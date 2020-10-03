@@ -11,7 +11,8 @@ long sum(int array[], int size);
 const int MAX_SIZE = 100;
 const int SIGN_PLUS = 1;
 const int SIGN_MINUS = -1;
-
+const char SEP_SYMB = ' ';
+const char END_SYMB = '\n';
 
 int main()
 {
@@ -22,7 +23,7 @@ int main()
 	int inputVar = 0;
 	int tempChar = getchar()/*считываем лишний пробел*/;
 
-	while (tempChar != '\n')
+	while (tempChar != END_SYMB)
 	{
 		tempChar = getchar();
 		//проверка для отрицательных чисел
@@ -34,7 +35,7 @@ int main()
 		}
 
 		inputVar = tempChar - '0';
-		while ((tempChar = getchar()) != ' ' && tempChar != '\n')
+		while ((tempChar = getchar()) != SEP_SYMB && tempChar != END_SYMB)
 		{
 			inputVar *= 10;
 			inputVar += tempChar - '0';
