@@ -1,5 +1,12 @@
 #include <stdio.h>
 
+const int MAX_SIZE = 100;
+const int SIGN_PLUS = 1;
+const int SIGN_MINUS = -1;
+const char SEP_SYMB = ' ';
+const char END_SYMB = '\n';
+
+
 int max(int array[], int size);
 
 int min(int array[], int size);
@@ -8,11 +15,6 @@ int diff(int array[], int size);
 
 long sum(int array[], int size);
 
-const int MAX_SIZE = 100;
-const int SIGN_PLUS = 1;
-const int SIGN_MINUS = -1;
-const char SEP_SYMB = ' ';
-const char END_SYMB = '\n';
 
 int main()
 {
