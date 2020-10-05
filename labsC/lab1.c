@@ -3,6 +3,7 @@
 const int MAX_SIZE = 100;
 const int SIGN_PLUS = 1;
 const int SIGN_MINUS = -1;
+const int SIZE_ERROR = -1;
 const char SEP_SYMB = ' ';
 const char END_SYMB = '\n';
 
@@ -28,6 +29,9 @@ int main()
 	while (tempChar != END_SYMB)
 	{
 		tempChar = getchar();
+		//проверка на пустой массив или лишний пробел в конце ввода
+		if(tempChar == END_SYMB)
+			break;
 		//проверка для отрицательных чисел
 		int sign = SIGN_PLUS;//для обработки знака числа
 		if (tempChar == '-')
@@ -45,6 +49,10 @@ int main()
 
 		array[size++] = sign * inputVar;
 	}
+
+	//проверка для пустого массива
+	if(size == 0)
+		command = SIZE_ERROR;
 
 	switch (command)
 	{
