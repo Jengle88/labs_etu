@@ -8,7 +8,13 @@ def is_page_valid(page):
     except Exception:
         return False
     return True
-
+# безопасное обращение к странице
+def safe_page(page):
+    try:
+        pageAnswer = wikipedia.page(page)
+    except wikipedia.DisambiguationError as e:
+        pageAnswer = wikipedia.page(e.options[0])
+    return pageAnswer.title
 
 # существует ли такой язык
 def is_right_lang(language):
@@ -16,18 +22,15 @@ def is_right_lang(language):
 
 
 # максимальное количество слов в кратком содержании страницы
-def max_cnt_word_in_summary(array_page):
+def max_cnt_word_summary(array_page):
     # количество слов в строке
     def cnt_word(string):
-        a = list(string.replace('\n', ' ').replace('\t', ' ').split())
-        return len(a)
+        return len(list(string.replace('\n', ' ').replace('\t', ' ').split()))
 
     maxCount = 0
     answerPage = None
     for page in array_page:
-        if not is_page_valid(page):  # если не существует
-            continue
-        cntInIterPage = cnt_word(wikipedia.page(page).summary)
+        cntInIterPage = cnt_word(wikipedia.page(safe_page(page)).summary)
         if maxCount <= cntInIterPage:
             answerPage = page
             maxCount = cntInIterPage
@@ -38,30 +41,23 @@ def max_cnt_word_in_summary(array_page):
 def find_chain(pageArray):
     # ищем промежуточное звено
     def find_support_chain(pagesSuppArray, index):
-
         nonlocal pageArray
-
         for page in pagesSuppArray:
-            if not is_page_valid(page):  # если не существует
+            if not is_page_valid(page):
                 continue
-            if pageArray[index] in wikipedia.page(page).links:  # если есть ссылка
+            if pageArray[index] in wikipedia.page(safe_page(page)).links:  # если есть ссылка
                 return page
 
     # поиск первого элемента цепочки и проверка массива
     firstIndex = 0
-    # двигаем firstIndex, пока идут несущ страницы
-    while firstIndex < len(pageArray) and not is_page_valid(pageArray[firstIndex]):
-        firstIndex += 1
     if firstIndex == len(pageArray):
         return []
 
     # поиск самой цепочки
     answer = [pageArray[firstIndex]]
-    for i in range(0, len(pageArray) - 1):
-        if not is_page_valid(pageArray[i]):
-            continue
-        linksArray = wikipedia.page(pageArray[i]).links
-        if not (pageArray[i + 1] in linksArray):
+    for i in range(firstIndex, len(pageArray) - 1):
+        linksArray = wikipedia.page(safe_page(pageArray[i])).links
+        if pageArray[i + 1] not in linksArray:
             answer.append(find_support_chain(linksArray, i + 1))
         answer.append(pageArray[i + 1])
     return answer
@@ -75,6 +71,9 @@ else:
     print("no results")
     quit(0)
 array.pop()
-print(*max_cnt_word_in_summary(array))
-print(find_chain(array))
+rightPageArray = list(filter(is_page_valid, array))
+print(*max_cnt_word_summary(rightPageArray))
+print(find_chain(rightPageArray))
 # print(cnt_word(wikipedia.page(array[1]).summary))
+#Still on My Mind, Семпл, Сустейн, ru
+#May be answer: Still on My Mind, Thank You (песня Дайдо), Семпл, Сустейн
