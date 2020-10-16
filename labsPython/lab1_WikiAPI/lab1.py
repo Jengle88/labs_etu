@@ -21,7 +21,7 @@ def cnt_word(string):
 
 
 # максимальное количество слов в строке
-def max_words_summary(page_array):
+def max_cnt_words_summary(page_array):
     maxCnt = 0
     ansPage = ""
     for page in page_array:
@@ -59,5 +59,5 @@ if is_right_lang(array[-1]):
 else:
     print("no results")
     quit(0)
-print(*max_words_summary(array))
+print(*max_cnt_words_summary(array))
 print(find_chain(array))
