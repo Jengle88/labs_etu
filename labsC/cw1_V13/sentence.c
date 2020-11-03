@@ -29,7 +29,7 @@ int push_back_sntc(struct Sentence *sntc, struct Word *word)
 		sntc->words[sntc->size++] = word;
 		return 1;
 	}
-	struct Word **tempSntc = (struct Word **) realloc(sntc->words, (size_t) (sntc->realSize * INCREASE));
+	struct Word **tempSntc = (struct Word **) realloc(sntc->words, (size_t) (sntc->realSize * INCREASE * sizeof(struct Word *)));
 	if (tempSntc == NULL)
 	{
 		fprintf(stderr, "%sMemory alloc for sentence failed!%s\n", ERROR_CLR, STD_CLR);

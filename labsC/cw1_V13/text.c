@@ -25,7 +25,7 @@ int push_back_text(struct Text *text, struct Sentence *sntc)
 		text->sntcs[text->size++] = sntc;
 		return 1;
 	}
-	struct Sentence **tempText = (struct Sentence **)realloc(text->sntcs, (size_t)(text->realSize * INCREASE));
+	struct Sentence **tempText = (struct Sentence **)realloc(text->sntcs, (size_t)(text->realSize * INCREASE * sizeof(struct Sentence *)));
 	if(tempText == NULL)
 	{
 		fprintf(stderr, "%sMemory alloc for text failed!%s\n", ERROR_CLR, STD_CLR);

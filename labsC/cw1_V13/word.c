@@ -35,7 +35,7 @@ int push_back_word(struct Word *word, wchar_t c)
 		word->word[++word->size] = '\0';
 		return 1;
 	}
-	wchar_t *tempWord = (wchar_t*) realloc(word->word, (size_t)(word->realSize * INCREASE));
+	wchar_t *tempWord = (wchar_t*) realloc(word->word, (size_t)(word->realSize * INCREASE * sizeof(wchar_t)));
 	if(tempWord == NULL)
 	{
 		fprintf(stderr, "%sMemory alloc for word failed!%s\n", ERROR_CLR, STD_CLR);
