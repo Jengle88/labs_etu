@@ -1,7 +1,7 @@
 //WIP
-//Сделано: word.c word.h - инициал и пуш назад			- проверено
+//Сделано:         word.c word.h         - инициал и пуш назад	- проверено
 //		   sentence.c sentence.h - инициал и пуш назад	- проверено
-//		   text.c text.h 		 - инициал и пуш назад  - проверено
+//		   text.c text.h 	 - инициал и пуш назад  - проверено
 
 #include "word.h"
 
@@ -24,7 +24,6 @@ int initial_word(struct Word *new_word, int start_size)
 	}
 	return 1;
 }
-
 
 
 int push_back_word(struct Word *word, wchar_t c)
