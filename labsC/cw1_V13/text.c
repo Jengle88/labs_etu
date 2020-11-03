@@ -37,4 +37,3 @@ int push_back_text(struct Text *text, struct Sentence *sntc)
 	return 1;
 }
 
-

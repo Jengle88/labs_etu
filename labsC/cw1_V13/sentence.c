@@ -1,3 +1,7 @@
+//
+// Created by evgeny on 17.10.2020.
+//
+
 #include "sentence.h"
 
 int initial_sntc(struct Sentence *new_sntc, int start_size)
