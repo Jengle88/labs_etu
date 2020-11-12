@@ -48,7 +48,6 @@ void print_interface(struct Text text)
 			L"Введите номер команды...\n");
 	int task = 0;
 	wscanf(L"%d", &task);
-	wchar_t *p = NULL;
 	switch (task)
 	{
 		case 1:
@@ -92,8 +91,18 @@ void print_interface(struct Text text)
 			break;
 		}
 		case 4:
-			//TODO
+		{
+			for (int i = 0; i < text.size; ++i)
+			{
+				rm_word_last_cptlz(&text.sntcs[i]);
+			}
+			wprintf(L"Выполнено!\n");
+			out(text);
 			break;
+		}
+		case 0:
+			wprintf(L"Работа завершена!\n");
+			return;
 		default:
 			wprintf(L"Команда не распознана\n");
 	}

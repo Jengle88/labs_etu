@@ -38,6 +38,16 @@ int push_back_sntc(struct Sentence *sntc, struct Word *word)
 	return 1;
 }
 
+void remove_word(struct Sentence *sntc, int ind)
+{
+	for (int i = ind; i < sntc->realSize - 1; ++i)
+	{
+		sntc->words[i] = sntc->words[i + 1];
+	}
+	free(sntc->words[sntc->realSize - 1].word);
+	sntc->size--;
+	sntc->realSize--;
+}
 
 int is_equal_sent(struct Sentence *sent1, struct Sentence *sent2)
 {
@@ -66,4 +76,27 @@ void move_word_n(struct Sentence *sntc, int n)
 	} while((sntc->size + ind - 2 * n) % sntc->size != sntc->size - 2);
 	sntc->words[ind] = tempWord;
 }
+
+void rm_word_last_cptlz(struct Sentence *sntc)
+{
+	for (int i = sntc->size - 2; i >= 0; i -= 2)
+	{
+		if(iswupper(sntc->words[i].word[sntc->words[i].size - 1]))
+		{
+			remove_word(sntc,i);
+			if (i == 0)
+				remove_word(sntc,i);
+			else
+			{
+				for (int j = 0; j < sntc->words[i].size; ++j)
+				{
+					push_back_word(&sntc->words[i-1],sntc->words[i].word[j]);
+				}
+				remove_word(sntc,i);
+			}
+		}
+	}
+}
+
+
 //a, b, c. A1, B2, C3.@
