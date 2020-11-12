@@ -44,16 +44,17 @@ void print_interface(struct Text text)
 			L"2)Вывести все уникальные кириллические и латинские символы\n"
 			L"3)Посчитать количество слов с длиной 1,2,3...\n"
 			L"4)Удалить все слова, заканчивающиеся на заглавный символ\n"
-   			L"0)Выйти из программы\n"
-	  		L"Введите номер команды...\n");
+			L"0)Выйти из программы\n"
+			L"Введите номер команды...\n");
 	int task = 0;
 	wscanf(L"%d", &task);
+	wchar_t *p = NULL;
 	switch (task)
 	{
 		case 1:
 			wprintf(L"Введите номер предложения (1, 2, ...) и смещение:\n");
 			int ind, n;
-			wscanf(L"%d%d",&ind,&n);
+			wscanf(L"%d%d", &ind, &n);
 			ind--;
 			if (0 <= ind && ind <= text.size - 1 && n >= 0)
 			{
@@ -65,11 +66,31 @@ void print_interface(struct Text text)
 				wprintf(L"Неверный индекс или смещение!\n");
 			break;
 		case 2:
-			//TODO
+		{
+			wchar_t *res = (wchar_t *)malloc(0 * sizeof(wchar_t));
+			int size = 0;
+			unique_symb(text, &res, &size);
+			wprintf(L"Выполнено!\n");
+			for (int i = 0; i < size; ++i)
+			{
+				wprintf(L"%lc ", res[i]);
+			}
 			break;
+		}
 		case 3:
-			//TODO
+		{
+			int size = 0;
+			int *len_words = unique_len_word(text, &size);
+			if (len_words != NULL)
+			{
+				wprintf(L"Выполнено!\n");
+				for (int i = 0; i < size; ++i)
+					wprintf(L"%d) %d\n", i + 1, len_words[i]);
+			}
+			else
+				wprintf(L"Не получилось выделить память!\n");
 			break;
+		}
 		case 4:
 			//TODO
 			break;

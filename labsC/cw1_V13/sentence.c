@@ -1,5 +1,3 @@
-#include <wchar.h> //"Широкие" многобайтовые символы и их ввод-вывод
-#include <wctype.h> //"Классификация" широких символов
 #include "sentence.h"
 
 int initial_sntc(struct Sentence *new_sntc, int start_size)

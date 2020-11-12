@@ -1,4 +1,5 @@
 #include <wchar.h>
+#include <wctype.h> //"Классификация" широких символов
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
