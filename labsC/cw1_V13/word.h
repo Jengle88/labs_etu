@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
+#include <limits.h>
 #define ERROR_CLR   "\033[0;31m"
 #define STD_CLR   "\033[0m"
 #define INCREASE 1.6

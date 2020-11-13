@@ -4,16 +4,17 @@ int initial_text(struct Text *new_text, int start_size)
 {
 	if (start_size < 0)
 	{
-		fprintf(stderr, "%sError, bad start_size for new_text%s\n", ERROR_CLR, STD_CLR);
-		return -1;
+		fwprintf(stderr, L"%sОшибка, неверный размер для нового текста!%s\n", ERROR_CLR, STD_CLR);
+		return 0;
 	}
 	new_text->size = 0;
+	//резервируем память
 	new_text->realSize = MAX(start_size, TEXT_START_SIZE);
 	new_text->sntcs = (struct Sentence *) calloc(new_text->realSize, sizeof(struct Sentence));
 	if (new_text->sntcs == NULL)
 	{
-		fprintf(stderr, "%sMemory alloc for text failed!%s\n", ERROR_CLR, STD_CLR);
-		return -1;
+		fwprintf(stderr, L"%sНе получилось выделить память для текста!%s\n", ERROR_CLR, STD_CLR);
+		return 0;
 	}
 	return 1;
 }
@@ -30,13 +31,71 @@ int push_back_text(struct Text *text, struct Sentence *sntc)
 															sizeof(struct Sentence));
 	if (tempText == NULL)
 	{
-		fprintf(stderr, "%sMemory alloc for text failed!%s\n", ERROR_CLR, STD_CLR);
-		return -1;
+		fwprintf(stderr, L"%sНе получилось выделить память для текста!%s\n", ERROR_CLR, STD_CLR);
+		return 0;
 	}
 	text->sntcs = tempText;
 	text->realSize = (size_t) (text->realSize * INCREASE);
 	text->sntcs[text->size++] = *sntc;
 	return 1;
+}
+
+int fill_text_fr_inp(struct Text *text)
+{
+	wchar_t c = L'$';
+	int flag_end_sntc;
+	while ((c = getwchar()) != L'@')
+	{
+		flag_end_sntc = 0;
+		struct Sentence sntc;
+		if (!initial_sntc(&sntc, 2))
+			return -1;
+		while (!flag_end_sntc)
+		{
+			struct Word word;
+			if (!initial_word(&word, 3))
+				return -1;
+			while (c != L' ' && c != L',' && c != L'.')
+			{
+				if (!push_back_word(&word, c))
+					return -1;
+				c = getwchar();
+			}
+			if (!push_back_sntc(&sntc, &word))
+				return -1;
+			struct Word specWord;
+			if (!initial_word(&specWord, 2))
+				return -1;
+			while (c == L' ' || c == L',' || c == L'.')
+			{
+				if (c == L'.')
+					flag_end_sntc = 1;
+				if (!push_back_word(&specWord, c))
+					return -1;
+				c = getwchar();
+			}
+			if (!push_back_sntc(&sntc, &specWord))
+				return -1;
+			if (flag_end_sntc)
+			{
+				ungetwc(c, stdin);
+				if (!push_back_text(text, &sntc))
+					return -1;
+			}
+		}
+	}
+	return 1;
+}
+
+void remove_sent(struct Text *text, int ind)
+{
+	for (int i = ind; i < text->realSize - 1; ++i)
+	{
+		text->sntcs[i] = text->sntcs[i + 1];
+	}
+	free(text->sntcs[text->realSize - 1].words);
+	text->size--;
+	text->realSize--;
 }
 
 void delete_dubl(struct Text *text)
@@ -54,19 +113,8 @@ void delete_dubl(struct Text *text)
 	}
 }
 
-void remove_sent(struct Text *text, int ind)
-{
-	for (int i = ind; i < text->realSize - 1; ++i)
-	{
-		text->sntcs[i] = text->sntcs[i + 1];
-	}
-	free(text->sntcs[text->realSize - 1].words);
-	text->size--;
-	text->realSize--;
-}
 
-
-void unique_symb(struct Text text, wchar_t **res, int *n)
+wchar_t *unique_symb(struct Text text, int *n)
 {
 	int tableCntOfENSymb[L'z' - L'a' + 1] = {0};
 	int tableCntOfRUSymb[L'я' - L'а' + 1] = {0};
@@ -93,21 +141,20 @@ void unique_symb(struct Text text, wchar_t **res, int *n)
 			}
 		}
 	}
-	//исправить под использование res
-	wchar_t *resTemp = (wchar_t *) malloc(size * sizeof(wchar_t));
+	wchar_t *res = (wchar_t *) malloc(size * sizeof(wchar_t));
 	int ind = 0;
 	for (int i = 0; i < L'я' - L'а' + 1; ++i)
 	{
 		if (tableCntOfRUSymb[i] > 0)
-			resTemp[ind++] = L'а' + i;
+			res[ind++] = L'а' + i;
 	}
 	for (int i = 0; i < L'z' - L'a' + 1; ++i)
 	{
 		if (tableCntOfENSymb[i] > 0)
-			resTemp[ind++] = L'a' + i;
+			res[ind++] = L'a' + i;
 	}
-	*res = resTemp;
 	*n = size;
+	return res;
 }
 
 int *unique_len_word(struct Text text, int *size)
@@ -120,7 +167,7 @@ int *unique_len_word(struct Text text, int *size)
 			if (text.sntcs[i].words[j].word[0] != '.' && text.sntcs[i].words[j].word[0] != ',' &&
 				text.sntcs[i].words[j].word[0] != ' ')
 			{
-				maxSize = MAX(maxSize,text.sntcs[i].words[j].size);
+				maxSize = MAX(maxSize, text.sntcs[i].words[j].size);
 			}
 		}
 	}
@@ -140,6 +187,8 @@ int *unique_len_word(struct Text text, int *size)
 	*size = maxSize;
 	return res;
 }
+
+
 
 
 

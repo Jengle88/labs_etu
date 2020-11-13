@@ -7,7 +7,18 @@
 #include <locale.h> //Во избежание "крокозяблей" на выводе
 #include <stdlib.h>
 
-#define MIN(a, b) (a < b ? a : b)
+/* TODO list:
+ * 1)добавить в строки \0
+ * 2)заменить в unique_symb resTemp на res ----------- V
+ * 3)проверить на большем количестве тестов
+ * 4)улучшить структуризацию функций в файлах
+ * 5)избавить код от мусора
+ * 6)проверить функции на предмет "утечки памяти" ---- V
+ * 7)перевести вывод ошибок на русский язык	---------- V
+ * 8)добавить выход при ошибке выделения памяти ------ V
+ * 9)заменить @ на ввод из терминала
+*/
+
 
 void out(struct Text text)
 {
@@ -37,20 +48,14 @@ void delete_all(struct Text text)
 	free(text.sntcs);
 }
 
-void print_interface(struct Text text)
+void do_task(struct Text text)
 {
-	wprintf(L"Доступные команды:\n"
-			L"1)Сделать сдвиг на N слов вперёд\n"
-			L"2)Вывести все уникальные кириллические и латинские символы\n"
-			L"3)Посчитать количество слов с длиной 1,2,3...\n"
-			L"4)Удалить все слова, заканчивающиеся на заглавный символ\n"
-			L"0)Выйти из программы\n"
-			L"Введите номер команды...\n");
 	int task = 0;
 	wscanf(L"%d", &task);
 	switch (task)
 	{
 		case 1:
+		{
 			wprintf(L"Введите номер предложения (1, 2, ...) и смещение:\n");
 			int ind, n;
 			wscanf(L"%d%d", &ind, &n);
@@ -64,16 +69,18 @@ void print_interface(struct Text text)
 			else
 				wprintf(L"Неверный индекс или смещение!\n");
 			break;
+		}
 		case 2:
 		{
-			wchar_t *res = (wchar_t *)malloc(0 * sizeof(wchar_t));
+			wchar_t *res;
 			int size = 0;
-			unique_symb(text, &res, &size);
+			res = unique_symb(text, &size);
 			wprintf(L"Выполнено!\n");
 			for (int i = 0; i < size; ++i)
 			{
 				wprintf(L"%lc ", res[i]);
 			}
+			free(res);
 			break;
 		}
 		case 3:
@@ -85,6 +92,7 @@ void print_interface(struct Text text)
 				wprintf(L"Выполнено!\n");
 				for (int i = 0; i < size; ++i)
 					wprintf(L"%d) %d\n", i + 1, len_words[i]);
+				free(len_words);
 			}
 			else
 				wprintf(L"Не получилось выделить память!\n");
@@ -113,51 +121,18 @@ int main()
 {
 	setlocale(LC_ALL, "");
 	struct Text text;
-	initial_text(&text, 2);
-	wchar_t c = L'$';
-	int flag_end_sntc;
-	while ((c = getwchar()) != L'@')
-	{
-		flag_end_sntc = 0;
-		struct Sentence sntc;
-		initial_sntc(&sntc, 2);
-		while (!flag_end_sntc)
-		{
-			struct Word word;
-			//add protect
-			initial_word(&word, 3);
-			while (c != L' ' && c != L',' && c != L'.')
-			{
-				//add protect
-				push_back_word(&word, c);
-				c = getwchar();
-			}
-			//add protect
-			push_back_sntc(&sntc, &word);
-			struct Word specWord;
-			//add protect
-			initial_word(&specWord, 2);
-			while (c == L' ' || c == L',' || c == L'.')
-			{
-				//add protect
-				if (c == L'.')
-					flag_end_sntc = 1;
-				push_back_word(&specWord, c);
-				c = getwchar();
-			}
-			//add protect
-			push_back_sntc(&sntc, &specWord);
-			if (flag_end_sntc)
-			{
-				ungetwc(c, stdin);
-				push_back_text(&text, &sntc);
-			}
-		}
-	}
+	if(!initial_text(&text, 2))
+		return -1;
+	fill_text_fr_inp(&text);
 	delete_dubl(&text);
-	print_interface(text);
-	//out(text);
-	int z = 2;
+	wprintf(L"Доступные команды:\n"
+			L"1)Сделать сдвиг на N слов вперёд\n"
+			L"2)Вывести все уникальные кириллические и латинские символы\n"
+			L"3)Посчитать количество слов с длиной 1,2,3...\n"
+			L"4)Удалить все слова, заканчивающиеся на заглавный символ\n"
+			L"0)Выйти из программы\n"
+			L"Введите номер команды...\n");
+	do_task(text);
 	delete_all(text);
 	return 0;
 }
