@@ -34,19 +34,19 @@ int do_task(struct Text text);
 
 enum EXITS
 {
-	GOOD_EXIT = 0,
+	GOOD_EXIT,
 	BAD_EXIT
 };
 
 enum TASKS
 {
-	MOVE_WORD,
+	MOVE_WORD = 1,
 	UNIQ_SYMB,
 	CNT_WORD_WITH_LEN,
 	RM_WORD_LAST_CAPIT,
 	CLEAR_TERM,
 	OUT_TEXT,
-	STOP_WORK,
+	STOP_WORK = 0,
 };
 
 int main()
@@ -57,15 +57,15 @@ int main()
 		return BAD_EXIT;
 	delete_dubl(&text);
 	int working = 1;
-	while (working == WORKING)
+	while (working)
 	{
 		wprintf(L"Доступные команды:\n"
 				L"1)Сделать сдвиг на N слов вперёд\n"
 				L"2)Вывести все уникальные кириллические и латинские символы\n"
 				L"3)Посчитать количество слов с длиной 1,2,3...\n"
 				L"4)Удалить все слова, заканчивающиеся на заглавный символ\n"
-				L"5)Очистить терминал"
-				L"6)Вывести текст"
+				L"5)Очистить терминал\n"
+				L"6)Вывести текст\n"
 				L"0)Выйти из программы\n"
 				L"Введите номер команды...\n");
 		working = do_task(text);
@@ -109,6 +109,7 @@ int do_task(struct Text text)
 				{
 					wprintf(L"%lc ", res[i]);
 				}
+				wprintf(L"\n");
 				free(res);
 			}
 			else
@@ -124,6 +125,7 @@ int do_task(struct Text text)
 				wprintf(L"Выполнено!\n");
 				for (int i = 0; i < size; ++i)
 					wprintf(L"%d) %d\n", i + 1, len_words[i]);
+
 				free(len_words);
 			}
 			else
@@ -142,16 +144,18 @@ int do_task(struct Text text)
 		case CLEAR_TERM:
 		{
 			system("clear");
+			break;
 		}
 		case OUT_TEXT:
 		{
 			out_text(text);
+			wprintf(L"\n");
+			break;
 		}
 		case STOP_WORK:
 		{
 			wprintf(L"Работа завершена!\n");
 			return EXIT;
-
 		}
 		default:
 			wprintf(L"Команда не распознана\n");
