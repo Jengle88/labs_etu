@@ -8,6 +8,10 @@
 #define STD_CLR   "\033[0m"
 #define INCREASE 1.6
 #define WORD_START_SIZE 2
+#define SOME_ERROR 0
+#define ALL_OK 1
+#define NOT_EQUAL 0
+#define EQUAL 1
 #define MAX(a,b) (a > b ? a : b)
 
 struct Word
@@ -19,3 +23,4 @@ struct Word
 
 int initial_word(struct Word* new_word, int start_size);
 int push_back_word(struct Word* word, wchar_t c);
+int is_equal_word(struct Word* word1, struct Word* word2);

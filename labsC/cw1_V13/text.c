@@ -1,103 +1,118 @@
 #include "text.h"
 
+//начальная инициализация текста
 int initial_text(struct Text *new_text, int start_size)
 {
 	if (start_size < 0)
 	{
 		fwprintf(stderr, L"%sОшибка, неверный размер для нового текста!%s\n", ERROR_CLR, STD_CLR);
-		return 0;
+		return SOME_ERROR;
 	}
 	new_text->size = 0;
-	//резервируем память
 	new_text->realSize = MAX(start_size, TEXT_START_SIZE);
-	new_text->sntcs = (struct Sentence *) calloc(new_text->realSize, sizeof(struct Sentence));
+	new_text->sntcs = (struct Sentence *) malloc(new_text->realSize * sizeof(struct Sentence));
 	if (new_text->sntcs == NULL)
 	{
 		fwprintf(stderr, L"%sНе получилось выделить память для текста!%s\n", ERROR_CLR, STD_CLR);
-		return 0;
+		return SOME_ERROR;
 	}
-	return 1;
+	return ALL_OK;
 }
 
+//положить назад новое предложение
 int push_back_text(struct Text *text, struct Sentence *sntc)
 {
+	//если есть место
 	if (text->size + 1 < text->realSize)
 	{
 		text->sntcs[text->size++] = *sntc;
-		return 1;
+		return ALL_OK;
 	}
+	//если нет места
 	struct Sentence *tempText = (struct Sentence *) realloc(text->sntcs,
 															(size_t) (text->realSize * INCREASE) *
 															sizeof(struct Sentence));
 	if (tempText == NULL)
 	{
 		fwprintf(stderr, L"%sНе получилось выделить память для текста!%s\n", ERROR_CLR, STD_CLR);
-		return 0;
+		return SOME_ERROR;
 	}
 	text->sntcs = tempText;
 	text->realSize = (size_t) (text->realSize * INCREASE);
 	text->sntcs[text->size++] = *sntc;
-	return 1;
+	return ALL_OK;
 }
 
+//заполнить текст из потока ввода
 int fill_text_from_inp(struct Text *text)
 {
 	wchar_t c = L'$';
 	int flag_end_sntc;
 	while ((c = getwchar()) != L'@')
 	{
+		//флаг для признака конца строки
 		flag_end_sntc = 0;
 		struct Sentence sntc;
-		if (!initial_sntc(&sntc, 2))
-			return -1;
+		if (!initial_sntc(&sntc, SNTC_START_SIZE))
+			return SOME_ERROR;
 		while (!flag_end_sntc)
 		{
 			struct Word word;
-			if (!initial_word(&word, 3))
-				return -1;
+			if (!initial_word(&word, WORD_START_SIZE))
+				return SOME_ERROR;
+			//считываем слово до разделителей
 			while (c != L' ' && c != L',' && c != L'.')
 			{
 				if (!push_back_word(&word, c))
-					return -1;
+					return SOME_ERROR;
 				c = getwchar();
 			}
+			//добавляем слово в предложение
 			if (!push_back_sntc(&sntc, &word))
-				return -1;
+				return SOME_ERROR;
+			//специальное слово с символами разделителями
 			struct Word specWord;
-			if (!initial_word(&specWord, 2))
-				return -1;
+			if (!initial_word(&specWord, WORD_START_SIZE))
+				return SOME_ERROR;
+			//считываем специальное слово
 			while (c == L' ' || c == L',' || c == L'.')
 			{
-				if (c == L'.')
+				if (c == L'.') //признак конца строки
 					flag_end_sntc = 1;
 				if (!push_back_word(&specWord, c))
-					return -1;
+					return SOME_ERROR;
 				c = getwchar();
 			}
 			if (!push_back_sntc(&sntc, &specWord))
-				return -1;
+				return SOME_ERROR;
+			//если достигли конца предложения
 			if (flag_end_sntc)
 			{
+				//возвращаем лишний символ в поток ввод
 				ungetwc(c, stdin);
 				if (!push_back_text(text, &sntc))
-					return -1;
+					return SOME_ERROR;
 			}
 		}
 	}
-	return 1;
+	return ALL_OK;
 }
 
+//удалить предложение из текста
 void remove_sent(struct Text *text, int ind)
 {
+	//смещаем все предложения после того, которое мы удалили
 	for (int i = ind; i < text->realSize - 1; ++i)
 	{
 		text->sntcs[i] = text->sntcs[i + 1];
 	}
+	//освобождаем память за последним
 	free(text->sntcs[text->realSize - 1].words);
 	text->size--;
 	text->realSize--;
 }
 
+//удалить повторяющиеся предложения
 void delete_dubl(struct Text *text)
 {
 	for (int i = text->size - 1; i >= 0; --i)
@@ -113,12 +128,13 @@ void delete_dubl(struct Text *text)
 	}
 }
 
-
+//получить массив уникальных символов(без знаков препинания)
 wchar_t *unique_symb(struct Text text, int *n)
 {
-	int tableCntOfENSymb[L'z' - L'a' + 1] = {0};
-	int tableCntOfRUSymb[L'я' - L'а' + 1] = {0};
+	int tableCntOfENSymb[L'z' - L'a' + 1] = {0}; //массив латинских букв
+	int tableCntOfRUSymb[L'я' - L'а' + 1] = {0}; //массив кирилличиских букв
 	int size = 0;
+	//заполняем массивы и считаем количество различных букв
 	for (int i = 0; i < text.size; ++i)
 	{
 		for (int j = 0; j < text.sntcs[i].size; ++j)
@@ -141,6 +157,7 @@ wchar_t *unique_symb(struct Text text, int *n)
 			}
 		}
 	}
+	//массив для ответа
 	wchar_t *res = (wchar_t *) malloc(size * sizeof(wchar_t));
 	int ind = 0;
 	for (int i = 0; i < L'я' - L'а' + 1; ++i)
@@ -153,12 +170,15 @@ wchar_t *unique_symb(struct Text text, int *n)
 		if (tableCntOfENSymb[i] > 0)
 			res[ind++] = L'a' + i;
 	}
+	//задаём размер массива для ответа
 	*n = size;
 	return res;
 }
 
+//получить массив с количеством слов, длина которых 1, 2, ...
 int *unique_len_word(struct Text text, int *size)
 {
+	//ищем максимальную длину слова
 	int maxSize = -1;
 	for (int i = 0; i < text.size; ++i)
 	{
@@ -171,8 +191,8 @@ int *unique_len_word(struct Text text, int *size)
 			}
 		}
 	}
+	//массив для ответа
 	int *res = (int *) calloc(maxSize, sizeof(int));
-
 	for (int i = 0; i < text.size; ++i)
 	{
 		for (int j = 0; j < text.sntcs[i].size; ++j)
@@ -184,6 +204,7 @@ int *unique_len_word(struct Text text, int *size)
 			}
 		}
 	}
+	//задаём размер массива для ответа
 	*size = maxSize;
 	return res;
 }

@@ -1,6 +1,7 @@
 #include "word.h"
 #define SNTC_START_SIZE 2
 
+
 struct Sentence
 {
 	struct Word *words;
