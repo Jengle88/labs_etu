@@ -40,7 +40,7 @@ int push_back_text(struct Text *text, struct Sentence *sntc)
 	return 1;
 }
 
-int fill_text_fr_inp(struct Text *text)
+int fill_text_from_inp(struct Text *text)
 {
 	wchar_t c = L'$';
 	int flag_end_sntc;
