@@ -9,6 +9,7 @@
 
 char* enter_text(int *cntSent)
 {
+
 	char c;
 	int maxSize = 10;
 	int size = 0;
@@ -89,6 +90,5 @@ int main()
 	printf("\nКоличество предложений до %d и количество предложений после %d", cntSent, cntActualSent);
 	//чистим память
 	free(text);
-
 	return 0;
 }
