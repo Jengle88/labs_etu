@@ -67,6 +67,3 @@ print("Случайная погрешность по Стьюденту:", luck
 
 print("Полная погрешность:", calc_full_defect(luckyDefect, toolDefect))
 
-
-
-# 1.498 1.668 1.68
