@@ -3,15 +3,17 @@
 
 struct Text
 {
-	struct Sentence *sntcs;
+	Sentence *sntcs;
 	int size;
 	int realSize;
 };
 
-int initial_text(struct Text* new_text, int start_size);
-int push_back_text(struct Text* text, struct Sentence* sntc);
-void remove_sent(struct Text* text, int ind);
-void delete_dubl(struct Text* text);
-wchar_t* unique_symb(struct Text text, int *n);
-int *unique_len_word(struct Text text, int *size);
-int fill_text_from_inp(struct Text* text);
+typedef struct Text Text;
+
+int initial_text(Text* new_text, int start_size);
+int push_back_text(Text* text, Sentence* sntc);
+void remove_sent(Text* text, int ind);
+void delete_dubl(Text* text);
+wchar_t* unique_symb(Text text, int *n);
+int *unique_len_word(Text text, int *size);
+int fill_text_from_input(Text* text);
