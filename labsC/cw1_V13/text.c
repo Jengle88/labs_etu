@@ -43,24 +43,27 @@ int push_back_text(Text *text, Sentence *sntc)
 }
 
 //заполнить текст из потока ввода
-int fill_text_from_input(Text *text)
+int input_text(Text *text)
 {
 	wchar_t c = L'$';
+	wchar_t cPrev = L'$';
 	int flag_end_sntc;
-	while ((c = getwchar()) != L'@')
+	while ((c = getwchar()) != L'\n')
 	{
 		//флаг для признака конца строки
 		flag_end_sntc = 0;
 		Sentence sntc;
 		if (!initial_sntc(&sntc, SNTC_START_SIZE))
 			return SOME_ERROR;
+
 		while (!flag_end_sntc)
 		{
 			Word word;
 			if (!initial_word(&word, WORD_START_SIZE))
 				return SOME_ERROR;
+
 			//считываем слово до разделителей
-			while (!is_sep_symb(c))
+			while (!is_sep_symb(c) && c != '\n')
 			{
 				if (!push_back_word(&word, c))
 					return SOME_ERROR;
@@ -69,21 +72,26 @@ int fill_text_from_input(Text *text)
 			//добавляем слово в предложение
 			if (!push_back_sntc(&sntc, &word))
 				return SOME_ERROR;
+
 			//специальное слово с символами разделителями
-			Word specWord;
-			if (!initial_word(&specWord, WORD_START_SIZE))
+			Word sepWord;
+			if (!initial_word(&sepWord, WORD_START_SIZE))
 				return SOME_ERROR;
+
 			//считываем специальное слово
-			while (is_sep_symb(c))
+			while (is_sep_symb(c) || (c == L'\n' && cPrev != L'\n'))
 			{
+				cPrev = c;//запоминаем прошлый разделительный знак
+
 				if (c == L'.') //признак конца строки
 					flag_end_sntc = 1;
-				if (!push_back_word(&specWord, c))
+				if (!push_back_word(&sepWord, c))
 					return SOME_ERROR;
 				c = getwchar();
 			}
-			if (!push_back_sntc(&sntc, &specWord))
+			if (!push_back_sntc(&sntc, &sepWord))
 				return SOME_ERROR;
+
 			//если достигли конца предложения
 			if (flag_end_sntc)
 			{
@@ -103,7 +111,10 @@ void remove_sent(Text *text, int ind)
 	//смещаем все предложения после того, которое мы удалили
 	for (int i = ind; i < text->realSize - 1; ++i)
 	{
-		text->sntcs[i] = text->sntcs[i + 1];
+		swap_sntc(&(text->sntcs[i]), &(text->sntcs[i+1]));
+//		Sentence tempSntc = text->sntcs[i];
+//		text->sntcs[i] = text->sntcs[i + 1];
+//		text->sntcs[i+1] = tempSntc;
 	}
 	//освобождаем память за последним
 	free(text->sntcs[text->realSize - 1].words);
@@ -118,7 +129,7 @@ void delete_dubl(Text *text)
 	{
 		for (int j = i - 1; j >= 0; --j)
 		{
-			if (is_equal_sent(&text->sntcs[i], &text->sntcs[j]))
+			if (is_equal_sntc(&text->sntcs[i], &text->sntcs[j]))
 			{
 				remove_sent(text, i);
 				break;
@@ -181,7 +192,7 @@ wchar_t *unique_symb(Text text, int *n)
 int *unique_len_word(Text text, int *size)
 {
 	//ищем максимальную длину слова
-	int maxSize = -1;
+	int maxSize = 0;
 	for (int i = 0; i < text.size; ++i)
 	{
 		for (int j = 0; j < text.sntcs[i].size; ++j)
@@ -212,6 +223,32 @@ int *unique_len_word(Text text, int *size)
 	return res;
 }
 
+//освободить всю память
+void delete_all(Text *text)
+{
+	for (int i = 0; i < text->size; ++i)
+	{//удаляем до size, тк выделяли память через initial только для [size] элементов
+		for (int j = 0; j < text->sntcs[i].size; ++j)
+		{
+			free(text->sntcs[i].words[j].word);
+		}
+		free(text->sntcs[i].words);
+	}
+	free(text->sntcs);
+}
+
+//вывести текст
+void print_text(Text *text)
+{
+	for (int i = 0; i < text->size; ++i)
+	{
+		for (int j = 0; j < text->sntcs[i].size; ++j)
+		{
+			fputws(text->sntcs[i].words[j].word, stdout);
+			//wprintf(L"\n");
+		}
+	}
+}
 
 
 
@@ -223,5 +260,8 @@ int *unique_len_word(Text text, int *size)
 
 /*
 a. b. a. c.
-g. y. z. a, b. c, t. b.@
+g. y. z. a. b. c. t. b.@
 */
+
+
+

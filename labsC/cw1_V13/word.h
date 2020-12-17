@@ -23,11 +23,14 @@ struct Word
 	int realSize;
 };
 
+
+
 typedef struct Word Word;
 
 int initial_word(Word* new_word, int start_size);
 int push_back_word(Word* word, wchar_t c);
 int is_equal_word(Word* word1, Word* word2);
+void swap_word(Word* word1, Word* word2);
 
 
 

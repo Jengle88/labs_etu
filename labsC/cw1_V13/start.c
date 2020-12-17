@@ -3,7 +3,7 @@
 #include "text.h"
 #include <stdio.h> //Стандартный однобайтовый ввод-вывод
 #include <wchar.h> //"Широкие" многобайтовые символы и их ввод-вывод
-#include <locale.h> //Во избежание "крокозяблей" на выводе
+#include <locale.h> //Для подключения правильной локализации
 
 /* TODO list:
  * 1)проверить на большем количестве тестов
@@ -14,8 +14,6 @@
  * 6)исправить смещение ------------------------------------ V
 */
 
-void out_text(Text *text);
-void delete_all(Text *text);
 int do_task(Text *text);
 
 
@@ -31,7 +29,7 @@ enum EXITS
 enum TASKS
 {
 	MOVE_WORD = 1,
-	UNIQ_SYMB,
+	UNIQ_SYMB,//заполняются последовательно
 	CNT_WORD_WITH_LEN,
 	RM_WORD_LAST_CAPIT,
 	OUT_TEXT,
@@ -43,9 +41,10 @@ int main()
 {
 	setlocale(LC_ALL, "");
 	Text text;
-	if (!initial_text(&text, 2) || !fill_text_from_input(&text))
+	wprintf(L"Введите текст(два переноса строки являются признаком конца ввода текста)\n");
+	if (!initial_text(&text, 2) || !input_text(&text))
 	{
-		fwprintf(stderr, L"%sОшибка памяти при исполнении функции!!%s\n", ERROR_CLR, STD_CLR);
+		fwprintf(stderr, L"%Ошибка выделения памяти при исполнении функции!!%s\n", ERROR_CLR, STD_CLR);
 		return BAD_EXIT;
 	}
 	delete_dubl(&text);
@@ -88,7 +87,7 @@ int do_task(Text *text)
 					fwprintf(stderr, L"%sОшибка памяти при исполнении функции!!%s\n", ERROR_CLR, STD_CLR);
 			}
 			else
-				fwprintf(stderr, L"%sНеверный индекс или смещение!%s\n", ERROR_CLR, STD_CLR);
+				wprintf(L"%sНеверный индекс или смещение!%s\n", ERROR_CLR, STD_CLR);
 			break;
 		}
 		case UNIQ_SYMB:
@@ -136,7 +135,7 @@ int do_task(Text *text)
 		}
 		case OUT_TEXT:
 		{
-			out_text(text);
+			print_text(text);
 			wprintf(L"\n");
 			break;
 		}
@@ -151,34 +150,10 @@ int do_task(Text *text)
 			return EXIT;
 		}
 		default:
-			wprintf(L"Команда не распознана!\n");
+			wprintf(L"%sКоманда не распознана!%s\n", ERROR_CLR, STD_CLR);
 	}
 	return WORKING;
 }
 
-//освободить всю память
-void delete_all(Text *text)
-{
-	for (int i = 0; i < text->size; ++i)
-	{//удаляем до size, тк выделяли память через initial только для [size] элементов
-		for (int j = 0; j < text->sntcs[i].size; ++j)
-		{
-			free(text->sntcs[i].words[j].word);
-		}
-		free(text->sntcs[i].words);
-	}
-	free(text->sntcs);
-}
 
-//вывести текст
-void out_text(Text *text)
-{
-	for (int i = 0; i < text->size; ++i)
-	{
-		for (int j = 0; j < text->sntcs[i].size; ++j)
-		{
-			fputws(text->sntcs[i].words[j].word, stdout);
-			//wprintf(L"\n");
-		}
-	}
-}
+

@@ -1,6 +1,5 @@
 #include "sentence.h"
 
-
 //начальная инициализация предложений
 int initial_sntc(Sentence *new_sntc, int start_size)
 {
@@ -45,24 +44,28 @@ int push_back_sntc(Sentence *sntc, Word *word)
 //удалить слово из предложения
 void remove_word(Sentence *sntc, int ind)
 {
-	free(sntc->words[ind].word);
-	for (int i = ind + 1; i < sntc->realSize; ++i)
+	//смещаем все слова после того, которое мы удалили
+	for (int i = ind; i < sntc->realSize - 1; ++i)
 	{
-		sntc->words[i - 1] = sntc->words[i];
+		swap_word(&(sntc->words[i]), &(sntc->words[i+1]));
+		//Word tempWord = sntc->words[i];
+		//sntc->words[i] = sntc->words[i + 1];
+		//sntc->words[i + 1] = tempWord;
 	}
+	//освобождаем память за последним
+	free(sntc->words[sntc->realSize - 1].word);
 	sntc->size--;
 	sntc->realSize--;
 }
-//фыйФЫЙЦУ, вйцв уйввыйФЫЙцуФЫ, пйцу.@
 
 //проверка предложений на равенство, не учитывая регистр
-int is_equal_sent(Sentence *sent1, Sentence *sent2)
+int is_equal_sntc(Sentence *sntc1, Sentence *sntc2)
 {
-	if (sent1->size != sent2->size)
+	if (sntc1->size != sntc2->size)
 		return NOT_EQUAL;
-	for (int i = 0; i < sent1->size; ++i)
+	for (int i = 0; i < sntc1->size; ++i)
 	{
-		if (!is_equal_word(&sent1->words[i], &sent2->words[i]))
+		if (!is_equal_word(&sntc1->words[i], &sntc2->words[i]))
 			return NOT_EQUAL;
 	}
 	return EQUAL;
@@ -72,13 +75,14 @@ int is_equal_sent(Sentence *sent1, Sentence *sent2)
 int move_word_n(Sentence *sntc, int n)
 {
 	n %= (sntc->size / 2);
-	int *used = (int*)calloc(sntc->size, sizeof(int));
-	if(!used)
+	//отображаем, какие слова мы уже переместили
+	int *used = (int *) calloc(sntc->size, sizeof(int));
+	if (!used)
 		return SOME_ERROR;
 	Word swapWord;
 	for (int i = sntc->size - 2; i >= 0; i -= 2)
 	{
-		if(!used[i])//если до этого не были здесь
+		if (!used[i])//если до этого не были здесь
 		{
 			int ind = i;
 			swapWord = sntc->words[ind]; // запоминаем последнее слово
@@ -99,7 +103,7 @@ int move_word_n(Sentence *sntc, int n)
 
 //удалить слова с последней заглавной буквой
 void rm_word_last_cptlz(Sentence *sntc)
-{
+{//удаляем с конца для оптимизации удаления(двигаем только те, которые сохранены)
 	for (int i = sntc->size - 2; i >= 0; i -= 2)
 	{
 		if (iswupper(sntc->words[i].word[sntc->words[i].size - 1]))
@@ -122,5 +126,9 @@ int is_sep_symb(wchar_t c)
 	return c == L'.' || c == L',' || c == L' ';
 }
 
-
-//a, b, c. A1, B2, C3.@
+void swap_sntc(Sentence *sntc1, Sentence *sntc2)
+{
+	Sentence tempSntc = *sntc1;
+	*sntc1 = *sntc2;
+	*sntc2 = tempSntc;
+}
