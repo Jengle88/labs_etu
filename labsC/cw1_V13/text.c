@@ -28,6 +28,7 @@ int push_back_text(Text *text, Sentence *sntc)
 		text->sntcs[text->size++] = *sntc;
 		return ALL_OK;
 	}
+
 	//если нет места
 	Sentence *tempText = (Sentence *) realloc(text->sntcs, (size_t) (text->realSize * INCREASE) *
 														   sizeof(Sentence));
@@ -112,9 +113,6 @@ void remove_sent(Text *text, int ind)
 	for (int i = ind; i < text->realSize - 1; ++i)
 	{
 		swap_sntc(&(text->sntcs[i]), &(text->sntcs[i+1]));
-//		Sentence tempSntc = text->sntcs[i];
-//		text->sntcs[i] = text->sntcs[i + 1];
-//		text->sntcs[i+1] = tempSntc;
 	}
 	//освобождаем память за последним
 	free(text->sntcs[text->realSize - 1].words);
@@ -124,13 +122,13 @@ void remove_sent(Text *text, int ind)
 
 //удалить повторяющиеся предложения
 void delete_dubl(Text *text)
-{
+{//удаляем с конца для оптимизации (двигаем только те, которые сохранены)
 	for (int i = text->size - 1; i >= 0; --i)
 	{
 		for (int j = i - 1; j >= 0; --j)
 		{
 			if (is_equal_sntc(&text->sntcs[i], &text->sntcs[j]))
-			{
+			{//удаляем предложение, которое имеет больший индекс, и выходим
 				remove_sent(text, i);
 				break;
 			}
@@ -141,8 +139,8 @@ void delete_dubl(Text *text)
 //получить массив уникальных символов(без знаков препинания)
 wchar_t *unique_symb(Text text, int *n)
 {
-	int tableCntOfENSymb[L'z' - L'a' + 1] = {0}; //массив латинских букв
-	int tableCntOfRUSymb[L'я' - L'а' + 1] = {0}; //массив кирилличиских букв
+	int tableCntOfENSymb[L'z' - L'a' + 1] = {0}; //массив количеств латинских букв
+	int tableCntOfRUSymb[L'я' - L'а' + 1 + 1] = {0}; //массив количеств кирилличиских букв (+1 за счёт 'ё')
 	int size = 0;
 	//заполняем массивы и считаем количество различных букв
 	for (int i = 0; i < text.size; ++i)
@@ -164,6 +162,12 @@ wchar_t *unique_symb(Text text, int *n)
 					if (tableCntOfRUSymb[symb - L'а'] == 1)
 						size++;
 				}
+				else if (symb == L'ё')
+				{
+					tableCntOfRUSymb[L'я' - L'а' + 1]++;
+					if(tableCntOfRUSymb[L'я' - L'а' + 1] == 1)
+						size++;
+				}
 			}
 		}
 	}
@@ -175,6 +179,8 @@ wchar_t *unique_symb(Text text, int *n)
 	int ind = 0;
 	for (int i = 0; i < L'я' - L'а' + 1; ++i)
 	{
+		if(L'е' - L'а' + 1 == i && tableCntOfRUSymb[L'я' - L'а' + 1] > 0)
+			res[ind++] = L'ё';
 		if (tableCntOfRUSymb[i] > 0)
 			res[ind++] = L'а' + i;
 	}
@@ -197,7 +203,7 @@ int *unique_len_word(Text text, int *size)
 	{
 		for (int j = 0; j < text.sntcs[i].size; ++j)
 		{
-			if (!is_sep_symb(text.sntcs[i].words[j].word[0]))
+			if (!is_sep_symb(text.sntcs[i].words[j].word[0]) && text.sntcs[i].words[j].word[0] != L'\n')
 			{
 				maxSize = MAX(maxSize, text.sntcs[i].words[j].size);
 			}
@@ -212,7 +218,7 @@ int *unique_len_word(Text text, int *size)
 	{
 		for (int j = 0; j < text.sntcs[i].size; ++j)
 		{
-			if (!is_sep_symb(text.sntcs[i].words[j].word[0]))
+			if (!is_sep_symb(text.sntcs[i].words[j].word[0]) && text.sntcs[i].words[j].word[0] != L'\n')
 			{
 				res[text.sntcs[i].words[j].size - 1]++;
 			}

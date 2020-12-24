@@ -1,4 +1,3 @@
-#include <string.h>
 #include "word.h"
 
 //начальная инициализация слова

@@ -1,6 +1,6 @@
 #include "sentence.h"
 
-//начальная инициализация предложений
+//начальная инициализация предложения
 int initial_sntc(Sentence *new_sntc, int start_size)
 {
 	if (start_size < 0)
@@ -28,6 +28,7 @@ int push_back_sntc(Sentence *sntc, Word *word)
 		sntc->words[sntc->size++] = *word;
 		return ALL_OK;
 	}
+
 	//если нет места
 	Word *tempSntc = (Word *) realloc(sntc->words, (size_t) (sntc->realSize * INCREASE) * sizeof(Word));
 	if (tempSntc == NULL)
@@ -48,9 +49,6 @@ void remove_word(Sentence *sntc, int ind)
 	for (int i = ind; i < sntc->realSize - 1; ++i)
 	{
 		swap_word(&(sntc->words[i]), &(sntc->words[i+1]));
-		//Word tempWord = sntc->words[i];
-		//sntc->words[i] = sntc->words[i + 1];
-		//sntc->words[i + 1] = tempWord;
 	}
 	//освобождаем память за последним
 	free(sntc->words[sntc->realSize - 1].word);
@@ -75,7 +73,7 @@ int is_equal_sntc(Sentence *sntc1, Sentence *sntc2)
 int move_word_n(Sentence *sntc, int n)
 {
 	n %= (sntc->size / 2);
-	//отображаем, какие слова мы уже переместили
+	//запоминаем, какие слова мы уже переместили
 	int *used = (int *) calloc(sntc->size, sizeof(int));
 	if (!used)
 		return SOME_ERROR;
@@ -103,7 +101,7 @@ int move_word_n(Sentence *sntc, int n)
 
 //удалить слова с последней заглавной буквой
 void rm_word_last_cptlz(Sentence *sntc)
-{//удаляем с конца для оптимизации удаления(двигаем только те, которые сохранены)
+{//удаляем с конца для оптимизации (двигаем только те, которые сохранены)
 	for (int i = sntc->size - 2; i >= 0; i -= 2)
 	{
 		if (iswupper(sntc->words[i].word[sntc->words[i].size - 1]))
