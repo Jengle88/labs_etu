@@ -8,14 +8,14 @@ int initial_sntc(Sentence *new_sntc, int start_size)
 		fwprintf(stderr, L"%sОшибка, неверный размер для нового предложения!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
 	}
-	new_sntc->size = 0;
-	new_sntc->realSize = MAX(start_size, SNTC_START_SIZE);
 	new_sntc->words = (Word *) malloc(new_sntc->realSize * sizeof(Word));
 	if (new_sntc->words == NULL)
 	{
 		fwprintf(stderr, L"%sНе получилось выделить память для предложения!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
 	}
+	new_sntc->size = 0;
+	new_sntc->realSize = MAX(start_size, SNTC_START_SIZE);
 	return ALL_OK;
 }
 
@@ -42,6 +42,19 @@ int push_back_sntc(Sentence *sntc, Word *word)
 	return ALL_OK;
 }
 
+//проверка предложений на равенство, не учитывая регистр
+int is_equal_sntc(Sentence *sntc1, Sentence *sntc2)
+{
+	if (sntc1->size != sntc2->size)
+		return NOT_EQUAL;
+	for (int i = 0; i < sntc1->size; ++i)
+	{
+		if (!is_equal_word(&sntc1->words[i], &sntc2->words[i]))
+			return NOT_EQUAL;
+	}
+	return EQUAL;
+}
+
 //удалить слово из предложения
 void remove_word(Sentence *sntc, int ind)
 {
@@ -56,17 +69,12 @@ void remove_word(Sentence *sntc, int ind)
 	sntc->realSize--;
 }
 
-//проверка предложений на равенство, не учитывая регистр
-int is_equal_sntc(Sentence *sntc1, Sentence *sntc2)
+//обмен значениями двух предложений
+void swap_sntc(Sentence *sntc1, Sentence *sntc2)
 {
-	if (sntc1->size != sntc2->size)
-		return NOT_EQUAL;
-	for (int i = 0; i < sntc1->size; ++i)
-	{
-		if (!is_equal_word(&sntc1->words[i], &sntc2->words[i]))
-			return NOT_EQUAL;
-	}
-	return EQUAL;
+	Sentence tempSntc = *sntc1;
+	*sntc1 = *sntc2;
+	*sntc2 = tempSntc;
 }
 
 //сместить слова на n позиций вперёд
@@ -99,6 +107,7 @@ int move_word_n(Sentence *sntc, int n)
 	return ALL_OK;
 }
 
+
 //удалить слова с последней заглавной буквой
 void rm_word_last_cptlz(Sentence *sntc)
 {//удаляем с конца для оптимизации (двигаем только те, которые сохранены)
@@ -117,16 +126,4 @@ void rm_word_last_cptlz(Sentence *sntc)
 			}
 		}
 	}
-}
-
-int is_sep_symb(wchar_t c)
-{
-	return c == L'.' || c == L',' || c == L' ';
-}
-
-void swap_sntc(Sentence *sntc1, Sentence *sntc2)
-{
-	Sentence tempSntc = *sntc1;
-	*sntc1 = *sntc2;
-	*sntc2 = tempSntc;
 }

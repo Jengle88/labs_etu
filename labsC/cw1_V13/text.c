@@ -8,14 +8,14 @@ int initial_text(Text *new_text, int start_size)
 		fwprintf(stderr, L"%sОшибка, неверный размер для нового текста!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
 	}
-	new_text->size = 0;
-	new_text->realSize = MAX(start_size, TEXT_START_SIZE);
 	new_text->sntcs = (Sentence *) malloc(new_text->realSize * sizeof(Sentence));
 	if (new_text->sntcs == NULL)
 	{
 		fwprintf(stderr, L"%sНе получилось выделить память для текста!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
 	}
+	new_text->size = 0;
+	new_text->realSize = MAX(start_size, TEXT_START_SIZE);
 	return ALL_OK;
 }
 
@@ -28,7 +28,6 @@ int push_back_text(Text *text, Sentence *sntc)
 		text->sntcs[text->size++] = *sntc;
 		return ALL_OK;
 	}
-
 	//если нет места
 	Sentence *tempText = (Sentence *) realloc(text->sntcs, (size_t) (text->realSize * INCREASE) *
 														   sizeof(Sentence));
@@ -41,6 +40,50 @@ int push_back_text(Text *text, Sentence *sntc)
 	text->realSize = (size_t) (text->realSize * INCREASE);
 	text->sntcs[text->size++] = *sntc;
 	return ALL_OK;
+}
+
+//удалить предложение из текста
+void remove_sent(Text *text, int ind)
+{
+	//смещаем все предложения после того, которое мы удалили
+	for (int i = ind; i < text->realSize - 1; ++i)
+	{
+		swap_sntc(&(text->sntcs[i]), &(text->sntcs[i+1]));
+	}
+	//освобождаем память за последним
+	free(text->sntcs[text->realSize - 1].words);
+	text->size--;
+	text->realSize--;
+}
+
+//удалить повторяющиеся предложения
+void delete_dubl(Text *text)
+{//удаляем с конца для оптимизации (двигаем только те, которые сохранены)
+	for (int i = text->size - 1; i >= 0; --i)
+	{
+		for (int j = i - 1; j >= 0; --j)
+		{
+			if (is_equal_sntc(&text->sntcs[i], &text->sntcs[j]))
+			{//удаляем предложение, которое имеет больший индекс, и выходим
+				remove_sent(text, i);
+				break;
+			}
+		}
+	}
+}
+
+//освободить всю память
+void delete_all(Text *text)
+{
+	for (int i = 0; i < text->size; ++i)
+	{//удаляем до size, тк выделяли память через initial только для [size] элементов
+		for (int j = 0; j < text->sntcs[i].size; ++j)
+		{
+			free(text->sntcs[i].words[j].word);
+		}
+		free(text->sntcs[i].words);
+	}
+	free(text->sntcs);
 }
 
 //заполнить текст из потока ввода
@@ -106,32 +149,14 @@ int input_text(Text *text)
 	return ALL_OK;
 }
 
-//удалить предложение из текста
-void remove_sent(Text *text, int ind)
+//вывести текст
+void print_text(Text *text)
 {
-	//смещаем все предложения после того, которое мы удалили
-	for (int i = ind; i < text->realSize - 1; ++i)
+	for (int i = 0; i < text->size; ++i)
 	{
-		swap_sntc(&(text->sntcs[i]), &(text->sntcs[i+1]));
-	}
-	//освобождаем память за последним
-	free(text->sntcs[text->realSize - 1].words);
-	text->size--;
-	text->realSize--;
-}
-
-//удалить повторяющиеся предложения
-void delete_dubl(Text *text)
-{//удаляем с конца для оптимизации (двигаем только те, которые сохранены)
-	for (int i = text->size - 1; i >= 0; --i)
-	{
-		for (int j = i - 1; j >= 0; --j)
+		for (int j = 0; j < text->sntcs[i].size; ++j)
 		{
-			if (is_equal_sntc(&text->sntcs[i], &text->sntcs[j]))
-			{//удаляем предложение, которое имеет больший индекс, и выходим
-				remove_sent(text, i);
-				break;
-			}
+			fputws(text->sntcs[i].words[j].word, stdout);
 		}
 	}
 }
@@ -174,7 +199,7 @@ wchar_t *unique_symb(Text text, int *n)
 	//массив для ответа
 	wchar_t *res = (wchar_t *) malloc(size * sizeof(wchar_t));
 	if (!res)
-		return SOME_ERROR;
+		return NULL;
 
 	int ind = 0;
 	for (int i = 0; i < L'я' - L'а' + 1; ++i)
@@ -228,46 +253,3 @@ int *unique_len_word(Text text, int *size)
 	*size = maxSize;
 	return res;
 }
-
-//освободить всю память
-void delete_all(Text *text)
-{
-	for (int i = 0; i < text->size; ++i)
-	{//удаляем до size, тк выделяли память через initial только для [size] элементов
-		for (int j = 0; j < text->sntcs[i].size; ++j)
-		{
-			free(text->sntcs[i].words[j].word);
-		}
-		free(text->sntcs[i].words);
-	}
-	free(text->sntcs);
-}
-
-//вывести текст
-void print_text(Text *text)
-{
-	for (int i = 0; i < text->size; ++i)
-	{
-		for (int j = 0; j < text->sntcs[i].size; ++j)
-		{
-			fputws(text->sntcs[i].words[j].word, stdout);
-			//wprintf(L"\n");
-		}
-	}
-}
-
-
-
-
-
-//test cases
-
-//abc. abc. abc, eft. abc.@
-
-/*
-a. b. a. c.
-g. y. z. a. b. c. t. b.@
-*/
-
-
-

@@ -1,23 +1,26 @@
 #pragma once
 
 #include "text.h"
-#include <stdio.h> //Стандартный однобайтовый ввод-вывод
-#include <wchar.h> //"Широкие" многобайтовые символы и их ввод-вывод
-#include <locale.h> //Для подключения правильной локализации
+#include <stdio.h>
+#include <wchar.h>
+#include <locale.h>
 
 
 int do_task(Text *text);
 void print_interface();
 
+//состояния работы программы
 #define EXIT 0
 #define WORKING 1
 
+//возможные завершения программы
 enum EXITS
 {
 	GOOD_EXIT,
 	BAD_EXIT
 };
 
+//перечисление операций
 enum TASKS
 {
 	MOVE_WORD = 1,
@@ -29,6 +32,7 @@ enum TASKS
 	STOP_WORK = 0,
 };
 
+//точка запуска программы
 int main()
 {
 	setlocale(LC_ALL, "");
@@ -37,6 +41,7 @@ int main()
 	if (!initial_text(&text, 2) || !input_text(&text))
 	{
 		fwprintf(stderr, L"%Ошибка выделения памяти при инициализации текста!!%s\n", ERROR_CLR, STD_CLR);
+		delete_all(&text);
 		return BAD_EXIT;
 	}
 	delete_dubl(&text);
@@ -139,18 +144,16 @@ int do_task(Text *text)
 	return WORKING;
 }
 
+//вывести интерфейс
 void print_interface()
 {
 	wprintf(L"Доступные команды:\n"
 			L"1)Сделать сдвиг на N слов вперёд\n"
 			L"2)Вывести все уникальные кириллические и латинские символы\n"
 			L"3)Посчитать количество слов с длиной 1,2,3...\n"
-			L"4)Удалить все слова, заканчивающиеся на заглавный символ\n"
+			L"4)Удалить все слова, оканчивающиеся на заглавный символ\n"
 			L"8)Вывести текст\n"
 			L"9)Очистить терминал\n"
 			L"0)Выйти из программы\n"
 			L"Введите номер команды...\n");
 }
-
-
-
