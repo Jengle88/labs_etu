@@ -40,7 +40,6 @@ int main()
 	wprintf(L"Введите текст(два переноса строки являются признаком конца ввода текста)\n");
 	if (!initial_text(&text, 2) || !input_text(&text))
 	{
-		fwprintf(stderr, L"%Ошибка выделения памяти при инициализации текста!!%s\n", ERROR_CLR, STD_CLR);
 		delete_all(&text);
 		return BAD_EXIT;
 	}
