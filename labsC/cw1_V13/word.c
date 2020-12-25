@@ -16,6 +16,7 @@ int initial_word(Word *new_word, int start_size)
 		fwprintf(stderr, L"%sНе получилось выделить память для слова!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
 	}
+
 	return ALL_OK;
 }
 

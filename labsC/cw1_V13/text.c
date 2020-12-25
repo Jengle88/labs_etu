@@ -13,16 +13,8 @@ int initial_text(Text *new_text, int start_size)
 	new_text->sntcs = (Sentence *) malloc(new_text->realSize * sizeof(Sentence));
 	if (new_text->sntcs == NULL)
 	{
-		new_text->realSize = 0;
 		fwprintf(stderr, L"%sНе получилось выделить память для текста!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
-	}
-	for (int i = 0; i < new_text->realSize; ++i)
-	{
-		if(!initial_sntc(&(new_text->sntcs[i]), SNTC_START_SIZE))
-		{
-			return SOME_ERROR;
-		}
 	}
 	return ALL_OK;
 }
@@ -31,13 +23,8 @@ int initial_text(Text *new_text, int start_size)
 int push_back_text(Text *text, Sentence *sntc)
 {
 	//если есть место
-	if (text->size < text->realSize)//---------------------
+	if (text->size < text->realSize)
 	{
-		for (int i = 0; i < text->sntcs[text->size].realSize; ++i)
-		{
-			free(text->sntcs[text->size].words[i].word);
-		}
-		free(text->sntcs[text->size].words);//-----------------------
 		text->sntcs[text->size++] = *sntc;
 		return ALL_OK;
 	}
@@ -49,21 +36,8 @@ int push_back_text(Text *text, Sentence *sntc)
 		fwprintf(stderr, L"%sНе получилось выделить память для текста!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
 	}
-	size_t lastInd = text->realSize * INCREASE;
-	for (int i = text->realSize; i < lastInd; ++i)
-	{
-		if(!initial_sntc(&(tempText[i]), SNTC_START_SIZE))
-		{
-			return SOME_ERROR;
-		}
-		text->realSize++;
-	}
 	text->sntcs = tempText;
-	for (int i = 0; i < text->sntcs[text->size].realSize; ++i)//------------------
-	{
-		free(text->sntcs[text->size].words[i].word);
-	}
-	free(text->sntcs[text->size].words);//-----------------------
+	text->realSize = (size_t) (text->realSize * INCREASE);
 	text->sntcs[text->size++] = *sntc;
 	return ALL_OK;
 }
@@ -101,9 +75,9 @@ void delete_dubl(Text *text)
 //освободить всю память
 void delete_all(Text *text)
 {
-	for (int i = 0; i < text->realSize; ++i)
+	for (int i = 0; i < text->size; ++i)
 	{//удаляем до size, тк выделяли память через initial только для [size] элементов
-		for (int j = 0; j < text->sntcs[i].realSize; ++j)
+		for (int j = 0; j < text->sntcs[i].size; ++j)
 		{
 			free(text->sntcs[i].words[j].word);
 		}
