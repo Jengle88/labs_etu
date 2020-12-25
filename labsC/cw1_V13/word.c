@@ -8,14 +8,14 @@ int initial_word(Word *new_word, int start_size)
 		fwprintf(stderr, L"%sОшибка, неверный размер для нового слова!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
 	}
+	new_word->size = 0;
+	new_word->realSize = MAX(start_size + 1, WORD_START_SIZE);// +1 за счёт \0
 	new_word->word = (wchar_t *) malloc(new_word->realSize * sizeof(wchar_t));
 	if (new_word->word == NULL)
 	{
 		fwprintf(stderr, L"%sНе получилось выделить память для слова!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
 	}
-	new_word->size = 0;
-	new_word->realSize = MAX(start_size + 1, WORD_START_SIZE);// +1 за счёт \0
 	return ALL_OK;
 }
 

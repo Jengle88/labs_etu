@@ -8,14 +8,22 @@ int initial_sntc(Sentence *new_sntc, int start_size)
 		fwprintf(stderr, L"%sОшибка, неверный размер для нового предложения!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
 	}
+	new_sntc->size = 0;
+	new_sntc->realSize = MAX(start_size, SNTC_START_SIZE);
 	new_sntc->words = (Word *) malloc(new_sntc->realSize * sizeof(Word));
 	if (new_sntc->words == NULL)
 	{
+		new_sntc->realSize = 0;
 		fwprintf(stderr, L"%sНе получилось выделить память для предложения!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
 	}
-	new_sntc->size = 0;
-	new_sntc->realSize = MAX(start_size, SNTC_START_SIZE);
+	for (int i = 0; i < new_sntc->realSize; ++i)
+	{
+		if(!initial_word(&(new_sntc->words[i]), WORD_START_SIZE))
+		{
+			return SOME_ERROR;
+		}
+	}
 	return ALL_OK;
 }
 
@@ -25,10 +33,10 @@ int push_back_sntc(Sentence *sntc, Word *word)
 	//если есть место
 	if (sntc->size < sntc->realSize)
 	{
+		free(sntc->words[sntc->size].word);//---------------
 		sntc->words[sntc->size++] = *word;
 		return ALL_OK;
 	}
-
 	//если нет места
 	Word *tempSntc = (Word *) realloc(sntc->words, (size_t) (sntc->realSize * INCREASE) * sizeof(Word));
 	if (tempSntc == NULL)
@@ -36,8 +44,18 @@ int push_back_sntc(Sentence *sntc, Word *word)
 		fwprintf(stderr, L"%sНе получилось выделить память для предложения!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
 	}
+	//начальная инициализация слов
+	size_t lastInd = sntc->realSize * INCREASE;
+	for (int i = sntc->realSize; i < lastInd; ++i)
+	{
+		if(!initial_word(&(tempSntc[i]), WORD_START_SIZE))
+		{
+			return SOME_ERROR;
+		}
+		sntc->realSize++;
+	}
 	sntc->words = tempSntc;
-	sntc->realSize = (size_t) (sntc->realSize * INCREASE);
+	free(sntc->words[sntc->size].word);//-------------------
 	sntc->words[sntc->size++] = *word;
 	return ALL_OK;
 }
