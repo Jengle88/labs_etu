@@ -3,12 +3,12 @@
 //начальная инициализация предложения
 int initial_sntc(Sentence *new_sntc, int start_size)
 {
+	new_sntc->size = 0;
 	if (start_size < 0)
 	{
 		fwprintf(stderr, L"%sОшибка, неверный размер для нового предложения!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
 	}
-	new_sntc->size = 0;
 	new_sntc->realSize = MAX(start_size, SNTC_START_SIZE);
 	new_sntc->words = (Word *) malloc(new_sntc->realSize * sizeof(Word));
 	if (new_sntc->words == NULL)
@@ -16,7 +16,6 @@ int initial_sntc(Sentence *new_sntc, int start_size)
 		fwprintf(stderr, L"%sНе получилось выделить память для предложения!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
 	}
-
 	return ALL_OK;
 }
 

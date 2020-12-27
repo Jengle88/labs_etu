@@ -3,12 +3,12 @@
 //начальная инициализация текста
 int initial_text(Text *new_text, int start_size)
 {
+	new_text->size = 0;
 	if (start_size < 0)
 	{
 		fwprintf(stderr, L"%sОшибка, неверный размер для нового текста!!%s\n", ERROR_CLR, STD_CLR);
 		return SOME_ERROR;
 	}
-	new_text->size = 0;
 	new_text->realSize = MAX(start_size, TEXT_START_SIZE);
 	new_text->sntcs = (Sentence *) malloc(new_text->realSize * sizeof(Sentence));
 	if (new_text->sntcs == NULL)
