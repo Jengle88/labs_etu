@@ -27,6 +27,7 @@ enum TASKS
 	UNIQ_SYMB,//заполняются последовательно
 	CNT_WORD_WITH_LEN,
 	RM_WORD_LAST_CAPIT,
+	SORT_WORD_BY_CNT,
 	OUT_TEXT = 8,
 	CLEAR_TERM = 9,
 	STOP_WORK = 0,
@@ -121,6 +122,25 @@ int do_task(Text *text)
 			wprintf(L"Выполнено!\n");
 			break;
 		}
+		case SORT_WORD_BY_CNT:
+		{
+			Word_cnt *res;
+			int size = 0;
+			res = sort_word_by_cnt(text,&size);
+			if(res == NULL)
+			{
+				wprintf(L"Ошибка!");
+				break;
+			}
+			wprintf(L"Выполнено!\n");
+			for (int i = 0; i < size; ++i)
+			{
+				fputws(res[i].word[0].word, stdout);
+				fputws(L"\n", stdout);
+			}
+			free(res);
+			break;
+		}
 		case OUT_TEXT:
 		{
 			print_text(text);
@@ -151,6 +171,7 @@ void print_interface()
 			L"2)Вывести все уникальные кириллические и латинские символы\n"
 			L"3)Посчитать количество слов с длиной 1,2,3...\n"
 			L"4)Удалить все слова, оканчивающиеся на заглавный символ\n"
+   			L"5)Отсортировать все слова текста в порядке уменьшения частоты их встречаемости\n"
 			L"8)Вывести текст\n"
 			L"9)Очистить терминал\n"
 			L"0)Выйти из программы\n"

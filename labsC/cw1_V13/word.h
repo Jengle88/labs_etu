@@ -26,12 +26,18 @@ struct Word
 	int realSize;
 };
 
-
+typedef struct word_cnt Word_cnt;
 
 typedef struct Word Word;
-
+struct word_cnt
+{
+	Word *word;
+	int word_capacity;
+	int cnt;
+};
 int initial_word(Word* new_word, int start_size);
 int push_back_word(Word* word, wchar_t c);
 int is_equal_word(Word* word1, Word* word2);
 void swap_word(Word* word1, Word* word2);
 int is_sep_symb(wchar_t c);
+int cmp_word(const void *word1, const void *word2);

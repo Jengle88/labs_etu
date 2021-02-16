@@ -48,7 +48,7 @@ void remove_sent(Text *text, int ind)
 	//смещаем все предложения после того, которое мы удалили
 	for (int i = ind; i < text->realSize - 1; ++i)
 	{
-		swap_sntc(&(text->sntcs[i]), &(text->sntcs[i+1]));
+		swap_sntc(&(text->sntcs[i]), &(text->sntcs[i + 1]));
 	}
 	//освобождаем память за последним
 	free(text->sntcs[text->realSize - 1].words);
@@ -190,7 +190,7 @@ wchar_t *unique_symb(Text text, int *n)
 				else if (symb == L'ё')
 				{
 					tableCntOfRUSymb[L'я' - L'а' + 1]++;
-					if(tableCntOfRUSymb[L'я' - L'а' + 1] == 1)
+					if (tableCntOfRUSymb[L'я' - L'а' + 1] == 1)
 						size++;
 				}
 			}
@@ -204,7 +204,7 @@ wchar_t *unique_symb(Text text, int *n)
 	int ind = 0;
 	for (int i = 0; i < L'я' - L'а' + 1; ++i)
 	{
-		if(L'е' - L'а' + 1 == i && tableCntOfRUSymb[L'я' - L'а' + 1] > 0)
+		if (L'е' - L'а' + 1 == i && tableCntOfRUSymb[L'я' - L'а' + 1] > 0)
 			res[ind++] = L'ё';
 		if (tableCntOfRUSymb[i] > 0)
 			res[ind++] = L'а' + i;
@@ -236,7 +236,7 @@ int *unique_len_word(Text text, int *size)
 	}
 	//массив для ответа
 	int *res = (int *) calloc(maxSize, sizeof(int));
-	if(!res)
+	if (!res)
 		return NULL;
 
 	for (int i = 0; i < text.size; ++i)
@@ -253,3 +253,123 @@ int *unique_len_word(Text text, int *size)
 	*size = maxSize;
 	return res;
 }
+
+
+//сравнение слов
+int comp_word_cnt(const void *a, const void *b)
+{
+	Word_cnt *word1 = (Word_cnt*)a;
+	Word_cnt *word2 = (Word_cnt*)b;
+	if(word1->cnt > word2->cnt)//в порядке убывания
+		return -1;
+	else if(word1->cnt < word2->cnt)
+		return 1;
+	else
+		return 0;
+}
+
+//сортировка слов по частоте встречаемости и удаление
+Word_cnt *sort_word_by_cnt(Text *text, int *size)
+{
+	if (text->size == 0)
+		return NULL;
+	int cntWord = 0;
+	for (int i = 0; i < text->size; ++i)
+	{
+		cntWord += text->sntcs[i].size / 2;
+	}
+	Word *arr = (Word *) malloc(cntWord * sizeof(Word));
+	if(arr == NULL)
+		return NULL;
+	int ind = 0;
+	for (int i = 0; i < text->size; ++i)
+	{
+		for (int j = 0; j < text->sntcs[i].size; j += 2)
+		{
+			arr[ind++] = text->sntcs[i].words[j];
+		}
+	}
+	qsort(arr, cntWord, sizeof(Word), cmp_word);
+
+	int tableCapacity = 10;
+	int tableSize = 0;
+	struct word_cnt *tableWord = malloc(tableCapacity * sizeof(struct word_cnt));
+	if(tableWord == NULL)
+	{
+		free(arr);
+		return NULL;
+	}
+	tableWord[0].word = (Word*)malloc(10 * sizeof(Word));
+	if(tableWord[0].word == NULL)
+	{
+		free(arr);
+		free(tableWord);
+		return NULL;
+	}
+	tableWord[0].word[0] = arr[0];
+	tableWord[0].word_capacity = 10;
+	tableWord[0].cnt = 1;
+	for (int i = 1; i < cntWord; ++i)//aa, aa, aa, bb, bb.
+	{
+		if (cmp_word(&(arr[i].word), &(arr[i - 1].word)) == 0)
+		{
+			if(tableWord[tableSize].word_capacity == tableWord[tableSize].cnt + 1)
+			{
+				Word* tempWord = (Word*)realloc(tableWord[tableSize].word, (size_t)(tableWord[tableSize].word_capacity * INCREASE));
+				if(tempWord != NULL)
+				{
+//					tableWord[tableSize].word[tableWord[tableSize].cnt] = arr[i];
+					tableWord[tableSize].word_capacity *= INCREASE;
+				}
+				else
+				{
+					free(tableWord);
+					free(arr);
+					return NULL;
+				}
+			}
+			tableWord[tableSize].word[tableWord[tableSize].cnt] = arr[i];
+			tableWord[tableSize].cnt++;
+		}
+		else
+		{
+			if (tableSize + 1 == tableCapacity)
+			{
+				struct word_cnt *tempTable = (struct word_cnt *) realloc(tableWord,
+																		 (size_t) (tableCapacity * INCREASE));
+				if(tempTable == NULL)
+				{
+					free(arr);
+					return NULL;
+				}
+				else
+				{
+					tableWord = tempTable;
+					tableCapacity = (size_t) (tableCapacity * INCREASE);
+				}
+			}
+			tableSize++;
+			tableWord[tableSize].word = (Word*)malloc(10 * sizeof(Word));
+			tableWord[tableSize].word[0] = arr[i];
+			tableWord[tableSize].word_capacity = 10;
+			tableWord[tableSize].cnt = 1;
+		}
+	}
+	qsort(tableWord, tableSize + 1, sizeof(Word_cnt), comp_word_cnt);
+	ind = 0;
+	for (int i = 0; i < text->size; ++i)
+	{
+		for (int j = 0; j < text->sntcs[i].size; j += 2)
+		{
+			if (tableWord[ind].cnt == 0)
+			{
+				ind++;
+			}
+			text->sntcs[i].words[j] = tableWord[ind].word[tableWord[ind].cnt-1];
+			tableWord[ind].cnt--;
+		}
+	}
+	*size = tableSize + 1;
+	return tableWord;
+}
+//aa, aa, bb, bb, bb.

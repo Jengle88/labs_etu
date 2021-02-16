@@ -19,3 +19,4 @@ int input_text(Text* text);
 void print_text(Text *text);
 wchar_t* unique_symb(Text text, int *n);
 int *unique_len_word(Text text, int *size);
+Word_cnt* sort_word_by_cnt(Text *text, int *size);

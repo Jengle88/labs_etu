@@ -66,3 +66,10 @@ int is_sep_symb(wchar_t c)
 {
 	return c == L'.' || c == L',' || c == L' ';
 }
+
+int cmp_word(const void *a, const void *b)
+{
+	Word *word1 = (Word*)a;
+	Word *word2 = (Word*)b;
+	return wcscmp(word1->word, word2->word);
+}
