@@ -60,53 +60,34 @@ long long calcInDir(char **dirPath, char action, int indexDirPath, int *sizeDirP
 	int size = arrayNamesFoldersFiles(&arr, &dir);
 	for (int i = 0; i < size; ++i) {
 		long long num;
-		if (!strcmp(arr[i], ADD)) {
-			if (indexDirPath + 4 > *sizeDirPath) {
-				char *tempStr = (char *) realloc(*dirPath, (*sizeDirPath + 4 + 1) * sizeof(char));
-				if (!tempStr) {
-					puts(ERROR);
-					return 0;
-				}
-				*sizeDirPath += 4;
-				*dirPath = tempStr;
-			}
-			strcpy((*dirPath) + indexDirPath, ADD_PATH);
-			num = calcInDir(dirPath, 'a', indexDirPath + 4, sizeDirPath);
-			(*dirPath)[indexDirPath] = '\0';
-		}
-		else if (!strcmp(arr[i], MUL)) {
-			if (indexDirPath + 4 > *sizeDirPath) {
-				char *tempStr = (char *) realloc(*dirPath, (*sizeDirPath + 4 + 1) * sizeof(char));
-				if (!tempStr) {
-					puts(ERROR);
-					return 0;
-				}
-				*sizeDirPath += 4;
-				*dirPath = tempStr;
-			}
-			strcpy(*dirPath + indexDirPath, MUL_PATH);
-			num = calcInDir(dirPath, 'm', indexDirPath + 4, sizeDirPath);
-			(*dirPath)[indexDirPath] = '\0';
-		}
-		else if (strcmp(arr[i], ".") && strcmp(arr[i], "..")) {
-			int length = strlen(arr[i]);
-			if (indexDirPath + length + 1 > *sizeDirPath) {
+		if (!strcmp(arr[i], ADD) || !strcmp(arr[i], MUL) || (strcmp(arr[i], "..") && strcmp(arr[i], "."))) {
+			int length = strlen(arr[i]);//если нужно увеличить длину строки
+			if (indexDirPath + length + 1 > *sizeDirPath) {				// lenght + '/' + '/0'
 				char *tempStr = (char *) realloc(*dirPath, (*sizeDirPath + length + 1 + 1) * sizeof(char));
 				if (!tempStr) {
 					puts(ERROR);
 					return 0;
 				}
-				*sizeDirPath += length + 1;
+				*sizeDirPath += 4;
 				*dirPath = tempStr;
 			}
-			(*dirPath)[indexDirPath] = '/';
-			strcpy(*dirPath + indexDirPath + 1, arr[i]);
-			num = calcNumsFile(*dirPath, action);
+			if (!strcmp(arr[i], ADD)) {
+				strcpy((*dirPath) + indexDirPath, ADD_PATH);
+				num = calcInDir(dirPath, 'a', indexDirPath + 4, sizeDirPath);
+			}
+			else if (!strcmp(arr[i], MUL)) {
+				strcpy(*dirPath + indexDirPath, MUL_PATH);
+				num = calcInDir(dirPath, 'm', indexDirPath + 4, sizeDirPath);
+			}
+			else {
+				(*dirPath)[indexDirPath] = '/';
+				strcpy(*dirPath + indexDirPath + 1, arr[i]);
+				num = calcNumsFile(*dirPath, action);
+			}
 			(*dirPath)[indexDirPath] = '\0';
 		}
 		else
 			continue;
-
 		result = (action == 'a' ? result + num : result * num);
 	}
 	closedir(dir);
@@ -128,7 +109,6 @@ int main() {
 	fclose(output);
 	free(dir);
 	return 0;
-
 }
 
 
