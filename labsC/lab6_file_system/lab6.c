@@ -68,7 +68,7 @@ long long calcInDir(char **dirPath, char action, int indexDirPath, int *sizeDirP
 					puts(ERROR);
 					return 0;
 				}
-				*sizeDirPath += 4;
+				*sizeDirPath += length + 1;
 				*dirPath = tempStr;
 			}
 			if (!strcmp(arr[i], ADD)) {
