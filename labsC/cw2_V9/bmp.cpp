@@ -4,15 +4,13 @@
 
 //Vim: :%! xxd - показать HEX-содерж файла, :%! xxd -r - вернуть обычное представление
 int main() {
-	std::fstream in("test.bmp", std::ios_base::binary | std::ios_base::in);
 
 	BMP bmp;
-	bmp.input_picture(in);
-	in.close();
+	std::string name_file_input = "test.bmp";
+	bmp.input_picture(name_file_input);
 
-	std::ofstream out("out2.bmp",std::ios_base::binary | std::ios_base::out);
-	bmp.write_bmp(out);
-	out.close();
+	std::string name_file_output = "out.bmp";
+	bmp.write_bmp(name_file_output);
 	return 0;
 
 }
