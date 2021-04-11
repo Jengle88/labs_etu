@@ -1,20 +1,33 @@
-#include "Byte.h"
+#pragma once
 #include <vector>
 #include <fstream>
 #include <iostream>
 #include <tuple>
+#include <type_traits>
 
 #define BMPFileHeaderSIZE 14
 #define BMPInfoHeaderSIZE 40
+#define CLR_WHITE {255,255,255,0}
+#define CLR_BLACK {0,0,0,0}
+#define CLR_BLUE {255,0,0,0}
+#define CLR_GREEN {0,255,0,0}
+#define CLR_RED {0,0,255,0}
+
 
 /*
  * TODO:
  *  1) Сделать коммит --- V
  *  2) Убрать поддержку не 24-битных изображений --- V
  *  3) Перенести реализацию в cpp файл --- V
- *  4) Сделать миграцию в проект Qt
+ *  4) Сделать миграцию в проект Qt --- V
  *  5) Убрать палитру --- V
- *  6) Coming soon...
+ *  6) Сделать изменение размера изображения: выбор стороны и размера --- V
+ *  7) Нарисовать квадрат и диагонали --- V
+ *  8) Спросить про ширину диагонали
+ *  9) Сделать поворот фрагмента на 180 --- V
+ *  10) Сделать поворот фрагмента на 90 --- V
+ *  11) Сделать поворот фрагмента на 270
+ *  12) Coming soon...
  */
 
 
@@ -43,15 +56,14 @@ struct BMPInfoHeader {
 };
 
 struct ColorItem {
-	u_char rgbBlue = 0;
-	u_char rgbGreen = 0;
-	u_char rgbRed = 0;
+	u_char rgbBlue = 255;
+	u_char rgbGreen = 255;
+	u_char rgbRed = 255;
 	u_char rgbReserved = 0;
 
 };
 
-void write_3_color(std::ofstream &out, const ColorItem &item);
-void write_4_color(std::ofstream &out, const ColorItem &item);
+
 
 class BMP {
 
@@ -69,9 +81,20 @@ private:
 	void in_bmp_info_header(std::fstream &in);
 	void in_bmp_palette(std::fstream &in);
 	void in_bmp_pixel_table(std::fstream &in);
+	static void write_3_color(std::ofstream &out, const ColorItem &item);
+	static void write_4_color(std::ofstream &out, const ColorItem &item);
 
 public:
-	void input_picture(std::string &name_file);
+	bool input_picture(std::string &name_file);
 	void write_bmp(std::string &name_file_output) const;
+	int getWidth() const;
+	int getHeight() const;
+	void setWidth(int width);
+	void setHeight(int height);
+
+	void draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem line_color,
+				  bool is_pour_over = false, ColorItem square_color = CLR_WHITE);
+	void edit_component(char component, int num);
+	void rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle);
 };
 
