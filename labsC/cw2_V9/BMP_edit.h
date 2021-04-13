@@ -23,10 +23,10 @@
  *  5) Убрать палитру --- V
  *  6) Сделать изменение размера изображения: выбор стороны и размера --- V
  *  7) Нарисовать квадрат и диагонали --- V
- *  8) Спросить про ширину диагонали
+ *  8) Исправить рисование диагонали квадрата с правильной толщиной линии
  *  9) Сделать поворот фрагмента на 180 --- V
  *  10) Сделать поворот фрагмента на 90 --- V
- *  11) Сделать поворот фрагмента на 270
+ *  11) Сделать поворот фрагмента на 270 --- V
  *  12) Coming soon...
  */
 
@@ -77,7 +77,7 @@ public:
 	std::vector<std::vector<ColorItem>> pixels;
 
 private:
-	void in_bmp_file_header(std::fstream &in);
+	int in_bmp_file_header(std::fstream &in);
 	void in_bmp_info_header(std::fstream &in);
 	void in_bmp_palette(std::fstream &in);
 	void in_bmp_pixel_table(std::fstream &in);

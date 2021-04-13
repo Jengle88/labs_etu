@@ -11,16 +11,21 @@ void BMP::write_4_color(std::ofstream &out, const ColorItem &item) {
 	out << item.rgbBlue << item.rgbGreen << item.rgbRed << item.rgbReserved;
 }
 
-void BMP::in_bmp_file_header(std::fstream &in) {
+int BMP::in_bmp_file_header(std::fstream &in) {
 	std::vector<u_char> byte;
 	byte = Byte::get_byte(in, 2);
 	this->file_header.Signature = Byte::make_short(byte[1], byte[0]);
+	if(!Byte::compare_like_short(this->file_header.Signature, 'B', 'M')){//check!!!
+		std::cout << "This image is not BMP-file!";                      //check!!!
+		return 0;                                                        //check!!!
+	}                                                                    //check!!!
 	byte = Byte::get_byte(in, 4);
 	this->file_header.FileSize = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
 	byte = Byte::get_byte(in, 4);
 	this->file_header.Reserved = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
 	byte = Byte::get_byte(in, 4);
 	this->file_header.DataOffset = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
+	return 1;
 }
 
 void BMP::in_bmp_info_header(std::fstream &in) {
@@ -86,7 +91,8 @@ bool BMP::input_picture(std::string &name_file) {
 		std::clog << "Haven`t found file!\n";
 		return false;
 	}
-	in_bmp_file_header(in);
+	if(!in_bmp_file_header(in))
+		return false;
 	in_bmp_info_header(in);
 	if (this->info_header.BitCount == 24) {
 		in_bmp_palette(in);
@@ -176,7 +182,7 @@ void BMP::setHeight(int height) {
 	}
 }
 
-void
+void // FIXME исправить толщину диагонали
 BMP::draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem line_color, bool is_pour_over,
 				 ColorItem square_color) {
 	if (xpos < 0 || xpos > this->info_header.Width || ypos < 0 || ypos > this->info_header.Height) {
@@ -306,7 +312,23 @@ void BMP::rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle)
 		}
 	}
 	else if (angle == 270) {
-		//TODO
+		int ydelta = (yrpos - ylpos) / 2;
+		int xdelta = (xrpos - xlpos) / 2;
+		std::vector<std::vector<ColorItem>> temp_matrix(yrpos - ylpos + 1,
+														std::vector<ColorItem>(xrpos - xlpos + 1));
+		for (int i = ylpos; i <= yrpos; ++i) {
+			for (int j = xlpos; j <= xrpos; ++j) {
+				temp_matrix[i - ylpos][j - xlpos] = this->pixels[i][j];
+				this->pixels[i][j] = CLR_WHITE;
+			}
+		}
+		int new_x_start = std::max(0, xlpos + xdelta - ydelta);
+		int new_y_start = std::max(0, ylpos + ydelta - xdelta);
+		for (int i = 0; i < temp_matrix[0].size() && i + new_y_start < this->info_header.Height; ++i) {
+			for (int j = 0; j < temp_matrix.size() && j + new_x_start < this->info_header.Width; ++j) {
+				this->pixels[i + new_y_start][j + new_x_start] = temp_matrix[j][temp_matrix[0].size() - 1 - i];
+			}
+		}
 	}
 	else
 		std::cout << "Bad angle!\n";

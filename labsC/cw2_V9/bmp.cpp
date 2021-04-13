@@ -5,6 +5,7 @@
  * TODO:
  *  1) Построить квадрат с диагональю. Ширина диагонали вычисляется: sqrt(x) с округлением до ближ нечётного
  *  Из угла идёт середина ширины и смещение на +1 вверх и вправо
+ *  Толщина линии диагонали должна совпадать с толщиной стороны
  *
  *
  */
@@ -31,13 +32,13 @@ void testing_edit_component(BMP &bmp) {
 int main() {
 
 	BMP bmp;
-	std::string name_file_input = "image24.bmp";
+	std::string name_file_input = "test.bmp";
 	if (!bmp.input_picture(name_file_input))
 		return 0;
 
 	//bmp.draw_square(5,5,12,6,CLR_BLACK);
 	//bmp.draw_square(5,5,6,3,CLR_RED);
-	bmp.rotate_fragment(0, 0, bmp.getWidth() - 1, bmp.getHeight() - 1, 90);
+	bmp.rotate_fragment(0, 0, bmp.getWidth() - 1, bmp.getHeight() - 1, 270);
 	std::string name_file_output = "out.bmp";
 	bmp.write_bmp(name_file_output);
 	return 0;
