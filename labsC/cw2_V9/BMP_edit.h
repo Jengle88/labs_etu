@@ -120,13 +120,13 @@ public:
 	int getHeight() const;
 	void setWidth(int width);
 	void setHeight(int height);
-	void draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem line_color,
+	bool draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem line_color,
 					 bool is_pour_over = false, ColorItem square_color = CLR_BLACK);
-	void edit_component(char component, int num);
-	void rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle);
-	void draw_circle_via_radius(int xpos, int ypos, int rad, int line_width, ColorItem line_color,
+	bool edit_component(char component, int num);
+	bool rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle);
+	bool draw_circle_via_radius(int xpos, int ypos, int rad, int line_width, ColorItem line_color,
 								bool is_pour_over = false, ColorItem circle_color = CLR_BLACK);
-	void draw_circle_via_square(int xposl, int yposl, int xposr, int yposr, int line_width, ColorItem line_color,
+	bool draw_circle_via_square(int xposl, int yposl, int xposr, int yposr, int line_width, ColorItem line_color,
 							 bool is_pour_over = false, ColorItem circle_color = CLR_BLACK);
 };
 

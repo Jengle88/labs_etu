@@ -74,8 +74,11 @@ void BMP::in_bmp_palette(std::fstream &in) {
 		this->have_palette = true;
 		this->colors.resize(palette_size);
 		for (int i = 0; i < palette_size / 4; ++i) {
-			this->colors[i] = {(u_char) in.get(), (u_char) in.get(),
-							   (u_char) in.get(), (u_char) in.get()};
+			u_char b = in.get();
+			u_char g = in.get();
+			u_char r = in.get();
+			u_char res = in.get();
+			this->colors[i] = ColorItem(b,g,r,res);
 		}
 	}
 }
@@ -89,8 +92,10 @@ void BMP::in_bmp_pixel_table(std::fstream &in) {
 	this->cnt_extra_byte = this->info_header.Width % 4;
 	for (int i = this->info_header.Height - 1; i >= 0; i--) {
 		for (int j = 0; j < this->info_header.Width; ++j) {
-			this->pixels[i][j] = ColorItem((u_char) in.get(), (u_char) in.get(),
-								  (u_char) in.get(), 0);
+			u_char b = in.get();
+			u_char g = in.get();
+			u_char r = in.get();
+			this->pixels[i][j] = ColorItem(b,g,r, 0);
 		}
 		for (int j = 0; j < this->cnt_extra_byte; ++j) {
 			in.get();
@@ -193,21 +198,21 @@ void BMP::setHeight(int height) {
 	}
 }
 
-void
+bool
 BMP::draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem line_color, bool is_pour_over,
 				 ColorItem square_color) {
 	if (xpos < 0 || xpos >= this->info_header.Width || ypos < 0 || ypos >= this->info_header.Height) {
 		std::cerr << ERR_XYPOS;
-		return;
+		return false;
 	}
 	if (line_length < 0 || xpos + line_length > this->info_header.Width ||
 		ypos + line_length > this->info_header.Height || line_length < 2 * line_width) {
 		std::cerr << ERR_LENGTH;
-		return;
+		return false;
 	}
 	if (line_width < 0) {
 		std::cerr << ERR_WIDTH;
-		return;
+		return false;
 	}
 	// верхняя и нижняя линии
 	for (int i = 0; i < line_width; ++i) {
@@ -249,16 +254,17 @@ BMP::draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem 
 			this->pixels[ypos + line_length - line_width - i - 1][xpos + line_width + i - j] = line_color;
 		}
 	}
+	return true;
 }
 
-void BMP::edit_component(char component, int num) {
+bool BMP::edit_component(char component, int num) {
 	if (component != 'r' && component != 'g' && component != 'b') {
 		std::cerr << ERR_COMP;
-		return;
+		return false;
 	}
 	if (num < 0 || num > 255) {
 		std::cerr << ERR_CLR;
-		return;
+		return false;
 	}
 	for (int i = 0; i < this->info_header.Height; ++i) {
 		for (int j = 0; j < this->info_header.Width; ++j) {
@@ -275,20 +281,21 @@ void BMP::edit_component(char component, int num) {
 			}
 		}
 	}
+	return true;
 }
 
-void BMP::rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle) {
+bool BMP::rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle) {
 	if (xlpos < 0 || xlpos >= this->info_header.Width || ylpos < 0 || ylpos >= this->info_header.Height) {
 		std::cerr << ERR_LPOS;
-		return;
+		return false;
 	}
 	if (xrpos < 0 || xrpos >= this->info_header.Width || yrpos < 0 || yrpos >= this->info_header.Height) {
 		std::cerr << ERR_RPOS;
-		return;
+		return false;
 	}
 	if (xlpos > xrpos || ylpos > yrpos) {
 		std::cerr << ERR_LRPOS;
-		return;
+		return false;
 	}
 
 	if (angle == 90) {
@@ -344,8 +351,11 @@ void BMP::rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle)
 			}
 		}
 	}
-	else
+	else{
 		std::cerr << ERR_ANGLE;
+		return false;
+	}
+	return true;
 }
 
 int BMP::getWidth() const {
@@ -387,21 +397,21 @@ BMP::fill_circle(std::vector<std::pair<int, int>> &brd_ins, std::vector<std::pai
 
 }
 
-void//делать -1 от пикселей, заданных пользователем
+bool//делать -1 от пикселей, заданных пользователем
 BMP::draw_circle_via_radius(int xpos, int ypos, int rad, int line_width, ColorItem line_color, bool is_pour_over,
 							ColorItem circle_color) {
 	if(xpos - rad - line_width + 1 < 0 || xpos + rad + line_width > this->info_header.Width ||
 	ypos - rad - line_width + 1 < 0 || ypos + rad + line_width > this->info_header.Height){
 		std::cerr << ERR_XYPOS;
-		return;
+		return false;
 	}
 	if(rad <= 0){
 		std::cerr << ERR_RADIUS;
-		return;
+		return false;
 	}
 	if(line_width <= 0){
 		std::cerr << ERR_WIDTH;
-		return;
+		return false;
 	}
 	draw_circle(xpos,ypos,rad,line_color);
 	draw_circle(xpos,ypos,rad+line_width-1,line_color);
@@ -416,26 +426,27 @@ BMP::draw_circle_via_radius(int xpos, int ypos, int rad, int line_width, ColorIt
 			}
 		}
 	}
+	return true;
 }
 
-void BMP::draw_circle_via_square(int xposl, int yposl, int xposr, int yposr, int line_width, ColorItem line_color,
+bool BMP::draw_circle_via_square(int xposl, int yposl, int xposr, int yposr, int line_width, ColorItem line_color,
 								 bool is_pour_over, ColorItem circle_color) {
 	if(xposl >= xposr || yposl >= yposr || xposl < 0 || xposl >= this->info_header.Width ||
 	xposr < 0 || xposr >= this->info_header.Width || yposl < 0 || yposl >= this->info_header.Height ||
 	yposr < 0 || yposr >= this->info_header.Height){
 		std::clog << ERR_XYPOS;
-		return;
+		return false;
 	}
 	if(xposr - xposl != yposr - yposl){
 		std::clog << ERR_SQSHAPE;
-		return;
+		return false;
 	}
 	int xcentr = (xposr + xposl) / 2;
 	int ycentr = (yposr + yposl) / 2;
 	int radius = xcentr - xposl - line_width+1;
 	if(radius < 0){
 		std::clog << ERR_WIDTH;
-		return;
+		return false;
 	}
 	if((xposr - xposl) % 2 == 0)
 		draw_circle_via_radius(xcentr,ycentr,radius,line_width,line_color,is_pour_over,circle_color);
@@ -454,7 +465,7 @@ void BMP::draw_circle_via_square(int xposl, int yposl, int xposr, int yposr, int
 			}
 		}
 	}
-
+	return true;
 }
 
 
