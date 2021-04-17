@@ -1,24 +1,37 @@
-#include <cmath>
 #include "BMP_edit.h"
 #include "Byte.h"
 
 
 void BMP::write_3_color(std::ofstream &out, const ColorItem &item) {
-	out << item.rgbBlue << item.rgbGreen << item.rgbRed;
+	out << item.Blue << item.Green << item.Red;
 }
 
 void BMP::write_4_color(std::ofstream &out, const ColorItem &item) {
-	out << item.rgbBlue << item.rgbGreen << item.rgbRed << item.rgbReserved;
+	out << item.Blue << item.Green << item.Red << item.Reserved;
 }
+
+ColorItem::ColorItem(u_char blue, u_char green, u_char red, u_char reserved) {
+	if(blue < 0 || blue > 255 || green < 0 || green > 255 || red < 0 || red > 255 ||
+	   reserved < 0 || reserved > 255){
+		std::clog << ERR_CLR;
+		this->Blue = this->Green = this->Red = this->Reserved = 0;
+	}
+	this->Blue = blue;
+	this->Green = green;
+	this->Red = red;
+	this->Reserved = reserved;
+}
+
+ColorItem::ColorItem() = default;
 
 int BMP::in_bmp_file_header(std::fstream &in) {
 	std::vector<u_char> byte;
 	byte = Byte::get_byte(in, 2);
 	this->file_header.Signature = Byte::make_short(byte[1], byte[0]);
-	if(!Byte::compare_like_short(this->file_header.Signature, 'B', 'M')){//check!!!
-		std::cout << "This image is not BMP-file!";                      //check!!!
-		return 0;                                                        //check!!!
-	}                                                                    //check!!!
+	if(!Byte::compare_like_short(this->file_header.Signature, 'M', 'B')) {
+		std::cerr << ERR_BMPIMAGE;
+		return 0;
+	}
 	byte = Byte::get_byte(in, 4);
 	this->file_header.FileSize = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
 	byte = Byte::get_byte(in, 4);
@@ -76,8 +89,8 @@ void BMP::in_bmp_pixel_table(std::fstream &in) {
 	this->cnt_extra_byte = this->info_header.Width % 4;
 	for (int i = this->info_header.Height - 1; i >= 0; i--) {
 		for (int j = 0; j < this->info_header.Width; ++j) {
-			this->pixels[i][j] = {(u_char) in.get(), (u_char) in.get(),
-								  (u_char) in.get()};
+			this->pixels[i][j] = ColorItem((u_char) in.get(), (u_char) in.get(),
+								  (u_char) in.get(), 0);
 		}
 		for (int j = 0; j < this->cnt_extra_byte; ++j) {
 			in.get();
@@ -85,10 +98,10 @@ void BMP::in_bmp_pixel_table(std::fstream &in) {
 	}
 }
 
-bool BMP::input_picture(std::string &name_file) {
+bool BMP::input_image(std::string &name_file) {
 	std::fstream in(name_file, std::ios_base::binary | std::ios_base::in);
 	if (!in.is_open()) {
-		std::clog << "Haven`t found file!\n";
+		std::cerr << ERR_NFILE;
 		return false;
 	}
 	if(!in_bmp_file_header(in))
@@ -99,7 +112,7 @@ bool BMP::input_picture(std::string &name_file) {
 		in_bmp_pixel_table(in);
 	}
 	else {
-		std::cout << "This image is not supported!";
+		std::cerr << ERR_IMAGE;
 	}
 	in.close();
 	return true;
@@ -161,8 +174,7 @@ void BMP::setWidth(int width) {
 		this->info_header.Width = width;
 	}
 	else {
-		/*Сообщение об ошибке*/
-		std::cout << "Bad width!\n";
+		std::cerr << ERR_WIDTH;
 	}
 
 }
@@ -177,46 +189,40 @@ void BMP::setHeight(int height) {
 		}
 	}
 	else {
-		/*Сообщение об ошибке*/
-		std::cout << "Bad height!\n";
+		std::cerr << ERR_HEIGHT;
 	}
 }
 
-void // FIXME исправить толщину диагонали
+void
 BMP::draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem line_color, bool is_pour_over,
 				 ColorItem square_color) {
-	if (xpos < 0 || xpos > this->info_header.Width || ypos < 0 || ypos > this->info_header.Height) {
-		std::cout << "Bad x/y position for square!\n";
+	if (xpos < 0 || xpos >= this->info_header.Width || ypos < 0 || ypos >= this->info_header.Height) {
+		std::cerr << ERR_XYPOS;
 		return;
 	}
-	if (line_length < 0 || xpos + line_length >= this->info_header.Width ||
-		ypos + line_length >= this->info_header.Height || line_length < 2 * line_width) {
-		std::cout << "Bad line length!\n";
+	if (line_length < 0 || xpos + line_length > this->info_header.Width ||
+		ypos + line_length > this->info_header.Height || line_length < 2 * line_width) {
+		std::cerr << ERR_LENGTH;
 		return;
 	}
-	if (line_width < 0 || line_width > 50) {
-		std::cout << "Bad line width!\n";
+	if (line_width < 0) {
+		std::cerr << ERR_WIDTH;
 		return;
 	}
-	// первая верхняя линия
+	// верхняя и нижняя линии
 	for (int i = 0; i < line_width; ++i) {
 		for (int j = 0; j < line_length; ++j) {
 			this->pixels[ypos + i][xpos + j] = line_color;
+			this->pixels[ypos + line_length - i - 1][xpos + j] = line_color;
+
 		}
 	}
 	//боковые линии
 	for (int i = line_width; i < line_length - line_width; ++i) {
 		for (int j = 0; j < line_width; ++j) {
 			this->pixels[ypos + i][xpos + j] = line_color;
-		}
-		for (int j = 0; j < line_width; ++j) {
 			this->pixels[ypos + i][xpos + line_length - j - 1] = line_color;
-		}
-	}
-	//нижняя линия
-	for (int i = 0; i < line_width; ++i) {
-		for (int j = 0; j < line_length; ++j) {
-			this->pixels[ypos + line_length - i - 1][xpos + j] = line_color;
+
 		}
 	}
 	//заливка
@@ -230,33 +236,41 @@ BMP::draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem 
 	//главная диагональ
 	for (int i = 0; i < line_length - 2 * line_width; ++i) {
 		this->pixels[ypos + line_width + i][xpos + line_width + i] = line_color;
+		for (int j = 1; j <= line_width-1; ++j) {
+			this->pixels[ypos + line_width + i + j][xpos + line_width + i] = line_color;
+			this->pixels[ypos + line_width + i][xpos + line_width + i + j] = line_color;
+		}
 	}
 	//побочная диагональ
 	for (int i = 0; i < line_length - 2 * line_width; ++i) {
 		this->pixels[ypos + line_length - line_width - i - 1][xpos + line_width + i] = line_color;
+		for (int j = 1; j <= line_width - 1; ++j) {
+			this->pixels[ypos + line_length - line_width - i - 1 + j][xpos + line_width + i] = line_color;
+			this->pixels[ypos + line_length - line_width - i - 1][xpos + line_width + i - j] = line_color;
+		}
 	}
 }
 
 void BMP::edit_component(char component, int num) {
 	if (component != 'r' && component != 'g' && component != 'b') {
-		std::cout << "Bad component!\n";
+		std::cerr << ERR_COMP;
 		return;
 	}
 	if (num < 0 || num > 255) {
-		std::cout << "Bad color!\n";
+		std::cerr << ERR_CLR;
 		return;
 	}
 	for (int i = 0; i < this->info_header.Height; ++i) {
 		for (int j = 0; j < this->info_header.Width; ++j) {
 			switch (component) {
 				case 'r':
-					this->pixels[i][j].rgbRed = num;
+					this->pixels[i][j].Red = num;
 					break;
 				case 'g':
-					this->pixels[i][j].rgbGreen = num;
+					this->pixels[i][j].Green = num;
 					break;
 				case 'b':
-					this->pixels[i][j].rgbBlue = num;
+					this->pixels[i][j].Blue = num;
 					break;
 			}
 		}
@@ -264,16 +278,16 @@ void BMP::edit_component(char component, int num) {
 }
 
 void BMP::rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle) {
-	if (xlpos < 0 || xlpos > this->info_header.Width || ylpos < 0 || ylpos > this->info_header.Height) {
-		std::cout << "Bad left pos!\n";
+	if (xlpos < 0 || xlpos >= this->info_header.Width || ylpos < 0 || ylpos >= this->info_header.Height) {
+		std::cerr << ERR_LPOS;
 		return;
 	}
-	if (xrpos < 0 || xrpos > this->info_header.Width || yrpos < 0 || yrpos > this->info_header.Height) {
-		std::cout << "Bad right pos!\n";
+	if (xrpos < 0 || xrpos >= this->info_header.Width || yrpos < 0 || yrpos >= this->info_header.Height) {
+		std::cerr << ERR_RPOS;
 		return;
 	}
 	if (xlpos > xrpos || ylpos > yrpos) {
-		std::cout << "Bad right and left pos!\n";
+		std::cerr << ERR_LRPOS;
 		return;
 	}
 
@@ -331,7 +345,7 @@ void BMP::rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle)
 		}
 	}
 	else
-		std::cout << "Bad angle!\n";
+		std::cerr << ERR_ANGLE;
 }
 
 int BMP::getWidth() const {
@@ -342,6 +356,184 @@ int BMP::getHeight() const {
 	return this->info_header.Height;
 }
 
+void
+BMP::fill_circle(std::vector<std::pair<int, int>> &brd_ins, std::vector<std::pair<int, int>> &brd_out, int y,
+				 ColorItem line_color){
+	int delta_size = (brd_out.size() - brd_ins.size()) / 2;
+	y++;
+	for (int i = 1; i < delta_size; ++i) {
+		for (int j = brd_out[i].first+1; j < brd_out[i].second; ++j) {
+			this->pixels[y][j] = line_color;
+		}
+		y++;
+	}
+	int ind = 0;
+	for (int i = delta_size; i < brd_out.size() - delta_size; ++i) {
+		for (int j = brd_out[i].first+1; j < brd_ins[ind].first; ++j) {
+			this->pixels[y][j] = line_color;
+		}
+		for (int j = brd_ins[ind].second+1; j < brd_out[i].second; ++j) {
+			this->pixels[y][j] = line_color;
+		}
+		ind++;
+		y++;
+	}
+	for (int i = brd_out.size()-delta_size; i < brd_out.size()-1; ++i) {
+		for (int j = brd_out[i].first+1; j < brd_out[i].second; ++j) {
+			this->pixels[y][j] = line_color;
+		}
+		y++;
+	}
 
+}
+
+void//делать -1 от пикселей, заданных пользователем
+BMP::draw_circle_via_radius(int xpos, int ypos, int rad, int line_width, ColorItem line_color, bool is_pour_over,
+							ColorItem circle_color) {
+	if(xpos - rad - line_width + 1 < 0 || xpos + rad + line_width > this->info_header.Width ||
+	ypos - rad - line_width + 1 < 0 || ypos + rad + line_width > this->info_header.Height){
+		std::cerr << ERR_XYPOS;
+		return;
+	}
+	if(rad <= 0){
+		std::cerr << ERR_RADIUS;
+		return;
+	}
+	if(line_width <= 0){
+		std::cerr << ERR_WIDTH;
+		return;
+	}
+	draw_circle(xpos,ypos,rad,line_color);
+	draw_circle(xpos,ypos,rad+line_width-1,line_color);
+	auto borders_greater_circle_out = get_border_circle_out(xpos,rad+line_width-1, true);
+	auto borders_less_circle_out = get_border_circle_out(xpos,rad, true);
+	auto borders_less_circle_in = get_border_circle_in(xpos,rad, true);
+	fill_circle(borders_less_circle_out,borders_greater_circle_out,ypos-rad-line_width+1,line_color);
+	if(is_pour_over){
+		for (int i = 1; i <= 2*rad; ++i) {
+			for (int j = borders_less_circle_in[i].first+1; j < borders_less_circle_in[i].second; ++j) {
+				this->pixels[ypos-rad+i][j] = circle_color;
+			}
+		}
+	}
+}
+
+void BMP::draw_circle_via_square(int xposl, int yposl, int xposr, int yposr, int line_width, ColorItem line_color,
+								 bool is_pour_over, ColorItem circle_color) {
+	if(xposl >= xposr || yposl >= yposr || xposl < 0 || xposl >= this->info_header.Width ||
+	xposr < 0 || xposr >= this->info_header.Width || yposl < 0 || yposl >= this->info_header.Height ||
+	yposr < 0 || yposr >= this->info_header.Height){
+		std::clog << ERR_XYPOS;
+		return;
+	}
+	if(xposr - xposl != yposr - yposl){
+		std::clog << ERR_SQSHAPE;
+		return;
+	}
+	int xcentr = (xposr + xposl) / 2;
+	int ycentr = (yposr + yposl) / 2;
+	int radius = xcentr - xposl - line_width+1;
+	if(radius < 0){
+		std::clog << ERR_WIDTH;
+		return;
+	}
+	if((xposr - xposl) % 2 == 0)
+		draw_circle_via_radius(xcentr,ycentr,radius,line_width,line_color,is_pour_over,circle_color);
+	else{
+		draw_circle(xcentr,ycentr,radius,line_color, false);
+		draw_circle(xcentr,ycentr,radius+line_width-1,line_color, false);
+		auto borders_greater_circle_out = get_border_circle_out(xcentr,radius+line_width-1, false);
+		auto borders_less_circle_out = get_border_circle_out(xcentr,radius, false);
+		auto borders_less_circle_in = get_border_circle_in(xcentr,radius, false);
+		fill_circle(borders_less_circle_out,borders_greater_circle_out,ycentr-radius-line_width+1,line_color);
+		if(is_pour_over){
+			for (int i = 1; i <= 2*radius; ++i) {
+				for (int j = borders_less_circle_in[i].first+1; j < borders_less_circle_in[i].second; ++j) {
+					this->pixels[ycentr-radius+i][j] = circle_color;
+				}
+			}
+		}
+	}
+
+}
+
+
+void BMP::draw_circle(int xcentr, int ycentr, int r, ColorItem color, bool have_center) {
+	have_center = !have_center;
+	int x = r;
+	int y = 0;
+	int radiusError = 1-x;
+	while(x >= y){
+		this->pixels[ycentr+have_center+y][xcentr+have_center+x] = color;
+		this->pixels[ycentr+have_center+x][xcentr+have_center+y] = color;
+		this->pixels[ycentr-y][xcentr+have_center+x] = color;
+		this->pixels[ycentr-x][xcentr+have_center+y] = color;
+		this->pixels[ycentr+have_center+y][xcentr-x] = color;
+		this->pixels[ycentr+have_center+x][xcentr-y] = color;
+		this->pixels[ycentr-y][xcentr-x] = color;
+		this->pixels[ycentr-x][xcentr-y] = color;
+		y++;
+		if(radiusError < 0){
+			radiusError += 2 * y + 1;
+		} else{
+			x--;
+			radiusError += 2 * (y-x+1);
+		}
+	}
+}
+
+std::vector<std::pair<int, int>> BMP::get_border_circle_in(int xcentr, int r, bool have_center) const {
+	have_center = !have_center;
+	int x = r;
+	int y = 0;
+	int radiusError = 1-x;
+	std::vector<std::pair<int,int>> borders(2*r+1+have_center, {-1e9,1e9});
+	while(x >= y){
+
+		borders[r+have_center+y].second = std::min(borders[r+have_center+y].second, xcentr+have_center+x);
+		borders[r+have_center+x].second = std::min(borders[r+have_center+x].second, xcentr+have_center+y);
+		borders[r-y].second = std::min(borders[r-y].second, xcentr+have_center+x);
+		borders[r-x].second = std::min(borders[r-x].second, xcentr+have_center+y);
+		borders[r+have_center+y].first = std::max(borders[r+have_center+y].first, xcentr-x);
+		borders[r+have_center+x].first = std::max(borders[r+have_center+x].first, xcentr-y);
+		borders[r-y].first = std::max(borders[r-y].first, xcentr-x);
+		borders[r-x].first = std::max(borders[r-x].first, xcentr-y);
+		y++;
+		if(radiusError < 0){
+			radiusError += 2 * y + 1;
+		} else{
+			x--;
+			radiusError += 2 * (y-x+1);
+		}
+	}
+	return borders;
+}
+
+std::vector<std::pair<int, int>> BMP::get_border_circle_out(int xcentr, int r, bool have_center) const {
+	have_center = !have_center;
+	int x = r;
+	int y = 0;
+	int radiusError = 1-x;
+	std::vector<std::pair<int,int>> borders(2*r+1+have_center, {1e9,-1e9});
+	while(x >= y){
+
+		borders[r+have_center+y].second = std::max(borders[r+have_center+y].second, xcentr+have_center+x);
+		borders[r+have_center+x].second = std::max(borders[r+have_center+x].second, xcentr+have_center+y);
+		borders[r-y].second = std::max(borders[r-y].second, xcentr+have_center+x);
+		borders[r-x].second = std::max(borders[r-x].second, xcentr+have_center+y);
+		borders[r+have_center+y].first = std::min(borders[r+have_center+y].first, xcentr-x);
+		borders[r+have_center+x].first = std::min(borders[r+have_center+x].first, xcentr-y);
+		borders[r-y].first = std::min(borders[r-y].first, xcentr-x);
+		borders[r-x].first = std::min(borders[r-x].first, xcentr-y);
+		y++;
+		if(radiusError < 0){
+			radiusError += 2 * y + 1;
+		} else{
+			x--;
+			radiusError += 2 * (y-x+1);
+		}
+	}
+	return borders;
+}
 
 
