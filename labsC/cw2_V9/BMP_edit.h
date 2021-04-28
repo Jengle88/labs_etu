@@ -118,7 +118,7 @@ class BMP {
 public:
 	std::vector<std::vector<ColorItem>> pixels;
 
-public:
+private:
 	int in_bmp_file_header(std::fstream &in);
 	void in_bmp_info_header(std::fstream &in);
 	void in_bmp_palette(std::fstream &in);
