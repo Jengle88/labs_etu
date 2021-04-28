@@ -1,7 +1,5 @@
-#include <iostream>
 #include "BMP_edit.h"
-
-
+#include <iostream>
 //void testing_draw_square(BMP &bmp) {
 //	bmp.draw_square(10, 10, 30, 4, CLR_RED, true, CLR_GREEN);//OK
 //	bmp.draw_square(10, 10, 30, 4, CLR_RED);//OK
@@ -20,27 +18,28 @@
 //
 //}
 
+
 //Vim: :%! xxd - показать HEX-содерж файла, :%! xxd -r - вернуть обычное представление
 int main() {
-
+	//BMP bmp;
+	//std::string name_file_input = "test3.bmp";
+	//BMPHeader bmph;
+	//BMPInfoHeader bmpi;
+	////FILE *f = fopen(name_file_input.c_str(), "rb");
+	//std::fstream in(name_file_input,std::ios_base::binary | std::ios_base::in);
+	//bmp.in_bmp_file_header(in);
+	//bmp.in_bmp_info_header(in);
+	//int z = 2;
 	BMP bmp;
-	std::string name_file_input = "image24.bmp";
-	if (!bmp.input_image(name_file_input))
-		return 0;
-
-//	bmp.draw_square(0,0,20,1,CLR_YELLOW, true, CLR_YELLOW);
-//	bmp.draw_square(20,0,20,1,CLR_YELLOW, true, CLR_YELLOW);
-//	bmp.draw_square(0,20,20,1,CLR_BLUE, true, CLR_BLUE);
-//	bmp.draw_square(20,20,20,1,CLR_BLUE, true, CLR_BLUE);
-	//bmp.rotate_fragment(0, 0, bmp.getWidth() - 1, bmp.getHeight() - 1, 270);
-	//bmp.draw_circle_via_radius(38, 38, 1, 1, CLR_RED, true, CLR_BLUE);
-	//bmp.draw_circle_via_radius(1, 1, 1, 1, CLR_RED, true, CLR_BLUE);
-	bmp.draw_circle_via_square(35,36,39,39,1,CLR_BLACK, true, CLR_BLUE);
-	//bmp.draw_circle_via_square(2,2,15,15,1,CLR_BLACK, true, CLR_BLUE);
-	//bmp.draw_circle_via_radius(10,10,5,4,CLR_BLACK,true,CLR_BLUE);
-//	bmp.draw_circle_via_radius(12,12,10,1,CLR_BLACK);
-	std::string name_file_output = "out.bmp";
-	bmp.write_bmp(name_file_output);
+	std::string name_file_input = "test.bmp";
+	bmp.input_image(name_file_input);
+	for (int i = 0; i < 400; ++i) {
+		for (int j = 0; j < 400; ++j) {
+			bmp.pixels[i][j] = CLR_WHITE;
+		}
+	}
+	std::string res = "result.bmp";
+	bmp.write_bmp(res);
 	return 0;
 
 }

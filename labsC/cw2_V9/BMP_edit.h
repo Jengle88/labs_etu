@@ -7,7 +7,7 @@
 #include <type_traits>
 
 #define BMPFileHeaderSIZE 14
-#define BMPInfoHeaderSIZE 40
+
 #define CLR_WHITE {255,255,255,0}
 #define CLR_BLACK {0,0,0,0}
 #define CLR_BLUE {255,0,0,0}
@@ -33,6 +33,8 @@
 #define ERR_RADIUS "Bad radius!\n"
 
 
+#define DEBUG 1
+
 /*
  * TODO:
  *  1) Сделать коммит --- V
@@ -48,10 +50,13 @@
  *  11) Сделать поворот фрагмента на 270 --- V
  *  12) Нарисовать круг через радиус --- V
  *  13) Нарисовать круг через квадрат --- V
- *  14) Миграция в Qt
- *  15) Coming soon...
+ *  14) Миграция в Qt --- V
+ *  15) Изменить алгоритм построения диагонали ???
+ *  16) Дополнить BMPInfoHeader новыми полями --- V
+ *  17) Coming soon...
  */
 
+//Фича: при повороте из-за добавления белых полей изображение может смещаться вправо
 
 
 struct BMPHeader {
@@ -59,7 +64,6 @@ struct BMPHeader {
 	u_int FileSize = 0; //bfSize размер файла в байтах
 	u_int Reserved = 0; //bfReserved12 должны быть нули
 	u_int DataOffset = 0; // bfOffBits где начало массива данных относительно начала файла
-
 };
 
 struct BMPInfoHeader {
@@ -74,7 +78,21 @@ struct BMPInfoHeader {
 	u_int YpixelsPerM = 0; //biYPelsPerMeter вертикальное разрешение
 	u_int ColourUsed = 0; //biClrUsed кол-во цветов из таблицы (0 - макс число)
 	u_int ColorsImportant = 0; //biClrImportant кол-во цветов, нужных для изображения (0 - все)
-
+	//4 версия
+	u_int RChannelBitmask = 0; //bV4RChannelBitmask битовые маски
+	u_int GChannelBitmask = 0; //bV4GChannelBitmask битовые маски
+	u_int BChannelBitmask = 0; //bV4BChannelBitmask битовые маски
+	u_int AChannelBitmask = 0; //bV4AChannelBitmask битовые маски
+	u_int ColorSpaceType = 0; //bV4ColorSpaceType вид цветового пространства
+	u_int ColorSpaceEndpoints[9] = {0}; //bV4ColorSpaceEndpoints конечные точки
+	u_int GammaRchannel = 0; //bV4GammaRchannel значение гаммы
+	u_int GammaGchannel = 0; //bV4GammaGchannel значение гаммы
+	u_int GammaBchannel = 0; //bV4GammaBchannel значение гаммы
+	//5 версия
+	u_int Intent = 0; //bV5Intent для рендеринга растра
+	u_int ICCProfileData = 0; //bV5ICCProfileData смещение в байтах цветового профиля от BITMAPINFO
+	u_int ICCProfileSize = 0; //bV5ICCProfileSize размер цветового профиля
+	u_int Reserved = 0; //bV5Reserved зарезервированные нули
 };
 
 struct ColorItem {
@@ -85,11 +103,12 @@ struct ColorItem {
 
 	ColorItem(u_char blue, u_char green, u_char red, u_char reserved);
 	ColorItem();
+
+	static bool is_correct_color(int b, int g, int r, int reserv);
 };
 
 
 class BMP {
-
 	BMPHeader file_header;
 	BMPInfoHeader info_header;
 	std::vector<ColorItem> colors;
@@ -99,7 +118,7 @@ class BMP {
 public:
 	std::vector<std::vector<ColorItem>> pixels;
 
-private:
+public:
 	int in_bmp_file_header(std::fstream &in);
 	void in_bmp_info_header(std::fstream &in);
 	void in_bmp_palette(std::fstream &in);
@@ -120,6 +139,8 @@ public:
 	int getHeight() const;
 	void setWidth(int width);
 	void setHeight(int height);
+	int getSize() const;
+	int getBitPerPixels() const;
 	bool draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem line_color,
 					 bool is_pour_over = false, ColorItem square_color = CLR_BLACK);
 	bool edit_component(char component, int num);
@@ -128,5 +149,6 @@ public:
 								bool is_pour_over = false, ColorItem circle_color = CLR_BLACK);
 	bool draw_circle_via_square(int xposl, int yposl, int xposr, int yposr, int line_width, ColorItem line_color,
 							 bool is_pour_over = false, ColorItem circle_color = CLR_BLACK);
-};
 
+
+};

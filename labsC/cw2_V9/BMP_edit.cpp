@@ -11,66 +11,119 @@ void BMP::write_4_color(std::ofstream &out, const ColorItem &item) {
 }
 
 ColorItem::ColorItem(u_char blue, u_char green, u_char red, u_char reserved) {
-	if(blue < 0 || blue > 255 || green < 0 || green > 255 || red < 0 || red > 255 ||
-	   reserved < 0 || reserved > 255){
-		std::clog << ERR_CLR;
-		this->Blue = this->Green = this->Red = this->Reserved = 0;
-	}
 	this->Blue = blue;
 	this->Green = green;
 	this->Red = red;
 	this->Reserved = reserved;
 }
 
+bool ColorItem::is_correct_color(int b, int g, int r, int reserv) {
+	return 0 <= b && b <= 255 && 0 <= g && g <= 255 && 0 <= r && r <= 255 && 0 <= reserv && reserv <= 255;
+}
+
 ColorItem::ColorItem() = default;
 
 int BMP::in_bmp_file_header(std::fstream &in) {
-	std::vector<u_char> byte;
-	byte = Byte::get_byte(in, 2);
-	this->file_header.Signature = Byte::make_short(byte[1], byte[0]);
-	if(!Byte::compare_like_short(this->file_header.Signature, 'M', 'B')) {
+	char byte[4];
+	in.read(byte, 2);
+	this->file_header.Signature = Byte::make_short(byte[0], byte[1]);
+	in.read(byte, 4);
+	this->file_header.FileSize = Byte::make_int(byte[0],byte[1],byte[2],byte[3]);
+	in.read(byte, 4);
+	this->file_header.Reserved = Byte::make_int(byte[0],byte[1],byte[2],byte[3]);
+	in.read(byte, 4);
+	this->file_header.DataOffset = Byte::make_int(byte[0],byte[1],byte[2],byte[3]);
+
+	if(!Byte::compare_like_short(this->file_header.Signature, 'B', 'M')) {
 		std::cerr << ERR_BMPIMAGE;
 		return 0;
 	}
-	byte = Byte::get_byte(in, 4);
-	this->file_header.FileSize = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-	byte = Byte::get_byte(in, 4);
-	this->file_header.Reserved = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-	byte = Byte::get_byte(in, 4);
-	this->file_header.DataOffset = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
 	return 1;
 }
 
 void BMP::in_bmp_info_header(std::fstream &in) {
-	std::vector<u_char> byte;
-	byte = Byte::get_byte(in, 4);
-	this->info_header.Size = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-	byte = Byte::get_byte(in, 4);
-	this->info_header.Width = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-	byte = Byte::get_byte(in, 4);
-	this->info_header.Height = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-	byte = Byte::get_byte(in, 2);
-	this->info_header.Planes = Byte::make_short(byte[1], byte[0]);
-	byte = Byte::get_byte(in, 2);
-	this->info_header.BitCount = Byte::make_short(byte[1], byte[0]);
-	byte = Byte::get_byte(in, 4);
-	this->info_header.Compression = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-	byte = Byte::get_byte(in, 4);
-	this->info_header.ImageSize = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-	byte = Byte::get_byte(in, 4);
-	this->info_header.XpixelsPerM = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-	byte = Byte::get_byte(in, 4);
-	this->info_header.YpixelsPerM = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-	byte = Byte::get_byte(in, 4);
-	this->info_header.ColourUsed = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-	byte = Byte::get_byte(in, 4);
-	this->info_header.ColorsImportant = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
+	char byte[4];
+	in.read(byte,4);
+	this->info_header.Size = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	in.read(byte,4);
+	this->info_header.Width = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	in.read(byte,4);
+	this->info_header.Height = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	in.read(byte,2);
+	this->info_header.Planes = Byte::make_short(byte[0], byte[1]);
+	in.read(byte,2);
+	this->info_header.BitCount = Byte::make_short(byte[0], byte[1]);
+	in.read(byte,4);
+	this->info_header.Compression = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	in.read(byte,4);
+	this->info_header.ImageSize = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	in.read(byte,4);
+	this->info_header.XpixelsPerM = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	in.read(byte,4);
+	this->info_header.YpixelsPerM = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	in.read(byte,4);
+	this->info_header.ColourUsed = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	in.read(byte,4);
+	this->info_header.ColorsImportant = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	if(this->info_header.Size >= 108) {
+		in.read(byte, 4);
+		this->info_header.RChannelBitmask = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		in.read(byte, 4);
+		this->info_header.GChannelBitmask = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		in.read(byte, 4);
+		this->info_header.BChannelBitmask = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		in.read(byte, 4);
+		this->info_header.AChannelBitmask = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		in.read(byte, 4);
+		this->info_header.ColorSpaceType = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		for (int i = 0; i < 9; ++i) {
+			in.read(byte, 4);
+			this->info_header.ColorSpaceEndpoints[i] = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		}
+		in.read(byte, 4);
+		this->info_header.GammaRchannel = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		in.read(byte, 4);
+		this->info_header.GammaGchannel = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		in.read(byte, 4);
+		this->info_header.GammaBchannel = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	}
+	if(this->info_header.Size == 124){
+		in.read(byte,4);
+		this->info_header.Intent = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		in.read(byte,4);
+		this->info_header.ICCProfileData = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		in.read(byte,4);
+		this->info_header.ICCProfileSize = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		in.read(byte,4);
+		this->info_header.Reserved = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	}
+
+//	byte = Byte::get_byte(in, 4);
+//	this->info_header.Width = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
+//	byte = Byte::get_byte(in, 4);
+//	this->info_header.Height = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
+//	byte = Byte::get_byte(in, 2);
+//	this->info_header.Planes = Byte::make_short(byte[1], byte[0]);
+//	byte = Byte::get_byte(in, 2);
+//	this->info_header.BitCount = Byte::make_short(byte[1], byte[0]);
+//	byte = Byte::get_byte(in, 4);
+//	this->info_header.Compression = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
+//	byte = Byte::get_byte(in, 4);
+//	this->info_header.ImageSize = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
+//	byte = Byte::get_byte(in, 4);
+//	this->info_header.XpixelsPerM = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
+//	byte = Byte::get_byte(in, 4);
+//	this->info_header.YpixelsPerM = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
+//	byte = Byte::get_byte(in, 4);
+//	this->info_header.ColourUsed = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
+//	byte = Byte::get_byte(in, 4);
+//	this->info_header.ColorsImportant = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
 }
 
 void BMP::in_bmp_palette(std::fstream &in) {
-	if (BMPFileHeaderSIZE + BMPInfoHeaderSIZE != this->file_header.DataOffset) {
+	if (BMPFileHeaderSIZE + this->info_header.Size != this->file_header.DataOffset) {
 		int palette_size =
-				this->file_header.DataOffset - (BMPFileHeaderSIZE + BMPInfoHeaderSIZE);
+				this->file_header.DataOffset - (BMPFileHeaderSIZE + this->info_header.Size);
 		this->have_palette = true;
 		this->colors.resize(palette_size);
 		for (int i = 0; i < palette_size / 4; ++i) {
@@ -84,23 +137,33 @@ void BMP::in_bmp_palette(std::fstream &in) {
 }
 
 void BMP::in_bmp_pixel_table(std::fstream &in) {
-	if (this->info_header.BitCount != 24)
-		return;
 
-	pixels.resize(this->info_header.Height,
-				  std::vector<ColorItem>(this->info_header.Width));
-	this->cnt_extra_byte = this->info_header.Width % 4;
-	for (int i = this->info_header.Height - 1; i >= 0; i--) {
-		for (int j = 0; j < this->info_header.Width; ++j) {
-			u_char b = in.get();
-			u_char g = in.get();
-			u_char r = in.get();
-			this->pixels[i][j] = ColorItem(b,g,r, 0);
-		}
-		for (int j = 0; j < this->cnt_extra_byte; ++j) {
-			in.get();
-		}
+	switch(this->info_header.BitCount) {
+		case 24:
+			pixels.resize(this->info_header.Height,
+			              std::vector<ColorItem>(this->info_header.Width));
+			this->cnt_extra_byte = this->info_header.Width % 4;
+			for (int i = this->info_header.Height - 1; i >= 0; i--) {
+				for (int j = 0; j < this->info_header.Width; ++j) {
+					u_char b = in.get();
+					u_char g = in.get();
+					u_char r = in.get();
+					this->pixels[i][j] = ColorItem(b, g, r, 0);
+				}
+				for (int j = 0; j < this->cnt_extra_byte; ++j) {
+					in.get();
+				}
+			}
+			break;
+		default:
+			return;
 	}
+
+//
+//	if (this->info_header.BitCount != 24)
+//		return;
+
+
 }
 
 bool BMP::input_image(std::string &name_file) {
@@ -112,13 +175,21 @@ bool BMP::input_image(std::string &name_file) {
 	if(!in_bmp_file_header(in))
 		return false;
 	in_bmp_info_header(in);
-	if (this->info_header.BitCount == 24) {
-		in_bmp_palette(in);
-		in_bmp_pixel_table(in);
+	switch(this->info_header.BitCount){
+		case 24:
+			in_bmp_palette(in);
+			in_bmp_pixel_table(in);
+			break;
+		default:
+			std::cerr << ERR_IMAGE;
+			in.close();
+			return false;
 	}
-	else {
-		std::cerr << ERR_IMAGE;
-	}
+//	if (this->info_header.BitCount == 24) {
+//
+//	}
+//	else {
+//	}
 	in.close();
 	return true;
 }
@@ -155,7 +226,6 @@ void BMP::write_bmp(std::string &name_file_output) const {
 	for (int i = this->info_header.Height - 1; i >= 0; i--) {
 		for (int j = 0; j < this->info_header.Width; ++j) {
 			write_3_color(out, this->pixels[i][j]);
-
 		}
 		for (int j = 0; j < this->cnt_extra_byte; ++j) {
 			out << (u_char) 0;
@@ -547,4 +617,10 @@ std::vector<std::pair<int, int>> BMP::get_border_circle_out(int xcentr, int r, b
 	return borders;
 }
 
+int BMP::getSize() const {
+	return file_header.FileSize;
+}
 
+int BMP::getBitPerPixels() const {
+	return info_header.BitCount;
+}
