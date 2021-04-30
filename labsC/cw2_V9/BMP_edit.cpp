@@ -131,8 +131,11 @@ void BMP::in_bmp_palette(std::fstream &in) {
 			u_char g = in.get();
 			u_char r = in.get();
 			u_char res = in.get();
-			this->colors[i] = ColorItem(b,g,r,res);
+			this->colors[i] = ColorItem(b, g, r, res);
 		}
+	} else {
+		this->have_palette = false;
+		this->colors.clear();
 	}
 }
 
@@ -140,9 +143,11 @@ void BMP::in_bmp_pixel_table(std::fstream &in) {
 
 	switch(this->info_header.BitCount) {
 		case 24:
-			pixels.resize(this->info_header.Height,
-			              std::vector<ColorItem>(this->info_header.Width));
-			this->cnt_extra_byte = this->info_header.Width % 4;
+			pixels.resize(this->info_header.Height);
+			for (int i = 0; i < pixels.size(); ++i) {
+				pixels[i].resize(this->info_header.Width);
+			}
+			this->cnt_extra_byte = (this->info_header.Width*3) % 4;
 			for (int i = this->info_header.Height - 1; i >= 0; i--) {
 				for (int j = 0; j < this->info_header.Width; ++j) {
 					u_char b = in.get();
@@ -151,7 +156,8 @@ void BMP::in_bmp_pixel_table(std::fstream &in) {
 					this->pixels[i][j] = ColorItem(b, g, r, 0);
 				}
 				for (int j = 0; j < this->cnt_extra_byte; ++j) {
-					in.get();
+					u_char z = in.get();
+					int z2 = 3;
 				}
 			}
 			break;

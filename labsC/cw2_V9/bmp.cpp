@@ -33,11 +33,21 @@ int main() {
 	BMP bmp;
 	std::string name_file_input = "test.bmp";
 	bmp.input_image(name_file_input);
-	for (int i = 0; i < 400; ++i) {
-		for (int j = 0; j < 400; ++j) {
-			bmp.pixels[i][j] = CLR_WHITE;
-		}
-	}
+	name_file_input = "myres.bmp";
+	bmp.input_image(name_file_input);
+	name_file_input = "mat.bmp";
+	bmp.input_image(name_file_input);
+	name_file_input = "result2.bmp";
+	bmp.input_image(name_file_input);
+	name_file_input = "simpsonsvr.bmp";
+	bmp.input_image(name_file_input);
+	name_file_input = "image24.bmp";
+	bmp.input_image(name_file_input);
+	//for (int i = 0; i < 4; ++i) {
+	//	for (int j = 0; j < 4; ++j) {
+	//		bmp.pixels[i][j] = CLR_WHITE;
+	//	}
+	//}
 	std::string res = "result.bmp";
 	bmp.write_bmp(res);
 	return 0;
