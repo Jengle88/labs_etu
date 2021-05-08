@@ -147,7 +147,7 @@ void BMP::in_bmp_pixel_table(std::fstream &in) {
 			for (int i = 0; i < pixels.size(); ++i) {
 				pixels[i].resize(this->info_header.Width);
 			}
-			this->cnt_extra_byte = (this->info_header.Width*3) % 4;
+			this->cnt_extra_byte = (4-int(this->info_header.Width*3) % 4) % 4;
 			for (int i = this->info_header.Height - 1; i >= 0; i--) {
 				for (int j = 0; j < this->info_header.Width; ++j) {
 					u_char b = in.get();
@@ -156,8 +156,7 @@ void BMP::in_bmp_pixel_table(std::fstream &in) {
 					this->pixels[i][j] = ColorItem(b, g, r, 0);
 				}
 				for (int j = 0; j < this->cnt_extra_byte; ++j) {
-					u_char z = in.get();
-					int z2 = 3;
+					in.get();
 				}
 			}
 			break;
