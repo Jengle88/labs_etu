@@ -29,6 +29,7 @@ public:
     bool image_edited = false;
 	MainWindow(QWidget *parent = nullptr);
 	void try_save();
+	void load_label_image(const std::string name_file);
     ~MainWindow();
 
 

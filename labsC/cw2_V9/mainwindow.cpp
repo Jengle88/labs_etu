@@ -49,10 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	if(bmp_image.input_image(start_file.toStdString())){
 		start_bmp_image = BMP(bmp_image);
-		image = new QPixmap(start_file);
-		*image = image->scaled(ui->label->width() - 2 * ui->label->margin(),
-		                       ui->label->height() - 2 * ui->label->margin());
-		ui->label->setPixmap(*image);
+		load_label_image(start_file.toStdString());
 		ui->height_label->setText(QString::number(bmp_image.getHeight()));
 		ui->width_label->setText(QString::number(bmp_image.getWidth()));
 		ui->bit_pixels_label->setText(QString::number(bmp_image.getBitPerPixels()));
@@ -94,12 +91,22 @@ void MainWindow::try_save() {
 		std::string s = ".result.bmp";
 		bmp_image.write_bmp(s);
 		delete image;
-		image = new QPixmap(".result.bmp");
-		*image = image->scaled(ui->label->width() - 2 * ui->label->margin(),
-		                       ui->label->height() - 2 * ui->label->margin());
-		ui->label->setPixmap(*image);
+		load_label_image(s);
 	}
 	this->image_edited = false;
+}
+
+void MainWindow::load_label_image(const std::string name_file) {
+	image = new QPixmap(QString::fromStdString(name_file));
+	double koeff_scaled = double(bmp_image.getHeight()) / bmp_image.getWidth();
+	if(bmp_image.getHeight() > bmp_image.getWidth()){
+		*image = image->scaled(int(ui->label->width() * (1.0 / koeff_scaled)) - 2 * ui->label->margin(),
+		                       ui->label->height() - 2 * ui->label->margin());
+	} else {
+		*image = image->scaled(ui->label->width() - 2 * ui->label->margin(),
+		                       int(ui->label->height() * koeff_scaled) - 2 * ui->label->margin());
+	}
+	ui->label->setPixmap(*image);
 }
 
 void MainWindow::on_draw_square_clicked()
@@ -141,10 +148,7 @@ void MainWindow::on_load_image_clicked()
 		ui->bit_pixels_label->setText(QString::number(bmp_image.getBitPerPixels()));
 		ui->size_byte_label->setText(QString::number(bmp_image.getSize()));
 		delete image;
-		image = new QPixmap(name_file);
-		*image = image->scaled(ui->label->width() - 2 * ui->label->margin(),
-		                       ui->label->height() - 2 * ui->label->margin());
-		ui->label->setPixmap(*image);
+		load_label_image(name_file.toStdString());
 	} else{
 		QMessageBox::critical(this,"Attention!","Не удалось загрузить изображение!");
 	}
@@ -163,10 +167,7 @@ void MainWindow::on_reload_image_clicked()
 	std::string s = ".result.bmp";
 	bmp_image.write_bmp(s);
 	delete image;
-	image = new QPixmap(".result.bmp");
-	*image = image->scaled(ui->label->width() - 2 * ui->label->margin(),
-	                       ui->label->height() - 2 * ui->label->margin());
-	ui->label->setPixmap(*image);
+	load_label_image(s);
 }
 
 
@@ -189,3 +190,5 @@ void MainWindow::on_pushButton_clicked()
 		   );
 
 }
+
+

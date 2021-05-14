@@ -92,6 +92,12 @@
    </layout>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>newComponent</tabstop>
+  <tabstop>rComponent</tabstop>
+  <tabstop>gComponent</tabstop>
+  <tabstop>bComponent</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
