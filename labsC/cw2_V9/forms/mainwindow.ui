@@ -9,8 +9,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>809</width>
-    <height>623</height>
+    <width>870</width>
+    <height>680</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -26,10 +26,10 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>20</y>
-      <width>415</width>
-      <height>531</height>
+      <x>290</x>
+      <y>29</y>
+      <width>541</width>
+      <height>581</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -377,7 +377,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>809</width>
+     <width>870</width>
      <height>20</height>
     </rect>
    </property>

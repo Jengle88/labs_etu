@@ -2,11 +2,11 @@
 #include "Byte.h"
 
 
-void BMP::write_3_color(std::ofstream &out, const ColorItem &item) {
+void BMP::write_3_color(std::ofstream &out, ColorItem item) {
 	out << item.Blue << item.Green << item.Red;
 }
 
-void BMP::write_4_color(std::ofstream &out, const ColorItem &item) {
+void BMP::write_4_color(std::ofstream &out, ColorItem item) {
 	out << item.Blue << item.Green << item.Red << item.Reserved;
 }
 
@@ -171,7 +171,7 @@ void BMP::in_bmp_pixel_table(std::fstream &in) {
 
 }
 
-bool BMP::input_image(std::string &name_file) {
+bool BMP::input_image(std::string name_file) {
 	std::fstream in(name_file, std::ios_base::binary | std::ios_base::in);
 	if (!in.is_open()) {
 		std::cerr << ERR_NFILE;
@@ -199,7 +199,7 @@ bool BMP::input_image(std::string &name_file) {
 	return true;
 }
 
-void BMP::write_bmp(std::string &name_file_output) const {
+void BMP::write_bmp(std::string name_file_output) const {
 	if (this->info_header.BitCount != 24) {
 		return;
 	}

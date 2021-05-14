@@ -7,8 +7,6 @@ OpenSaveImageForm::OpenSaveImageForm(QWidget *parent, bool save_form) :
 {
     ui->setupUi(this);
     std::clog << "OpenSaveImageForm created\n";
-		//name_file = findChild<QLineEdit*>("name_file");
-	//setAttribute(Qt::WA_DeleteOnClose);
 }
 
 OpenSaveImageForm::~OpenSaveImageForm()

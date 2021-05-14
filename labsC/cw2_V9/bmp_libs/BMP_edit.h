@@ -33,7 +33,7 @@
 #define ERR_RADIUS "Bad radius!\n"
 
 
-#define DEBUG 1
+#define DEBUG 0
 
 /*
  * TODO:
@@ -123,8 +123,8 @@ private:
 	void in_bmp_info_header(std::fstream &in);
 	void in_bmp_palette(std::fstream &in);
 	void in_bmp_pixel_table(std::fstream &in);
-	static void write_3_color(std::ofstream &out, const ColorItem &item);
-	static void write_4_color(std::ofstream &out, const ColorItem &item);
+	static void write_3_color(std::ofstream &out, ColorItem item);
+	static void write_4_color(std::ofstream &out, ColorItem item);
 	void draw_circle(int xcentr, int ycentr, int r, ColorItem color, bool have_center = true);
 	std::vector<std::pair<int,int>> get_border_circle_in(int xcentr, int r, bool have_center = true) const;
 	std::vector<std::pair<int,int>> get_border_circle_out(int xcentr, int r, bool have_center = true) const;
@@ -133,8 +133,8 @@ private:
 
 
 public:
-	bool input_image(std::string &name_file);
-	void write_bmp(std::string &name_file_output) const;
+	bool input_image(std::string name_file);
+	void write_bmp(std::string name_file_output) const;
 	int getWidth() const;
 	int getHeight() const;
 	void setWidth(int width);

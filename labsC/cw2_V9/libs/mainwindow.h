@@ -16,8 +16,8 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
-	std::string start_file;
-	std::string name_file;
+	QString start_file;
+	QString name_file;
 	QPixmap *image;
 	OpenSaveImageForm *openImageForm;
 	OpenSaveImageForm *saveImageForm;
@@ -40,15 +40,10 @@ private slots:
     void on_draw_square_clicked();
     void on_change_RGB_clicked();
     void on_rotate_fragment_clicked();
-
     void on_draw_circle_clicked();
-
     void on_load_image_clicked();
-
     void on_save_image_clicked();
-
     void on_reload_image_clicked();
-
     void on_pushButton_clicked();
 
 public slots:

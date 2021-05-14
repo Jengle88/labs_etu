@@ -24,15 +24,10 @@ signals:
 
 private slots:
     void on_buttonBox_accepted();
-
     void on_buttonBox_rejected();
-
     void on_drawSquare_clicked();
-
     void on_drawPointRad_clicked();
-
     void on_is_pure_over_stateChanged(int arg1);
-
 private:
     Ui::DrawCircleForm *ui;
 };

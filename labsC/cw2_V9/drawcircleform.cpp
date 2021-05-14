@@ -5,7 +5,6 @@ DrawCircleForm::DrawCircleForm(QWidget *parent, BMP *bmp_image) :
     QDialog(parent),
     ui(new Ui::DrawCircleForm)
 {
-	//setAttribute(Qt::WA_DeleteOnClose);
 	std::clog << "DrawCircleForm created\n";
 	this->bmp_image = bmp_image;
 	this->was_edited = false;
@@ -35,17 +34,17 @@ void DrawCircleForm::init() {
 	ui->xcenter->clear();
 	ui->ycenter->clear();
 	ui->radius->clear();
-	ui->line_width->setText(QString::fromStdString("1"));
-	ui->line_r->setText(QString::fromStdString("0"));
-	ui->line_g->setText(QString::fromStdString("0"));
-	ui->line_b->setText(QString::fromStdString("0"));
+	ui->line_width->setText("1");
+	ui->line_r->setText("0");
+	ui->line_g->setText("0");
+	ui->line_b->setText("0");
 	ui->is_pure_over->setCheckState(Qt::Unchecked);
 	ui->over_b->setEnabled(false);
 	ui->over_g->setEnabled(false);
 	ui->over_r->setEnabled(false);
-	ui->over_r->setText(QString::fromStdString("0"));
-	ui->over_g->setText(QString::fromStdString("0"));
-	ui->over_b->setText(QString::fromStdString("0"));
+	ui->over_r->setText("0");
+	ui->over_g->setText("0");
+	ui->over_b->setText("0");
 }
 void DrawCircleForm::on_buttonBox_accepted()
 {
