@@ -41,6 +41,9 @@
     <property name="text">
      <string>Здесь будет изображение</string>
     </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
     <property name="margin">
      <number>5</number>
     </property>

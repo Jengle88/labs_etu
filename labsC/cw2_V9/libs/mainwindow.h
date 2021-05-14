@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include "bmp_libs/BMP_edit.h"
-#include "opensaveimageform.h"
 #include "createsquareform.h"
 #include "changergbfilterform.h"
 #include "rotatefragmentform.h"
@@ -19,8 +18,6 @@ class MainWindow : public QMainWindow
 	QString start_file;
 	QString name_file;
 	QPixmap *image;
-	OpenSaveImageForm *openImageForm;
-	OpenSaveImageForm *saveImageForm;
 	CreateSquareForm *squareForm;
 	ChangeRGBFilterForm *rgbFilterForm;
 	RotateFragmentForm *rotateFragForm;

@@ -11,10 +11,10 @@ void BMP::write_4_color(std::ofstream &out, ColorItem item) {
 }
 
 ColorItem::ColorItem(u_char blue, u_char green, u_char red, u_char reserved) {
-	this->Blue = blue;
-	this->Green = green;
-	this->Red = red;
-	this->Reserved = reserved;
+	Blue = blue;
+	Green = green;
+	Red = red;
+	Reserved = reserved;
 }
 
 bool ColorItem::is_correct_color(int b, int g, int r, int reserv) {
@@ -26,15 +26,15 @@ ColorItem::ColorItem() = default;
 int BMP::in_bmp_file_header(std::fstream &in) {
 	char byte[4];
 	in.read(byte, 2);
-	this->file_header.Signature = Byte::make_short(byte[0], byte[1]);
+	file_header.Signature = Byte::make_short(byte[0], byte[1]);
 	in.read(byte, 4);
-	this->file_header.FileSize = Byte::make_int(byte[0],byte[1],byte[2],byte[3]);
+	file_header.FileSize = Byte::make_int(byte[0],byte[1],byte[2],byte[3]);
 	in.read(byte, 4);
-	this->file_header.Reserved = Byte::make_int(byte[0],byte[1],byte[2],byte[3]);
+	file_header.Reserved = Byte::make_int(byte[0],byte[1],byte[2],byte[3]);
 	in.read(byte, 4);
-	this->file_header.DataOffset = Byte::make_int(byte[0],byte[1],byte[2],byte[3]);
+	file_header.DataOffset = Byte::make_int(byte[0],byte[1],byte[2],byte[3]);
 
-	if(!Byte::compare_like_short(this->file_header.Signature, 'B', 'M')) {
+	if(!Byte::compare_like_short(file_header.Signature, 'B', 'M')) {
 		std::cerr << ERR_BMPIMAGE;
 		return 0;
 	}
@@ -44,118 +44,98 @@ int BMP::in_bmp_file_header(std::fstream &in) {
 void BMP::in_bmp_info_header(std::fstream &in) {
 	char byte[4];
 	in.read(byte,4);
-	this->info_header.Size = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	info_header.Size = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 	in.read(byte,4);
-	this->info_header.Width = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	info_header.Width = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 	in.read(byte,4);
-	this->info_header.Height = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	info_header.Height = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 	in.read(byte,2);
-	this->info_header.Planes = Byte::make_short(byte[0], byte[1]);
+	info_header.Planes = Byte::make_short(byte[0], byte[1]);
 	in.read(byte,2);
-	this->info_header.BitCount = Byte::make_short(byte[0], byte[1]);
+	info_header.BitCount = Byte::make_short(byte[0], byte[1]);
 	in.read(byte,4);
-	this->info_header.Compression = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	info_header.Compression = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 	in.read(byte,4);
-	this->info_header.ImageSize = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	info_header.ImageSize = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 	in.read(byte,4);
-	this->info_header.XpixelsPerM = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	info_header.XpixelsPerM = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 	in.read(byte,4);
-	this->info_header.YpixelsPerM = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	info_header.YpixelsPerM = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 	in.read(byte,4);
-	this->info_header.ColourUsed = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	info_header.ColourUsed = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 	in.read(byte,4);
-	this->info_header.ColorsImportant = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
-	if(this->info_header.Size >= 108) {
+	info_header.ColorsImportant = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+	if(info_header.Size >= 108) {
 		in.read(byte, 4);
-		this->info_header.RChannelBitmask = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		info_header.RChannelBitmask = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 		in.read(byte, 4);
-		this->info_header.GChannelBitmask = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		info_header.GChannelBitmask = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 		in.read(byte, 4);
-		this->info_header.BChannelBitmask = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		info_header.BChannelBitmask = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 		in.read(byte, 4);
-		this->info_header.AChannelBitmask = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		info_header.AChannelBitmask = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 		in.read(byte, 4);
-		this->info_header.ColorSpaceType = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		info_header.ColorSpaceType = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 		for (int i = 0; i < 9; ++i) {
 			in.read(byte, 4);
-			this->info_header.ColorSpaceEndpoints[i] = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+			info_header.ColorSpaceEndpoints[i] = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 		}
 		in.read(byte, 4);
-		this->info_header.GammaRchannel = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		info_header.GammaRchannel = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 		in.read(byte, 4);
-		this->info_header.GammaGchannel = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		info_header.GammaGchannel = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 		in.read(byte, 4);
-		this->info_header.GammaBchannel = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		info_header.GammaBchannel = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 	}
-	if(this->info_header.Size == 124){
+	if(info_header.Size == 124){
 		in.read(byte,4);
-		this->info_header.Intent = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		info_header.Intent = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 		in.read(byte,4);
-		this->info_header.ICCProfileData = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		info_header.ICCProfileData = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 		in.read(byte,4);
-		this->info_header.ICCProfileSize = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		info_header.ICCProfileSize = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 		in.read(byte,4);
-		this->info_header.Reserved = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
+		info_header.Reserved = Byte::make_int(byte[0], byte[1], byte[2], byte[3]);
 	}
 
-//	byte = Byte::get_byte(in, 4);
-//	this->info_header.Width = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-//	byte = Byte::get_byte(in, 4);
-//	this->info_header.Height = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-//	byte = Byte::get_byte(in, 2);
-//	this->info_header.Planes = Byte::make_short(byte[1], byte[0]);
-//	byte = Byte::get_byte(in, 2);
-//	this->info_header.BitCount = Byte::make_short(byte[1], byte[0]);
-//	byte = Byte::get_byte(in, 4);
-//	this->info_header.Compression = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-//	byte = Byte::get_byte(in, 4);
-//	this->info_header.ImageSize = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-//	byte = Byte::get_byte(in, 4);
-//	this->info_header.XpixelsPerM = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-//	byte = Byte::get_byte(in, 4);
-//	this->info_header.YpixelsPerM = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-//	byte = Byte::get_byte(in, 4);
-//	this->info_header.ColourUsed = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
-//	byte = Byte::get_byte(in, 4);
-//	this->info_header.ColorsImportant = Byte::make_int(byte[3], byte[2], byte[1], byte[0]);
 }
 
 void BMP::in_bmp_palette(std::fstream &in) {
-	if (BMPFileHeaderSIZE + this->info_header.Size != this->file_header.DataOffset) {
+	if (BMPFileHeaderSIZE + info_header.Size != file_header.DataOffset) {
 		int palette_size =
-				this->file_header.DataOffset - (BMPFileHeaderSIZE + this->info_header.Size);
-		this->have_palette = true;
-		this->colors.resize(palette_size);
+				(int)file_header.DataOffset - (BMPFileHeaderSIZE + (int)info_header.Size);
+		have_palette = true;
+		colors.resize(palette_size);
 		for (int i = 0; i < palette_size / 4; ++i) {
 			u_char b = in.get();
 			u_char g = in.get();
 			u_char r = in.get();
 			u_char res = in.get();
-			this->colors[i] = ColorItem(b, g, r, res);
+			colors[i] = ColorItem(b, g, r, res);
 		}
 	} else {
-		this->have_palette = false;
-		this->colors.clear();
+		have_palette = false;
+		colors.clear();
 	}
 }
 
 void BMP::in_bmp_pixel_table(std::fstream &in) {
 
-	switch(this->info_header.BitCount) {
+	switch(info_header.BitCount) {
 		case 24:
-			pixels.resize(this->info_header.Height);
+			pixels.resize(info_header.Height);
 			for (int i = 0; i < pixels.size(); ++i) {
-				pixels[i].resize(this->info_header.Width);
+				pixels[i].resize(info_header.Width);
 			}
-			this->cnt_extra_byte = (4-int(this->info_header.Width*3) % 4) % 4;
-			for (int i = this->info_header.Height - 1; i >= 0; i--) {
-				for (int j = 0; j < this->info_header.Width; ++j) {
+			cnt_extra_byte = (4-int(info_header.Width*3) % 4) % 4;
+			for (int i = (int)info_header.Height - 1; i >= 0; i--) {
+				for (int j = 0; j < info_header.Width; ++j) {
 					u_char b = in.get();
 					u_char g = in.get();
 					u_char r = in.get();
-					this->pixels[i][j] = ColorItem(b, g, r, 0);
+					pixels[i][j] = ColorItem(b, g, r, 0);
 				}
-				for (int j = 0; j < this->cnt_extra_byte; ++j) {
+				for (int j = 0; j < cnt_extra_byte; ++j) {
 					in.get();
 				}
 			}
@@ -171,7 +151,7 @@ void BMP::in_bmp_pixel_table(std::fstream &in) {
 
 }
 
-bool BMP::input_image(std::string name_file) {
+bool BMP::input_image(const std::string name_file) {
 	std::fstream in(name_file, std::ios_base::binary | std::ios_base::in);
 	if (!in.is_open()) {
 		std::cerr << ERR_NFILE;
@@ -180,7 +160,7 @@ bool BMP::input_image(std::string name_file) {
 	if(!in_bmp_file_header(in))
 		return false;
 	in_bmp_info_header(in);
-	switch(this->info_header.BitCount){
+	switch(info_header.BitCount){
 		case 24:
 			in_bmp_palette(in);
 			in_bmp_pixel_table(in);
@@ -199,40 +179,60 @@ bool BMP::input_image(std::string name_file) {
 	return true;
 }
 
-void BMP::write_bmp(std::string name_file_output) const {
-	if (this->info_header.BitCount != 24) {
+void BMP::write_bmp(const std::string name_file_output) const {
+	if (info_header.BitCount != 24)
 		return;
-	}
+
 	std::ofstream out(name_file_output, std::ios_base::binary | std::ios_base::out);
 
-	Byte::write_16_like_byte(this->file_header.Signature, out);
-	Byte::write_32_like_byte(this->file_header.FileSize, out);
-	Byte::write_32_like_byte(this->file_header.Reserved, out);
-	Byte::write_32_like_byte(this->file_header.DataOffset, out);
+	Byte::write_16_like_byte(file_header.Signature, out);
+	Byte::write_32_like_byte(file_header.FileSize, out);
+	Byte::write_32_like_byte(file_header.Reserved, out);
+	Byte::write_32_like_byte(file_header.DataOffset, out);
 
-	Byte::write_32_like_byte(this->info_header.Size, out);
-	Byte::write_32_like_byte(this->info_header.Width, out);
-	Byte::write_32_like_byte(this->info_header.Height, out);
-	Byte::write_16_like_byte(this->info_header.Planes, out);
-	Byte::write_16_like_byte(this->info_header.BitCount, out);
-	Byte::write_32_like_byte(this->info_header.Compression, out);
-	Byte::write_32_like_byte(this->info_header.ImageSize, out);
-	Byte::write_32_like_byte(this->info_header.XpixelsPerM, out);
-	Byte::write_32_like_byte(this->info_header.YpixelsPerM, out);
-	Byte::write_32_like_byte(this->info_header.ColourUsed, out);
-	Byte::write_32_like_byte(this->info_header.ColorsImportant, out);
+	Byte::write_32_like_byte(info_header.Size, out);
+	Byte::write_32_like_byte(info_header.Width, out);
+	Byte::write_32_like_byte(info_header.Height, out);
+	Byte::write_16_like_byte(info_header.Planes, out);
+	Byte::write_16_like_byte(info_header.BitCount, out);
+	Byte::write_32_like_byte(info_header.Compression, out);
+	Byte::write_32_like_byte(info_header.ImageSize, out);
+	Byte::write_32_like_byte(info_header.XpixelsPerM, out);
+	Byte::write_32_like_byte(info_header.YpixelsPerM, out);
+	Byte::write_32_like_byte(info_header.ColourUsed, out);
+	Byte::write_32_like_byte(info_header.ColorsImportant, out);
 
-	if (this->have_palette) {
-		for (int i = 0; i < this->colors.size(); ++i) {
-			write_4_color(out, this->colors[i]);
+	if(info_header.Size >= 108) {
+		Byte::write_32_like_byte(info_header.RChannelBitmask, out);
+		Byte::write_32_like_byte(info_header.GChannelBitmask, out);
+		Byte::write_32_like_byte(info_header.BChannelBitmask, out);
+		Byte::write_32_like_byte(info_header.AChannelBitmask, out);
+		Byte::write_32_like_byte(info_header.ColorSpaceType, out);
+		for (int i = 0; i < 9; ++i)
+			Byte::write_32_like_byte(info_header.ColorSpaceEndpoints[i], out);
+		Byte::write_32_like_byte(info_header.GammaRchannel, out);
+		Byte::write_32_like_byte(info_header.GammaGchannel, out);
+		Byte::write_32_like_byte(info_header.GammaBchannel, out);
+	}
+
+	if(info_header.Size >= 124) {
+		Byte::write_32_like_byte(info_header.Intent, out);
+		Byte::write_32_like_byte(info_header.ICCProfileData, out);
+		Byte::write_32_like_byte(info_header.ICCProfileSize, out);
+		Byte::write_32_like_byte(info_header.Reserved, out);
+	}
+
+	if (have_palette) {
+		for (int i = 0; i < colors.size(); ++i) {
+			write_4_color(out, colors[i]);
 		}
 	}
 
-	for (int i = this->info_header.Height - 1; i >= 0; i--) {
-		for (int j = 0; j < this->info_header.Width; ++j) {
-			write_3_color(out, this->pixels[i][j]);
+	for (int i = (int)info_header.Height - 1; i >= 0; i--) {
+		for (int j = 0; j < info_header.Width; ++j) {
+			write_3_color(out, pixels[i][j]);
 		}
-		for (int j = 0; j < this->cnt_extra_byte; ++j) {
+		for (int j = 0; j < cnt_extra_byte; ++j) {
 			out << (u_char) 0;
 		}
 	}
@@ -241,17 +241,17 @@ void BMP::write_bmp(std::string name_file_output) const {
 
 void BMP::setWidth(int width) {
 	if (width > 0 && width <= 6000) {
-		for (int i = 0; i < this->info_header.Height; ++i) {
-			this->pixels[i].resize(width);
+		for (int i = 0; i < info_header.Height; ++i) {
+			pixels[i].resize(width);
 		}
-		if (this->info_header.Width < width) {
-			for (int i = 0; i < this->info_header.Height; ++i) {
-				for (int j = this->info_header.Width; j < width; ++j) {
-					this->pixels[i][j] = CLR_WHITE;
+		if (info_header.Width < width) {
+			for (int i = 0; i < info_header.Height; ++i) {
+				for (int j = (int)info_header.Width; j < width; ++j) {
+					pixels[i][j] = CLR_WHITE;
 				}
 			}
 		}
-		this->info_header.Width = width;
+		info_header.Width = width;
 	}
 	else {
 		std::cerr << ERR_WIDTH;
@@ -261,10 +261,10 @@ void BMP::setWidth(int width) {
 
 void BMP::setHeight(int height) {
 	if (height > 0 && height < 6000) {
-		this->pixels.resize(height);
-		if (this->info_header.Height < height) {
-			for (int i = this->info_header.Height; i < height; ++i) {
-				this->pixels[i] = std::vector<ColorItem>(this->info_header.Width, CLR_WHITE);
+		pixels.resize(height);
+		if (info_header.Height < height) {
+			for (int i = (int)info_header.Height; i < height; ++i) {
+				pixels[i] = std::vector<ColorItem>(info_header.Width, CLR_WHITE);
 			}
 		}
 	}
@@ -276,12 +276,12 @@ void BMP::setHeight(int height) {
 bool
 BMP::draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem line_color, bool is_pour_over,
 				 ColorItem square_color) {
-	if (xpos < 0 || xpos >= this->info_header.Width || ypos < 0 || ypos >= this->info_header.Height) {
+	if (xpos < 0 || xpos >= info_header.Width || ypos < 0 || ypos >= info_header.Height) {
 		std::cerr << ERR_XYPOS;
 		return false;
 	}
-	if (line_length < 0 || xpos + line_length > this->info_header.Width ||
-		ypos + line_length > this->info_header.Height || line_length < 2 * line_width) {
+	if (line_length < 0 || xpos + line_length > info_header.Width ||
+		ypos + line_length > info_header.Height || line_length < 2 * line_width) {
 		std::cerr << ERR_LENGTH;
 		return false;
 	}
@@ -292,16 +292,16 @@ BMP::draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem 
 	// верхняя и нижняя линии
 	for (int i = 0; i < line_width; ++i) {
 		for (int j = 0; j < line_length; ++j) {
-			this->pixels[ypos + i][xpos + j] = line_color;
-			this->pixels[ypos + line_length - i - 1][xpos + j] = line_color;
+			pixels[ypos + i][xpos + j] = line_color;
+			pixels[ypos + line_length - i - 1][xpos + j] = line_color;
 
 		}
 	}
 	//боковые линии
 	for (int i = line_width; i < line_length - line_width; ++i) {
 		for (int j = 0; j < line_width; ++j) {
-			this->pixels[ypos + i][xpos + j] = line_color;
-			this->pixels[ypos + i][xpos + line_length - j - 1] = line_color;
+			pixels[ypos + i][xpos + j] = line_color;
+			pixels[ypos + i][xpos + line_length - j - 1] = line_color;
 
 		}
 	}
@@ -309,24 +309,24 @@ BMP::draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem 
 	if (is_pour_over) {
 		for (int i = 0; i < line_length - 2 * line_width; ++i) {
 			for (int j = 0; j < line_length - 2 * line_width; ++j) {
-				this->pixels[ypos + line_width + i][xpos + line_width + j] = square_color;
+				pixels[ypos + line_width + i][xpos + line_width + j] = square_color;
 			}
 		}
 	}
 	//главная диагональ
 	for (int i = 0; i < line_length - 2 * line_width; ++i) {
-		this->pixels[ypos + line_width + i][xpos + line_width + i] = line_color;
+		pixels[ypos + line_width + i][xpos + line_width + i] = line_color;
 		for (int j = 1; j <= line_width-1; ++j) {
-			this->pixels[ypos + line_width + i + j][xpos + line_width + i] = line_color;
-			this->pixels[ypos + line_width + i][xpos + line_width + i + j] = line_color;
+			pixels[ypos + line_width + i + j][xpos + line_width + i] = line_color;
+			pixels[ypos + line_width + i][xpos + line_width + i + j] = line_color;
 		}
 	}
 	//побочная диагональ
 	for (int i = 0; i < line_length - 2 * line_width; ++i) {
-		this->pixels[ypos + line_length - line_width - i - 1][xpos + line_width + i] = line_color;
+		pixels[ypos + line_length - line_width - i - 1][xpos + line_width + i] = line_color;
 		for (int j = 1; j <= line_width - 1; ++j) {
-			this->pixels[ypos + line_length - line_width - i - 1 + j][xpos + line_width + i] = line_color;
-			this->pixels[ypos + line_length - line_width - i - 1][xpos + line_width + i - j] = line_color;
+			pixels[ypos + line_length - line_width - i - 1 + j][xpos + line_width + i] = line_color;
+			pixels[ypos + line_length - line_width - i - 1][xpos + line_width + i - j] = line_color;
 		}
 	}
 	return true;
@@ -341,17 +341,17 @@ bool BMP::edit_component(char component, int num) {
 		std::cerr << ERR_CLR;
 		return false;
 	}
-	for (int i = 0; i < this->info_header.Height; ++i) {
-		for (int j = 0; j < this->info_header.Width; ++j) {
+	for (int i = 0; i < info_header.Height; ++i) {
+		for (int j = 0; j < info_header.Width; ++j) {
 			switch (component) {
 				case 'r':
-					this->pixels[i][j].Red = num;
+					pixels[i][j].Red = num;
 					break;
 				case 'g':
-					this->pixels[i][j].Green = num;
+					pixels[i][j].Green = num;
 					break;
 				case 'b':
-					this->pixels[i][j].Blue = num;
+					pixels[i][j].Blue = num;
 					break;
 			}
 		}
@@ -360,11 +360,11 @@ bool BMP::edit_component(char component, int num) {
 }
 
 bool BMP::rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle) {
-	if (xlpos < 0 || xlpos >= this->info_header.Width || ylpos < 0 || ylpos >= this->info_header.Height) {
+	if (xlpos < 0 || xlpos >= info_header.Width || ylpos < 0 || ylpos >= info_header.Height) {
 		std::cerr << ERR_LPOS;
 		return false;
 	}
-	if (xrpos < 0 || xrpos >= this->info_header.Width || yrpos < 0 || yrpos >= this->info_header.Height) {
+	if (xrpos < 0 || xrpos >= info_header.Width || yrpos < 0 || yrpos >= info_header.Height) {
 		std::cerr << ERR_RPOS;
 		return false;
 	}
@@ -380,15 +380,15 @@ bool BMP::rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle)
 														std::vector<ColorItem>(xrpos - xlpos + 1));
 		for (int i = ylpos; i <= yrpos; ++i) {
 			for (int j = xlpos; j <= xrpos; ++j) {
-				temp_matrix[i - ylpos][j - xlpos] = this->pixels[i][j];
-				this->pixels[i][j] = CLR_WHITE;
+				temp_matrix[i - ylpos][j - xlpos] = pixels[i][j];
+				pixels[i][j] = CLR_WHITE;
 			}
 		}
 		int new_x_start = std::max(0, xlpos + xdelta - ydelta);
 		int new_y_start = std::max(0, ylpos + ydelta - xdelta);
-		for (int i = 0; i < temp_matrix[0].size() && i + new_y_start < this->info_header.Height; ++i) {
-			for (int j = 0; j < temp_matrix.size() && j + new_x_start < this->info_header.Width; ++j) {
-				this->pixels[i + new_y_start][j + new_x_start] = temp_matrix[temp_matrix.size() - 1 - j][i];
+		for (int i = 0; i < temp_matrix[0].size() && i + new_y_start < info_header.Height; ++i) {
+			for (int j = 0; j < temp_matrix.size() && j + new_x_start < info_header.Width; ++j) {
+				pixels[i + new_y_start][j + new_x_start] = temp_matrix[temp_matrix.size() - 1 - j][i];
 			}
 		}
 	}
@@ -397,13 +397,13 @@ bool BMP::rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle)
 		int xdelta = (xrpos - xlpos);
 		for (int i = 0; i <= ydelta; ++i) {
 			for (int j = 0; j <= xdelta; ++j) {
-				std::swap(this->pixels[ylpos + i][xlpos + j], this->pixels[yrpos - i][xrpos - j]);
+				std::swap(pixels[ylpos + i][xlpos + j], pixels[yrpos - i][xrpos - j]);
 			}
 		}
 		if ((yrpos - ylpos + 1) % 2 != 0) {
 			for (int i = 0; i < xdelta / 2; ++i) {
-				std::swap(this->pixels[ylpos + ydelta][xlpos + i],
-						  this->pixels[ylpos + ydelta][xrpos - i]);
+				std::swap(pixels[ylpos + ydelta][xlpos + i],
+						  pixels[ylpos + ydelta][xrpos - i]);
 			}
 		}
 	}
@@ -414,15 +414,15 @@ bool BMP::rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle)
 														std::vector<ColorItem>(xrpos - xlpos + 1));
 		for (int i = ylpos; i <= yrpos; ++i) {
 			for (int j = xlpos; j <= xrpos; ++j) {
-				temp_matrix[i - ylpos][j - xlpos] = this->pixels[i][j];
-				this->pixels[i][j] = CLR_WHITE;
+				temp_matrix[i - ylpos][j - xlpos] = pixels[i][j];
+				pixels[i][j] = CLR_WHITE;
 			}
 		}
 		int new_x_start = std::max(0, xlpos + xdelta - ydelta);
 		int new_y_start = std::max(0, ylpos + ydelta - xdelta);
-		for (int i = 0; i < temp_matrix[0].size() && i + new_y_start < this->info_header.Height; ++i) {
-			for (int j = 0; j < temp_matrix.size() && j + new_x_start < this->info_header.Width; ++j) {
-				this->pixels[i + new_y_start][j + new_x_start] = temp_matrix[j][temp_matrix[0].size() - 1 - i];
+		for (int i = 0; i < temp_matrix[0].size() && i + new_y_start < info_header.Height; ++i) {
+			for (int j = 0; j < temp_matrix.size() && j + new_x_start < info_header.Width; ++j) {
+				pixels[i + new_y_start][j + new_x_start] = temp_matrix[j][temp_matrix[0].size() - 1 - i];
 			}
 		}
 	}
@@ -434,38 +434,38 @@ bool BMP::rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle)
 }
 
 int BMP::getWidth() const {
-	return this->info_header.Width;
+	return info_header.Width;
 }
 
 int BMP::getHeight() const {
-	return this->info_header.Height;
+	return info_header.Height;
 }
 
 void
 BMP::fill_circle(std::vector<std::pair<int, int>> &brd_ins, std::vector<std::pair<int, int>> &brd_out, int y,
 				 ColorItem line_color){
-	int delta_size = (brd_out.size() - brd_ins.size()) / 2;
+	int delta_size = ((int)brd_out.size() - (int)brd_ins.size()) / 2;
 	y++;
 	for (int i = 1; i < delta_size; ++i) {
 		for (int j = brd_out[i].first+1; j < brd_out[i].second; ++j) {
-			this->pixels[y][j] = line_color;
+			pixels[y][j] = line_color;
 		}
 		y++;
 	}
 	int ind = 0;
 	for (int i = delta_size; i < brd_out.size() - delta_size; ++i) {
 		for (int j = brd_out[i].first+1; j < brd_ins[ind].first; ++j) {
-			this->pixels[y][j] = line_color;
+			pixels[y][j] = line_color;
 		}
 		for (int j = brd_ins[ind].second+1; j < brd_out[i].second; ++j) {
-			this->pixels[y][j] = line_color;
+			pixels[y][j] = line_color;
 		}
 		ind++;
 		y++;
 	}
-	for (int i = brd_out.size()-delta_size; i < brd_out.size()-1; ++i) {
+	for (int i = (int)brd_out.size()-delta_size; i < brd_out.size()-1; ++i) {
 		for (int j = brd_out[i].first+1; j < brd_out[i].second; ++j) {
-			this->pixels[y][j] = line_color;
+			pixels[y][j] = line_color;
 		}
 		y++;
 	}
@@ -475,8 +475,8 @@ BMP::fill_circle(std::vector<std::pair<int, int>> &brd_ins, std::vector<std::pai
 bool//делать -1 от пикселей, заданных пользователем
 BMP::draw_circle_via_radius(int xpos, int ypos, int rad, int line_width, ColorItem line_color, bool is_pour_over,
 							ColorItem circle_color) {
-	if(xpos - rad - line_width + 1 < 0 || xpos + rad + line_width > this->info_header.Width ||
-	ypos - rad - line_width + 1 < 0 || ypos + rad + line_width > this->info_header.Height){
+	if(xpos - rad - line_width + 1 < 0 || xpos + rad + line_width > info_header.Width ||
+	ypos - rad - line_width + 1 < 0 || ypos + rad + line_width > info_header.Height){
 		std::cerr << ERR_XYPOS;
 		return false;
 	}
@@ -497,7 +497,7 @@ BMP::draw_circle_via_radius(int xpos, int ypos, int rad, int line_width, ColorIt
 	if(is_pour_over){
 		for (int i = 1; i <= 2*rad; ++i) {
 			for (int j = borders_less_circle_in[i].first+1; j < borders_less_circle_in[i].second; ++j) {
-				this->pixels[ypos-rad+i][j] = circle_color;
+				pixels[ypos-rad+i][j] = circle_color;
 			}
 		}
 	}
@@ -506,9 +506,9 @@ BMP::draw_circle_via_radius(int xpos, int ypos, int rad, int line_width, ColorIt
 
 bool BMP::draw_circle_via_square(int xposl, int yposl, int xposr, int yposr, int line_width, ColorItem line_color,
 								 bool is_pour_over, ColorItem circle_color) {
-	if(xposl >= xposr || yposl >= yposr || xposl < 0 || xposl >= this->info_header.Width ||
-	xposr < 0 || xposr >= this->info_header.Width || yposl < 0 || yposl >= this->info_header.Height ||
-	yposr < 0 || yposr >= this->info_header.Height){
+	if(xposl >= xposr || yposl >= yposr || xposl < 0 || xposl >= info_header.Width ||
+	xposr < 0 || xposr >= info_header.Width || yposl < 0 || yposl >= info_header.Height ||
+	yposr < 0 || yposr >= info_header.Height){
 		std::clog << ERR_XYPOS;
 		return false;
 	}
@@ -535,7 +535,7 @@ bool BMP::draw_circle_via_square(int xposl, int yposl, int xposr, int yposr, int
 		if(is_pour_over){
 			for (int i = 1; i <= 2*radius; ++i) {
 				for (int j = borders_less_circle_in[i].first+1; j < borders_less_circle_in[i].second; ++j) {
-					this->pixels[ycentr-radius+i][j] = circle_color;
+					pixels[ycentr-radius+i][j] = circle_color;
 				}
 			}
 		}
@@ -550,14 +550,14 @@ void BMP::draw_circle(int xcentr, int ycentr, int r, ColorItem color, bool have_
 	int y = 0;
 	int radiusError = 1-x;
 	while(x >= y){
-		this->pixels[ycentr+have_center+y][xcentr+have_center+x] = color;
-		this->pixels[ycentr+have_center+x][xcentr+have_center+y] = color;
-		this->pixels[ycentr-y][xcentr+have_center+x] = color;
-		this->pixels[ycentr-x][xcentr+have_center+y] = color;
-		this->pixels[ycentr+have_center+y][xcentr-x] = color;
-		this->pixels[ycentr+have_center+x][xcentr-y] = color;
-		this->pixels[ycentr-y][xcentr-x] = color;
-		this->pixels[ycentr-x][xcentr-y] = color;
+		pixels[ycentr+have_center+y][xcentr+have_center+x] = color;
+		pixels[ycentr+have_center+x][xcentr+have_center+y] = color;
+		pixels[ycentr-y][xcentr+have_center+x] = color;
+		pixels[ycentr-x][xcentr+have_center+y] = color;
+		pixels[ycentr+have_center+y][xcentr-x] = color;
+		pixels[ycentr+have_center+x][xcentr-y] = color;
+		pixels[ycentr-y][xcentr-x] = color;
+		pixels[ycentr-x][xcentr-y] = color;
 		y++;
 		if(radiusError < 0){
 			radiusError += 2 * y + 1;

@@ -3,6 +3,7 @@
 #include <utility>
 #include "libs/mainwindow.h"
 #include <QMessageBox>
+#include <QFileDialog>
 
 /* TODO:
  * 	1) Настроить доп окно для выбора характеристик квадрата --- V
@@ -20,23 +21,13 @@
 
 MainWindow::MainWindow(QWidget *parent)
 		: QMainWindow(parent), ui(new Ui::MainWindow) {
-	openImageForm = new OpenSaveImageForm();
-	connect(openImageForm, SIGNAL(sendData(QString)), this, SLOT(receiveNameImage(QString)));
-	if(!DEBUG) {
-		openImageForm->setWindowTitle("Загрузить изображение");
-		openImageForm->exec();
-		if (name_file.isEmpty()) {
-			QMessageBox::warning(this, "Ошибка", "Файл не был выбран, приложение завершилось");
-			delete openImageForm;
-			exit(1);
-		}
-	} else {
-//		name_file = "test1.bmp";
-//		name_file = "simpsonsvr.bmp";
-	}
+
+
+	name_file = QFileDialog::getOpenFileName(nullptr, "Open Dialog", "", "*.bmp");
 	start_file = std::move(name_file);
-	if(DEBUG)
-		std::clog << "MainWindow created\n";
+
+
+	std::clog << "MainWindow created\n";
 	ui->setupUi(this);
 
 	this->squareForm = new CreateSquareForm(nullptr, &bmp_image);
@@ -55,11 +46,7 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(drawCircleForm,SIGNAL(send_results(bool)), this, SLOT(receiveEditedImage(bool)));
 	drawCircleForm->setFixedSize(515,390);
 
-	this->saveImageForm = new OpenSaveImageForm(nullptr, true);
-	connect(saveImageForm, SIGNAL(sendData(QString)), this, SLOT(receiveNameImage(QString)));
 
-
-	//QString str = QString::fromStdString(start_file);
 	if(bmp_image.input_image(start_file.toStdString())){
 		start_bmp_image = BMP(bmp_image);
 		image = new QPixmap(start_file);
@@ -70,8 +57,11 @@ MainWindow::MainWindow(QWidget *parent)
 		ui->width_label->setText(QString::number(bmp_image.getWidth()));
 		ui->bit_pixels_label->setText(QString::number(bmp_image.getBitPerPixels()));
 		ui->size_byte_label->setText(QString::number(bmp_image.getSize()));
-	} else
-		ui->label->setText("Не удалось загрузить изображение!");
+	} else{
+		ui->label->setText("Здесь могло быть ваше изображение!");
+		QMessageBox::critical(this,"Attention!","Не удалось загрузить изображение!");
+	}
+
 
 	ui->label->setStyleSheet("QLabel {"
 							 "border-style: solid;"
@@ -82,12 +72,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow() {
 	delete image;
-	delete openImageForm;
 	delete squareForm;
 	delete rgbFilterForm;
 	delete rotateFragForm;
 	delete drawCircleForm;
-	delete saveImageForm;
 	std::clog << "MainWindow finished\n";
 	remove(".result.bmp");
 	delete ui;
@@ -145,9 +133,7 @@ void MainWindow::on_draw_circle_clicked()
 
 void MainWindow::on_load_image_clicked()
 {
-	openImageForm->init();
-	openImageForm->setWindowTitle("Загрузить изображение");
-	openImageForm->exec();
+	name_file = QFileDialog::getOpenFileName(nullptr, "Open Dialog", "", "*.bmp");
 	if (!name_file.isEmpty() && bmp_image.input_image(name_file.toStdString())){
 		start_bmp_image = bmp_image;
 		ui->height_label->setText(QString::number(bmp_image.getHeight()));
@@ -166,9 +152,7 @@ void MainWindow::on_load_image_clicked()
 
 void MainWindow::on_save_image_clicked()
 {
-	saveImageForm->init();
-	saveImageForm->setWindowTitle("Сохранить изображение");
-	saveImageForm->exec();
+	name_file = QFileDialog::getSaveFileName(nullptr, "Save Dialog", "", "*.bmp");
 	if (!name_file.isEmpty())
 		bmp_image.write_bmp(name_file.toStdString());
 }
