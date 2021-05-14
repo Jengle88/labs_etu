@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	this->squareForm = new CreateSquareForm(nullptr, &bmp_image);
 	connect(squareForm, SIGNAL(send_results(bool)), this, SLOT(receiveEditedImage(bool)));
-	squareForm->setFixedSize(380, 280);
+	squareForm->setFixedSize(460, 370);
 
 	this->rgbFilterForm = new ChangeRGBFilterForm(nullptr, &bmp_image);
 	connect(rgbFilterForm, SIGNAL(send_results(bool)), this, SLOT(receiveEditedImage(bool)));
@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 	this->drawCircleForm = new DrawCircleForm(nullptr, &bmp_image);
 	connect(drawCircleForm,SIGNAL(send_results(bool)), this, SLOT(receiveEditedImage(bool)));
-	drawCircleForm->setFixedSize(515,390);
+	drawCircleForm->setFixedSize(515,440);
 
 
 	if(bmp_image.input_image(start_file.toStdString())){
@@ -58,7 +58,6 @@ MainWindow::MainWindow(QWidget *parent)
 		ui->label->setText("Здесь могло быть ваше изображение!");
 		QMessageBox::critical(this,"Attention!","Не удалось загрузить изображение!");
 	}
-
 
 	ui->label->setStyleSheet("QLabel {"
 							 "border-style: solid;"

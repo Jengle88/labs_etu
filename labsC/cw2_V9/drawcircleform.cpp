@@ -35,16 +35,13 @@ void DrawCircleForm::init() {
 	ui->ycenter->clear();
 	ui->radius->clear();
 	ui->line_width->setText("1");
-	ui->line_r->setText("0");
-	ui->line_g->setText("0");
-	ui->line_b->setText("0");
+	line_set_color(CLR_BLACK);
 	ui->is_pure_over->setCheckState(Qt::Unchecked);
 	ui->over_b->setEnabled(false);
 	ui->over_g->setEnabled(false);
 	ui->over_r->setEnabled(false);
-	ui->over_r->setText("0");
-	ui->over_g->setText("0");
-	ui->over_b->setText("0");
+	over_set_color(CLR_BLACK);
+
 }
 void DrawCircleForm::on_buttonBox_accepted()
 {
@@ -158,4 +155,62 @@ void DrawCircleForm::on_is_pure_over_stateChanged(int arg1)
 		ui->over_g->setEnabled(false);
 		ui->over_b->setEnabled(false);
 	}
+}
+void DrawCircleForm::line_set_color(ColorItem color) {
+	ui->line_r->setText(QString::number(color.Red));
+	ui->line_g->setText(QString::number(color.Green));
+	ui->line_b->setText(QString::number(color.Blue));
+}
+void DrawCircleForm::over_set_color(ColorItem color) {
+	ui->over_r->setText(QString::number(color.Red));
+	ui->over_g->setText(QString::number(color.Green));
+	ui->over_b->setText(QString::number(color.Blue));
+}
+void DrawCircleForm::on_line_black_clicked() {
+	line_set_color(CLR_BLACK);
+}
+void DrawCircleForm::on_line_white_clicked() {
+	line_set_color(CLR_WHITE);
+}
+void DrawCircleForm::on_line_red_clicked() {
+	line_set_color(CLR_RED);
+}
+void DrawCircleForm::on_line_green_clicked() {
+	line_set_color(CLR_GREEN);
+}
+void DrawCircleForm::on_line_blue_clicked() {
+	line_set_color(CLR_BLUE);
+}
+void DrawCircleForm::on_line_yellow_clicked() {
+	line_set_color(CLR_YELLOW);
+}
+void DrawCircleForm::on_line_pink_clicked() {
+	line_set_color(CLR_PINK);
+}
+void DrawCircleForm::on_line_orange_clicked() {
+	line_set_color(CLR_ORANGE);
+}
+void DrawCircleForm::on_over_black_clicked() {
+	over_set_color(CLR_BLACK);
+}
+void DrawCircleForm::on_over_white_clicked() {
+	over_set_color(CLR_WHITE);
+}
+void DrawCircleForm::on_over_red_clicked() {
+	over_set_color(CLR_RED);
+}
+void DrawCircleForm::on_over_green_clicked() {
+	over_set_color(CLR_GREEN);
+}
+void DrawCircleForm::on_over_blue_clicked() {
+	over_set_color(CLR_BLUE);
+}
+void DrawCircleForm::on_over_yellow_clicked() {
+	over_set_color(CLR_YELLOW);
+}
+void DrawCircleForm::on_over_pink_clicked() {
+	over_set_color(CLR_PINK);
+}
+void DrawCircleForm::on_over_orange_clicked() {
+	over_set_color(CLR_ORANGE);
 }

@@ -14,6 +14,8 @@
 #define CLR_GREEN {0,255,0,0}
 #define CLR_RED {0,0,255,0}
 #define CLR_YELLOW {0,255,255,0}
+#define CLR_PINK {127,0,255,0}
+#define CLR_ORANGE {0,85,255,0}
 
 
 #define ERR_XYPOS "Bad x/y position for square!\n"
@@ -104,7 +106,7 @@ struct ColorItem {
 	ColorItem(u_char blue, u_char green, u_char red, u_char reserved);
 	ColorItem();
 
-	static bool is_correct_color(int b, int g, int r, int reserv);
+	static bool is_correct_color(int blue, int green, int red, int reserved);
 };
 
 
@@ -120,35 +122,57 @@ public:
 
 private:
 	int in_bmp_file_header(std::fstream &in);
+
 	void in_bmp_info_header(std::fstream &in);
+
 	void in_bmp_palette(std::fstream &in);
+
 	void in_bmp_pixel_table(std::fstream &in);
+
 	static void write_3_color(std::ofstream &out, ColorItem item);
+
 	static void write_4_color(std::ofstream &out, ColorItem item);
+
 	void draw_circle(int xcentr, int ycentr, int r, ColorItem color, bool have_center = true);
-	std::vector<std::pair<int,int>> get_border_circle_in(int xcentr, int r, bool have_center = true) const;
-	std::vector<std::pair<int,int>> get_border_circle_out(int xcentr, int r, bool have_center = true) const;
+
+	std::vector<std::pair<int, int>> get_border_circle_in(int xcentr, int r, bool have_center = true) const;
+
+	std::vector<std::pair<int, int>> get_border_circle_out(int xcentr, int r, bool have_center = true) const;
+
 	void fill_circle(std::vector<std::pair<int, int>> &brd_ins, std::vector<std::pair<int, int>> &brd_out,
-				  int y, ColorItem line_color);
+	                 int y, ColorItem line_color);
 
 
 public:
 	bool input_image(std::string name_file);
+
 	void write_bmp(std::string name_file_output) const;
+
 	int getWidth() const;
+
 	int getHeight() const;
+
 	void setWidth(int width);
+
 	void setHeight(int height);
+
 	int getSize() const;
+
 	int getBitPerPixels() const;
+
 	bool draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem line_color,
-					 bool is_pour_over = false, ColorItem square_color = CLR_BLACK);
+	                 bool is_pour_over = false, ColorItem square_color = CLR_BLACK);
+
 	bool edit_component(char component, int num);
+
 	bool rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle);
+
 	bool draw_circle_via_radius(int xpos, int ypos, int rad, int line_width, ColorItem line_color,
-								bool is_pour_over = false, ColorItem circle_color = CLR_BLACK);
-	bool draw_circle_via_square(int xposl, int yposl, int xposr, int yposr, int line_width, ColorItem line_color,
-							 bool is_pour_over = false, ColorItem circle_color = CLR_BLACK);
+	                            bool is_pour_over = false, ColorItem circle_color = CLR_BLACK);
+
+	bool
+	draw_circle_via_square(int xposl, int yposl, int xposr, int yposr, int line_width, ColorItem line_color,
+	                       bool is_pour_over = false, ColorItem circle_color = CLR_BLACK);
 
 
 };

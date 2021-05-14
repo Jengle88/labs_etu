@@ -17,8 +17,8 @@ ColorItem::ColorItem(u_char blue, u_char green, u_char red, u_char reserved) {
 	Reserved = reserved;
 }
 
-bool ColorItem::is_correct_color(int b, int g, int r, int reserv) {
-	return 0 <= b && b <= 255 && 0 <= g && g <= 255 && 0 <= r && r <= 255 && 0 <= reserv && reserv <= 255;
+bool ColorItem::is_correct_color(int blue, int green, int red, int reserved) {
+	return 0 <= blue && blue <= 255 && 0 <= green && green <= 255 && 0 <= red && red <= 255 && 0 <= reserved && reserved <= 255;
 }
 
 ColorItem::ColorItem() = default;

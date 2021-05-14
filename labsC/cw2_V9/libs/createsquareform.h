@@ -24,6 +24,8 @@ class CreateSquareForm : public QDialog
 public:
     explicit CreateSquareForm(QWidget *parent, BMP *bmp_image);
     void init();
+    void line_set_color(ColorItem color);
+    void over_set_color(ColorItem color);
     ~CreateSquareForm();
 
 	signals:
@@ -33,6 +35,38 @@ private slots:
     void on_buttonBox_accepted();
     void on_is_pure_over_stateChanged(int arg1);
     void on_buttonBox_rejected();
+
+    void on_line_black_clicked();
+
+    void on_line_white_clicked();
+
+    void on_line_orange_clicked();
+
+    void on_line_red_clicked();
+
+    void on_line_green_clicked();
+
+    void on_line_blue_clicked();
+
+    void on_line_yellow_clicked();
+
+    void on_line_pink_clicked();
+
+    void on_over_black_clicked();
+
+    void on_over_white_clicked();
+
+    void on_over_red_clicked();
+
+    void on_over_green_clicked();
+
+    void on_over_blue_clicked();
+
+    void on_over_yellow_clicked();
+
+    void on_over_pink_clicked();
+
+    void on_over_orange_clicked();
 
 private:
     Ui::CreateSquareForm *ui;

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>378</width>
-    <height>292</height>
+    <width>460</width>
+    <height>370</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,11 +16,14 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>250</y>
-     <width>181</width>
-     <height>24</height>
+     <x>140</x>
+     <y>310</y>
+     <width>180</width>
+     <height>25</height>
     </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
    </property>
    <property name="standardButtons">
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
@@ -33,9 +36,9 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>50</y>
-     <width>331</width>
-     <height>181</height>
+     <y>40</y>
+     <width>411</width>
+     <height>251</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
@@ -78,10 +81,24 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="line_length">
+      <property name="text">
+       <string>1</string>
+      </property>
+     </widget>
+    </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_2">
       <property name="text">
        <string>Толщина линии:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1">
+     <widget class="QLineEdit" name="line_width">
+      <property name="text">
+       <string>1</string>
       </property>
      </widget>
     </item>
@@ -147,28 +164,109 @@
       </item>
      </layout>
     </item>
-    <item row="4" column="0">
+    <item row="4" column="1">
+     <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <item>
+       <widget class="QPushButton" name="line_black">
+        <property name="styleSheet">
+         <string notr="true">background:rgb(0, 0, 0)</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="line_white">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="line_red">
+        <property name="styleSheet">
+         <string notr="true">background: rgb(255, 0, 0)</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="line_green">
+        <property name="styleSheet">
+         <string notr="true">background: rgb(0, 255, 0)</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="line_blue">
+        <property name="styleSheet">
+         <string notr="true">background: rgb(0, 0, 255)</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="line_yellow">
+        <property name="styleSheet">
+         <string notr="true">background: rgb(255, 255, 0)</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="line_pink">
+        <property name="styleSheet">
+         <string notr="true">background:rgb(255, 0, 127)</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="line_orange">
+        <property name="styleSheet">
+         <string notr="true">background:rgb(255, 85, 0)</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="5" column="0">
      <widget class="QLabel" name="label_5">
       <property name="text">
        <string>Заливка:</string>
       </property>
      </widget>
     </item>
-    <item row="4" column="1">
+    <item row="5" column="1">
      <widget class="QCheckBox" name="is_pure_over">
       <property name="text">
        <string>Залить</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="0">
+    <item row="6" column="0">
      <widget class="QLabel" name="label_6">
       <property name="text">
        <string>Цвет заливки:</string>
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
+    <item row="6" column="1">
      <layout class="QHBoxLayout" name="horizontalLayout_3">
       <item>
        <widget class="QLabel" name="label_11">
@@ -223,29 +321,96 @@
       </item>
      </layout>
     </item>
-    <item row="2" column="1">
-     <widget class="QLineEdit" name="line_width">
-      <property name="text">
-       <string>1</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLineEdit" name="line_length">
-      <property name="text">
-       <string>1</string>
-      </property>
-     </widget>
+    <item row="7" column="1">
+     <layout class="QHBoxLayout" name="horizontalLayout_8">
+      <item>
+       <widget class="QPushButton" name="over_black">
+        <property name="styleSheet">
+         <string notr="true">background:rgb(0, 0, 0)</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="over_white">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="over_red">
+        <property name="styleSheet">
+         <string notr="true">background: rgb(255, 0, 0)</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="over_green">
+        <property name="styleSheet">
+         <string notr="true">background: rgb(0, 255, 0)</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="over_blue">
+        <property name="styleSheet">
+         <string notr="true">background: rgb(0, 0, 255)</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="over_yellow">
+        <property name="styleSheet">
+         <string notr="true">background: rgb(255, 255, 0)</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="over_pink">
+        <property name="styleSheet">
+         <string notr="true">background:rgb(255, 0, 127)</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="over_orange">
+        <property name="styleSheet">
+         <string notr="true">background:rgb(255, 85, 0)</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
   <widget class="QLabel" name="label_14">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>10</y>
-     <width>261</width>
-     <height>31</height>
+     <x>100</x>
+     <y>0</y>
+     <width>260</width>
+     <height>30</height>
     </rect>
    </property>
    <property name="text">
@@ -267,10 +432,42 @@
   <tabstop>line_r</tabstop>
   <tabstop>line_g</tabstop>
   <tabstop>line_b</tabstop>
+  <tabstop>line_black</tabstop>
+  <tabstop>line_white</tabstop>
+  <tabstop>line_red</tabstop>
+  <tabstop>line_green</tabstop>
+  <tabstop>line_blue</tabstop>
+  <tabstop>line_yellow</tabstop>
+  <tabstop>line_pink</tabstop>
+  <tabstop>line_orange</tabstop>
   <tabstop>is_pure_over</tabstop>
   <tabstop>over_r</tabstop>
   <tabstop>over_g</tabstop>
   <tabstop>over_b</tabstop>
+  <tabstop>over_black</tabstop>
+  <tabstop>over_white</tabstop>
+  <tabstop>over_red</tabstop>
+  <tabstop>over_green</tabstop>
+  <tabstop>over_blue</tabstop>
+  <tabstop>over_yellow</tabstop>
+  <tabstop>over_pink</tabstop>
+  <tabstop>over_orange</tabstop>
+  <tabstop>pushButton_6</tabstop>
+  <tabstop>pushButton_7</tabstop>
+  <tabstop>pushButton_2</tabstop>
+  <tabstop>pushButton_3</tabstop>
+  <tabstop>pushButton_4</tabstop>
+  <tabstop>pushButton_5</tabstop>
+  <tabstop>pushButton_8</tabstop>
+  <tabstop>pushButton_9</tabstop>
+  <tabstop>pushButton_10</tabstop>
+  <tabstop>pushButton_11</tabstop>
+  <tabstop>pushButton_12</tabstop>
+  <tabstop>pushButton_13</tabstop>
+  <tabstop>pushButton_14</tabstop>
+  <tabstop>pushButton_15</tabstop>
+  <tabstop>pushButton_16</tabstop>
+  <tabstop>pushButton_17</tabstop>
  </tabstops>
  <resources/>
  <connections/>
