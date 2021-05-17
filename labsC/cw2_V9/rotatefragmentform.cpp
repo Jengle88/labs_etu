@@ -5,16 +5,16 @@ RotateFragmentForm::RotateFragmentForm(QWidget *parent, BMP *bmp_image) :
     QDialog(parent),
     ui(new Ui::RotateFragmentForm)
 {
-	std::clog << "RotateFragmentForm created\n";
 	this->bmp_image = bmp_image;
 	this->was_edited = false;
 	ui->setupUi(this);
+	std::clog << "RotateFragmentForm created\n";
 }
 
 RotateFragmentForm::~RotateFragmentForm()
 {
-	std::clog << "RotateFragmentForm deleted\n";
 	delete ui;
+	std::clog << "RotateFragmentForm deleted\n";
 }
 
 void RotateFragmentForm::init() {
@@ -25,6 +25,7 @@ void RotateFragmentForm::init() {
 	ui->ylpos->setText(QString::fromStdString(""));
 	ui->xrpos->setText(QString::fromStdString(""));
 	ui->yrpos->setText(QString::fromStdString(""));
+	std::clog << "RotateFragmentForm initialized\n";
 }
 
 void RotateFragmentForm::on_buttonBox_accepted()
@@ -42,27 +43,20 @@ void RotateFragmentForm::on_buttonBox_accepted()
 	int ylpos = ui->ylpos->text().toInt(&check[1]);
 	int xrpos = ui->xrpos->text().toInt(&check[2]);
 	int yrpos = ui->yrpos->text().toInt(&check[3]);
-	if(!(check[0] & check[1] & check[2] & check[3]) || !bmp_image->rotate_fragment(xlpos, ylpos,
-																			   xrpos, yrpos, angle))
+	if(!(check[0] & check[1] & check[2] & check[3]) ||
+		!bmp_image->rotate_fragment(xlpos, ylpos, xrpos, yrpos, angle))
 	{
 		QMessageBox::warning(this,"Attention!","Некоторые параметры указаны неверно!");
 	} else{
 		this->was_edited = true;
-		std::clog << "Fragment rotated\n";
 		emit send_results(was_edited);
+		std::clog << "Fragment rotated\n";
 		close();
 	}
-//	if(!bmp_image->rotate_fragment(component, num)) {
-//		QMessageBox::warning(this,"Attention!","Некоторые параметры указаны неверно!");
-//	} else {
-//		this->was_edited = true;
-//		std::clog << "Component edited\n";
-//		emit send_results(was_edited);
-//		close();
-//	}
 }
 
 void RotateFragmentForm::on_buttonBox_rejected()
 {
+	std::clog << "Edit canceled\n";
 	close();
 }

@@ -5,16 +5,16 @@ DrawCircleForm::DrawCircleForm(QWidget *parent, BMP *bmp_image) :
     QDialog(parent),
     ui(new Ui::DrawCircleForm)
 {
-	std::clog << "DrawCircleForm created\n";
 	this->bmp_image = bmp_image;
 	this->was_edited = false;
 	ui->setupUi(this);
+	std::clog << "DrawCircleForm created\n";
 }
 
 DrawCircleForm::~DrawCircleForm()
 {
-	std::clog << "DrawCircleForm deleted\n";
 	delete ui;
+	std::clog << "DrawCircleForm deleted\n";
 }
 
 void DrawCircleForm::init() {
@@ -41,6 +41,7 @@ void DrawCircleForm::init() {
 	ui->over_g->setEnabled(false);
 	ui->over_r->setEnabled(false);
 	over_set_color(CLR_BLACK);
+	std::clog << "DrawCircleForm initialized\n";
 
 }
 void DrawCircleForm::on_buttonBox_accepted()
@@ -75,8 +76,8 @@ void DrawCircleForm::on_buttonBox_accepted()
 			QMessageBox::warning(this,"Attention!","Некоторые параметры указаны неверно!");
 		} else{
 			this->was_edited = true;
-			std::clog << "Result sent\n";
 			emit send_results(was_edited);
+			std::clog << "Result DrawCircleForm sent\n";
 			close();
 		}
 	} else {
@@ -108,8 +109,8 @@ void DrawCircleForm::on_buttonBox_accepted()
 			QMessageBox::warning(this,"Attention!","Некоторые параметры указаны неверно!");
 		} else {
 			this->was_edited = true;
-			std::clog << "Result sent\n";
 			emit send_results(was_edited);
+			std::clog << "Result DrawCircleForm sent\n";
 			close();
 		}
 	}

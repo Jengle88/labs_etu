@@ -13,13 +13,14 @@ ChangeRGBFilterForm::ChangeRGBFilterForm(QWidget *parent, BMP *bmp_image) :
 
 ChangeRGBFilterForm::~ChangeRGBFilterForm()
 {
-	std::clog << "ChangeRGBFilterForm deleted\n";
 	delete ui;
+	std::clog << "ChangeRGBFilterForm deleted\n";
 }
 
 void ChangeRGBFilterForm::init() {
 	ui->rComponent->setChecked(true);
 	ui->newComponent->setText("0");
+	std::clog << "ChangeRGBFilterForm initialized\n";
 }
 
 
@@ -38,8 +39,8 @@ void ChangeRGBFilterForm::on_buttonBox_accepted()
 		QMessageBox::warning(this,"Attention!","Некоторые параметры указаны неверно!");
 	} else {
 		this->was_edited = true;
-		std::clog << "Component edited\n";
 		emit send_results(was_edited);
+		std::clog << "Component edited\n";
 		close();
 	}
 }

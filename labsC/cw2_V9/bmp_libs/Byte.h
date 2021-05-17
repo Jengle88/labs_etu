@@ -3,6 +3,7 @@
 #include <vector>
 
 namespace Byte{
+	//Little Endian
 	u_int16_t make_short(u_char c1, u_char c2) {
 		return (short(c2) << 8) + short(c1);
 	}

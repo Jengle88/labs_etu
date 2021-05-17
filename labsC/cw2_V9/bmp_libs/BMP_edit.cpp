@@ -23,7 +23,7 @@ bool ColorItem::is_correct_color(int blue, int green, int red, int reserved) {
 
 ColorItem::ColorItem() = default;
 
-int BMP::in_bmp_file_header(std::fstream &in) {
+bool BMP::in_bmp_file_header(std::fstream &in) {
 	char byte[4];
 	in.read(byte, 2);
 	file_header.Signature = Byte::make_short(byte[0], byte[1]);
@@ -36,9 +36,9 @@ int BMP::in_bmp_file_header(std::fstream &in) {
 
 	if(!Byte::compare_like_short(file_header.Signature, 'B', 'M')) {
 		std::cerr << ERR_BMPIMAGE;
-		return 0;
+		return false;
 	}
-	return 1;
+	return true;
 }
 
 void BMP::in_bmp_info_header(std::fstream &in) {
@@ -143,12 +143,6 @@ void BMP::in_bmp_pixel_table(std::fstream &in) {
 		default:
 			return;
 	}
-
-//
-//	if (this->info_header.BitCount != 24)
-//		return;
-
-
 }
 
 bool BMP::input_image(const std::string name_file) {
@@ -170,20 +164,16 @@ bool BMP::input_image(const std::string name_file) {
 			in.close();
 			return false;
 	}
-//	if (this->info_header.BitCount == 24) {
-//
-//	}
-//	else {
-//	}
+
 	in.close();
 	return true;
 }
 
-void BMP::write_bmp(const std::string name_file_output) const {
+void BMP::write_image(std::string name_file) const {
 	if (info_header.BitCount != 24)
 		return;
 
-	std::ofstream out(name_file_output, std::ios_base::binary | std::ios_base::out);
+	std::ofstream out(name_file, std::ios_base::binary | std::ios_base::out);
 
 	Byte::write_16_like_byte(file_header.Signature, out);
 	Byte::write_32_like_byte(file_header.FileSize, out);
@@ -252,6 +242,7 @@ void BMP::setWidth(int width) {
 			}
 		}
 		info_header.Width = width;
+		cnt_extra_byte = (4-int(info_header.Width*3) % 4) % 4;
 	}
 	else {
 		std::cerr << ERR_WIDTH;
@@ -267,6 +258,7 @@ void BMP::setHeight(int height) {
 				pixels[i] = std::vector<ColorItem>(info_header.Width, CLR_WHITE);
 			}
 		}
+		info_header.Height = height;
 	}
 	else {
 		std::cerr << ERR_HEIGHT;
@@ -280,12 +272,12 @@ BMP::draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem 
 		std::cerr << ERR_XYPOS;
 		return false;
 	}
-	if (line_length < 0 || xpos + line_length > info_header.Width ||
+	if (line_length <= 0 || xpos + line_length > info_header.Width ||
 		ypos + line_length > info_header.Height || line_length < 2 * line_width) {
 		std::cerr << ERR_LENGTH;
 		return false;
 	}
-	if (line_width < 0) {
+	if (line_width <= 0) {
 		std::cerr << ERR_WIDTH;
 		return false;
 	}

@@ -8,6 +8,7 @@
 #include "rotatefragmentform.h"
 #include "drawcircleform.h"
 #include "../forms/ui_mainwindow.h"
+#include <QMouseEvent>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -51,5 +52,6 @@ public slots:
 
 private:
     Ui::MainWindow *ui;
+
 };
 #endif // MAINWINDOW_H

@@ -121,7 +121,7 @@ public:
 	std::vector<std::vector<ColorItem>> pixels;
 
 private:
-	int in_bmp_file_header(std::fstream &in);
+	bool in_bmp_file_header(std::fstream &in);
 
 	void in_bmp_info_header(std::fstream &in);
 
@@ -146,7 +146,7 @@ private:
 public:
 	bool input_image(std::string name_file);
 
-	void write_bmp(std::string name_file_output) const;
+	void write_image(std::string name_file) const;
 
 	int getWidth() const;
 
@@ -173,6 +173,4 @@ public:
 	bool
 	draw_circle_via_square(int xposl, int yposl, int xposr, int yposr, int line_width, ColorItem line_color,
 	                       bool is_pour_over = false, ColorItem circle_color = CLR_BLACK);
-
-
 };

@@ -4,19 +4,18 @@
 CreateSquareForm::CreateSquareForm(QWidget *parent, BMP *bmp_image) :
 		QDialog(parent),
 		ui(new Ui::CreateSquareForm) {
-	//setAttribute(Qt::WA_DeleteOnClose);
-	std::clog << "CreateSquareForm created\n";
 	this->bmp_image = bmp_image;
 	this->was_edited = false;
 	ui->setupUi(this);
 	ui->over_b->setEnabled(false);
 	ui->over_g->setEnabled(false);
 	ui->over_r->setEnabled(false);
+	std::clog << "CreateSquareForm created\n";
 }
 
 CreateSquareForm::~CreateSquareForm() {
-	std::clog << "CreateSquareForm deleted\n";
 	delete ui;
+	std::clog << "CreateSquareForm deleted\n";
 }
 
 
@@ -53,8 +52,8 @@ void CreateSquareForm::on_buttonBox_accepted() {
 		QMessageBox::warning(this, "Attention!", "Некоторые параметры указаны неверно!");
 	else {
 		this->was_edited = true;
-		std::clog << "Result sent\n";
 		emit send_results(was_edited);
+		std::clog << "Result CreateSquareForm sent\n";
 		close();
 	}
 }
@@ -86,6 +85,7 @@ void CreateSquareForm::init() {
 	line_set_color(CLR_BLACK);
 	ui->is_pure_over->setCheckState(Qt::Unchecked);
 	over_set_color(CLR_BLACK);
+	std::clog << "CreateSquareForm initialized\n";
 }
 
 void CreateSquareForm::line_set_color(ColorItem color) {

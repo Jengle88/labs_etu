@@ -33,13 +33,10 @@
 //	BMP bmp;
 //	std::string name_file_input = "test.bmp";
 //	bmp.input_image(name_file_input);
-//	for (int i = 0; i < 400; ++i) {
-//		for (int j = 0; j < 400; ++j) {
-//			bmp.pixels[i][j] = CLR_WHITE;
-//		}
-//	}
+//	bmp.setHeight(800);
+//	bmp.setWidth(900);
 //	std::string res = "result.bmp";
-//	bmp.write_bmp(res);
+//	bmp.write_image(res);
 //	return 0;
 //
 //}

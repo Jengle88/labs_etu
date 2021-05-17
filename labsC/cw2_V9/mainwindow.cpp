@@ -14,7 +14,8 @@
  * 	6) Добавить окно для поворота части изображения --- V
  * 	7) Добавить окно для рисования окружности --- V
  * 	8) Добавить окна для других функций --- V
- * 	9) Переделать структуры под Qt
+ * 	9) Переделать структуры под Qt --- V
+ * 	10) Доделать изменение размера виджетов вместе с окном
  *
  * */
 
@@ -25,8 +26,6 @@ MainWindow::MainWindow(QWidget *parent)
 
 	name_file = QFileDialog::getOpenFileName(nullptr, "Open Dialog", "", "*.bmp");
 	start_file = std::move(name_file);
-
-
 	std::clog << "MainWindow created\n";
 	ui->setupUi(this);
 
@@ -46,7 +45,6 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(drawCircleForm,SIGNAL(send_results(bool)), this, SLOT(receiveEditedImage(bool)));
 	drawCircleForm->setFixedSize(515,440);
 
-
 	if(bmp_image.input_image(start_file.toStdString())){
 		start_bmp_image = BMP(bmp_image);
 		load_label_image(start_file.toStdString());
@@ -64,6 +62,7 @@ MainWindow::MainWindow(QWidget *parent)
 							 "border-width: 2px;"
 							 "border-color: black; "
 							 "}");
+
 }
 
 MainWindow::~MainWindow() {
@@ -88,7 +87,7 @@ void MainWindow::receiveEditedImage(bool was_edited) {
 void MainWindow::try_save() {
 	if(this->image_edited){
 		std::string s = ".result.bmp";
-		bmp_image.write_bmp(s);
+		bmp_image.write_image(s);
 		delete image;
 		load_label_image(s);
 	}
@@ -96,16 +95,14 @@ void MainWindow::try_save() {
 }
 
 void MainWindow::load_label_image(const std::string name_file) {
+	std::clog << "Image is starting load\n";
 	image = new QPixmap(QString::fromStdString(name_file));
-	double koeff_scaled = double(bmp_image.getHeight()) / bmp_image.getWidth();
-	if(bmp_image.getHeight() > bmp_image.getWidth()){
-		*image = image->scaled(int(ui->label->width() * (1.0 / koeff_scaled)) - 2 * ui->label->margin(),
-		                       ui->label->height() - 2 * ui->label->margin());
-	} else {
-		*image = image->scaled(ui->label->width() - 2 * ui->label->margin(),
-		                       int(ui->label->height() * koeff_scaled) - 2 * ui->label->margin());
-	}
+	*image = image->scaled(ui->label->width() - 2 * ui->label->margin(),
+						ui->label->height() - 2 * ui->label->margin(), Qt::KeepAspectRatio/*Сохраняет пропорции*/);
 	ui->label->setPixmap(*image);
+	std::clog << "Image-label) H: " << ui->label->height() << ", W: " << ui->label->width() << '\n';
+	std::clog << "Image loaded\n";
+
 }
 
 void MainWindow::on_draw_square_clicked()
@@ -157,19 +154,17 @@ void MainWindow::on_save_image_clicked()
 {
 	name_file = QFileDialog::getSaveFileName(nullptr, "Save Dialog", "", "*.bmp");
 	if (!name_file.isEmpty())
-		bmp_image.write_bmp(name_file.toStdString());
+		bmp_image.write_image(name_file.toStdString());
 }
 
 void MainWindow::on_reload_image_clicked()
 {
 	bmp_image = start_bmp_image;
 	std::string s = ".result.bmp";
-	bmp_image.write_bmp(s);
+	bmp_image.write_image(s);
 	delete image;
 	load_label_image(s);
 }
-
-
 
 void MainWindow::on_pushButton_clicked()
 {
