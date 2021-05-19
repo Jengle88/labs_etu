@@ -19,6 +19,7 @@ class MainWindow : public QMainWindow
 	QString name_file;
 	QString name_temp_file;
 	int image_border_pxls = 0;
+	bool loaded_image = false;
 	QPixmap *image;
 	CreateSquareForm *squareForm;
 	ChangeRGBFilterForm *rgbFilterForm;

@@ -34,34 +34,21 @@
 #define ERR_BMPIMAGE "This image is not BMP-file!\n"
 #define ERR_RADIUS "Bad radius!\n"
 
-
-#define DEBUG 0
-
-/*
- * TODO:
- *  1) Сделать коммит --- V
- *  2) Убрать поддержку не 24-битных изображений --- V
- *  3) Перенести реализацию в cpp файл --- V
- *  4) Сделать миграцию в проект Qt --- V
- *  5) Убрать палитру --- V
- *  6) Сделать изменение размера изображения: выбор стороны и размера --- V
- *  7) Нарисовать квадрат и диагонали --- V
- *  8) Исправить рисование диагонали квадрата с правильной толщиной линии --- V
- *  9) Сделать поворот фрагмента на 180 --- V
- *  10) Сделать поворот фрагмента на 90 --- V
- *  11) Сделать поворот фрагмента на 270 --- V
- *  12) Нарисовать круг через радиус --- V
- *  13) Нарисовать круг через квадрат --- V
- *  14) Миграция в Qt --- V
- *  15) Изменить алгоритм построения диагонали ???
- *  16) Дополнить BMPInfoHeader новыми полями --- V
- *  17) Coming soon...
- */
-
 //Фича: при повороте из-за добавления белых полей изображение может смещаться вправо
 
+struct ColorItem {
+	u_char Blue = 255;
+	u_char Green = 255;
+	u_char Red = 255;
+	u_char Reserved = 0;
 
-struct BMPHeader {
+	ColorItem(u_char blue, u_char green, u_char red, u_char reserved);
+	ColorItem();
+
+	static bool is_correct_color(int blue, int green, int red, int reserved);
+};
+
+struct BMPFileHeader {
 	u_int16_t Signature = 0; //bfType тип файла. Должен быть 'B''M' для bmp
 	u_int FileSize = 0; //bfSize размер файла в байтах
 	u_int Reserved = 0; //bfReserved12 должны быть нули
@@ -97,28 +84,19 @@ struct BMPInfoHeader {
 	u_int Reserved = 0; //bV5Reserved зарезервированные нули
 };
 
-struct ColorItem {
-	u_char Blue = 255;
-	u_char Green = 255;
-	u_char Red = 255;
-	u_char Reserved = 0;
-
-	ColorItem(u_char blue, u_char green, u_char red, u_char reserved);
-	ColorItem();
-
-	static bool is_correct_color(int blue, int green, int red, int reserved);
-};
-
 
 class BMP {
-	BMPHeader file_header;
+	BMPFileHeader file_header;
 	BMPInfoHeader info_header;
 	std::vector<ColorItem> colors;
-	short cnt_extra_byte = 0; // up to multiplicity 4
+	short cnt_extra_byte = 0; // выравнивание до кратности 4
 	bool have_palette = false;
 
 public:
 	std::vector<std::vector<ColorItem>> pixels;
+	BMP(BMPFileHeader bmp_file_header, BMPInfoHeader bmp_info_header,std::vector<ColorItem> palette,
+	        std::vector<std::vector<ColorItem>> pixels);
+	BMP() = default;
 
 private:
 	bool in_bmp_file_header(std::fstream &in);

@@ -5,27 +5,10 @@
 #include <QFileDialog>
 
 
-/* TODO:
- * 	1) Настроить доп окно для выбора характеристик квадрата --- V
- * 	2) Сделать перенос данных из доп окна в основное --- V
- * 	3) Добавить swap-файл для временного хранения изображения --- V
- * 	4) Добавить окно для RGB фильтра --- V
- * 	5) Сделать перенос данных из окна для RGB фильтра --- V
- * 	6) Добавить окно для поворота части изображения --- V
- * 	7) Добавить окно для рисования окружности --- V
- * 	8) Добавить окна для других функций --- V
- * 	9) Переделать структуры под Qt --- V
- * 	10) Доделать изменение размера виджетов вместе с окном --- V
- *
- * */
-
-
 MainWindow::MainWindow(QWidget *parent)
 		: QMainWindow(parent), ui(new Ui::MainWindow) {
 
-
 	name_file = QFileDialog::getOpenFileName(nullptr, "Open Dialog", "", "*.bmp");
-	//start_file = std::move(name_file);
 	std::clog << "MainWindow created\n";
 	ui->setupUi(this);
 
@@ -66,7 +49,9 @@ MainWindow::MainWindow(QWidget *parent)
 	temp_file.close();
 	delete[] str1;
 
+	//загрузка изображения
 	if(bmp_image.input_image(name_file.toStdString())){
+		loaded_image = true;
 		start_bmp_image = BMP(bmp_image);
 		load_label_image(name_file.toStdString());
 		ui->height_label->setText(QString::number(bmp_image.getHeight()));
@@ -74,10 +59,10 @@ MainWindow::MainWindow(QWidget *parent)
 		ui->bit_pixels_label->setText(QString::number(bmp_image.getBitPerPixels()));
 		ui->size_byte_label->setText(QString::number(bmp_image.getSize()));
 	} else{
+		loaded_image = false;
 		ui->label->setText("Здесь могло быть ваше изображение!");
 		QMessageBox::critical(this,"Attention!","Не удалось загрузить изображение!");
 	}
-
 }
 
 MainWindow::~MainWindow() {
@@ -108,7 +93,6 @@ void MainWindow::try_save() {
 
 void MainWindow::load_label_image(const std::string name_file) {
 	std::clog << "Image is starting load\n";
-	std::clog << "H: " << ui->label->height() << " W: " << ui->label->width() << '\n';
 	image = new QPixmap(QString::fromStdString(name_file));
 	*image = image->scaled(ui->label->width() - 2 * ui->label->margin() - 2 * image_border_pxls,
 						ui->label->height() - 2 * ui->label->margin() - 2 * image_border_pxls, Qt::KeepAspectRatio/*Сохраняет пропорции*/);
@@ -119,37 +103,55 @@ void MainWindow::load_label_image(const std::string name_file) {
 
 void MainWindow::on_draw_square_clicked()
 {
-	squareForm->init();
-	squareForm->exec();
-	try_save();
+	if(loaded_image){
+		squareForm->init();
+		squareForm->exec();
+		try_save();
+	} else {
+		QMessageBox::critical(nullptr,"Ошибка", "Изображение не было загружено!");
+	}
+
 }
 
 void MainWindow::on_change_RGB_clicked()
 {
-	rgbFilterForm->init();
-	rgbFilterForm->exec();
-	try_save();
+	if(loaded_image){
+		rgbFilterForm->init();
+		rgbFilterForm->exec();
+		try_save();
+	} else {
+		QMessageBox::critical(nullptr,"Ошибка", "Изображение не было загружено!");
+	}
 }
 
 
 void MainWindow::on_rotate_fragment_clicked()
 {
-	rotateFragForm->init();
-	rotateFragForm->exec();
-	try_save();
+	if(loaded_image){
+		rotateFragForm->init();
+		rotateFragForm->exec();
+		try_save();
+	} else {
+		QMessageBox::critical(nullptr,"Ошибка", "Изображение не было загружено!");
+	}
 }
 
 void MainWindow::on_draw_circle_clicked()
 {
-	drawCircleForm->init();
-	drawCircleForm->exec();
-	try_save();
+	if(loaded_image){
+		drawCircleForm->init();
+		drawCircleForm->exec();
+		try_save();
+	} else {
+		QMessageBox::critical(nullptr,"Ошибка", "Изображение не было загружено!");
+	}
 }
 
 void MainWindow::on_load_image_clicked()
 {
 	name_file = QFileDialog::getOpenFileName(nullptr, "Open Dialog", "", "*.bmp");
 	if (!name_file.isEmpty() && bmp_image.input_image(name_file.toStdString())){
+		loaded_image = true;
 		start_bmp_image = bmp_image;
 		ui->height_label->setText(QString::number(bmp_image.getHeight()));
 		ui->width_label->setText(QString::number(bmp_image.getWidth()));
@@ -164,17 +166,27 @@ void MainWindow::on_load_image_clicked()
 
 void MainWindow::on_save_image_clicked()
 {
-	name_file = QFileDialog::getSaveFileName(nullptr, "Save Dialog", "", "*.bmp");
-	if (!name_file.isEmpty())
-		bmp_image.write_image(name_file.toStdString());
+	if(loaded_image){
+		name_file = QFileDialog::getSaveFileName(nullptr, "Save Dialog", "", "*.bmp");
+		if (!name_file.isEmpty())
+			bmp_image.write_image(name_file.toStdString());
+	} else {
+		QMessageBox::critical(nullptr,"Ошибка", "Изображение не было загружено!");
+	}
+
 }
 
 void MainWindow::on_reload_image_clicked()
 {
-	bmp_image = start_bmp_image;
-	bmp_image.write_image(name_temp_file.toStdString());
-	delete image;
-	load_label_image(name_temp_file.toStdString());
+	if(loaded_image){
+		bmp_image = start_bmp_image;
+		bmp_image.write_image(name_temp_file.toStdString());
+		delete image;
+		load_label_image(name_temp_file.toStdString());
+	} else {
+		QMessageBox::critical(nullptr,"Ошибка", "Изображение не было загружено!");
+	}
+
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -196,11 +208,13 @@ void MainWindow::on_pushButton_clicked()
 		   );
 }
 
-
-
 void MainWindow::on_reload_scale_clicked()
 {
-	bmp_image.write_image(name_temp_file.toStdString());
-	delete image;
-	load_label_image(name_temp_file.toStdString());
+	if(loaded_image){
+		bmp_image.write_image(name_temp_file.toStdString());
+		delete image;
+		load_label_image(name_temp_file.toStdString());
+	} else {
+		QMessageBox::critical(nullptr,"Ошибка", "Изображение не было загружено!");
+	}
 }

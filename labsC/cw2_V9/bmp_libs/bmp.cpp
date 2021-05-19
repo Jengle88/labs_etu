@@ -23,7 +23,7 @@
 //int main() {
 //	//BMP bmp;
 //	//std::string name_file_input = "test3.bmp";
-//	//BMPHeader bmph;
+//	//BMPFileHeader bmph;
 //	//BMPInfoHeader bmpi;
 //	////FILE *f = fopen(name_file_input.c_str(), "rb");
 //	//std::fstream in(name_file_input,std::ios_base::binary | std::ios_base::in);

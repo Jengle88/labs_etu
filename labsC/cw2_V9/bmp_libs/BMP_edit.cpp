@@ -2,14 +2,6 @@
 #include "Byte.h"
 
 
-void BMP::write_3_color(std::ofstream &out, ColorItem item) {
-	out << item.Blue << item.Green << item.Red;
-}
-
-void BMP::write_4_color(std::ofstream &out, ColorItem item) {
-	out << item.Blue << item.Green << item.Red << item.Reserved;
-}
-
 ColorItem::ColorItem(u_char blue, u_char green, u_char red, u_char reserved) {
 	Blue = blue;
 	Green = green;
@@ -22,6 +14,30 @@ bool ColorItem::is_correct_color(int blue, int green, int red, int reserved) {
 }
 
 ColorItem::ColorItem() = default;
+
+
+void BMP::write_3_color(std::ofstream &out, ColorItem item) {
+	out << item.Blue << item.Green << item.Red;
+}
+
+void BMP::write_4_color(std::ofstream &out, ColorItem item) {
+	out << item.Blue << item.Green << item.Red << item.Reserved;
+}
+
+BMP::BMP(BMPFileHeader bmp_file_header, BMPInfoHeader bmp_info_header, std::vector<ColorItem> palette,
+         std::vector<std::vector<ColorItem>> pixels) {
+	this->file_header = bmp_file_header;
+	this->info_header = bmp_info_header;
+	if(!palette.empty()){
+		this->have_palette = true;
+		this->colors = palette;
+	} else{
+		this->have_palette = false;
+	}
+	this->pixels = pixels;
+	this->cnt_extra_byte = (4-int(this->info_header.Width*3) % 4) % 4;
+}
+
 
 bool BMP::in_bmp_file_header(std::fstream &in) {
 	char byte[4];
@@ -621,3 +637,8 @@ int BMP::getSize() const {
 int BMP::getBitPerPixels() const {
 	return info_header.BitCount;
 }
+
+
+
+
+
