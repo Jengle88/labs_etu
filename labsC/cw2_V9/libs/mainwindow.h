@@ -16,8 +16,9 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
-	QString start_file;
 	QString name_file;
+	QString name_temp_file;
+	int image_border_pxls = 0;
 	QPixmap *image;
 	CreateSquareForm *squareForm;
 	ChangeRGBFilterForm *rgbFilterForm;
@@ -44,9 +45,9 @@ private slots:
     void on_save_image_clicked();
     void on_reload_image_clicked();
     void on_pushButton_clicked();
+    void on_reload_scale_clicked();
 
 public slots:
-    void receiveNameImage(const QString& str);
 	void receiveEditedImage(bool was_edited);
 
 

@@ -1,9 +1,9 @@
 #include <QLabel>
 #include <iostream>
-#include <utility>
 #include "libs/mainwindow.h"
 #include <QMessageBox>
 #include <QFileDialog>
+
 
 /* TODO:
  * 	1) Настроить доп окно для выбора характеристик квадрата --- V
@@ -15,7 +15,7 @@
  * 	7) Добавить окно для рисования окружности --- V
  * 	8) Добавить окна для других функций --- V
  * 	9) Переделать структуры под Qt --- V
- * 	10) Доделать изменение размера виджетов вместе с окном
+ * 	10) Доделать изменение размера виджетов вместе с окном --- V
  *
  * */
 
@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
 	name_file = QFileDialog::getOpenFileName(nullptr, "Open Dialog", "", "*.bmp");
-	start_file = std::move(name_file);
+	//start_file = std::move(name_file);
 	std::clog << "MainWindow created\n";
 	ui->setupUi(this);
 
@@ -45,9 +45,30 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(drawCircleForm,SIGNAL(send_results(bool)), this, SLOT(receiveEditedImage(bool)));
 	drawCircleForm->setFixedSize(515,440);
 
-	if(bmp_image.input_image(start_file.toStdString())){
+	//Получаем величину рамки вокруг изображения
+	int ind_border_image_start = ui->label->styleSheet().indexOf("border-width: ") + strlen("border-width: ");
+	int ind_border_image_end = ui->label->styleSheet().indexOf("px;", ind_border_image_start);
+	image_border_pxls = ui->label->styleSheet().midRef(ind_border_image_start, ind_border_image_end - ind_border_image_start).toInt();
+
+	//Создаём временный файл как буфер для отображения изображения
+	char* str1 = new char[20];
+	strcpy(str1, "./.tempresXXXXXX");
+	if(mkstemp(str1) == -1)
+		std::clog << "Failed to find temporary filename\n";
+	else
+		std::clog << "Temp filename: " << std::string(str1) << '\n';
+	name_temp_file = QString::fromStdString(str1);
+	std::ofstream temp_file(name_temp_file.toStdString());
+	if(temp_file.is_open())
+		std::clog << "Temporary file created\n";
+	else
+		std::clog << "Temporary file not created\n";
+	temp_file.close();
+	delete[] str1;
+
+	if(bmp_image.input_image(name_file.toStdString())){
 		start_bmp_image = BMP(bmp_image);
-		load_label_image(start_file.toStdString());
+		load_label_image(name_file.toStdString());
 		ui->height_label->setText(QString::number(bmp_image.getHeight()));
 		ui->width_label->setText(QString::number(bmp_image.getWidth()));
 		ui->bit_pixels_label->setText(QString::number(bmp_image.getBitPerPixels()));
@@ -56,12 +77,6 @@ MainWindow::MainWindow(QWidget *parent)
 		ui->label->setText("Здесь могло быть ваше изображение!");
 		QMessageBox::critical(this,"Attention!","Не удалось загрузить изображение!");
 	}
-
-	ui->label->setStyleSheet("QLabel {"
-							 "border-style: solid;"
-							 "border-width: 2px;"
-							 "border-color: black; "
-							 "}");
 
 }
 
@@ -72,13 +87,11 @@ MainWindow::~MainWindow() {
 	delete rotateFragForm;
 	delete drawCircleForm;
 	std::clog << "MainWindow finished\n";
-	remove(".result.bmp");
+	remove(name_temp_file.toStdString().c_str());
+	std::clog << "Temporary file removed\n";
 	delete ui;
 }
 //SLOTs
-void MainWindow::receiveNameImage(const QString& str) {
-	this->name_file = str;
-}
 
 void MainWindow::receiveEditedImage(bool was_edited) {
 	this->image_edited = was_edited;
@@ -86,21 +99,20 @@ void MainWindow::receiveEditedImage(bool was_edited) {
 //end SLOTs
 void MainWindow::try_save() {
 	if(this->image_edited){
-		std::string s = ".result.bmp";
-		bmp_image.write_image(s);
+		bmp_image.write_image(name_temp_file.toStdString());
 		delete image;
-		load_label_image(s);
+		load_label_image(name_temp_file.toStdString());
 	}
 	this->image_edited = false;
 }
 
 void MainWindow::load_label_image(const std::string name_file) {
 	std::clog << "Image is starting load\n";
+	std::clog << "H: " << ui->label->height() << " W: " << ui->label->width() << '\n';
 	image = new QPixmap(QString::fromStdString(name_file));
-	*image = image->scaled(ui->label->width() - 2 * ui->label->margin(),
-						ui->label->height() - 2 * ui->label->margin(), Qt::KeepAspectRatio/*Сохраняет пропорции*/);
+	*image = image->scaled(ui->label->width() - 2 * ui->label->margin() - 2 * image_border_pxls,
+						ui->label->height() - 2 * ui->label->margin() - 2 * image_border_pxls, Qt::KeepAspectRatio/*Сохраняет пропорции*/);
 	ui->label->setPixmap(*image);
-	std::clog << "Image-label) H: " << ui->label->height() << ", W: " << ui->label->width() << '\n';
 	std::clog << "Image loaded\n";
 
 }
@@ -160,10 +172,9 @@ void MainWindow::on_save_image_clicked()
 void MainWindow::on_reload_image_clicked()
 {
 	bmp_image = start_bmp_image;
-	std::string s = ".result.bmp";
-	bmp_image.write_image(s);
+	bmp_image.write_image(name_temp_file.toStdString());
 	delete image;
-	load_label_image(s);
+	load_label_image(name_temp_file.toStdString());
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -181,8 +192,15 @@ void MainWindow::on_pushButton_clicked()
         "Загрузить изображение: выбрать другое изображение для обработки.\n\n"
 		"Сохранить изображение: сохранить результат обработки в файл.\n\n"
         "Вернуться к исходному: отменить изменения и вернуть последнее загруженное изображение.\n\n"
+		"Перезагрузить изображение: подогнать размер изображения под размер окна.\n\n"
 		   );
-
 }
 
 
+
+void MainWindow::on_reload_scale_clicked()
+{
+	bmp_image.write_image(name_temp_file.toStdString());
+	delete image;
+	load_label_image(name_temp_file.toStdString());
+}
