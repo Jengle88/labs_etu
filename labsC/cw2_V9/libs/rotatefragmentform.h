@@ -12,16 +12,16 @@ class RotateFragmentForm;
 class RotateFragmentForm : public QDialog
 {
 	BMP *bmp_image;
-	bool was_edited = false;
     Q_OBJECT
 
 public:
     explicit RotateFragmentForm(QWidget *parent, BMP *bmp_image);
-	void init();
 	~RotateFragmentForm();
+	void init();
 
 signals:
-	void send_results(bool was_edited);
+	void send_result(bool was_edited);
+
 private slots:
     void on_buttonBox_accepted();
     void on_buttonBox_rejected();

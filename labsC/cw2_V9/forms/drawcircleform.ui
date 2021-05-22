@@ -6,583 +6,591 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>515</width>
-    <height>440</height>
+    <width>531</width>
+    <height>464</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Нарисовать круг</string>
   </property>
-  <widget class="QGroupBox" name="groupBox">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>471</width>
-     <height>371</height>
-    </rect>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="leftMargin">
+    <number>20</number>
    </property>
-   <property name="title">
-    <string>Требование к окружности</string>
+   <property name="topMargin">
+    <number>15</number>
    </property>
-   <widget class="QLabel" name="xylpos">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>30</y>
-      <width>91</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Левый верхний угол:</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="xyrpos">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>70</y>
-      <width>91</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Правый нижний угол:</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>70</y>
-      <width>131</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_5">
-     <item>
-      <widget class="QLineEdit" name="xrpos">
-       <property name="maxLength">
-        <number>4</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_17">
-       <property name="text">
-        <string>x</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="yrpos">
-       <property name="maxLength">
-        <number>4</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>180</y>
-      <width>371</width>
-      <height>176</height>
-     </rect>
-    </property>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Толщина линии:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="line_width">
-       <property name="text">
-        <string>1</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>Цвет линии:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QLabel" name="label_8">
-         <property name="text">
-          <string>R:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="line_r">
-         <property name="text">
-          <string>0</string>
-         </property>
-         <property name="maxLength">
-          <number>3</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>G:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="line_g">
-         <property name="text">
-          <string>0</string>
-         </property>
-         <property name="maxLength">
-          <number>3</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_10">
-         <property name="text">
-          <string>B:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="line_b">
-         <property name="text">
-          <string>0</string>
-         </property>
-         <property name="maxLength">
-          <number>3</number>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_5">
-       <property name="text">
-        <string>Заливка:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QCheckBox" name="is_pure_over">
-       <property name="text">
-        <string>Залить</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>Цвет заливки:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout_3">
-       <item>
-        <widget class="QLabel" name="label_11">
-         <property name="text">
-          <string>R:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="over_r">
-         <property name="text">
-          <string>0</string>
-         </property>
-         <property name="maxLength">
-          <number>3</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_12">
-         <property name="text">
-          <string>G:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="over_g">
-         <property name="text">
-          <string>0</string>
-         </property>
-         <property name="maxLength">
-          <number>3</number>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_13">
-         <property name="text">
-          <string>B:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="over_b">
-         <property name="text">
-          <string>0</string>
-         </property>
-         <property name="maxLength">
-          <number>3</number>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="2" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout_7">
-       <item>
-        <widget class="QPushButton" name="line_black">
-         <property name="styleSheet">
-          <string notr="true">background:rgb(0, 0, 0)</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="line_white">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="line_red">
-         <property name="styleSheet">
-          <string notr="true">background: rgb(255, 0, 0)</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="line_green">
-         <property name="styleSheet">
-          <string notr="true">background: rgb(0, 255, 0)</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="line_blue">
-         <property name="styleSheet">
-          <string notr="true">background: rgb(0, 0, 255)</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="line_yellow">
-         <property name="styleSheet">
-          <string notr="true">background: rgb(255, 255, 0)</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="line_pink">
-         <property name="styleSheet">
-          <string notr="true">background:rgb(255, 0, 127)</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="line_orange">
-         <property name="styleSheet">
-          <string notr="true">background:rgb(255, 85, 0)</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="5" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout_8">
-       <item>
-        <widget class="QPushButton" name="over_black">
-         <property name="styleSheet">
-          <string notr="true">background:rgb(0, 0, 0)</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="over_white">
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="over_red">
-         <property name="styleSheet">
-          <string notr="true">background: rgb(255, 0, 0)</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="over_green">
-         <property name="styleSheet">
-          <string notr="true">background: rgb(0, 255, 0)</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="over_blue">
-         <property name="styleSheet">
-          <string notr="true">background: rgb(0, 0, 255)</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="over_yellow">
-         <property name="styleSheet">
-          <string notr="true">background: rgb(255, 255, 0)</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="over_pink">
-         <property name="styleSheet">
-          <string notr="true">background:rgb(255, 0, 127)</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="over_orange">
-         <property name="styleSheet">
-          <string notr="true">background:rgb(255, 85, 0)</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>110</y>
-      <width>91</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Центр окружности:</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget_3">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>110</y>
-      <width>131</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_6">
-     <item>
-      <widget class="QLineEdit" name="xcenter">
-       <property name="maxLength">
-        <number>4</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_18">
-       <property name="text">
-        <string>x</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="ycenter">
-       <property name="maxLength">
-        <number>4</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>150</y>
-      <width>81</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Радиус:</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="radius">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>150</y>
-      <width>131</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>11</x>
-      <y>31</y>
-      <width>196</width>
-      <height>111</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QRadioButton" name="drawSquare">
-       <property name="text">
-        <string>Задать квадратом</string>
-       </property>
-       <property name="checked">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QRadioButton" name="drawPointRad">
-       <property name="text">
-        <string>Задать точкой и радиусом</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>30</y>
-      <width>131</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <item>
-      <widget class="QLineEdit" name="xlpos">
-       <property name="maxLength">
-        <number>4</number>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_15">
-       <property name="text">
-        <string>x</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="ylpos">
-       <property name="maxLength">
-        <number>4</number>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>162</x>
-     <y>400</y>
-     <width>190</width>
-     <height>25</height>
-    </rect>
+   <property name="rightMargin">
+    <number>20</number>
    </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+   <property name="bottomMargin">
+    <number>15</number>
    </property>
-   <property name="centerButtons">
-    <bool>true</bool>
-   </property>
-  </widget>
+   <item>
+    <widget class="QLabel" name="label_14">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Координаты указываются считая от 0, левый верхний угол считается 0х0(XxY)</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Требование к окружности</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <layout class="QFormLayout" name="formLayout_3">
+        <property name="formAlignment">
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
+        <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QRadioButton" name="drawSquare">
+            <property name="text">
+             <string>Задать квадратом</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="drawPointRad">
+            <property name="text">
+             <string>Задать точкой и радиусом</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="verticalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item row="0" column="1">
+         <layout class="QFormLayout" name="formLayout_2">
+          <property name="sizeConstraint">
+           <enum>QLayout::SetFixedSize</enum>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="xylpos">
+            <property name="text">
+             <string>Левый верхний угол:</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLineEdit" name="xlpos">
+              <property name="maxLength">
+               <number>4</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_15">
+              <property name="text">
+               <string>x</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="ylpos">
+              <property name="maxLength">
+               <number>4</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="xyrpos">
+            <property name="text">
+             <string>Правый нижний угол:</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QLineEdit" name="xrpos">
+              <property name="maxLength">
+               <number>4</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_17">
+              <property name="text">
+               <string>x</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="yrpos">
+              <property name="maxLength">
+               <number>4</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Центр окружности:</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
+             <widget class="QLineEdit" name="xcenter">
+              <property name="maxLength">
+               <number>4</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_18">
+              <property name="text">
+               <string>x</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="ycenter">
+              <property name="maxLength">
+               <number>4</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Радиус:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="radius">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QFormLayout" name="formLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>Толщина линии:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="line_width">
+          <property name="text">
+           <string>1</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Цвет линии:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>R:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="line_r">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="maxLength">
+             <number>3</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>G:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="line_g">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="maxLength">
+             <number>3</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>B:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="line_b">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="maxLength">
+             <number>3</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QPushButton" name="line_black">
+            <property name="styleSheet">
+             <string notr="true">background:rgb(0, 0, 0)</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="line_white">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="line_red">
+            <property name="styleSheet">
+             <string notr="true">background: rgb(255, 0, 0)</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="line_green">
+            <property name="styleSheet">
+             <string notr="true">background: rgb(0, 255, 0)</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="line_blue">
+            <property name="styleSheet">
+             <string notr="true">background: rgb(0, 0, 255)</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="line_yellow">
+            <property name="styleSheet">
+             <string notr="true">background: rgb(255, 255, 0)</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="line_pink">
+            <property name="styleSheet">
+             <string notr="true">background:rgb(255, 0, 127)</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="line_orange">
+            <property name="styleSheet">
+             <string notr="true">background:rgb(255, 85, 0)</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>Заливка:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QCheckBox" name="is_pure_over">
+          <property name="text">
+           <string>Залить</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Цвет заливки:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>R:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="over_r">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="maxLength">
+             <number>3</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>G:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="over_g">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="maxLength">
+             <number>3</number>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>B:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="over_b">
+            <property name="text">
+             <string>0</string>
+            </property>
+            <property name="maxLength">
+             <number>3</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="5" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <widget class="QPushButton" name="over_black">
+            <property name="styleSheet">
+             <string notr="true">background:rgb(0, 0, 0)</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="over_white">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="over_red">
+            <property name="styleSheet">
+             <string notr="true">background: rgb(255, 0, 0)</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="over_green">
+            <property name="styleSheet">
+             <string notr="true">background: rgb(0, 255, 0)</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="over_blue">
+            <property name="styleSheet">
+             <string notr="true">background: rgb(0, 0, 255)</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="over_yellow">
+            <property name="styleSheet">
+             <string notr="true">background: rgb(255, 255, 0)</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="over_pink">
+            <property name="styleSheet">
+             <string notr="true">background:rgb(255, 0, 127)</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="over_orange">
+            <property name="styleSheet">
+             <string notr="true">background:rgb(255, 85, 0)</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>5</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
+     </property>
+     <property name="centerButtons">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <tabstops>
   <tabstop>drawSquare</tabstop>

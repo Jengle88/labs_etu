@@ -33,8 +33,8 @@
 //	BMP bmp;
 //	std::string name_file_input = "test.bmp";
 //	bmp.input_image(name_file_input);
-//	bmp.setHeight(800);
-//	bmp.setWidth(900);
+//	bmp.set_height(800);
+//	bmp.set_width(900);
 //	std::string res = "result.bmp";
 //	bmp.write_image(res);
 //	return 0;

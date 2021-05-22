@@ -12,8 +12,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>889</width>
-    <height>670</height>
+    <width>897</width>
+    <height>635</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -175,29 +175,6 @@
                </property>
               </widget>
              </item>
-             <item>
-              <spacer name="verticalSpacer_4">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
-               </property>
-               <property name="sizeType">
-                <enum>QSizePolicy::Fixed</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-             <item>
-              <widget class="QPushButton" name="new_func">
-               <property name="text">
-                <string>Coming soon...</string>
-               </property>
-              </widget>
-             </item>
             </layout>
            </item>
           </layout>
@@ -296,7 +273,7 @@
               </spacer>
              </item>
              <item>
-              <widget class="QPushButton" name="pushButton">
+              <widget class="QPushButton" name="info">
                <property name="text">
                 <string>Получить информацию</string>
                </property>
@@ -388,7 +365,7 @@
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>1000000</height>
+          <height>100000</height>
          </size>
         </property>
        </spacer>
@@ -408,8 +385,8 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>646</width>
-        <height>609</height>
+        <width>650</width>
+        <height>562</height>
        </size>
       </property>
       <property name="styleSheet">
@@ -438,8 +415,8 @@
        <string/>
       </property>
       <property name="icon">
-       <iconset>
-        <normaloff>../res/reload.png</normaloff>../res/reload.png</iconset>
+       <iconset resource="../icon.qrc">
+        <normaloff>:/res/reload.png</normaloff>:/res/reload.png</iconset>
       </property>
      </widget>
     </item>
@@ -457,6 +434,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../icon.qrc"/>
+ </resources>
  <connections/>
 </ui>

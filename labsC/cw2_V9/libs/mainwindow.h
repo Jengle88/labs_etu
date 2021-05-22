@@ -19,22 +19,27 @@ class MainWindow : public QMainWindow
 	QString name_file;
 	QString name_temp_file;
 	int image_border_pxls = 0;
+	BMP bmp_image;
+	BMP start_bmp_image;
 	bool loaded_image = false;
+	bool image_edited = false;
+	bool image_recover = true;
+	int prev_label_h = 0;
+	int prev_label_w = 0;
 	QPixmap *image;
 	CreateSquareForm *squareForm;
 	ChangeRGBFilterForm *rgbFilterForm;
 	RotateFragmentForm *rotateFragForm;
 	DrawCircleForm *drawCircleForm;
     Q_OBJECT
-public:
-	BMP bmp_image;
-    BMP start_bmp_image;
-    bool image_edited = false;
-	MainWindow(QWidget *parent = nullptr);
-	void try_save();
-	void load_label_image(const std::string name_file);
-    ~MainWindow();
 
+	void try_save();
+
+public:
+	MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+	void load_label_image(const std::string& name_file);
+	std::string get_name_file();
 
 
 private slots:
@@ -45,12 +50,9 @@ private slots:
     void on_load_image_clicked();
     void on_save_image_clicked();
     void on_reload_image_clicked();
-    void on_pushButton_clicked();
     void on_reload_scale_clicked();
-
-public slots:
-	void receiveEditedImage(bool was_edited);
-
+	void on_info_clicked();
+	void receive_flag_edited_image(bool was_edited);
 
 private:
     Ui::MainWindow *ui;

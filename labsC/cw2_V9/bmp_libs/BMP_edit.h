@@ -94,61 +94,39 @@ class BMP {
 
 public:
 	std::vector<std::vector<ColorItem>> pixels;
-	BMP(BMPFileHeader bmp_file_header, BMPInfoHeader bmp_info_header,std::vector<ColorItem> palette,
-	        std::vector<std::vector<ColorItem>> pixels);
+	BMP(BMPFileHeader bmp_file_header, BMPInfoHeader bmp_info_header, std::vector<ColorItem> palette,
+	    std::vector<std::vector<ColorItem>> pixels);
 	BMP() = default;
 
 private:
 	bool in_bmp_file_header(std::fstream &in);
-
 	void in_bmp_info_header(std::fstream &in);
-
 	void in_bmp_palette(std::fstream &in);
-
 	void in_bmp_pixel_table(std::fstream &in);
-
 	static void write_3_color(std::ofstream &out, ColorItem item);
-
 	static void write_4_color(std::ofstream &out, ColorItem item);
-
 	void draw_circle(int xcentr, int ycentr, int r, ColorItem color, bool have_center = true);
-
 	std::vector<std::pair<int, int>> get_border_circle_in(int xcentr, int r, bool have_center = true) const;
-
 	std::vector<std::pair<int, int>> get_border_circle_out(int xcentr, int r, bool have_center = true) const;
-
 	void fill_circle(std::vector<std::pair<int, int>> &brd_ins, std::vector<std::pair<int, int>> &brd_out,
 	                 int y, ColorItem line_color);
 
-
 public:
 	bool input_image(std::string name_file);
-
-	void write_image(std::string name_file) const;
-
-	int getWidth() const;
-
-	int getHeight() const;
-
-	void setWidth(int width);
-
-	void setHeight(int height);
-
-	int getSize() const;
-
-	int getBitPerPixels() const;
-
+	bool write_image(std::string name_file) const;
+	int get_width() const;
+	int get_height() const;
+	void set_width(int width);
+	void set_height(int height);
+	int get_size() const;
+	int get_bit_pixels() const;
 	bool draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem line_color,
 	                 bool is_pour_over = false, ColorItem square_color = CLR_BLACK);
-
 	bool edit_component(char component, int num);
-
 	bool rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle);
-
-	bool draw_circle_via_radius(int xpos, int ypos, int rad, int line_width, ColorItem line_color,
-	                            bool is_pour_over = false, ColorItem circle_color = CLR_BLACK);
-
+	bool draw_circle_radius(int xpos, int ypos, int rad, int line_width, ColorItem line_color,
+	                        bool is_pour_over = false, ColorItem circle_color = CLR_BLACK);
 	bool
-	draw_circle_via_square(int xposl, int yposl, int xposr, int yposr, int line_width, ColorItem line_color,
-	                       bool is_pour_over = false, ColorItem circle_color = CLR_BLACK);
+	draw_circle_square(int xposl, int yposl, int xposr, int yposr, int line_width, ColorItem line_color,
+	                   bool is_pour_over = false, ColorItem circle_color = CLR_BLACK);
 };

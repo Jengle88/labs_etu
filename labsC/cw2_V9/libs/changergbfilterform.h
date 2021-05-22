@@ -14,16 +14,15 @@ namespace Ui {
 class ChangeRGBFilterForm : public QDialog
 {
 	BMP *bmp_image;
-	bool was_edited = false;
-Q_OBJECT
+	Q_OBJECT
 
 public:
 	explicit ChangeRGBFilterForm(QWidget *parent, BMP *bmp_image);
-	void init();
 	~ChangeRGBFilterForm();
+	void init();
 
 signals:
-	void send_results(bool was_edited);
+	void send_result(bool was_edited);
 
 private slots:
 	void on_buttonBox_accepted();
