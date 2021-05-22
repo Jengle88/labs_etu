@@ -26,7 +26,7 @@ class MainWindow : public QMainWindow
 	bool image_recover = true;
 	int prev_label_h = 0;
 	int prev_label_w = 0;
-	QPixmap *image;
+	QPixmap *image = nullptr;
 	CreateSquareForm *squareForm;
 	ChangeRGBFilterForm *rgbFilterForm;
 	RotateFragmentForm *rotateFragForm;

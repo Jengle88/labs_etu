@@ -1,13 +1,6 @@
 #include "BMP_edit.h"
 #include "Byte.h"
 
-/*
- * TODO:
- *  1) Дописать комментарии --- V
- *  2) Сделать скриншоты работы программы
- *  3) Написать README.md с инструкциями по билду и запуску
- */
-
 ColorItem::ColorItem(u_char blue, u_char green, u_char red, u_char reserved) {
 	Blue = blue;
 	Green = green;
@@ -178,8 +171,12 @@ bool BMP::input_image(const std::string name_file) {
 		std::cerr << ERR_NFILE;
 		return false;
 	}
-	if (!in_bmp_file_header(in))
+	BMPFileHeader temp_file_header = file_header;
+	BMPInfoHeader temp_info_header = info_header;
+	if (!in_bmp_file_header(in)){
+		file_header = temp_file_header;
 		return false;
+	}
 	in_bmp_info_header(in);
 	switch (info_header.BitCount) {
 		case 24:
@@ -187,6 +184,8 @@ bool BMP::input_image(const std::string name_file) {
 			in_bmp_pixel_table(in);
 			break;
 		default:
+			file_header = temp_file_header;
+			info_header = temp_info_header;
 			std::cerr << ERR_IMAGE;
 			in.close();
 			return false;

@@ -61,8 +61,9 @@ MainWindow::MainWindow(QWidget *parent)
 	}
 	else {
 		loaded_image = false;
+		name_file = "";
 		ui->label->setText("Здесь могло быть ваше изображение!");
-		QMessageBox::critical(this, "Ошибка", "Не удалось загрузить изображение!");
+		QMessageBox::critical(this, "Ошибка", "Не удалось загрузить изображение или формат не поддерживается!");
 	}
 }
 
@@ -173,8 +174,11 @@ void MainWindow::on_load_image_clicked() {
 		ui->width_label->setText(QString::number(bmp_image.get_width()));
 		ui->bit_pixels_label->setText(QString::number(bmp_image.get_bit_pixels()));
 		ui->size_byte_label->setText(QString::number(bmp_image.get_size()));
-		delete image;
+		if(image != nullptr)
+			delete image;
 		load_label_image(name_file.toStdString());
+	} else if(!name_file.isEmpty()) {
+		QMessageBox::critical(this, "Ошибка", "Не удалось загрузить изображение или формат не поддерживается!");
 	}
 }
 
