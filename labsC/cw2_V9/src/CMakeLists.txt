@@ -42,7 +42,6 @@ else()
           createsquareform.cpp
           libs/createsquareform.h
           forms/createsquareform.ui
-          bmp_libs/bmp.cpp
           bmp_libs/BMP_edit.cpp
           bmp_libs/BMP_edit.h
           bmp_libs/Byte.h

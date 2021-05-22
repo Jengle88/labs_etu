@@ -1,6 +1,13 @@
 #include "BMP_edit.h"
 #include "Byte.h"
 
+/*
+ * TODO:
+ *  1) Дописать комментарии --- V
+ *  2) Сделать скриншоты работы программы --- V
+ *  3) Написать README.md с инструкциями по билду и запуску
+ */
+
 ColorItem::ColorItem(u_char blue, u_char green, u_char red, u_char reserved) {
 	Blue = blue;
 	Green = green;
