@@ -24,8 +24,8 @@ namespace Byte{
 		return {val2, val1};
 	}
 	std::vector<u_char> int_to_byte(u_int num){
-		const auto item1 = short_to_byte(num);//вторые 16
-		const auto item2 = short_to_byte(num >> 16);//первые 16
+		const auto item1 = short_to_byte(num);
+		const auto item2 = short_to_byte(num >> 16);
 		return {item1[0], item1[1], item2[0], item2[1]};
 	}
 

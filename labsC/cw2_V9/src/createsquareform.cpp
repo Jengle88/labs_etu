@@ -29,7 +29,7 @@ void CreateSquareForm::init() {
 }
 
 void CreateSquareForm::on_buttonBox_accepted() {
-	bool check[10] = {false};
+	bool check[12] = {false};
 	int xpos = ui->xpos->text().toInt(&check[0]);
 	int ypos = ui->ypos->text().toInt(&check[1]);
 	int line_length = ui->line_length->text().toInt(&check[2]);
@@ -37,19 +37,19 @@ void CreateSquareForm::on_buttonBox_accepted() {
 	int b = ui->line_b->text().toInt(&check[4]);
 	int g = ui->line_g->text().toInt(&check[5]);
 	int r = ui->line_r->text().toInt(&check[6]);
-	check[4] = check[5] = check[6] = ColorItem::is_correct_color(b, g, r, 0);
+	check[7] = ColorItem::is_correct_color(b, g, r, 0);
 	ColorItem line_color = ColorItem(b, g, r, 0);
 	bool is_pure_over = ui->is_pure_over->isChecked();
 	ColorItem pure_over_color;
 	if (is_pure_over) {
-		b = ui->over_b->text().toInt(&check[7]);
-		g = ui->over_g->text().toInt(&check[8]);
-		r = ui->over_r->text().toInt(&check[9]);
-		check[7] = check[8] = check[9] = ColorItem::is_correct_color(b, g, r, 0);
+		b = ui->over_b->text().toInt(&check[8]);
+		g = ui->over_g->text().toInt(&check[9]);
+		r = ui->over_r->text().toInt(&check[10]);
+		check[11] = ColorItem::is_correct_color(b, g, r, 0);
 		pure_over_color = ColorItem(b, g, r, 0);
 	}
 	else {
-		check[7] = check[8] = check[9] = true;
+		check[11] = true;
 	}
 
 	bool res = true;

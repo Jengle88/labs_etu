@@ -6,6 +6,7 @@
 #include "createsquareform.h"
 #include "changergbfilterform.h"
 #include "rotatefragmentform.h"
+#include "makeframeform.h"
 #include "drawcircleform.h"
 #include "../forms/ui_mainwindow.h"
 #include <QMouseEvent>
@@ -31,6 +32,7 @@ class MainWindow : public QMainWindow
 	ChangeRGBFilterForm *rgbFilterForm;
 	RotateFragmentForm *rotateFragForm;
 	DrawCircleForm *drawCircleForm;
+	MakeFrameForm *makeFrameForm;
     Q_OBJECT
 
 	void try_save();
@@ -51,6 +53,7 @@ private slots:
     void on_save_image_clicked();
     void on_reload_image_clicked();
     void on_reload_scale_clicked();
+    void on_make_frame_clicked();
 	void on_info_clicked();
 	void receive_flag_edited_image(bool was_edited);
 

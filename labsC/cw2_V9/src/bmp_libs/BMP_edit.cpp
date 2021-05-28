@@ -1,12 +1,6 @@
 #include "BMP_edit.h"
 #include "Byte.h"
 
-/*
- * TODO:
- *  1) Дописать комментарии --- V
- *  2) Сделать скриншоты работы программы --- V
- *  3) Написать README.md с инструкциями по билду и запуску
- */
 
 ColorItem::ColorItem(u_char blue, u_char green, u_char red, u_char reserved) {
 	Blue = blue;
@@ -18,6 +12,11 @@ ColorItem::ColorItem(u_char blue, u_char green, u_char red, u_char reserved) {
 bool ColorItem::is_correct_color(int blue, int green, int red, int reserved) {
 	return 0 <= blue && blue <= 255 && 0 <= green && green <= 255 && 0 <= red && red <= 255 &&
 	       0 <= reserved && reserved <= 255;
+}
+
+bool ColorItem::check(ColorItem item1, ColorItem item2) {
+	return item1.Red == item2.Red && item1.Green == item2.Green && item1.Blue == item2.Blue &&
+	       item1.Reserved == item2.Reserved;
 }
 
 ColorItem::ColorItem() = default;
@@ -180,7 +179,7 @@ bool BMP::input_image(const std::string name_file) {
 	}
 	BMPFileHeader temp_file_header = file_header;
 	BMPInfoHeader temp_info_header = info_header;
-	if (!in_bmp_file_header(in)){
+	if (!in_bmp_file_header(in)) {
 		file_header = temp_file_header;
 		return false;
 	}
@@ -203,13 +202,13 @@ bool BMP::input_image(const std::string name_file) {
 }
 
 bool BMP::write_image(std::string name_file) const {
-	if (info_header.BitCount != 24){
+	if (info_header.BitCount != 24) {
 		std::clog << "Unsupported bit per pixels\n";
 		return false;
 	}
 
 	std::ofstream out(name_file, std::ios_base::binary | std::ios_base::out);
-	if(!out.is_open()){
+	if (!out.is_open()) {
 		std::clog << "Error write image\n";
 		return false;
 	}
@@ -291,6 +290,8 @@ void BMP::set_width(int width) {
 		}
 		info_header.Width = width;
 		cnt_extra_byte = (4 - int(info_header.Width * 3) % 4) % 4;
+		file_header.FileSize = file_header.DataOffset + info_header.Height *
+		                                                (3 * info_header.Width + cnt_extra_byte);
 	}
 	else {
 		std::cerr << ERR_WIDTH;
@@ -307,6 +308,8 @@ void BMP::set_height(int height) {
 			}
 		}
 		info_header.Height = height;
+		file_header.FileSize = file_header.DataOffset + info_header.Height *
+		                                                (3 * info_header.Width + cnt_extra_byte);
 	}
 	else {
 		std::cerr << ERR_HEIGHT;
@@ -377,7 +380,8 @@ BMP::draw_square(int xpos, int ypos, int line_length, int line_width, ColorItem 
 		pixels[ypos + line_length - line_width - i - 1][xpos + line_width + i] = line_color;//главная линия
 		for (int j = 1; j <= line_width - 1; ++j) {
 			pixels[ypos + line_length - line_width - i - 1 + j][xpos + line_width + i] = line_color;
-			pixels[ypos + line_length - line_width - i - 1][xpos + line_width + i - j] = line_color;//расширение
+			pixels[ypos + line_length - line_width - i - 1][xpos + line_width + i -
+			                                                j] = line_color;//расширение
 		}
 	}
 	return true;
@@ -392,7 +396,7 @@ bool BMP::edit_component(char component, int num) {
 		std::cerr << ERR_CLR;
 		return false;
 	}
-	switch(component){
+	switch (component) {
 		case 'r':
 			for (int i = 0; i < info_header.Height; ++i) {
 				for (int j = 0; j < info_header.Width; ++j) {
@@ -457,13 +461,13 @@ bool BMP::rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle)
 		for (int i = 0; i <= ydelta; ++i) {//смещаем по линиям
 			for (int j = 0; j <= xdelta; ++j) {
 				std::swap(pixels[ylpos + i][xlpos + j],
-			              pixels[yrpos - i][xrpos - j]);
+				          pixels[yrpos - i][xrpos - j]);
 			}
 		}
 		if ((yrpos - ylpos + 1) % 2 != 0) {//если осталась одна линия
 			for (int i = 0; i < xdelta / 2; ++i) {
 				std::swap(pixels[ylpos + ydelta][xlpos + i],
-			              pixels[ylpos + ydelta][xrpos - i]);
+				          pixels[ylpos + ydelta][xrpos - i]);
 			}
 		}
 	}
@@ -494,12 +498,11 @@ bool BMP::rotate_fragment(int xlpos, int ylpos, int xrpos, int yrpos, int angle)
 }
 
 
-
 bool
 BMP::draw_circle_radius(int xpos, int ypos, int rad, int line_width, ColorItem line_color,
                         bool is_pour_over, ColorItem circle_color) {
 	if (xpos < 0 || xpos >= info_header.Width || ypos < 0 || ypos >= info_header.Height ||
-		xpos - rad - line_width + 1 < 0 || xpos + rad + line_width > info_header.Width ||
+	    xpos - rad - line_width + 1 < 0 || xpos + rad + line_width > info_header.Width ||
 	    ypos - rad - line_width + 1 < 0 || ypos + rad + line_width > info_header.Height) {
 		std::cerr << ERR_XYPOS;
 		return false;
@@ -512,12 +515,12 @@ BMP::draw_circle_radius(int xpos, int ypos, int rad, int line_width, ColorItem l
 		std::cerr << ERR_WIDTH;
 		return false;
 	}
-	draw_circle(xpos, ypos, rad, line_color);//меньшая окружность
+	draw_circle(xpos, ypos, rad, line_color);//меньшая окружность(от точки до линии длина rad - 1)
 	draw_circle(xpos, ypos, rad + line_width - 1, line_color);//большая окружность
 	auto borders_greater_circle_out = get_border_circle_out(xpos, rad + line_width - 1, true);
 	auto borders_less_circle_out = get_border_circle_out(xpos, rad, true);
 	auto borders_less_circle_in = get_border_circle_in(xpos, rad, true);
-	//заполняем пространтсво между окружностями
+	//заполняем пространство между окружностями
 	fill_circle(borders_less_circle_out, borders_greater_circle_out, ypos - rad - line_width + 1, line_color);
 	if (is_pour_over) {
 		for (int i = 1; i <= 2 * rad; ++i) {
@@ -681,5 +684,110 @@ std::vector<std::pair<int, int>> BMP::get_border_circle_out(int xcentr, int r, b
 		}
 	}
 	return borders;
+}
+
+bool BMP::make_frame(int line_width, ColorItem line_color) {
+	struct Point {
+		int y, x;
+		std::string dir = "";
+	};
+	if (line_width < 0 || line_width > info_header.Width || line_width > info_header.Height) {
+		std::clog << "Bad width\n";
+		return false;
+	}
+	std::vector<Point> border;
+	for (int i = 0; i < info_header.Height; ++i) {
+		for (int j = 0; j < info_header.Width; ++j) {
+			if (ColorItem::check(pixels[i][j], CLR_WHITE)) {
+				bool up = (i > 0 && !ColorItem::check(pixels[i - 1][j], CLR_WHITE));
+				bool down = (i < info_header.Height - 1 && !ColorItem::check(pixels[i + 1][j], CLR_WHITE));
+				bool left = (j > 0 && !ColorItem::check(pixels[i][j - 1], CLR_WHITE));
+				bool right = (j < info_header.Width - 1 && !ColorItem::check(pixels[i][j + 1], CLR_WHITE));
+				if (up) {
+					if (right && !ColorItem::check(pixels[i - 1][j + 1], CLR_WHITE)) {
+						border.push_back({i, j, "ur"});
+					}
+					if (left && !ColorItem::check(pixels[i - 1][j - 1], CLR_WHITE)) {
+						border.push_back({i, j, "ul"});
+					}
+				}
+				if (down) {
+					if (right && !ColorItem::check(pixels[i + 1][j + 1], CLR_WHITE)) {
+						border.push_back({i, j, "dr"});
+					}
+					if (left && !ColorItem::check(pixels[i + 1][j - 1], CLR_WHITE)) {
+						border.push_back({i, j, "dl"});
+					}
+				}
+				if (right)
+					border.push_back({i, j, "r"});
+				if (left)
+					border.push_back({i, j, "l"});
+				if (down)
+					border.push_back({i, j, "d"});
+				if (up)
+					border.push_back({i, j, "u"});
+			}
+		}
+	}
+	for (int i = 0; i < border.size(); ++i) {
+		if (border[i].dir == "ur") {
+			for (int j = 1; j <= line_width && border[i].y - j >= 0; ++j) {
+				for (int k = 1; k <= line_width && border[i].x + k < info_header.Width; ++k) {
+					if (!ColorItem::check(pixels[border[i].y - j][border[i].x + k], CLR_WHITE))
+						pixels[border[i].y - j][border[i].x + k] = line_color;
+				}
+			}
+		}
+		if (border[i].dir == "ul") {
+			for (int j = 1; j <= line_width && border[i].y - j >= 0; ++j) {
+				for (int k = 1; k <= line_width && border[i].x - k >= 0; ++k) {
+					if (!ColorItem::check(pixels[border[i].y - j][border[i].x - k], CLR_WHITE))
+						pixels[border[i].y - j][border[i].x - k] = line_color;
+				}
+			}
+		}
+		if (border[i].dir == "dr") {
+			for (int j = 1; j <= line_width && border[i].y + j < info_header.Height; ++j) {
+				for (int k = 1; k <= line_width && border[i].x + k < info_header.Width; ++k) {
+					if (!ColorItem::check(pixels[border[i].y + j][border[i].x + k], CLR_WHITE))
+						pixels[border[i].y + j][border[i].x + k] = line_color;
+				}
+			}
+		}
+		if (border[i].dir == "dl") {
+			for (int j = 1; j <= line_width && border[i].y + j < info_header.Height; ++j) {
+				for (int k = 1; k <= line_width && border[i].x - k >= 0; ++k) {
+					if (!ColorItem::check(pixels[border[i].y + j][border[i].x - k], CLR_WHITE))
+						pixels[border[i].y + j][border[i].x - k] = line_color;
+				}
+			}
+		}
+		if (border[i].dir == "u") {
+			for (int j = 1; j <= line_width && border[i].y - j >= 0; ++j) {
+				if (!ColorItem::check(pixels[border[i].y - j][border[i].x], CLR_WHITE))
+					pixels[border[i].y - j][border[i].x] = line_color;
+			}
+		}
+		if (border[i].dir == "d") {
+			for (int j = 1; j <= line_width && border[i].y + j < info_header.Height; ++j) {
+				if (!ColorItem::check(pixels[border[i].y + j][border[i].x], CLR_WHITE))
+					pixels[border[i].y + j][border[i].x] = line_color;
+			}
+		}
+		if (border[i].dir == "l") {
+			for (int k = 1; k <= line_width && border[i].x - k >= 0; ++k) {
+				if (!ColorItem::check(pixels[border[i].y][border[i].x - k], CLR_WHITE))
+					pixels[border[i].y][border[i].x - k] = line_color;
+			}
+		}
+		if (border[i].dir == "r") {
+			for (int k = 1; k <= line_width && border[i].x + k < info_header.Width; ++k) {
+				if (!ColorItem::check(pixels[border[i].y][border[i].x + k], CLR_WHITE))
+					pixels[border[i].y][border[i].x + k] = line_color;
+			}
+		}
+	}
+	return true;
 }
 

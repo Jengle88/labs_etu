@@ -55,6 +55,9 @@ else()
           libs/drawcircleform.h
           forms/drawcircleform.ui
           icon.qrc
+          makeframeform.cpp
+          libs/makeframeform.h
+          forms/makeframeform.ui
   )
 endif()
 

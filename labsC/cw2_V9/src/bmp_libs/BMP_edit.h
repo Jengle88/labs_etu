@@ -46,6 +46,7 @@ struct ColorItem {
 	ColorItem();
 
 	static bool is_correct_color(int blue, int green, int red, int reserved);
+	static bool check(ColorItem item1, ColorItem item2);
 };
 
 struct BMPFileHeader {
@@ -129,4 +130,5 @@ public:
 	bool
 	draw_circle_square(int xposl, int yposl, int xposr, int yposr, int line_width, ColorItem line_color,
 	                   bool is_pour_over = false, ColorItem circle_color = CLR_BLACK);
+	bool make_frame(int line_width, ColorItem line_color);
 };

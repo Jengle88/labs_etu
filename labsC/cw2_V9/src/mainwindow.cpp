@@ -31,6 +31,10 @@ MainWindow::MainWindow(QWidget *parent)
 	connect(drawCircleForm, &DrawCircleForm::send_result, this, &MainWindow::receive_flag_edited_image);
 	drawCircleForm->setFixedSize(530, 460);
 
+	this->makeFrameForm = new MakeFrameForm(nullptr, &bmp_image);
+	connect(makeFrameForm, &MakeFrameForm::send_result, this, &MainWindow::receive_flag_edited_image);
+	makeFrameForm->setFixedSize(360, 300);
+
 	//получаем величину рамки вокруг изображения для масштабирования
 	int ind_border_image_start = ui->label->styleSheet().indexOf("border-width: ") + strlen("border-width: ");
 	int ind_border_image_end = ui->label->styleSheet().indexOf("px;", ind_border_image_start);
@@ -73,6 +77,7 @@ MainWindow::~MainWindow() {
 	delete rgbFilterForm;
 	delete rotateFragForm;
 	delete drawCircleForm;
+	delete makeFrameForm;
 	std::clog << "MainWindow finished\n";
 	remove(name_temp_file.toStdString().c_str());
 	std::clog << "Temporary file removed\n";
@@ -128,7 +133,6 @@ void MainWindow::on_draw_square_clicked() {
 	else {
 		QMessageBox::critical(this, "Ошибка", "Изображение не было загружено!");
 	}
-
 }
 
 void MainWindow::on_change_RGB_clicked() {
@@ -248,3 +252,15 @@ void MainWindow::on_info_clicked() {
 }
 
 
+
+void MainWindow::on_make_frame_clicked()
+{
+	if (loaded_image) {
+		makeFrameForm->init();
+		makeFrameForm->exec();
+		try_save();
+	}
+	else {
+		QMessageBox::critical(this, "Ошибка", "Изображение не было загружено!");
+	}
+}
