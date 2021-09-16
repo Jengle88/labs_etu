@@ -1,4 +1,4 @@
-#define TESTING
+//#define TESTING
 
 void test(int answer, int (*solve)(int, std::vector<int>), int size, std::vector<int> tree) {
 	try {
