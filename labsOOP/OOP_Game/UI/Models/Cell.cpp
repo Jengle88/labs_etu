@@ -1,10 +1,10 @@
 #include "Cell.h"
 
-int Cell::getVal() const {
-	return this->val;
+CellObject Cell::getValue() const {
+	return this->value;
 }
 
-void Cell::setVal(int val) {
-	this->val = val;
+void Cell::setValue(CellObject value) {
+	this->value = value;
 }
 

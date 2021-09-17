@@ -7,6 +7,16 @@ Grid::Grid(int height, int width): height(height), width(width) {
 	}
 }
 
+Grid::Grid(int height, int width, Cell **grid) {
+	this->grid = new Cell*[height];
+	for (int i = 0; i < height; ++i) {
+		this->grid[i] = new Cell[width];
+		for (int j = 0; j < width; ++j) {
+			this->grid[i][j] = grid[i][j];
+		}
+	}
+}
+
 Grid::~Grid() {
 	for (int i = 0; i < height; ++i) {
 		delete[] grid[i];

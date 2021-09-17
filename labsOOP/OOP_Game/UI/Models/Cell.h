@@ -3,13 +3,13 @@
 #include "../../Tools/CellPoint.h"
 
 class Cell {
-	int val;
+	CellObject value;
 public:
 	Cell() = default;
-	Cell(int val): val(val){}
+	Cell(CellObject value): value(value){}
 
-	int getVal() const;
-	void setVal(int val);
+	CellObject getValue() const;
+	void setValue(CellObject val);
 
 };
 

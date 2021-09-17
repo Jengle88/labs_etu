@@ -15,6 +15,7 @@ class Grid {
 	bool isValidSizes(int height, int width) const;
 public:
 	Grid(int height, int width);
+	Grid(int height, int width, Cell **grid);
 	~Grid();
 
 	void setElem(CellPoint point, Cell cell);
