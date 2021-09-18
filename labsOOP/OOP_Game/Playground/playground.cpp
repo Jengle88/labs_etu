@@ -30,32 +30,20 @@ public:
 		nodes[sty][stx] = 'S';
 		int dist = calcDist(stx, sty);
 		srand(time(0));
+		int deltaX = -(stx - finx) / max(1,abs(stx - finx));
+		int deltaY = -(sty - finy) / max(1,abs(sty - finy));
 		while (stx != finx || sty != finy) {
-			switch (rand() % 4) {
+			switch (rand() % 2) {
 				case 0:
-					if (rightWay(stx + 1, sty, dist)) {
-						stx++;
+					if (rightWay(stx + deltaX, sty, dist)) {
+						stx += deltaX;
 						dist = calcDist(stx, sty);
 						points.emplace_back(sty, stx);
 					}
 					break;
 				case 1:
-					if (rightWay(stx - 1, sty, dist)) {
-						stx--;
-						dist = calcDist(stx, sty);
-						points.emplace_back(sty, stx);
-					}
-					break;
-				case 2:
-					if (rightWay(stx, sty + 1, dist)) {
-						sty++;
-						dist = calcDist(stx, sty);
-						points.emplace_back(sty, stx);
-					}
-					break;
-				case 3:
-					if (rightWay(stx, sty - 1, dist)) {
-						sty--;
+					if (rightWay(stx, sty + deltaY, dist)) {
+						sty += deltaY;
 						dist = calcDist(stx, sty);
 						points.emplace_back(sty, stx);
 					}
@@ -65,41 +53,24 @@ public:
 		for (auto &point: points) {
 			nodes[point.first][point.second] = 'X';
 		}
-//		std
-//		nodes[finy][finx] = 'F';
-//		for (int i = 0; i < n; ++i) {
-//			for (int j = 0; j < m; ++j) {
-//				cout << nodes[i][j];
-//			}
-//			cout << '\n';
-//		}
+		nodes[finy][finx] = 'F';
+		for (int i = 0; i < n; ++i) {
+			for (int j = 0; j < m; ++j) {
+				cout << nodes[i][j];
+			}
+			cout << '\n';
+		}
 	}
 
 };
 
-void divider() {
-	cout << '\n';
-	for (int i = 0; i < 30; ++i) {
-		cout << '-';
-	}
-	cout << '\n';
-}
-// TODO: проверить алг построения на стресс тестах
 
-int main() {
-//	Solve(3, 5, 0, 1, 4, 1).solve();
-//	divider();
-//	Solve(4, 4, 0, 2, 3, 1).solve();
-//	divider();
-//	Solve(4, 4, 0, 0, 3, 3).solve();
-//	divider();
-	int startTime = clock();
-	int cnt = 0;
-	int n = 700, m = 700; // 2285 раз за сек
-	while((clock() - startTime) / CLOCKS_PER_SEC < 1) {
-		Solve(n, m, 0, 0, m - 1, n - 1).solve();
-		cnt++;
-	}
-	cout << cnt;
+int main() { //проверено
+	int n;
+	int m;
+	int stx, sty, finx, finy;
+	cin >> n >> m;
+	cin >> stx >> sty >> finx >> finy;
+	Solve(n, m, stx, sty, finx, finy).solve();
 	return 0;
 }

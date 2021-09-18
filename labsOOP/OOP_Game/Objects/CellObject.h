@@ -1,5 +1,6 @@
 enum TypeCell {
 	EMPTY,
+	FORBIDDEN,
 	WALL,
 	START,
 	FINISH

@@ -14,10 +14,13 @@ class Grid {
 	bool isValidIndexes(int height, int width) const;
 	bool isValidSizes(int height, int width) const;
 public:
+	Grid();
 	Grid(int height, int width);
 	Grid(int height, int width, Cell **grid);
 	~Grid();
 
+	int getHeight() const;
+	int getWidth() const;
 	void setElem(CellPoint point, Cell cell);
 	Cell getElem(CellPoint point) const;
 	void clear();

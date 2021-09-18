@@ -25,7 +25,6 @@ Grid::~Grid() {
 }
 
 void Grid::setElem(CellPoint point, Cell cell) {
-
 	if (isValidIndexes(point.getX(), point.getY())) {
 		grid[point.getX()][point.getY()] = cell;
 	} else {
@@ -76,6 +75,20 @@ void Grid::resizeGrid(int height, int width, Cell **newGrid) {
 	}
 	this->height = height;
 	this->width = width;
+}
+
+Grid::Grid() {
+	height = 0;
+	width = 0;
+	grid = nullptr;
+}
+
+int Grid::getHeight() const {
+	return height;
+}
+
+int Grid::getWidth() const {
+	return width;
 }
 
 
