@@ -1,0 +1,4 @@
+[submodule "labsAaSD/lab1_tree/Catch2"]
+	path = labsAaSD/lab1_tree/Catch2
+	url = https://github.com/catchorg/Catch2.git
+	branch = v2.x
