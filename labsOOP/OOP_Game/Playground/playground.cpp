@@ -64,13 +64,31 @@ public:
 
 };
 
+class A {
+public:
+    vector<int> b;
+    A() {
+        std::cout << "constr\n";
+        b = vector<int>(10);
+    }
+    ~A() {
+        std::cout << "destr\n";
+    }
+};
 
-int main() { //проверено
-	int n;
-	int m;
-	int stx, sty, finx, finy;
-	cin >> n >> m;
-	cin >> stx >> sty >> finx >> finy;
-	Solve(n, m, stx, sty, finx, finy).solve();
-	return 0;
+void func() {
+    A a = A();
+    std::cout << a.b.size() << '\n';
+    std::cout << "func exit\n";
 }
+
+//int main() { //проверено
+////	int n;
+////	int m;
+////	int stx, sty, finx, finy;
+////	cin >> n >> m;
+////	cin >> stx >> sty >> finx >> finy;
+////	Solve(n, m, stx, sty, finx, finy).solve();
+//    func();
+//	return 0;
+//}
