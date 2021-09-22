@@ -1,5 +1,6 @@
+#pragma once
 #include "../../Tools/Grid.h"
-
+#include "../../Tools/FieldIterator.h"
 #define PERCENT_WALLS 45
 #define DIST_START_FINISH 15
 
@@ -16,6 +17,7 @@ class Field {
 	bool isCorrectDistStartFinish(CellPoint start, CellPoint finish) const;
 	bool isValidIndexes(int x, int y) const;
     CellPoint generateBorderPoint();
+
 public:
     Field();
 //    Field(Grid field, CellPoint start = CellPoint(0, 0), CellPoint finish  = CellPoint(0, 0));
@@ -27,5 +29,16 @@ public:
     void printField();
     int getHeight() const;
     int getWidth() const;
+    FieldIterator getFieldIterator();
 };
+
+
+
+
+
+
+
+
+
+
 

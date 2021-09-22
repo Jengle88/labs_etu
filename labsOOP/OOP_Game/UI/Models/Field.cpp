@@ -190,3 +190,7 @@ int Field::getHeight() const {
 int Field::getWidth() const {
     return field.width;
 }
+
+FieldIterator Field::getFieldIterator() {
+    return FieldIterator(&(this->field));
+}

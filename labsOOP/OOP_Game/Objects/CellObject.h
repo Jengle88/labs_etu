@@ -1,3 +1,4 @@
+#pragma once
 enum TypeCell {
 	EMPTY,
 	WAY,

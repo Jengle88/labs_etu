@@ -1,3 +1,4 @@
+#pragma once
 class CellPoint {
 	int x;
 	int y;

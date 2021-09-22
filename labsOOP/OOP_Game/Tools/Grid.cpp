@@ -29,6 +29,15 @@ Grid::Grid() {
     grid = nullptr;
 }
 
+void Grid::init(int height, int width) {
+    this->height = std::min(UP_LIMIT_HEIGHT, std::max(DOWN_LIMIT_HEIGHT, height));
+    this->width = std::min(UP_LIMIT_WIDTH, std::max(DOWN_LIMIT_WIDTH, width));
+    this->grid = new Cell*[this->height];
+    for (int i = 0; i < this->height; ++i) {
+        this->grid[i] = new Cell[this->width];
+    }
+}
+
 Grid::~Grid() {
     for (int i = 0; i < height; ++i) {
 		delete[] grid[i];
@@ -89,7 +98,7 @@ int Grid::getWidth() const {
 }
 
 bool Grid::isValidIndexes(int x, int y) const {
-	return 0 <= x && x < this->width && 0 <= y && y < this->height;
+	return isValidXPos(x) && isValidYPos(y);
 }
 
 bool Grid::isValidSizes(int height, int width) const {
@@ -104,13 +113,13 @@ bool Grid::isValidWidth(int width) const {
     return DOWN_LIMIT_WIDTH <= width && width < UP_LIMIT_WIDTH;
 }
 
-void Grid::init(int height, int width) {
-    this->height = std::min(UP_LIMIT_HEIGHT, std::max(DOWN_LIMIT_HEIGHT, height));
-    this->width = std::min(UP_LIMIT_WIDTH, std::max(DOWN_LIMIT_WIDTH, width));
-    this->grid = new Cell*[this->height];
-    for (int i = 0; i < this->height; ++i) {
-        this->grid[i] = new Cell[this->width];
-    }
+bool Grid::isValidXPos(int x) const {
+    return 0 <= x && x < this->width;
+}
+
+
+bool Grid::isValidYPos(int y) const {
+    return 0 <= y && y < this->height;
 }
 
 

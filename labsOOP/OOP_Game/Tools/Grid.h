@@ -1,3 +1,4 @@
+#pragma once
 #include "../UI/Models/Cell.h"
 #include <exception>
 
@@ -12,6 +13,8 @@ class Grid {
 	Cell** grid;
 
 	bool isValidIndexes(int x, int y) const;
+    bool isValidXPos(int x) const;
+    bool isValidYPos(int y) const;
 	bool isValidHeight(int height) const;
 	bool isValidWidth(int width) const;
 	bool isValidSizes(int height, int width) const;
@@ -29,4 +32,6 @@ public:
 	void clear();
 	void resizeGrid(int height, int width, Cell **newGrid = nullptr);
     friend class Field;
+    friend class FieldIterator;
+
 };
