@@ -3,24 +3,19 @@
 #include "Grid.h"
 
 Grid::Grid(int height, int width): height(height), width(width) {
-    if (!isValidHeight(height))
-        this->height = std::min(UP_LIMIT_HEIGHT, std::max(DOWN_LIMIT_HEIGHT, height));
-    if (!isValidWidth(width))
-        this->width = std::min(UP_LIMIT_WIDTH, std::max(DOWN_LIMIT_WIDTH, width));
-    grid = new Cell*[height];
-	for (int i = 0; i < height; ++i) {
-		grid[i] = new Cell[width];
-	}
+//    if (!isValidHeight(height))
+//        this->height = std::min(UP_LIMIT_HEIGHT, std::max(DOWN_LIMIT_HEIGHT, height));
+//    if (!isValidWidth(width))
+//        this->width = std::min(UP_LIMIT_WIDTH, std::max(DOWN_LIMIT_WIDTH, width));
+//    grid = new Cell*[height];
+//	for (int i = 0; i < height; ++i) {
+//		grid[i] = new Cell[width];
+//	}
+    // TODO
 }
 
 Grid::Grid(int height, int width, Cell **grid): height(height), width(width) {
-	this->grid = new Cell*[height];
-	for (int i = 0; i < height; ++i) {
-		this->grid[i] = new Cell[width];
-		for (int j = 0; j < width; ++j) {
-			this->grid[i][j] = grid[i][j];
-		}
-	}
+    // TODO
 }
 
 Grid::Grid() {
@@ -120,6 +115,58 @@ bool Grid::isValidXPos(int x) const {
 
 bool Grid::isValidYPos(int y) const {
     return 0 <= y && y < this->height;
+}
+
+Grid::Grid(const Grid &grid) {
+    this->grid = new Cell*[grid.height];
+    for (int i = 0; i < grid.height; ++i) {
+        this->grid[i] = new Cell[grid.width];
+    }
+}
+
+Grid &Grid::operator=(const Grid &grid) {
+    if (&grid == this)
+        return *this;
+
+    for (int i = 0; i < this->height; ++i) {
+        delete[] this->grid[i];
+    }
+    delete[] this->grid;
+
+    this->grid = new Cell*[grid.height];
+    for (int i = 0; i < grid.height; ++i) {
+        this->grid[i] = new Cell[grid.width];
+        for (int j = 0; j < grid.width; ++j) {
+            this->grid[i][j] = grid.grid[i][j];
+        }
+    }
+    height = grid.height;
+    width = grid.width;
+    return *this;
+}
+
+Grid::Grid(Grid &&grid): grid(grid.grid), height(grid.height), width(grid.width)  {
+    grid.grid = nullptr;
+    grid.height = 0;
+    grid.width = 0;
+}
+
+Grid& Grid::operator=(Grid &&grid) {
+    if (&grid == this)
+        return *this;
+
+    for (int i = 0; i < this->height; ++i) {
+        delete[] this->grid[i];
+    }
+    delete[] this->grid;
+
+    this->grid = grid.grid;
+    this->height = grid.height;
+    this->width = grid.width;
+    grid.grid = nullptr;
+    grid.height = 0;
+    grid.width = 0;
+    return *this;
 }
 
 

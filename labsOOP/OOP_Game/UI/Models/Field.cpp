@@ -7,7 +7,7 @@
 Field::Field() {
 }
 
-//Field::Field(Grid field, CellPoint start, CellPoint finish) {
+//Field::Field(Grid field, CellPoint start, CellPoint finish) { // TODO
 ////    this->field = field;
 //    std::cerr << "fill this->field\n";
 //    this->field = Grid(field.getHeight(), field.getWidth());// Заменить на copy-конструктор
@@ -142,23 +142,6 @@ void Field::printField() {
         std::cout << '|';
         for (int j = 0; j < field.getWidth(); ++j) {
             std::cout << field.getElem(CellPoint(j, i)).getValue().getTypeCellAsChar();
-//            switch (field.getElem(CellPoint(j, i)).getValue().getTypeCell()) {
-//                case TypeCell::WAY:
-//                    std::cout << '*';
-//                    break;
-//                case TypeCell::WALL:
-//                    std::cout << '.';
-//                    break;
-//                case TypeCell::START:
-//                    std::cout << 'S';
-//                    break;
-//                case TypeCell::FINISH:
-//                    std::cout << 'F';
-//                    break;
-//                case TypeCell::EMPTY:
-//                    std::cout << ' ';
-//                    break;
-//            }
         }
         std::cout << '|';
         std::cout << '\n';
@@ -193,4 +176,52 @@ int Field::getWidth() const {
 
 FieldIterator Field::getFieldIterator() {
     return FieldIterator(&(this->field));
+}
+
+Field::Field(const Field &field) {
+//    this->field.init(field.getHeight(), field.getWidth());
+    this->field = field.field;
+    start = field.start;
+    finish = field.finish;
+    wayGenerated = field.wayGenerated;
+    wallsGenerated = field.wallsGenerated;
+    chosenStartFinish = field.chosenStartFinish;
+    countWalls = field.countWalls;
+
+}
+
+Field &Field::operator=(const Field &field) {
+    if (&field == this)
+        return *this;
+    for (int i = 0; i < this->getHeight(); ++i) {
+        delete[] this->field.grid[i];
+    }
+    delete[] this->field.grid;
+
+    this->field.init(field.getHeight(), field.getWidth());
+    this->field = field.field;
+    start = field.start;
+    finish = field.finish;
+    wayGenerated = field.wayGenerated;
+    wallsGenerated = field.wallsGenerated;
+    chosenStartFinish = field.chosenStartFinish;
+    countWalls = field.countWalls;
+
+    return *this;
+}
+
+Field::Field(Field &&field) {
+    this->field = std::move(field.field);
+    this->start = field.start;
+    this->finish = field.finish;
+    this->chosenStartFinish = field.chosenStartFinish;
+    this->wayGenerated = field.wayGenerated;
+    this->wallsGenerated = field.wallsGenerated;
+    this->countWalls = field.countWalls;
+    field.start = CellPoint();
+    field.finish = CellPoint();
+    field.chosenStartFinish = false;
+    field.wayGenerated = false;
+    field.wallsGenerated = false;
+    field.countWalls = 0;
 }

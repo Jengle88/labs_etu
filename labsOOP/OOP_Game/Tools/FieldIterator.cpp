@@ -68,3 +68,7 @@ Cell FieldIterator::getElem() const {
 CellPoint FieldIterator::getCurrentPosition() const {
     return {posX, posY};
 }
+
+void FieldIterator::setElem(Cell cell) {
+    this->rootGrid->setElem(CellPoint(posX,posY), cell);
+}

@@ -22,6 +22,12 @@ public:
     Field();
 //    Field(Grid field, CellPoint start = CellPoint(0, 0), CellPoint finish  = CellPoint(0, 0));
     Field(int height, int width, CellPoint start = CellPoint(0,0), CellPoint finish = CellPoint(0,0));
+    Field(const Field& field);
+    Field& operator=(const Field& field);
+    Field(Field && field);
+    Field& operator=(Field&& field);
+
+
     void generateStartFinishWay();
     void generateWay(CellPoint start, CellPoint finish);
     void generateWalls(int countWalls);

@@ -23,6 +23,10 @@ public:
 	Grid();
 	Grid(int height, int width);
 	Grid(int height, int width, Cell **grid);
+    Grid(const Grid& grid);
+    Grid& operator=(const Grid& grid);
+    Grid(Grid&& grid);
+    Grid& operator=(Grid&& grid);
     ~Grid();
 
 	int getHeight() const;
@@ -31,6 +35,7 @@ public:
 	Cell getElem(CellPoint point) const;
 	void clear();
 	void resizeGrid(int height, int width, Cell **newGrid = nullptr);
+
     friend class Field;
     friend class FieldIterator;
 

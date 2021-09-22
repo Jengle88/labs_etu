@@ -19,5 +19,6 @@ public:
     void moveTo(int posX, int posY);
 
     Cell getElem() const;
+    void setElem(Cell cell);
     CellPoint getCurrentPosition() const;
 };
