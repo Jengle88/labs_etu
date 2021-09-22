@@ -105,12 +105,12 @@ bool Grid::isValidWidth(int width) const {
 }
 
 void Grid::init(int height, int width) {
-    this->grid = new Cell*[height];
-    for (int i = 0; i < height; ++i) {
-        this->grid[i] = new Cell[width];
+    this->height = std::min(UP_LIMIT_HEIGHT, std::max(DOWN_LIMIT_HEIGHT, height));
+    this->width = std::min(UP_LIMIT_WIDTH, std::max(DOWN_LIMIT_WIDTH, width));
+    this->grid = new Cell*[this->height];
+    for (int i = 0; i < this->height; ++i) {
+        this->grid[i] = new Cell[this->width];
     }
-    this->height = height;
-    this->width = width;
 }
 
 

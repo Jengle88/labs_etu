@@ -2,22 +2,22 @@
 #include "UI/Models/Field.h"
 
 int main() {
-	int h = 100;
+	int h = 250;
 	int w = 100;
-    int start = clock();
-    int fullTime = start;
+    int countWalls = 300;
+    int fullTime = clock();
     Field field = Field(h,w);
-    field.generateStartFinish();
-    std::cout << "Generate Start Finish: " << double(clock() - start) / CLOCKS_PER_SEC << '\n';
-    start = clock();
-    field.generateWayToFinish();
-    std::cout << "Generate Way to Finish: " << double(clock() - start) / CLOCKS_PER_SEC << '\n';
-    start = clock();
-    field.generateWalls(250);
-    std::cout << "Generate Walls: " << double(clock() - start) / CLOCKS_PER_SEC << '\n';
-    start = clock();
+//    field.generateStartFinishWay();
+//    std::cout << "Generate Start Finish: " << double(clock() - start) / CLOCKS_PER_SEC << '\n';
+//    start = clock();
+//    field.generateWay();
+//    std::cout << "Generate Way to Finish: " << double(clock() - start) / CLOCKS_PER_SEC << '\n';
+//    start = clock();
+//    field.generateWalls(countWalls);
+//    std::cout << "Generate Walls: " << double(clock() - start) / CLOCKS_PER_SEC << '\n';
+//    start = clock();
+    field.generateFullField(countWalls);
     field.printField();
-    std::cout << "Print Field: " << double(clock() - start) / CLOCKS_PER_SEC << '\n';
     std::cout << "Full time: " << double(clock() - fullTime) / CLOCKS_PER_SEC << '\n';
     int z = 2;
     //	Grid grid = Grid(h,w);

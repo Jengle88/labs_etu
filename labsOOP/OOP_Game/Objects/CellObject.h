@@ -1,6 +1,6 @@
 enum TypeCell {
 	EMPTY,
-	WAY_TO_FINISH,
+	WAY,
 	WALL,
 	START,
 	FINISH
