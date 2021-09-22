@@ -10,12 +10,14 @@ class FieldIterator {
     friend class Field;
 public:
     FieldIterator() = delete;
-    void moveUp();
-    void moveDown();
-    void moveDownAndStart();
 
-    void moveRight();
-    void moveLeft();
-    void moveTo(int deltaX, int deltaY);
+    FieldIterator& operator++();
+    FieldIterator operator++(int);
+    FieldIterator& operator--();
+    FieldIterator operator--(int);
+    void moveDelta(int deltaX, int deltaY);
+    void moveTo(int posX, int posY);
+
     Cell getElem() const;
+    CellPoint getCurrentPosition() const;
 };

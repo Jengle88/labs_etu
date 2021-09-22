@@ -9,8 +9,8 @@
  */
 
 int main() {
-	int h = 250;
-	int w = 100;
+	int h = 26;
+	int w = 50;
     int countWalls = 500;
     int fullTime = clock();
     Field field = Field(h,w);
@@ -24,17 +24,25 @@ int main() {
 //    std::cout << "Generate Walls: " << double(clock() - start) / CLOCKS_PER_SEC << '\n';
 //    start = clock();
     field.generateFullField(countWalls);
-//    field.printField();
+    field.printField();
     auto iter = field.getFieldIterator();
     for (int i = 0; i < field.getHeight(); ++i) {
         for (int j = 0; j < field.getWidth(); ++j) {
-            std::cout << iter.getElem().getValue().getTypeCell();
-            iter.moveRight();
+            std::cout << iter.getElem().getValue().getTypeCellAsChar();
+            iter++;
         }
+//        iter.moveTo(0, i*2);
         std::cout << '\n';
-        iter.moveDownAndStart();
     }
-//    std::cout << "Full time: " << double(clock() - fullTime) / CLOCKS_PER_SEC << '\n';
+//    for (int i = 0; i < field.getHeight(); ++i) {
+//        for (int j = 0; j < field.getWidth(); ++j) {
+//            std::cout << iter.getElem().getValue().getTypeCell();
+//            iter.moveRight();
+//        }
+//        std::cout << '\n';
+//        iter.moveDownAndStart();
+//    }
+    std::cout << "Full time: " << double(clock() - fullTime) / CLOCKS_PER_SEC << '\n';
     int z = 2;
     //	Grid grid = Grid(h,w);
 //	for (int i = 0; i < h; ++i) {

@@ -141,23 +141,24 @@ void Field::printField() {
     for (int i = 0; i < field.getHeight(); ++i) {
         std::cout << '|';
         for (int j = 0; j < field.getWidth(); ++j) {
-            switch (field.getElem(CellPoint(j, i)).getValue().getTypeCell()) {
-                case TypeCell::WAY:
-                    std::cout << '*';
-                    break;
-                case TypeCell::WALL:
-                    std::cout << '.';
-                    break;
-                case TypeCell::START:
-                    std::cout << 'S';
-                    break;
-                case TypeCell::FINISH:
-                    std::cout << 'F';
-                    break;
-                case TypeCell::EMPTY:
-                    std::cout << ' ';
-                    break;
-            }
+            std::cout << field.getElem(CellPoint(j, i)).getValue().getTypeCellAsChar();
+//            switch (field.getElem(CellPoint(j, i)).getValue().getTypeCell()) {
+//                case TypeCell::WAY:
+//                    std::cout << '*';
+//                    break;
+//                case TypeCell::WALL:
+//                    std::cout << '.';
+//                    break;
+//                case TypeCell::START:
+//                    std::cout << 'S';
+//                    break;
+//                case TypeCell::FINISH:
+//                    std::cout << 'F';
+//                    break;
+//                case TypeCell::EMPTY:
+//                    std::cout << ' ';
+//                    break;
+//            }
         }
         std::cout << '|';
         std::cout << '\n';
@@ -169,7 +170,7 @@ void Field::printField() {
 }
 
 Field::Field(int height, int width, CellPoint start, CellPoint finish) {
-    this->field.init(height, width);// Заменить на copy-конструктор
+    this->field.init(height, width);
     this->start = start;
     this->finish = finish;
     if (isCorrectStartFinish(start, finish)) {
@@ -179,7 +180,6 @@ Field::Field(int height, int width, CellPoint start, CellPoint finish) {
 
 void Field::generateFullField(int countWalls) {
     this->generateStartFinishWay();
-//    this->generateWay(CellPoint(), CellPoint());
     this->generateWalls(countWalls);
 }
 
