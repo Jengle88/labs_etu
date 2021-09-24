@@ -1,12 +1,15 @@
 #include "Models/Field.h"
 
 class FieldScreen {
-    Field field;
+    Field *field;
     bool fieldReady;
 
-    void showFieldScreen(int heightField, int widthField, int countWalls);
-    void updateScreen();
-    void requestMoveObject();
-    void requestGenerateObject();
+    FieldScreen();
+    void showStartingParams();
+    void showFieldScreen() const;
+    void showUpdatedScreen() const;
+    void registerMovement();
+    void requestMoveObject(CellPoint from, CellPoint to) const;
+    void requestGenerateObject(CellPoint pos, CellObject newObject);
 
 };

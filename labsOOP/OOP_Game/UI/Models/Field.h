@@ -36,6 +36,9 @@ public:
 
     int getHeight() const;
     int getWidth() const;
+    bool getStatusWay() const;
+    bool getStatusWalls() const;
+    bool getStatusStartFinish() const;
     FieldIterator getFieldIterator();
 
 };

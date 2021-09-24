@@ -2,8 +2,6 @@
 #include <iostream>
 #include "Grid.h"
 
-//Grid::Grid(int height, int width, Cell **grid): height(height), width(width) {
-//     TODO
 
 
 Grid::Grid() {

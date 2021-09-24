@@ -2,7 +2,7 @@
 #include "../../Objects/CellObject.h"
 #include "../../Tools/CellPoint.h"
 
-class Cell {
+class Cell { // TODO заменить на интерфейс
 	CellObject value;
 public:
 	Cell() = default;

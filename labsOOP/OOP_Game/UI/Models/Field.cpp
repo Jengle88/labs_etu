@@ -129,6 +129,39 @@ void Field::generateWalls(int countWalls) {
     wallsGenerated = true;
 }
 
+void Field::cleanStartFinishWay() {
+    auto calcDist = [](int stx, int sty, int finx, int finy) {
+        return abs(stx - finx) + abs(sty - finy);
+    }; // функция подсчёта расстояния между точками
+
+    field.setElem(start,
+                  Cell(CellObject(TypeCell::START, TypeObject::NOTHING)));
+
+    int deltaX = -(start.getX() - finish.getX()) /
+                 std::max(1, abs(start.getX() - finish.getX()));
+    int deltaY = -(start.getY() - finish.getY()) /
+                 std::max(1, abs(start.getY() - finish.getY()));
+    int stx = start.getX(), sty = start.getY(), finx = finish.getX(), finy = finish.getY();
+    while (stx != finx || sty != finy) {
+        if (isValidIndexes(stx + deltaX, sty) && (
+                field.getElem(CellPoint(stx + deltaX, sty)).getValue().getTypeCell() == TypeCell::WAY ||
+                field.getElem(CellPoint(stx + deltaX, sty)).getValue().getTypeCell() == TypeCell::FINISH)
+                ) {
+            stx += deltaX;
+            field.setElem(CellPoint(stx, sty), Cell(CellObject(TypeCell::EMPTY, TypeObject::NOTHING)));
+        } else if (isValidIndexes(stx, sty + deltaY) && (
+                field.getElem(CellPoint(stx, sty + deltaY)).getValue().getTypeCell() == TypeCell::WAY ||
+                field.getElem(CellPoint(stx, sty + deltaY)).getValue().getTypeCell() == TypeCell::FINISH)
+                ) {
+            sty += deltaY;
+            field.setElem(CellPoint(stx, sty), Cell(CellObject(TypeCell::EMPTY, TypeObject::NOTHING)));
+        }
+    }
+    wayGenerated = false;
+    field.setElem(finish,
+                  Cell(CellObject(TypeCell::FINISH, TypeObject::NOTHING)));
+}
+
 void Field::printField() {
     for (int i = 0; i < field.getWidth() + 2; ++i) {
         std::cout << '_';
@@ -225,40 +258,14 @@ Field &Field::operator=(Field &&field) {
     return *this;
 }
 
-void Field::cleanStartFinishWay() {
-    auto calcDist = [](int stx, int sty, int finx, int finy) {
-        return abs(stx - finx) + abs(sty - finy);
-    }; // функция подсчёта расстояния между точками
+bool Field::getStatusWay() const {
+    return wayGenerated;
+}
 
-    auto rightWay = [this, &calcDist](int stx, int sty, int curDist) {
-        return 0 <= stx && stx < field.getWidth() && 0 <= sty &&
-               sty < field.getHeight() && calcDist(stx, sty, finish.getX(), finish.getY()) < curDist;
-    }; // функция для контроля приближения к финишной точке
+bool Field::getStatusWalls() const {
+    return wallsGenerated;
+}
 
-    field.setElem(start,
-                  Cell(CellObject(TypeCell::START, TypeObject::NOTHING)));
-
-    int deltaX = -(start.getX() - finish.getX()) /
-                 std::max(1, abs(start.getX() - finish.getX()));
-    int deltaY = -(start.getY() - finish.getY()) /
-                 std::max(1, abs(start.getY() - finish.getY()));
-    int stx = start.getX(), sty = start.getY(), finx = finish.getX(), finy = finish.getY();
-    while (stx != finx || sty != finy) {
-        if (isValidIndexes(stx + deltaX, sty) && (
-                field.getElem(CellPoint(stx + deltaX, sty)).getValue().getTypeCell() == TypeCell::WAY ||
-                field.getElem(CellPoint(stx + deltaX, sty)).getValue().getTypeCell() == TypeCell::FINISH)
-                ) {
-            stx += deltaX;
-            field.setElem(CellPoint(stx, sty), Cell(CellObject(TypeCell::EMPTY, TypeObject::NOTHING)));
-        } else if (isValidIndexes(stx, sty + deltaY) && (
-                field.getElem(CellPoint(stx, sty + deltaY)).getValue().getTypeCell() == TypeCell::WAY ||
-                field.getElem(CellPoint(stx, sty + deltaY)).getValue().getTypeCell() == TypeCell::FINISH)
-                ) {
-            sty += deltaY;
-            field.setElem(CellPoint(stx, sty), Cell(CellObject(TypeCell::EMPTY, TypeObject::NOTHING)));
-        }
-    }
-    wayGenerated = false;
-    field.setElem(finish,
-                  Cell(CellObject(TypeCell::FINISH, TypeObject::NOTHING)));
+bool Field::getStatusStartFinish() const {
+    return chosenStartFinish;
 }

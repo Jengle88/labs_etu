@@ -68,6 +68,7 @@ int main() {
 
 #endif
 #ifdef FEATURES
+    std::setlocale(LC_ALL, "");
     int h = 30;
     int w = 30;
     int countWalls = 400;
