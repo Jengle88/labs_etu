@@ -21,7 +21,7 @@ char CellObject::getTypeCellAsChar() const {
         case TypeCell::WAY:
             return '#';
         case TypeCell::WALL:
-            return '.';
+            return '+';
         case TypeCell::START:
             return 'S';
         case TypeCell::FINISH:

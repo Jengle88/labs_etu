@@ -2,21 +2,9 @@
 #include <iostream>
 #include "Grid.h"
 
-Grid::Grid(int height, int width): height(height), width(width) {
-//    if (!isValidHeight(height))
-//        this->height = std::min(UP_LIMIT_HEIGHT, std::max(DOWN_LIMIT_HEIGHT, height));
-//    if (!isValidWidth(width))
-//        this->width = std::min(UP_LIMIT_WIDTH, std::max(DOWN_LIMIT_WIDTH, width));
-//    grid = new Cell*[height];
-//	for (int i = 0; i < height; ++i) {
-//		grid[i] = new Cell[width];
-//	}
-    // TODO
-}
+//Grid::Grid(int height, int width, Cell **grid): height(height), width(width) {
+//     TODO
 
-Grid::Grid(int height, int width, Cell **grid): height(height), width(width) {
-    // TODO
-}
 
 Grid::Grid() {
     height = 0;
@@ -24,14 +12,30 @@ Grid::Grid() {
     grid = nullptr;
 }
 
-void Grid::init(int height, int width) {
+Grid::Grid(int height, int width, Cell **grid) {
     this->height = std::min(UP_LIMIT_HEIGHT, std::max(DOWN_LIMIT_HEIGHT, height));
     this->width = std::min(UP_LIMIT_WIDTH, std::max(DOWN_LIMIT_WIDTH, width));
     this->grid = new Cell*[this->height];
-    for (int i = 0; i < this->height; ++i) {
-        this->grid[i] = new Cell[this->width];
+	for (int i = 0; i < this->height; ++i) {
+		this->grid[i] = new Cell[this->width];
+	}
+    if (grid != nullptr) {
+        for (int i = 0; i < this->height; ++i) {
+            for (int j = 0; j < this->width; ++j) {
+                this->grid[i][j] = grid[i][j];
+            }
+        }
     }
 }
+
+//void Grid::init(int height, int width) {
+//    this->height = std::min(UP_LIMIT_HEIGHT, std::max(DOWN_LIMIT_HEIGHT, height));
+//    this->width = std::min(UP_LIMIT_WIDTH, std::max(DOWN_LIMIT_WIDTH, width));
+//    this->grid = new Cell*[this->height];
+//    for (int i = 0; i < this->height; ++i) {
+//        this->grid[i] = new Cell[this->width];
+//    }
+//}
 
 Grid::~Grid() {
     for (int i = 0; i < height; ++i) {

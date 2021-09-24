@@ -11,18 +11,15 @@ class Grid {
 	int height;
 	int width;
 	Cell** grid;
-
 	bool isValidIndexes(int x, int y) const;
     bool isValidXPos(int x) const;
     bool isValidYPos(int y) const;
 	bool isValidHeight(int height) const;
 	bool isValidWidth(int width) const;
 	bool isValidSizes(int height, int width) const;
-    void init(int height, int width);
 public:
 	Grid();
-	Grid(int height, int width);
-	Grid(int height, int width, Cell **grid);
+	Grid(int height, int width, Cell **grid = nullptr);
     Grid(const Grid& grid);
     Grid& operator=(const Grid& grid);
     Grid(Grid&& grid);

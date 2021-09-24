@@ -17,25 +17,27 @@ class Field {
 	bool isCorrectDistStartFinish(CellPoint start, CellPoint finish) const;
 	bool isValidIndexes(int x, int y) const;
     CellPoint generateBorderPoint();
+    void generateStartFinishWay();
+    void generateWayWithoutWalls(CellPoint start, CellPoint finish);
+    void generateWalls(int countWalls);
 
 public:
     Field();
-//    Field(Grid field, CellPoint start = CellPoint(0, 0), CellPoint finish  = CellPoint(0, 0));
-    Field(int height, int width, CellPoint start = CellPoint(0,0), CellPoint finish = CellPoint(0,0));
+    Field(int height, int width, CellPoint start = CellPoint(0,0), CellPoint finish = CellPoint(0,0), Grid grid = Grid());
     Field(const Field& field);
     Field& operator=(const Field& field);
     Field(Field && field);
     Field& operator=(Field&& field);
 
-
-    void generateStartFinishWay();
-    void generateWay(CellPoint start, CellPoint finish);
-    void generateWalls(int countWalls);
     void generateFullField(int countWalls);
+    void cleanStartFinishWay();
+
     void printField();
+
     int getHeight() const;
     int getWidth() const;
     FieldIterator getFieldIterator();
+
 };
 
 

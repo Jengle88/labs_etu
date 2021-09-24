@@ -7,22 +7,18 @@
 Field::Field() {
 }
 
-//Field::Field(Grid field, CellPoint start, CellPoint finish) { // TODO
-////    this->field = field;
-//    std::cerr << "fill this->field\n";
-//    this->field = Grid(field.getHeight(), field.getWidth());// Заменить на copy-конструктор
-//    std::cerr << "filling this->field done\n";
-//    for (int i = 0; i < field.getHeight(); ++i) {
-//        for (int j = 0; j < field.getWidth(); ++j) {
-//            this->field.setElem(CellPoint(j, i), field.getElem(CellPoint(j, i)));
-//        }
-//    }
-//    this->start = start;
-//    this->finish = finish;
-//    if (isCorrectStartFinish(start, finish)) {
-//        chosenStartFinish = true;
-//    }
-//}
+
+Field::Field(int height, int width, CellPoint start, CellPoint finish, Grid grid) {
+    if (grid.grid != nullptr)
+        this->field = grid;
+    else
+        this->field = Grid(height, width);
+    this->start = start;
+    this->finish = finish;
+    if (isCorrectStartFinish(start, finish)) {
+        chosenStartFinish = true;
+    }
+}
 
 bool Field::isValidIndexes(int x, int y) const {
     return 0 <= x && x < field.getWidth() && 0 <= y && y < field.getHeight();
@@ -48,7 +44,7 @@ void Field::generateStartFinishWay() {
     chosenStartFinish = true;
     field.setElem(start,
                   Cell(CellObject(TypeCell::START, TypeObject::NOTHING)));
-    generateWay(this->start, this->finish);
+    generateWayWithoutWalls(this->start, this->finish);
     field.setElem(finish,
                   Cell(CellObject(TypeCell::FINISH, TypeObject::NOTHING)));
     wayGenerated = true;
@@ -72,7 +68,7 @@ CellPoint Field::generateBorderPoint() {
     return {0, 0};
 }
 
-void Field::generateWay(const CellPoint start, const CellPoint finish) {
+void Field::generateWayWithoutWalls(CellPoint start, CellPoint finish) {
     auto calcDist = [](int stx, int sty, int finx, int finy) {
         return abs(stx - finx) + abs(sty - finy);
     }; // функция подсчёта расстояния между точками
@@ -152,15 +148,6 @@ void Field::printField() {
     std::cout << '\n';
 }
 
-Field::Field(int height, int width, CellPoint start, CellPoint finish) {
-    this->field.init(height, width);
-    this->start = start;
-    this->finish = finish;
-    if (isCorrectStartFinish(start, finish)) {
-        chosenStartFinish = true;
-    }
-}
-
 void Field::generateFullField(int countWalls) {
     this->generateStartFinishWay();
     this->generateWalls(countWalls);
@@ -179,26 +166,19 @@ FieldIterator Field::getFieldIterator() {
 }
 
 Field::Field(const Field &field) {
-//    this->field.init(field.getHeight(), field.getWidth());
     this->field = field.field;
-    start = field.start;
-    finish = field.finish;
-    wayGenerated = field.wayGenerated;
-    wallsGenerated = field.wallsGenerated;
-    chosenStartFinish = field.chosenStartFinish;
-    countWalls = field.countWalls;
+    this->start = field.start;
+    this->finish = field.finish;
+    this->wayGenerated = field.wayGenerated;
+    this->wallsGenerated = field.wallsGenerated;
+    this->chosenStartFinish = field.chosenStartFinish;
+    this->countWalls = field.countWalls;
 
 }
 
 Field &Field::operator=(const Field &field) {
     if (&field == this)
         return *this;
-    for (int i = 0; i < this->getHeight(); ++i) {
-        delete[] this->field.grid[i];
-    }
-    delete[] this->field.grid;
-
-    this->field.init(field.getHeight(), field.getWidth());
     this->field = field.field;
     start = field.start;
     finish = field.finish;
@@ -224,4 +204,61 @@ Field::Field(Field &&field) {
     field.wayGenerated = false;
     field.wallsGenerated = false;
     field.countWalls = 0;
+}
+
+Field &Field::operator=(Field &&field) {
+    if (&field == this)
+        return *this;
+    this->field = std::move(field.field);
+    this->start = field.start;
+    this->finish = field.finish;
+    this->chosenStartFinish = field.chosenStartFinish;
+    this->wayGenerated = field.wayGenerated;
+    this->wallsGenerated = field.wallsGenerated;
+    this->countWalls = field.countWalls;
+    field.start = CellPoint();
+    field.finish = CellPoint();
+    field.chosenStartFinish = false;
+    field.wayGenerated = false;
+    field.wallsGenerated = false;
+    field.countWalls = 0;
+    return *this;
+}
+
+void Field::cleanStartFinishWay() {
+    auto calcDist = [](int stx, int sty, int finx, int finy) {
+        return abs(stx - finx) + abs(sty - finy);
+    }; // функция подсчёта расстояния между точками
+
+    auto rightWay = [this, &calcDist](int stx, int sty, int curDist) {
+        return 0 <= stx && stx < field.getWidth() && 0 <= sty &&
+               sty < field.getHeight() && calcDist(stx, sty, finish.getX(), finish.getY()) < curDist;
+    }; // функция для контроля приближения к финишной точке
+
+    field.setElem(start,
+                  Cell(CellObject(TypeCell::START, TypeObject::NOTHING)));
+
+    int deltaX = -(start.getX() - finish.getX()) /
+                 std::max(1, abs(start.getX() - finish.getX()));
+    int deltaY = -(start.getY() - finish.getY()) /
+                 std::max(1, abs(start.getY() - finish.getY()));
+    int stx = start.getX(), sty = start.getY(), finx = finish.getX(), finy = finish.getY();
+    while (stx != finx || sty != finy) {
+        if (isValidIndexes(stx + deltaX, sty) && (
+                field.getElem(CellPoint(stx + deltaX, sty)).getValue().getTypeCell() == TypeCell::WAY ||
+                field.getElem(CellPoint(stx + deltaX, sty)).getValue().getTypeCell() == TypeCell::FINISH)
+                ) {
+            stx += deltaX;
+            field.setElem(CellPoint(stx, sty), Cell(CellObject(TypeCell::EMPTY, TypeObject::NOTHING)));
+        } else if (isValidIndexes(stx, sty + deltaY) && (
+                field.getElem(CellPoint(stx, sty + deltaY)).getValue().getTypeCell() == TypeCell::WAY ||
+                field.getElem(CellPoint(stx, sty + deltaY)).getValue().getTypeCell() == TypeCell::FINISH)
+                ) {
+            sty += deltaY;
+            field.setElem(CellPoint(stx, sty), Cell(CellObject(TypeCell::EMPTY, TypeObject::NOTHING)));
+        }
+    }
+    wayGenerated = false;
+    field.setElem(finish,
+                  Cell(CellObject(TypeCell::FINISH, TypeObject::NOTHING)));
 }
