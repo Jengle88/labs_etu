@@ -8,4 +8,6 @@ public:
 	bool isIndexedCurr() const;
 	int getX() const;
 	int getY() const;
+
+    bool operator==(CellPoint point) const;
 };

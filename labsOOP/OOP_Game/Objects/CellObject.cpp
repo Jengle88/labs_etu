@@ -16,19 +16,41 @@ void CellObject::setTypeObject(TypeObject typeObject) {
 	this->typeObject = typeObject;
 }
 
-char CellObject::getTypeCellAsChar() const {
+char CellObject::getCellAsChar() const {
+    char typeCell = '?';
     switch (this->getTypeCell()) {
         case TypeCell::WAY:
-            return '#';
+            typeCell = '#';
+            break;
         case TypeCell::WALL:
-            return '+';
+            typeCell = '+';
+            break;
         case TypeCell::START:
-            return 'S';
+            typeCell = 'S';
+            break;
         case TypeCell::FINISH:
-            return 'F';
+            typeCell = 'F';
+            break;
         case TypeCell::EMPTY:
-            return ' ';
+            typeCell = ' ';
+            break;
     }
-    return '?';
+    char typeObject = '?';
+    switch (this->getTypeObject()) {
+        case TypeObject::HERO:
+            typeObject = 'H';
+            break;
+        case TypeObject::ENEMY:
+            typeObject = 'E';
+            break;
+        case TypeObject::THING :
+            typeObject = 'T';
+            break;
+    }
+    if (typeObject != '?')
+        return typeObject;
+    else
+        return typeCell;
+
 }
 

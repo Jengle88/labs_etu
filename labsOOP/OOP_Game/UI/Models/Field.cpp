@@ -1,7 +1,4 @@
-#include <cstdlib>
-#include <ctime>
-#include <algorithm>
-#include <iostream>
+
 #include "Field.h"
 
 Field::Field() {
@@ -32,11 +29,12 @@ bool Field::isCorrectStartFinish(CellPoint start, CellPoint finish) const {
 
 bool Field::isCorrectDistStartFinish(CellPoint start, CellPoint finish) const {
     return abs(start.getX() - finish.getX()) +
-           abs(start.getY() - finish.getY()) >= DIST_START_FINISH;
+           abs(start.getY() - finish.getY()) >= distStartFinish;
 }
 
 void Field::generateStartFinishWay() {
     srand(time(0));
+    distStartFinish = std::max((field.getWidth() + field.getHeight()) / 2, 2);
     while (!isCorrectDistStartFinish(this->start, this->finish)) {
         this->start = generateBorderPoint(); // нельзя выносить за while, тк возможна генерация в середине сетки,
         this->finish = generateBorderPoint(); // что сократит макс кол-во длины на половину
@@ -170,7 +168,7 @@ void Field::printField() {
     for (int i = 0; i < field.getHeight(); ++i) {
         std::cout << '|';
         for (int j = 0; j < field.getWidth(); ++j) {
-            std::cout << field.getElem(CellPoint(j, i)).getValue().getTypeCellAsChar();
+            std::cout << field.getElem(CellPoint(j, i)).getValue().getCellAsChar();
         }
         std::cout << '|';
         std::cout << '\n';
@@ -268,4 +266,29 @@ bool Field::getStatusWalls() const {
 
 bool Field::getStatusStartFinish() const {
     return chosenStartFinish;
+}
+
+Cell Field::getElem(CellPoint point) const {
+    return field.getElem(point);
+}
+
+void Field::setElem(CellPoint point, CellObject object) {
+    field.setElem(point, object);
+}
+
+void Field::setHeroOnStart() {
+    field.setElem(start, Cell(CellObject(TypeCell::START, TypeObject::HERO)));
+    heroPos = start;
+}
+
+CellPoint Field::getHeroPos() {
+    return heroPos;
+}
+
+void Field::moveHero(CellPoint to) {
+    if (getElem(to).getValue().getTypeCell() != TypeCell::WALL) {
+        setElem(heroPos, CellObject(getElem(heroPos).getValue().getTypeCell(), TypeObject::NOTHING));
+        setElem(to, CellObject(getElem(to).getValue().getTypeCell(), TypeObject::HERO));
+        heroPos = to;
+    }
 }

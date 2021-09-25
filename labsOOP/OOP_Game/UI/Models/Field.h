@@ -1,17 +1,23 @@
 #pragma once
 #include "../../Tools/Grid.h"
 #include "../../Tools/FieldIterator.h"
+#include <cstdlib>
+#include <ctime>
+#include <algorithm>
+#include <iostream>
 #define PERCENT_WALLS 45
-#define DIST_START_FINISH 15
+//#define DIST_START_FINISH 2
 
 class Field {
 	Grid field;
 	CellPoint start;
 	CellPoint finish;
+    CellPoint heroPos;
 	bool wayGenerated = false;
     bool wallsGenerated = false;
     bool chosenStartFinish = false;
     int countWalls = 0;
+    int distStartFinish = 0;
 
     bool isCorrectStartFinish(CellPoint start, CellPoint finish) const;
 	bool isCorrectDistStartFinish(CellPoint start, CellPoint finish) const;
@@ -31,16 +37,22 @@ public:
 
     void generateFullField(int countWalls);
     void cleanStartFinishWay();
+    void moveHero(CellPoint to);
 
-    void printField();
+    void printField(); // нужно для DEMO
 
+    Cell getElem(CellPoint point) const;
+    void setElem(CellPoint point, CellObject object);
     int getHeight() const;
     int getWidth() const;
     bool getStatusWay() const;
     bool getStatusWalls() const;
     bool getStatusStartFinish() const;
     FieldIterator getFieldIterator();
+    CellPoint getHeroPos();
+    void setHeroOnStart();
 
+    friend class FieldScreen;
 };
 
 

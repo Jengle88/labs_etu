@@ -1,13 +1,21 @@
 #include <iostream>
 #include "UI/Models/Field.h"
+#include "UI/FieldScreen.h"
 
-#define FEATURES
-//#define GAME
+
+//#define FEATURES
+#define GAME // Запускать через терминал
 //#define DEMO
+
+
 
 int main() {
 #ifdef GAME
-    // вывод экрана
+    std::setlocale(LC_ALL, "");
+    FieldScreen mainScreen;
+    mainScreen.showStartFieldScreen();
+    mainScreen.gameStatusObserver();
+    system("clear");
 #endif
 #ifdef DEMO
     int h = 30;
@@ -68,13 +76,15 @@ int main() {
 
 #endif
 #ifdef FEATURES
-    std::setlocale(LC_ALL, "");
-    int h = 30;
-    int w = 30;
-    int countWalls = 400;
-    Field field = Field(h, w);
-    field.generateFullField(countWalls);
-    field.cleanStartFinishWay();
+
+
+
+    //    int h = 30;
+    //    int w = 30;
+    //    int countWalls = 400;
+    //    Field field = Field(h, w);
+    //    field.generateFullField(countWalls);
+    //    field.cleanStartFinishWay();
 #endif
     return 0;
 }

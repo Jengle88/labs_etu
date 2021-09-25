@@ -1,6 +1,8 @@
 #pragma once
 #include "../UI/Models/Cell.h"
 #include <exception>
+#include <algorithm>
+#include <iostream>
 
 #define UP_LIMIT_HEIGHT (int)1e4
 #define DOWN_LIMIT_HEIGHT (int)2
