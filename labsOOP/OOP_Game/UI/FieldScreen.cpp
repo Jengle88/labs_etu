@@ -5,11 +5,6 @@ FieldScreen::FieldScreen() {
     field = nullptr;
 }
 
-void FieldScreen::showStartFieldScreen() {
-    showStartingParams();
-    std::system("clear");
-}
-
 void FieldScreen::showStartingParams() {
     std::cout << "Введите значения параметров:\n";
     bool acceptedParams = false;
@@ -19,7 +14,7 @@ void FieldScreen::showStartingParams() {
             int width,
             const char title[],
             bool (*compare_bad)(int, int, int)
-            ) {
+    ) {
         while (val < 0) {
             try {
                 std::cout << title;
@@ -100,21 +95,6 @@ void FieldScreen::showUpdatedScreen() const {
     std::cout << '\n';
 }
 
-void FieldScreen::gameStatusObserver() {
-    char action = getchar(); // считываем перенос строки
-    std::cout << "Для выхода введите ` и нажмите enter.\n";
-    showUpdatedScreen();
-    while (action != '`') {
-        bool goodMovement = registerMovement(action);
-        if (goodMovement) {
-            std::system("clear");
-            std::cout << "Для выхода введите ` и нажмите enter.\n";
-            showUpdatedScreen();
-        }
-    }
-    std::system("clear");
-}
-
 bool FieldScreen::registerMovement(char &action) {
     action = getchar();
     std::cin.clear();
@@ -147,6 +127,26 @@ void FieldScreen::requestMoveObject(CellPoint from, CellPoint to) {
     if (field->getHeroPos() == from) {
         field->moveHero(to);
     }
+}
+
+void FieldScreen::showStartFieldScreen() {
+    showStartingParams();
+    std::system("clear");
+}
+
+void FieldScreen::gameStatusObserver() {
+    char action = getchar(); // считываем перенос строки
+    std::cout << "Для выхода введите ` и нажмите enter.\n";
+    showUpdatedScreen();
+    while (action != '`') {
+        bool goodMovement = registerMovement(action);
+        if (goodMovement) {
+            std::system("clear");
+            std::cout << "Для выхода введите ` и нажмите enter.\n";
+            showUpdatedScreen();
+        }
+    }
+    std::system("clear");
 }
 
 
