@@ -1,12 +1,11 @@
-#include <utility>
 #include "../../Objects/CellObject.h"
 #include "../../Tools/CellPoint.h"
 
-class Cell { // TODO заменить на интерфейс
+class Cell {
 	CellObject value;
 public:
 	Cell() = default;
-	Cell(CellObject value): value(value){}
+	explicit Cell(CellObject value): value(value) {}
 
 	CellObject getValue() const;
 	void setValue(CellObject val);

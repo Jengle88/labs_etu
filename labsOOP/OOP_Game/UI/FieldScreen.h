@@ -1,15 +1,22 @@
 #pragma once
 #include "Models/Field.h"
-#include <termios.h>
-#include <unistd.h>
+
+enum MoveSide{
+    UP = 'w',
+    LEFT = 'a',
+    RIGHT = 'd',
+    DOWN = 's',
+    EXIT = '`'
+};
+
 class FieldScreen {
     Field *field;
     void showStartingParams();
     void showUpdatedScreen() const;
 
-    void registerMovement(char &action, int (*getch)());
+    bool registerMovement(char &action);
     void requestMoveObject(CellPoint from, CellPoint to);
-    void requestGenerateObject(const CellPoint pos, const CellObject newObject);
+    void requestGenerateObject(const CellPoint pos, const CellObject newObject); // на будущее
 public:
     FieldScreen();
     void showStartFieldScreen();

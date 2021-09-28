@@ -3,7 +3,7 @@ class CellPoint {
 	int x;
 	int y;
 public:
-	CellPoint() = default;
+	CellPoint(): x(0), y(0) {}
 	CellPoint(int x, int y): x(x), y(y) {}
 	bool isIndexedCurr() const;
 	int getX() const;

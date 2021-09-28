@@ -1,24 +1,28 @@
 #pragma once
 #include "../UI/Models/Cell.h"
-#include <exception>
 #include <algorithm>
 #include <iostream>
 
-#define UP_LIMIT_HEIGHT (int)1e4
+#define UP_LIMIT_HEIGHT (int)1e3
 #define DOWN_LIMIT_HEIGHT (int)2
-#define UP_LIMIT_WIDTH (int)1e4
+#define UP_LIMIT_WIDTH (int)1e3
 #define DOWN_LIMIT_WIDTH (int)2
 
 class Grid {
 	int height;
 	int width;
 	Cell** grid;
-	bool isValidIndexes(int x, int y) const;
     bool isValidXPos(int x) const;
     bool isValidYPos(int y) const;
-	bool isValidHeight(int height) const;
-	bool isValidWidth(int width) const;
+    bool isValidIndexes(int x, int y) const;
+    static bool isValidHeight(int height);
+	static bool isValidWidth(int width);
 	bool isValidSizes(int height, int width) const;
+
+    friend class FieldScreen; // для доступа к функциям проверки высоты и ширины
+    friend class Field; // т.к Field работает с Grid
+    friend class FieldIterator; // т.к FieldIterator работает с Grid
+
 public:
 	Grid();
 	Grid(int height, int width, Cell **grid = nullptr);
@@ -26,6 +30,7 @@ public:
     Grid& operator=(const Grid& grid);
     Grid(Grid&& grid);
     Grid& operator=(Grid&& grid);
+
     ~Grid();
 
 	int getHeight() const;
@@ -33,9 +38,5 @@ public:
 	void setElem(CellPoint point, Cell cell);
 	Cell getElem(CellPoint point) const;
 	void clear();
-	void resizeGrid(int height, int width, Cell **newGrid = nullptr);
-
-    friend class Field;
-    friend class FieldIterator;
-
+	void resizeCleanGrid(int height, int width, Cell **newGrid = nullptr);
 };

@@ -13,15 +13,21 @@ void FieldScreen::showStartFieldScreen() {
 void FieldScreen::showStartingParams() {
     std::cout << "Введите значения параметров:\n";
     bool acceptedParams = false;
-    auto enterSizeValue = [](int &val, int height, int width, char title[], bool (*compare_bad)(int, int, int)) {
+    auto enterSizeValue = [](
+            int &val,
+            int height,
+            int width,
+            const char title[],
+            bool (*compare_bad)(int, int, int)
+            ) {
         while (val < 0) {
             try {
                 std::cout << title;
                 std::cin >> val;
                 if (std::cin.fail())
-                    throw 0;
+                    throw -1;
             } catch (int) {
-                std::cin.clear();
+                std::cin.clear(); // убирает флаг fail с cin
                 std::cin.ignore(32767, '\n');
                 std::cout << "Введённое значение неверно.\n";
                 val = -1;
@@ -39,22 +45,24 @@ void FieldScreen::showStartingParams() {
 
     while (!acceptedParams) {
         height = width = countWalls = -1;
-        enterSizeValue(height, height, width, "Высота поля (мин = 2, макс = 1000): ",
-                       [](int val, int, int) { return val < 2; });
-        enterSizeValue(width, height, width, "Ширина поля (мин = 2, макс = 1000): ",
-                       [](int val, int, int) { return val < 2; });
+        enterSizeValue(height, height, width, ("Высота поля (мин = " + std::to_string(DOWN_LIMIT_HEIGHT) + ", макс = " + std::to_string(UP_LIMIT_HEIGHT) + "): ").c_str(),
+                       [](int val, int, int) { return !Grid::isValidHeight(val); });
+        enterSizeValue(width, height, width, ("Ширина поля (мин = " + std::to_string(DOWN_LIMIT_WIDTH) + ", макс = " + std::to_string(UP_LIMIT_WIDTH) +"): ").c_str(),
+                       [](int val, int, int) { return !Grid::isValidWidth(val); });
         enterSizeValue(countWalls, height, width,
-                       "Количество непроходимых клеток (мин = 2, макс = 1000, макс процент покрытия - 45% от площади поля): ",
+                       ("Количество непроходимых клеток (макс процент покрытия - " + std::to_string(PERCENT_WALLS) + "% от площади поля): ").c_str(),
                        [](int val, int height, int width) {
                            return (double) val / (width * height) * 100 > PERCENT_WALLS;
                        });
         std::cout << "Значения приняты. Сгенерировать поле? (y - сгенерировать / n - изменить параметры) ";
-        char acceptSymbol = getchar(); // считываем лишний символ
+        char acceptSymbol = getchar(); // считываем лишний символ после ввода числа непроходимых клеток
         while (true) {
             acceptSymbol = getchar();
             if (acceptSymbol != 'y' && acceptSymbol != 'n') {
                 std::cout
                         << "Неверное значение, попробуйте снова. Сгенерировать поле? (y - сгенерировать/n - изменить параметры) ";
+                std::cin.clear();
+                std::cin.ignore(32767, '\n');
             } else break;
         }
         if (acceptSymbol == 'y')
@@ -62,8 +70,13 @@ void FieldScreen::showStartingParams() {
     }
 
     field = new Field(height, width);
-    field->generateFullField(countWalls);
-    field->setHeroOnStart();
+    if(field->generateFullField(countWalls))
+        field->setHeroOnStart();
+    else {
+        std::cout << "Не удалось сгенерировать поле!\n";
+        throw -1;
+    }
+
 }
 
 void FieldScreen::showUpdatedScreen() const {
@@ -71,11 +84,11 @@ void FieldScreen::showUpdatedScreen() const {
         std::cout << '_';
     }
     std::cout << '\n';
+    auto fieldIterator = field->getFieldIterator();
     for (int i = 0; i < field->getHeight(); ++i) {
         std::cout << '|';
         for (int j = 0; j < field->getWidth(); ++j) {
-            char c = field->getElem(CellPoint(j, i)).getValue().getCellAsChar();
-
+            char c = (fieldIterator++).getElem().getValue().getCellAsChar();
             std::cout << (c == '#' ? ' ' : c);
         }
         std::cout << '|';
@@ -88,44 +101,44 @@ void FieldScreen::showUpdatedScreen() const {
 }
 
 void FieldScreen::gameStatusObserver() {
-    auto getch = []()
-    {
-        struct termios oldattr, newattr;
-        int ch;
-        tcgetattr( STDIN_FILENO, &oldattr );
-        newattr = oldattr;
-        newattr.c_lflag &= ~( ICANON | ECHO );
-        tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
-        ch = getchar();
-        tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
-        return ch;
-    };
-
-    char action = '$';
+    char action = getchar(); // считываем перенос строки
+    std::cout << "Для выхода введите ` и нажмите enter.\n";
+    showUpdatedScreen();
     while (action != '`') {
-        registerMovement(action, getch);
-        std::system("clear");
-        showUpdatedScreen();
+        bool goodMovement = registerMovement(action);
+        if (goodMovement) {
+            std::system("clear");
+            std::cout << "Для выхода введите ` и нажмите enter.\n";
+            showUpdatedScreen();
+        }
     }
+    std::system("clear");
 }
 
-void FieldScreen::registerMovement(char &action, int (*getch)()) {
-    action = getch();
+bool FieldScreen::registerMovement(char &action) {
+    action = getchar();
+    std::cin.clear();
+    std::cin.ignore(32767, '\n');
     CellPoint heroPos = field->getHeroPos();
     switch (tolower(action)) {
-        case 'w':
+        case MoveSide::UP:
             requestMoveObject(heroPos, CellPoint(heroPos.getX(), heroPos.getY() - 1));
-            break;
-        case 's':
+            return true;
+        case MoveSide::DOWN:
             requestMoveObject(heroPos, CellPoint(heroPos.getX(), heroPos.getY() + 1));
-            break;
-        case 'a':
+            return true;
+        case MoveSide::LEFT:
             requestMoveObject(heroPos, CellPoint(heroPos.getX() - 1, heroPos.getY()));
-            break;
-        case 'd':
+            return true;
+        case MoveSide::RIGHT:
             requestMoveObject(heroPos, CellPoint(heroPos.getX() + 1, heroPos.getY()));
-            break;
+            return true;
+        case MoveSide::EXIT:
+            return false;
+        default:
+            std::cout << "Команда не распознана.\n";
     }
+    return false;
 }
 
 void FieldScreen::requestMoveObject(CellPoint from, CellPoint to) {
@@ -133,9 +146,6 @@ void FieldScreen::requestMoveObject(CellPoint from, CellPoint to) {
         return;
     if (field->getHeroPos() == from) {
         field->moveHero(to);
-//        field->setElem(from, CellObject(field->getElem(from).getValue().getTypeCell(), TypeObject::NOTHING));
-//        field->setElem(to, CellObject(field->getElem(to).getValue().getTypeCell(), TypeObject::HERO));
-//        field->heroPos = to;
     }
 }
 

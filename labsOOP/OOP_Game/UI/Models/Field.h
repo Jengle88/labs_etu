@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <iostream>
 #define PERCENT_WALLS 45
-//#define DIST_START_FINISH 2
 
 class Field {
 	Grid field;
@@ -17,7 +16,7 @@ class Field {
     bool wallsGenerated = false;
     bool chosenStartFinish = false;
     int countWalls = 0;
-    int distStartFinish = 0;
+    int distStartFinish = 2;
 
     bool isCorrectStartFinish(CellPoint start, CellPoint finish) const;
 	bool isCorrectDistStartFinish(CellPoint start, CellPoint finish) const;
@@ -35,7 +34,7 @@ public:
     Field(Field && field);
     Field& operator=(Field&& field);
 
-    void generateFullField(int countWalls);
+    bool generateFullField(int countWalls);
     void cleanStartFinishWay();
     void moveHero(CellPoint to);
 

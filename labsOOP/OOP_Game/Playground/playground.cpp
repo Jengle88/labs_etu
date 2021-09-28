@@ -82,25 +82,25 @@ void func() {
     std::cout << "func exit\n";
 }
 
-//int main() { //проверено
-////	int n;
-////	int m;
-////	int stx, sty, finx, finy;
-////	cin >> n >> m;
-////	cin >> stx >> sty >> finx >> finy;
-////	Solve(n, m, stx, sty, finx, finy).solve();
-////    func();
-//    int size = 10;
-//    int *arr = new int[size];
-//    int *arr2 = new int[size];
-//    for (int i = 0; i < size; ++i) {
-//        arr[i] = i * 2;
-//    }
-//    *arr2 = *arr;
-//    *(arr2 + 1) = *(arr + 1);
-//    *(arr2 + 2) = *(arr + 2);
-//    for (int i = 0; i < size; ++i) {
-//        std::cout << arr2[i] << ' ';
-//    }
-//	return 0;
-//}
+int main() { //проверено
+//	int n;
+//	int m;
+//	int stx, sty, finx, finy;
+//	cin >> n >> m;
+//	cin >> stx >> sty >> finx >> finy;
+//	Solve(n, m, stx, sty, finx, finy).solve();
+//    func();
+    int size = 10;
+    int *arr = new int[size];
+    int *arr2 = new int[size];
+    for (int i = 0; i < size; ++i) {
+        arr[i] = i * 2;
+    }
+    *arr2 = *arr;
+    *(arr2 + 1) = *(arr + 1);
+    *(arr2 + 2) = *(arr + 2);
+    for (int i = 0; i < size; ++i) {
+        std::cout << arr2[i] << ' ';
+    }
+	return 0;
+}

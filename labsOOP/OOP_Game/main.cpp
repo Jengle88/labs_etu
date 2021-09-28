@@ -3,9 +3,9 @@
 #include "UI/FieldScreen.h"
 
 
-//#define FEATURES
 #define GAME // Запускать через терминал
 //#define DEMO
+//#define FEATURES
 
 
 
@@ -17,6 +17,7 @@ int main() {
     mainScreen.gameStatusObserver();
     system("clear");
 #endif
+
 #ifdef DEMO
     int h = 30;
     int w = 30;
@@ -32,7 +33,7 @@ int main() {
     std::cout << "Print with iterator:\n";
     for (int i = 0; i < field1.getHeight(); ++i) {
         for (int j = 0; j < field1.getWidth(); ++j) {
-            std::cout << iter.getElem().getValue().getTypeCellAsChar();
+            std::cout << iter.getElem().getValue().getCellAsChar();
             iter++;
         }
         std::cout << '\n';
@@ -70,21 +71,18 @@ int main() {
     }
     std::cout << "Print moved field1:\n";
     moveField.printField();
-    std::cout << "Cleaned way-symbols\n"
+    std::cout << "Cleaned way-symbols\n";
     moveField.cleanStartFinishWay();
     moveField.printField();
-
 #endif
+
 #ifdef FEATURES
-
-
-
-    //    int h = 30;
-    //    int w = 30;
-    //    int countWalls = 400;
-    //    Field field = Field(h, w);
-    //    field.generateFullField(countWalls);
-    //    field.cleanStartFinishWay();
+        int h = 30;
+        int w = 30;
+        int countWalls = 400;
+        Field field = Field(h, w);
+        field.generateFullField(countWalls);
+        field.cleanStartFinishWay();
 #endif
     return 0;
 }
