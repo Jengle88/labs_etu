@@ -7,4 +7,3 @@ CellObject Cell::getValue() const {
 void Cell::setValue(CellObject value) {
 	this->value = value;
 }
-

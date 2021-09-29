@@ -35,7 +35,6 @@ char CellObject::getCellAsChar() const {
         return typeObject;
     else
         return typeCell;
-
 }
 
 int CellObject::getTypeCell() const {

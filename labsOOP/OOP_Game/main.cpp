@@ -77,12 +77,12 @@ int main() {
 #endif
 
 #ifdef FEATURES
-        int h = 30;
-        int w = 30;
-        int countWalls = 400;
-        Field field = Field(h, w);
-        field.generateFullField(countWalls);
-        field.cleanStartFinishWay();
+    int h = 30;
+    int w = 30;
+    int countWalls = 400;
+    Field field = Field(h, w);
+    field.generateFullField(countWalls);
+    field.cleanStartFinishWay();
 #endif
     return 0;
 }

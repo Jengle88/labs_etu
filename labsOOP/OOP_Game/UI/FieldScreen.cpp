@@ -37,7 +37,6 @@ void FieldScreen::showStartingParams() {
         }
     };
     int height, width, countWalls;
-
     while (!acceptedParams) {
         height = width = countWalls = -1;
         enterSizeValue(height, height, width, ("Высота поля (мин = " + std::to_string(DOWN_LIMIT_HEIGHT) + ", макс = " + std::to_string(UP_LIMIT_HEIGHT) + "): ").c_str(),
@@ -63,7 +62,6 @@ void FieldScreen::showStartingParams() {
         if (acceptSymbol == 'y')
             acceptedParams = true;
     }
-
     field = new Field(height, width);
     if(field->generateFullField(countWalls))
         field->setHeroOnStart();
@@ -71,7 +69,6 @@ void FieldScreen::showStartingParams() {
         std::cout << "Не удалось сгенерировать поле!\n";
         throw -1;
     }
-
 }
 
 void FieldScreen::showUpdatedScreen() const {
@@ -148,5 +145,3 @@ void FieldScreen::gameStatusObserver() {
     }
     std::system("clear");
 }
-
-

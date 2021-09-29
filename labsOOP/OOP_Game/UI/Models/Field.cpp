@@ -1,4 +1,3 @@
-
 #include "Field.h"
 
 Field::Field() {}
@@ -24,7 +23,6 @@ Field::Field(const Field &field) {
     this->wallsGenerated = field.wallsGenerated;
     this->chosenStartFinish = field.chosenStartFinish;
     this->countWalls = field.countWalls;
-
 }
 
 Field &Field::operator=(const Field &field) {
@@ -37,7 +35,6 @@ Field &Field::operator=(const Field &field) {
     wallsGenerated = field.wallsGenerated;
     chosenStartFinish = field.chosenStartFinish;
     countWalls = field.countWalls;
-
     return *this;
 }
 
@@ -88,7 +85,7 @@ bool Field::isCorrectDistStartFinish(CellPoint start, CellPoint finish) const {
 }
 
 
-CellPoint Field::generateBorderPoint() {
+CellPoint Field::generateBorderPoint() const {
     switch (rand() % 4) {
         case 0:
             return {0,
@@ -132,7 +129,6 @@ void Field::generateWayWithoutWalls(CellPoint start, CellPoint finish) {
                sty < field.getHeight() && calcDist(stx, sty, finish.getX(), finish.getY()) < curDist;
     }; // функция для контроля приближения к финишной точке
 
-
     int dist = calcDist(start.getX(), start.getY(), finish.getX(), finish.getY());
     srand(time(0));
     int deltaX = -(start.getX() - finish.getX()) /
@@ -157,6 +153,7 @@ void Field::generateWayWithoutWalls(CellPoint start, CellPoint finish) {
                     field.setElem(CellPoint(stx, sty), Cell(
                             CellObject(TypeCell::WAY, TypeObject::NOTHING)));
                 }
+                break;
         }
     }
 }
@@ -164,12 +161,10 @@ void Field::generateWayWithoutWalls(CellPoint start, CellPoint finish) {
 void Field::generateWalls(int countWalls) {
     if (!wayGenerated)
         throw -1; // путь не сгенерирован
-
     if ((double) countWalls / (field.getWidth() * field.getHeight()) * 100 > PERCENT_WALLS) {
         countWalls = double(PERCENT_WALLS) / 100 * (field.getWidth() * field.getHeight());
         std::cerr << "Слишком много стен. Количество уменьшено до " << countWalls << '\n';
     }
-
     int cntSetWalls = 0;
     srand(time(0));
     while (cntSetWalls < countWalls) {
@@ -277,7 +272,7 @@ FieldIterator Field::getFieldIterator() {
     return FieldIterator(&(this->field));
 }
 
-CellPoint Field::getHeroPos() {
+CellPoint Field::getHeroPos() const{
     return heroPos;
 }
 

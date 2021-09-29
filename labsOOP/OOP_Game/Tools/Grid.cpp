@@ -32,12 +32,10 @@ Grid::Grid(const Grid &grid) {
 Grid &Grid::operator=(const Grid &grid) {
     if (&grid == this)
         return *this;
-
     for (int i = 0; i < this->height; ++i) {
         delete[] this->grid[i];
     }
     delete[] this->grid;
-
     this->grid = new Cell*[grid.height];
     for (int i = 0; i < grid.height; ++i) {
         this->grid[i] = new Cell[grid.width];
@@ -59,12 +57,10 @@ Grid::Grid(Grid &&grid): grid(grid.grid), height(grid.height), width(grid.width)
 Grid& Grid::operator=(Grid &&grid) {
     if (&grid == this)
         return *this;
-
     for (int i = 0; i < this->height; ++i) {
         delete[] this->grid[i];
     }
     delete[] this->grid;
-
     this->grid = grid.grid;
     this->height = grid.height;
     this->width = grid.width;
@@ -157,7 +153,3 @@ void Grid::resizeCleanGrid(int height, int width, Cell **newGrid) {
     this->height = height;
     this->width = width;
 }
-
-
-
-

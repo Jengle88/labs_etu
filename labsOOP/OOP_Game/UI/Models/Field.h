@@ -20,7 +20,7 @@ class Field {
 
     bool isCorrectStartFinish(CellPoint start, CellPoint finish) const;
 	bool isCorrectDistStartFinish(CellPoint start, CellPoint finish) const;
-    CellPoint generateBorderPoint();
+    CellPoint generateBorderPoint() const;
     void generateStartFinishWay();
     void generateWayWithoutWalls(CellPoint start, CellPoint finish);
     void generateWalls(int countWalls);
@@ -47,10 +47,10 @@ public:
     bool getStatusWalls() const;
     bool getStatusStartFinish() const;
     FieldIterator getFieldIterator();
-    CellPoint getHeroPos();
+    CellPoint getHeroPos() const;
     void setHeroOnStart();
 
-    friend class FieldScreen;
+    friend class FieldScreen; // т.к FieldScreen использует проверку данных
 };
 
 

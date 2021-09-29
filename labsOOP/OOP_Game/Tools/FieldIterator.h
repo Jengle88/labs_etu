@@ -3,7 +3,7 @@
 
 class FieldIterator {
     Grid * rootGrid;
-    int posX;
+    int posX; // лучше так, чем переприсваивание в CellPoint
     int posY;
     explicit FieldIterator(Grid * pGrid) : rootGrid(pGrid), posX(0), posY(0) {};
     friend class Field; // т.к. Field должен возвращать итератор

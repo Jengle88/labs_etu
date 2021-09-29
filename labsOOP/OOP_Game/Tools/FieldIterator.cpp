@@ -20,7 +20,6 @@ void FieldIterator::moveDelta(int deltaX, int deltaY) {
         posX += deltaX;
         posY += deltaY;
     }
-
 }
 
 void FieldIterator::moveTo(int posX, int posY) {
@@ -28,7 +27,6 @@ void FieldIterator::moveTo(int posX, int posY) {
         this->posX = posX;
         this->posY = posY;
     }
-
 }
 
 FieldIterator& FieldIterator::operator++() {
