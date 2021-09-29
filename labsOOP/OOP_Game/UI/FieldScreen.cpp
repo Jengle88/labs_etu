@@ -5,7 +5,7 @@ FieldScreen::FieldScreen() {
     field = nullptr;
 }
 
-void FieldScreen::showStartingParams() {
+void FieldScreen::showStartingParams() { // паттерн Builder
     std::cout << "Введите значения параметров:\n";
     bool acceptedParams = false;
     auto enterSizeValue = [](
@@ -55,7 +55,6 @@ void FieldScreen::showStartingParams() {
             if (acceptSymbol != 'y' && acceptSymbol != 'n') {
                 std::cout
                         << "Неверное значение, попробуйте снова. Сгенерировать поле? (y - сгенерировать/n - изменить параметры) ";
-                std::cin.clear();
                 std::cin.ignore(32767, '\n');
             } else break;
         }
@@ -94,7 +93,6 @@ void FieldScreen::showUpdatedScreen() const {
 
 bool FieldScreen::registerMovement(char &action) {
     action = getchar();
-    std::cin.clear();
     std::cin.ignore(32767, '\n');
     CellPoint heroPos = field->getHeroPos();
     switch (tolower(action)) {
@@ -135,7 +133,7 @@ void FieldScreen::gameStatusObserver() {
     char action = getchar(); // считываем перенос строки
     std::cout << "Для выхода введите ` и нажмите enter.\n";
     showUpdatedScreen();
-    while (action != '`') {
+    while (action != MoveSide::EXIT) {
         bool goodMovement = registerMovement(action);
         if (goodMovement) {
             std::system("clear");

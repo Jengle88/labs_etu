@@ -3,8 +3,8 @@
 #include "UI/FieldScreen.h"
 
 
-#define GAME // Запускать через терминал
-//#define DEMO
+//#define GAME // Запускать через терминал
+#define DEMO
 //#define FEATURES
 
 
@@ -15,7 +15,6 @@ int main() {
     FieldScreen mainScreen;
     mainScreen.showStartFieldScreen();
     mainScreen.gameStatusObserver();
-    system("clear");
 #endif
 
 #ifdef DEMO

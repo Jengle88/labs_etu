@@ -165,13 +165,13 @@ void Field::generateWalls(int countWalls) {
         countWalls = double(PERCENT_WALLS) / 100 * (field.getWidth() * field.getHeight());
         std::cerr << "Слишком много стен. Количество уменьшено до " << countWalls << '\n';
     }
-    int cntSetWalls = 0;
+    int cntPlacedWalls = 0;
     srand(time(0));
-    while (cntSetWalls < countWalls) {
+    while (cntPlacedWalls < countWalls) {
         CellPoint point = CellPoint(rand() % field.getWidth(), rand() % field.getHeight());
         if (field.getElem(point).getValue().getTypeCell() == TypeCell::EMPTY) {
             field.setElem(point, Cell(CellObject(TypeCell::WALL, TypeObject::NOTHING)));
-            cntSetWalls++;
+            cntPlacedWalls++;
         }
     }
     this->countWalls = countWalls;

@@ -1,7 +1,7 @@
 #pragma once
 #include "Grid.h"
 
-class FieldIterator {
+class FieldIterator { // паттерн Iterator
     Grid * rootGrid;
     int posX; // лучше так, чем переприсваивание в CellPoint
     int posY;
