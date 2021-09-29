@@ -122,7 +122,7 @@ bool FieldScreen::registerMovement(char &action) {
 }
 
 void FieldScreen::requestMoveObject(CellPoint from, CellPoint to) {
-    if (!field->isValidIndexes(to.getX(), to.getY()))
+    if (!field->field.isValidIndexes(to.getX(), to.getY()))
         return;
     if (field->getHeroPos() == from) {
         field->moveHero(to);

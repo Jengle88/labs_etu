@@ -77,8 +77,8 @@ Field &Field::operator=(Field &&field) {
 }
 
 bool Field::isCorrectStartFinish(CellPoint start, CellPoint finish) const {
-    return isValidIndexes(start.getX(), start.getY()) &&
-           isValidIndexes(finish.getX(), finish.getY()) &&
+    return this->field.isValidIndexes(start.getX(), start.getY()) &&
+            this->field.isValidIndexes(finish.getX(), finish.getY()) &&
            isCorrectDistStartFinish(start, finish);
 }
 
@@ -87,9 +87,6 @@ bool Field::isCorrectDistStartFinish(CellPoint start, CellPoint finish) const {
            abs(start.getY() - finish.getY()) >= distStartFinish;
 }
 
-bool Field::isValidIndexes(int x, int y) const {
-    return 0 <= x && x < field.getWidth() && 0 <= y && y < field.getHeight();
-}
 
 CellPoint Field::generateBorderPoint() {
     switch (rand() % 4) {
@@ -202,13 +199,13 @@ void Field::cleanStartFinishWay() { // удаляет путь между start 
                  std::max(1, abs(start.getY() - finish.getY()));
     int stx = start.getX(), sty = start.getY(), finx = finish.getX(), finy = finish.getY();
     while (stx != finx || sty != finy) {
-        if (isValidIndexes(stx + deltaX, sty) && (
+        if (this->field.isValidIndexes(stx + deltaX, sty) && (
                 field.getElem(CellPoint(stx + deltaX, sty)).getValue().getTypeCell() == TypeCell::WAY ||
                 field.getElem(CellPoint(stx + deltaX, sty)).getValue().getTypeCell() == TypeCell::FINISH)
                 ) {
             stx += deltaX;
             field.setElem(CellPoint(stx, sty), Cell(CellObject(TypeCell::EMPTY, TypeObject::NOTHING)));
-        } else if (isValidIndexes(stx, sty + deltaY) && (
+        } else if (this->field.isValidIndexes(stx, sty + deltaY) && (
                 field.getElem(CellPoint(stx, sty + deltaY)).getValue().getTypeCell() == TypeCell::WAY ||
                 field.getElem(CellPoint(stx, sty + deltaY)).getValue().getTypeCell() == TypeCell::FINISH)
                 ) {

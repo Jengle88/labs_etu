@@ -16,7 +16,7 @@ class FieldScreen {
 
     bool registerMovement(char &action);
     void requestMoveObject(CellPoint from, CellPoint to);
-    void requestGenerateObject(const CellPoint pos, const CellObject newObject); // на будущее
+//    void requestGenerateObject(const CellPoint pos, const CellObject newObject); // на будущее
 public:
     FieldScreen();
     void showStartFieldScreen();

@@ -20,7 +20,6 @@ class Field {
 
     bool isCorrectStartFinish(CellPoint start, CellPoint finish) const;
 	bool isCorrectDistStartFinish(CellPoint start, CellPoint finish) const;
-	bool isValidIndexes(int x, int y) const;
     CellPoint generateBorderPoint();
     void generateStartFinishWay();
     void generateWayWithoutWalls(CellPoint start, CellPoint finish);
