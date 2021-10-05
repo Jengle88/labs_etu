@@ -71,6 +71,10 @@ void FieldScreen::showStartingParams() { // паттерн Builder
 }
 
 void FieldScreen::showUpdatedScreen() const {
+    if (!this->field->getStatusStartFinish() || !this->field->getStatusWay()) {
+        throw -1;
+    }
+
     for (int i = 0; i < field->getWidth() + 2; ++i) {
         std::cout << '_';
     }

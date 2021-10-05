@@ -48,11 +48,11 @@ int main() {
     copyTime = clock();
     copyField = field2;
     std::cout << "Full copy operator= time: " << double(clock() - copyTime) / CLOCKS_PER_SEC << '\n';
-    FieldIterator copyIter = copyField.getFieldIterator();
-    for (int i = 0; i < 5; ++i) {
-        copyIter.setElem(Cell(CellObject(TypeCell::START, TypeObject::NOTHING)));
-        copyIter++;
-    }
+//    FieldIterator copyIter = copyField.getFieldIterator();
+//    for (int i = 0; i < 5; ++i) {
+//        copyIter.setElem(Cell(CellObject(TypeCell::START, TypeObject::NOTHING)));
+//        copyIter++;
+//    }
     std::cout << "Print copied field1:\n";
     copyField.printField();
 
@@ -62,17 +62,16 @@ int main() {
     moveTime = clock();
     moveField = std::move(field2);
     std::cout << "Full move operator= time: " << double(clock() - moveTime) / CLOCKS_PER_SEC << '\n';
-    FieldIterator moveIter = moveField.getFieldIterator();
-    moveIter.moveTo(5, 0);
-    for (int i = 0; i < 5; ++i) {
-        moveIter.setElem(Cell(CellObject(TypeCell::FINISH, TypeObject::NOTHING)));
-        moveIter++;
-    }
-    std::cout << "Print moved field1:\n";
     moveField.printField();
+//    FieldIterator moveIter = moveField.getFieldIterator();
+//    moveIter.moveTo(5, 0);
+//    for (int i = 0; i < 5; ++i) {
+//        moveIter.setElem(Cell(CellObject(TypeCell::FINISH, TypeObject::NOTHING)));
+//        moveIter++;
+//    }
+//    std::cout << "Print moved field1:\n";
+//    moveField.printField();
     std::cout << "Cleaned way-symbols\n";
-    moveField.cleanStartFinishWay();
-    moveField.printField();
 #endif
 
 #ifdef FEATURES
@@ -81,7 +80,9 @@ int main() {
     int countWalls = 400;
     Field field = Field(h, w);
     field.generateFullField(countWalls);
-    field.cleanStartFinishWay();
+    Field field1 = field;
+    field1.printField();
+//    field.cleanStartFinishWay();
 #endif
     return 0;
 }

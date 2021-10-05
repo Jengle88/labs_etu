@@ -24,6 +24,7 @@ class Field {
     void generateStartFinishWay();
     void generateWayWithoutWalls(CellPoint start, CellPoint finish);
     void generateWalls(int countWalls);
+    void cleanStartFinishWay();
 
 public:
     Field();
@@ -34,7 +35,6 @@ public:
     Field& operator=(Field&& field);
 
     bool generateFullField(int countWalls);
-    void cleanStartFinishWay();
     void moveHero(CellPoint to);
 
     void printField(); // нужно для DEMO

@@ -26,7 +26,12 @@ Grid::Grid(const Grid &grid) {
     this->grid = new Cell*[grid.height];
     for (int i = 0; i < grid.height; ++i) {
         this->grid[i] = new Cell[grid.width];
+        for (int j = 0; j < grid.width; ++j) {
+            this->grid[i][j] = grid.grid[i][j];
+        }
     }
+    height = grid.height;
+    width = grid.width;
 }
 
 Grid &Grid::operator=(const Grid &grid) {

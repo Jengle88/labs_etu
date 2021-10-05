@@ -11,7 +11,7 @@ public:
     FieldIterator() = delete;
 
     Cell getElem() const;
-    void setElem(Cell cell);
+//    void setElem(Cell cell);
     CellPoint getCurrentPosition() const;
 
     void moveDelta(int deltaX, int deltaY);
