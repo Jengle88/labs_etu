@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 
+
 class SquareMatrix {
     int size;
     int id;
@@ -9,7 +10,7 @@ public:
 
     SquareMatrix() {}
 
-    SquareMatrix(int id, std::vector<std::vector<int>> matrix) : size(matrix.size()), id(id), matrix(matrix) {}
+    SquareMatrix(int id, std::vector<std::vector<int>> matrix) : id(id), size(matrix.size()), matrix(matrix) {}
 
     int calcTrace() const {
         int res = 0;
@@ -78,25 +79,6 @@ class Functional {
         }
     }
 
-    static std::vector<SquareMatrix> mergeSubSortStable(const std::vector<SquareMatrix> &array, int l, int r,
-                                                        bool (*compareLessEqual)(const SquareMatrix &,
-                                                                                 const SquareMatrix &)) {
-        if (l < 0 || r >= array.size() || l > r)
-            return {};
-        if (l == r)
-            return std::vector<SquareMatrix>{array[l]};
-        else {
-            std::vector<SquareMatrix> leftArray = mergeSubSortStable(array, l, (r + l - 1) / 2, compareLessEqual);
-            std::vector<SquareMatrix> rightArray = mergeSubSortStable(array, (r + l - 1) / 2 + 1, r, compareLessEqual);
-            auto res = mergeArray(leftArray, rightArray, compareLessEqual);
-            for (int i = 0; i < res.size(); ++i) {
-                std::cout << res[i].getId() << ' ';
-            }
-            std::cout << '\n';
-            return res;
-        }
-    }
-
 public:
     template<class T>
     static void mergeSortStable(std::vector<T> &array,
@@ -108,42 +90,4 @@ public:
         auto rightArray = mergeSubSortStable(array, (r + l - 1) / 2 + 1, r, compareLessEqual);
         array = mergeArray(leftArray, rightArray, compareLessEqual);
     }
-
-    static void mergeSortStable(std::vector<SquareMatrix> &array,
-                                bool (*compareLessEqual)(const SquareMatrix &, const SquareMatrix &) = [](
-                                        const SquareMatrix &left, const SquareMatrix &right) {
-                                    return left <= right;
-                                }) {
-        int l = 0, r = array.size() - 1;
-        auto leftArray = mergeSubSortStable(array, l, (r + l - 1) / 2, compareLessEqual);
-        auto rightArray = mergeSubSortStable(array, (r + l - 1) / 2 + 1, r, compareLessEqual);
-        array = mergeArray(leftArray, rightArray, compareLessEqual);
-        for (int i = 0; i < array.size(); ++i) {
-            std::cout << array[i].getId() << ' ';
-        }
-        std::cout << '\n';
-    }
 };
-
-
-int main() {
-    int n;
-    std::cin >> n;
-    std::vector<SquareMatrix> matrixArray(n);
-    for (int i = 0; i < n; ++i) {
-        int matrixSize;
-        std::cin >> matrixSize;
-        std::vector<std::vector<int>> matrix(matrixSize, std::vector<int>(matrixSize));
-        for (int j = 0; j < matrixSize; ++j) {
-            for (int k = 0; k < matrixSize; ++k) {
-                std::cin >> matrix[j][k];
-            }
-        }
-        matrixArray[i] = SquareMatrix(i, matrix);
-    }
-    Functional::mergeSortStable(matrixArray);
-    for (auto &item: matrixArray) {
-        std::cout << item.getId() << ' ';
-    }
-    return 0;
-}
