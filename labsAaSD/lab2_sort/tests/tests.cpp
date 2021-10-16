@@ -4,10 +4,17 @@
 template<typename T>
 bool testCase(std::vector<T> testCase) {
     auto test = testCase;
-    Functional::mergeSortStable(test);
+    SortLibs::mergeSortStable(test);
     std::stable_sort(testCase.begin(), testCase.end());
     return test == testCase;
 }
+
+
+
+TEMPLATE_TEST_CASE("Template test case", "[vector][template]", int, double, SquareMatrix) {
+    REQUIRE(testCase(std::vector<TestType>{}));
+}
+
 
 TEST_CASE("Simple type sort tests", "[test]")
 {
@@ -27,7 +34,7 @@ TEST_CASE("SquareMatrix type sort tests", "[test]")
     auto matrix2 = std::vector<std::vector<int>>{{1}};
     auto matrix3 = std::vector<std::vector<int>>{{-1}};
     auto matrix4 = std::vector<std::vector<int>>{{1, 1, 1},
-                                                 {1, -2, 1},
+                                                 {1, -3, 1},
                                                  {1, 1, 1}};
     auto matrix5 = std::vector<std::vector<int>>{{1, 1, 1, 2},
                                                  {1, -2, 1, 8},
