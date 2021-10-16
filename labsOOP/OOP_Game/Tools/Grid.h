@@ -4,9 +4,9 @@
 #include <iostream>
 
 #define UP_LIMIT_HEIGHT (int)1e3
-#define DOWN_LIMIT_HEIGHT (int)2
+#define DOWN_LIMIT_HEIGHT (int)5
 #define UP_LIMIT_WIDTH (int)1e3
-#define DOWN_LIMIT_WIDTH (int)2
+#define DOWN_LIMIT_WIDTH (int)5
 
 class Grid {
 	int height;
