@@ -13,8 +13,8 @@ double MainHero::requestDodge() {
 
 bool MainHero::isCriticalCase(double luck) {
     srand(time(0)); // сделать глобально в начале игры????
-    double checkCriticalAttack = std::sin((rand() % 100 + 1 / double(rand() % 100)) * luck); // есть ли способ проще?
-    return ((checkCriticalAttack - int(checkCriticalAttack)) <= CRITICAL_EPSILON);
+    double checkCriticalAttack = std::sin((rand() % 100 + 1 / double(rand() % 100)) * luck); // есть ли способ проще? //luck >= 1, поэтому проблем нет
+    return ((checkCriticalAttack - int(checkCriticalAttack)) <= ROOT_EPLISON_FOR_CRITICAL);
 }
 
 void MainHero::requestProtect(double attackPower) {
@@ -38,8 +38,9 @@ void MainHero::takeThing(Thing thing) {
 }
 
 void MainHero::ejectThing(int pos) {
-    auto prevThing = things.erase(things.begin() + pos);
-    recalcCharacteristics(prevThing->getInverseValueProperties());
+    auto prevThing = things[pos];
+    things.erase(things.begin() + pos);
+    recalcCharacteristics(prevThing.getInverseValueProperties());
 }
 
 void MainHero::replaceThing(int pos, Thing thing) {

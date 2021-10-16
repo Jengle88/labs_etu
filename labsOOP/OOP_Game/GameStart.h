@@ -75,9 +75,15 @@ public:
             Field field = Field(h, w);
             field.generateFullField(countWalls);
             field.setHeroOnStart();
-            field.createHero(100, 0, 0, 2, 0);
-
-
+            field.createHero(100, 7, 2, 2, 1);
+            field.hero.takeThing(Thing("aba", {1,2,3,0,0}, ThingObject::SWORD, true, false));
+            int z1 = 2;
+            auto character = MainHero(100, 1, 1, 0, 0);
+            field.hero.requestAttack(character);
+            field.hero.requestAttack(character);
+            field.hero.requestAttack(character);
+//            field.hero.ejectThing(0);
+            int z2 = 2;
 //    field.cleanStartFinishWay();
         }
     }

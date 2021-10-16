@@ -64,6 +64,7 @@ void FieldScreen::showStartingParams() { // паттерн Builder
     field = new Field(height, width);
     if(field->generateFullField(countWalls)) {
         field->setHeroOnStart();
+        field->createHero(100, 0, 0, 2, 1);
     }
     else {
         std::cout << "Не удалось сгенерировать поле!\n";

@@ -13,7 +13,6 @@ class Field {
 	CellPoint start;
 	CellPoint finish;
     CellPoint heroPos;
-    MainHero hero;
 	bool wayGenerated = false;
     bool wallsGenerated = false;
     bool chosenStartFinish = false;
@@ -29,6 +28,7 @@ class Field {
     void cleanStartFinishWay();
 
 public:
+    MainHero hero;
     Field();
     Field(int height, int width, CellPoint start = CellPoint(0,0), CellPoint finish = CellPoint(0,0), Grid grid = Grid());
     Field(const Field& field);
