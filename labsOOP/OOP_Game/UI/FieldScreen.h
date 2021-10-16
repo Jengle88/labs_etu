@@ -19,6 +19,7 @@ class FieldScreen {
 //    void requestGenerateObject(const CellPoint pos, const CellObject newObject); // на будущее
 public:
     FieldScreen();
+    ~FieldScreen();
     void showStartFieldScreen();
     void gameStatusObserver();
 

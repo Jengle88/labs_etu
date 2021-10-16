@@ -147,3 +147,7 @@ void FieldScreen::gameStatusObserver() {
     }
     std::system("clear");
 }
+
+FieldScreen::~FieldScreen() {
+    delete field;
+}

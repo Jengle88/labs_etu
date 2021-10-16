@@ -4,7 +4,8 @@ Field::Field() {}
 
 
 Field::Field(int height, int width, CellPoint start, CellPoint finish, Grid grid) {
-    if (grid.grid != nullptr)
+//    if (grid.grid != nullptr)
+    if (!grid.grid.empty())
         this->field = grid;
     else
         this->field = Grid(height, width);

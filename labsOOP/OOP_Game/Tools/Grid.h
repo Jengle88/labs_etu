@@ -11,7 +11,7 @@
 class Grid {
 	int height;
 	int width;
-	Cell** grid;
+	std::vector<std::vector<Cell>> grid;
     bool isValidXPos(int x) const;
     bool isValidYPos(int y) const;
     bool isValidIndexes(int x, int y) const;
@@ -25,7 +25,7 @@ class Grid {
 
 public:
 	Grid();
-	Grid(int height, int width, Cell **grid = nullptr);
+	Grid(int height, int width, std::vector<std::vector<Cell>> grid = std::vector<std::vector<Cell>>()/*Cell **grid = nullptr*/);
     Grid(const Grid& grid);
     Grid& operator=(const Grid& grid);
     Grid(Grid&& grid);
@@ -38,5 +38,5 @@ public:
 	void setElem(CellPoint point, Cell cell);
 	Cell getElem(CellPoint point) const;
 	void clear();
-	void resizeCleanGrid(int height, int width, Cell **newGrid = nullptr);
+	void resizeCleanGrid(int height, int width, std::vector<std::vector<Cell>> grid = std::vector<std::vector<Cell>>());
 };

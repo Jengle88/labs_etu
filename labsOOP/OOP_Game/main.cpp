@@ -3,8 +3,8 @@
 #include "UI/FieldScreen.h"
 
 
-//#define GAME // Запускать через терминал
-#define DEMO
+#define GAME // Запускать через терминал
+//#define DEMO
 //#define FEATURES
 
 
