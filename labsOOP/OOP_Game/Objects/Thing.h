@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <unordered_map>
+#include <vector>
 
 enum ThingObject {
     HELMET,
@@ -9,33 +9,35 @@ enum ThingObject {
     SWORD,
     POTION_HEAL,
     RING_LUCKY,
-    NONE
+    THING_OBJECT_SIZE
 };
 
-enum TypeProperties {
+enum ThingProperties {
     DAMAGE,
     PROTECTION,
     STAMINA,
-    LUCKY,
-    HEAL
+    LUCK,
+    HEAL,
+    THING_PROPERTIES_SIZE
 };
 
 class Thing {
     std::string nameThing;
-    std::unordered_map<int, double> properties; // тип свойства + дельта
+    std::vector<double> properties; // тип свойства + дельта
     int thingObject;
     bool isVisualized;
     bool isActive;
     int countBattles; // -1, если не ограничено количеством боёв
 public:
     Thing() = delete;
-    Thing(std::string nameThing, std::unordered_map<int, double> properties, int thingObject, bool isVisualized, bool isActive, int countBattles = -1);
+    Thing(std::string nameThing, std::vector<double> properties, int thingObject, bool isVisualized, bool isActive, int countBattles = -1);
     std::string getNameThing() const;
-    std::unordered_map<int, double> getProperties() const;
+    std::vector<double> getProperties() const;
     int getThingObject() const;
     bool getStatusIsVisualized() const;
     bool getStatusIsActive() const;
     int getCountBattles() const;
+    std::vector<double> getInverseValueProperties() const;
     // сделать функцию action, принимающую героя
 };
 

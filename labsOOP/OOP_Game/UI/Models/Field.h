@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Tools/Grid.h"
 #include "../../Tools/FieldIterator.h"
+#include "../../Characters/MainHero.h"
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
@@ -12,6 +13,7 @@ class Field {
 	CellPoint start;
 	CellPoint finish;
     CellPoint heroPos;
+    MainHero hero;
 	bool wayGenerated = false;
     bool wallsGenerated = false;
     bool chosenStartFinish = false;
@@ -35,6 +37,7 @@ public:
     Field& operator=(Field&& field);
 
     bool generateFullField(int countWalls);
+    void createHero(double health, double attackPower, double protection, double stamina, double luck);
     void moveHero(CellPoint to);
 
     void printField(); // нужно для DEMO

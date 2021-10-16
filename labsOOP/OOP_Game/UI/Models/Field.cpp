@@ -281,3 +281,7 @@ void Field::setHeroOnStart() {
     field.setElem(start, Cell(CellObject(TypeCell::START, TypeObject::HERO)));
     heroPos = start;
 }
+
+void Field::createHero(double health, double attackPower, double protection, double stamina, double luck) {
+    hero = MainHero(health, attackPower, protection, stamina, luck);
+}

@@ -9,7 +9,9 @@ public:
             FieldScreen mainScreen;
             mainScreen.showStartFieldScreen();
             mainScreen.gameStatusObserver();
-        } else if (modeName == "demo") {
+        }
+        else if (modeName == "demo")
+        {
             int h = 30;
             int w = 30;
             int countWalls = 500;
@@ -64,14 +66,18 @@ public:
 //    std::cout << "Print moved field1:\n";
 //    moveField.printField();
             std::cout << "Cleaned way-symbols\n";
-        } else if (modeName == "features") {
+        }
+        else if (modeName == "features")
+        {
             int h = 30;
             int w = 30;
-            int countWalls = 400;
+            int countWalls = 250;
             Field field = Field(h, w);
             field.generateFullField(countWalls);
-            Field field1 = field;
-            field1.printField();
+            field.setHeroOnStart();
+            field.createHero(100, 0, 0, 2, 0);
+
+
 //    field.cleanStartFinishWay();
         }
     }

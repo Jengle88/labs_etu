@@ -1,13 +1,24 @@
+#include <vector>
+#include <cmath>
 #include "Character.h"
+#include "../Objects/Thing.h"
+
+
 
 class MainHero : public Character {
-    double health;
-    double attackPower;
     double stamina;
-    double luck;
+    double luck; // >= 1
+    std::vector<Thing> things;
+    bool isCriticalCase(double luck) override;
+    void requestProtect(double attackPower) override;
+    double requestDodge();
+    void recalcCharacteristics(std::vector<double> thingProperties);
 public:
-    MainHero(double health, double attackPower, double protection, double stamina, double luck) : Character(health, attackPower, protection), stamina(stamina), luck(luck) {}
-    double requestAttack(Character &enemy) override;
-    bool requestDodge() override;
-    double requestProtect(double attackPower) override;
+    MainHero(double health, double attackPower, double protection, double stamina, double luck) : Character(health, attackPower, protection), stamina(stamina), luck(std::max(luck, 1.0)) {}
+    MainHero() {}
+    void requestAttack(Character &enemy) override;
+    void takeThing(Thing thing);
+    void ejectThing(int pos);
+    void replaceThing(int pos, Thing thing);
+
 };

@@ -1,6 +1,6 @@
 #include "Thing.h"
 
-Thing::Thing(std::string nameThing, std::unordered_map<int, double> properties, int thingObject, bool isVisualized,
+Thing::Thing(std::string nameThing, std::vector<double> properties, int thingObject, bool isVisualized,
              bool isActive, int countBattles)
         : nameThing(nameThing), properties(properties), thingObject(thingObject), isVisualized(isVisualized),
           isActive(isActive), countBattles(countBattles) {}
@@ -9,7 +9,7 @@ std::string Thing::getNameThing() const {
     return nameThing;
 }
 
-std::unordered_map<int, double> Thing::getProperties() const {
+std::vector<double> Thing::getProperties() const {
     return properties;
 }
 
@@ -27,5 +27,12 @@ bool Thing::getStatusIsActive() const {
 
 int Thing::getCountBattles() const {
     return countBattles;
+}
+
+std::vector<double> Thing::getInverseValueProperties() const {
+    std::vector<double> resProperties = getProperties();
+    for (double & resProperty : resProperties)
+        resProperty = -resProperty;
+    return resProperties;
 }
 
