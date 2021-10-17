@@ -25,7 +25,6 @@ class Field {
     void generateStartFinishWay();
     void generateWayWithoutWalls(CellPoint start, CellPoint finish);
     void generateWalls(int countWalls);
-    void cleanStartFinishWay();
 
 public:
     MainHero hero;
@@ -52,7 +51,7 @@ public:
     FieldIterator getFieldIterator();
     CellPoint getHeroPos() const;
     void setHeroOnStart();
-
+    CellPoint generateRandomFreePoint();
     friend class FieldScreen; // т.к FieldScreen использует проверку данных
 };
 

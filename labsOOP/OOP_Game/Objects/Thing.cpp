@@ -1,15 +1,15 @@
 #include "Thing.h"
 
 Thing::Thing(std::string nameThing, std::vector<double> properties, int thingObject, bool isVisualized,
-             bool isActive, int countBattles)
+             int countBattles)
         : nameThing(nameThing), properties(properties), thingObject(thingObject), isVisualized(isVisualized),
-          isActive(isActive), countBattles(countBattles) {}
+        countBattles(countBattles) {}
 
 std::string Thing::getNameThing() const {
     return nameThing;
 }
 
-std::vector<double> Thing::getProperties() const {
+const std::vector<double>& Thing::getProperties() const {
     return properties;
 }
 
@@ -21,9 +21,6 @@ bool Thing::getStatusIsVisualized() const {
     return isVisualized;
 }
 
-bool Thing::getStatusIsActive() const {
-    return isActive;
-}
 
 int Thing::getCountBattles() const {
     return countBattles;

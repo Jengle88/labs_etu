@@ -12,6 +12,11 @@ int CellPoint::getY() const {
 	return this->y;
 }
 
-bool CellPoint::operator==(CellPoint point) const {
-    return this->x == point.x && this->y == point.y;
+bool operator==(const CellPoint &point1, const CellPoint &point2) {
+    return point1.x == point2.x && point1.y == point2.y;
 }
+
+bool operator<(const CellPoint &point1, const CellPoint& point2) {
+    return point1.y < point2.y || point1.y == point2.y && point1.x < point2.x;
+}
+

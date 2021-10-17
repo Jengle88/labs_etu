@@ -82,6 +82,13 @@ void func() {
     std::cout << "func exit\n";
 }
 
+enum ENUM {
+    A,
+    B,
+    C,
+    ENUM_SIZE
+};
+
 int main() { //проверено
 //	int n;
 //	int m;
@@ -90,10 +97,13 @@ int main() { //проверено
 //	cin >> stx >> sty >> finx >> finy;
 //	Solve(n, m, stx, sty, finx, finy).solve();
 //    func();
-    std::vector<int> a = {1,2,3};
-    a.clear();
-    a.resize(3);
-    std::cout << a[1];
+//    std::vector<int> a = {1,2,3};
+//    a.clear();
+//    a.resize(3);
+//    std::cout << a[1];
+
+    std::cout << ENUM_SIZE;
+
 
 //    int size = 10;
 //    int *arr = new int[size];

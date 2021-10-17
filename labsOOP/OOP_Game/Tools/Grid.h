@@ -3,9 +3,9 @@
 #include <algorithm>
 #include <iostream>
 
-#define UP_LIMIT_HEIGHT (int)1e3
+#define UP_LIMIT_HEIGHT (int)50
 #define DOWN_LIMIT_HEIGHT (int)5
-#define UP_LIMIT_WIDTH (int)1e3
+#define UP_LIMIT_WIDTH (int)130
 #define DOWN_LIMIT_WIDTH (int)5
 
 class Grid {
@@ -25,7 +25,7 @@ class Grid {
 
 public:
 	Grid();
-	Grid(int height, int width, std::vector<std::vector<Cell>> grid = std::vector<std::vector<Cell>>()/*Cell **grid = nullptr*/);
+	Grid(int height, int width, std::vector<std::vector<Cell>> grid = std::vector<std::vector<Cell>>()/*Cell **field = nullptr*/);
     Grid(const Grid& grid);
     Grid& operator=(const Grid& grid);
     Grid(Grid&& grid);

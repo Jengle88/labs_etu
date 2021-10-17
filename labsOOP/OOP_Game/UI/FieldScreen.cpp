@@ -1,7 +1,9 @@
+#include <termios.h>
+#include <unistd.h>
 #include "FieldScreen.h"
 
 
-FieldScreen::FieldScreen() {
+FieldScreen::FieldScreen() : thingsManager(field) {
     field = nullptr;
 }
 
@@ -64,7 +66,8 @@ void FieldScreen::showStartingParams() { // паттерн Builder
     field = new Field(height, width);
     if(field->generateFullField(countWalls)) {
         field->setHeroOnStart();
-        field->createHero(100, 0, 0, 2, 1);
+        field->createHero(MAX_HEALTH, 0, 0, 2, 1);
+        thingsManager = ThingsManager(field);
     }
     else {
         std::cout << "Не удалось сгенерировать поле!\n";
@@ -96,11 +99,27 @@ void FieldScreen::showUpdatedScreen() const {
     }
     std::cout << '\n';
 }
+/*
+char getch() {
+    struct termios oldattr, newattr;
+    int ch;
+    tcgetattr( STDIN_FILENO, &oldattr );
+    newattr = oldattr;
+    newattr.c_lflag &= ~( ICANON | ECHO );
+    tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
+    ch = getchar();
+    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
+    return ch;
+}
+ */
 
 bool FieldScreen::registerMovement(char &action) {
+//    action = getch();
     action = getchar();
     std::cin.ignore(32767, '\n');
     CellPoint heroPos = field->getHeroPos();
+    thingsManager.generateThing(field->hero);
+    thingsManager.incCountSteps();
     switch (tolower(action)) {
         case MoveSide::UP:
             requestMoveObject(heroPos, CellPoint(heroPos.getX(), heroPos.getY() - 1));
@@ -137,6 +156,7 @@ void FieldScreen::showStartFieldScreen() {
 
 void FieldScreen::gameStatusObserver() {
     char action = getchar(); // считываем перенос строки
+//    char action = getch(); // считываем перенос строки
     std::cout << "Для выхода введите ` и нажмите enter.\n";
     showUpdatedScreen();
     while (action != MoveSide::EXIT) {

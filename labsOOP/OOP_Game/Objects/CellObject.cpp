@@ -27,12 +27,12 @@ char CellObject::getCellAsChar() const {
         case TypeObject::ENEMY:
             typeObject = 'E';
             break;
-        case TypeObject::THING :
-            typeObject = 'T';
-            break;
     }
+    char thingObject = this->hasThing ? 'T' : '?';
     if (typeObject != '?')
         return typeObject;
+    else if (thingObject != '?')
+        return thingObject;
     else
         return typeCell;
 }
@@ -51,5 +51,9 @@ int CellObject::getTypeObject() const {
 
 void CellObject::setTypeObject(TypeObject typeObject) {
 	this->typeObject = typeObject;
+}
+
+bool CellObject::isThing() const {
+    return hasThing;
 }
 

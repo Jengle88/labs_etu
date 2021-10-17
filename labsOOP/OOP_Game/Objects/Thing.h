@@ -23,19 +23,17 @@ enum ThingProperties {
 
 class Thing {
     std::string nameThing;
-    std::vector<double> properties; // тип свойства + дельта
+    std::vector<double> properties; // дельта свойства, максимум 5 элементов
     int thingObject;
     bool isVisualized;
-    bool isActive;
     int countBattles; // -1, если не ограничено количеством боёв
 public:
-    Thing() = delete;
-    Thing(std::string nameThing, std::vector<double> properties, int thingObject, bool isVisualized, bool isActive, int countBattles = -1);
+    Thing() = default;
+    Thing(std::string nameThing, std::vector<double> properties, int thingObject, bool isVisualized, int countBattles = -1);
     std::string getNameThing() const;
-    std::vector<double> getProperties() const;
+    const std::vector<double>& getProperties() const;
     int getThingObject() const;
     bool getStatusIsVisualized() const;
-    bool getStatusIsActive() const;
     int getCountBattles() const;
     std::vector<double> getInverseValueProperties() const;
     // сделать функцию action, принимающую героя

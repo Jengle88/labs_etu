@@ -1,5 +1,6 @@
 #pragma once
 #include "Models/Field.h"
+#include "../Objects/ThingsManager.h"
 
 enum MoveSide{
     UP = 'w',
@@ -11,6 +12,7 @@ enum MoveSide{
 
 class FieldScreen {
     Field *field;
+    ThingsManager thingsManager;
     void showStartingParams();
     void showUpdatedScreen() const;
 

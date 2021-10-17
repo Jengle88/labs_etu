@@ -4,7 +4,7 @@ Field::Field() {}
 
 
 Field::Field(int height, int width, CellPoint start, CellPoint finish, Grid grid) {
-//    if (grid.grid != nullptr)
+//    if (field.field != nullptr)
     if (!grid.grid.empty())
         this->field = grid;
     else
@@ -103,7 +103,7 @@ CellPoint Field::generateBorderPoint() const {
     }
     return {0, 0};
 }
-
+// Удалять вещи из ThingsManager
 void Field::generateStartFinishWay() {
     srand(time(0));
     distStartFinish = std::max((field.getWidth() + field.getHeight()) / 2, 2);
@@ -113,13 +113,13 @@ void Field::generateStartFinishWay() {
     }
     chosenStartFinish = true;
     field.setElem(start,
-                  Cell(CellObject(TypeCell::START, TypeObject::NOTHING)));
+                  Cell(CellObject(TypeCell::START, TypeObject::NOTHING, false)));
     generateWayWithoutWalls(this->start, this->finish);
     field.setElem(finish,
-                  Cell(CellObject(TypeCell::FINISH, TypeObject::NOTHING)));
+                  Cell(CellObject(TypeCell::FINISH, TypeObject::NOTHING, false)));
     wayGenerated = true;
 }
-
+// Удалять вещи из ThingsManager
 void Field::generateWayWithoutWalls(CellPoint start, CellPoint finish) {
     auto calcDist = [](int stx, int sty, int finx, int finy) {
         return abs(stx - finx) + abs(sty - finy);
@@ -144,7 +144,7 @@ void Field::generateWayWithoutWalls(CellPoint start, CellPoint finish) {
                     stx += deltaX;
                     dist = calcDist(stx, sty, finx, finy);
                     field.setElem(CellPoint(stx, sty), Cell(
-                            CellObject(TypeCell::WAY, TypeObject::NOTHING)));
+                            CellObject(TypeCell::WAY, TypeObject::NOTHING, false)));
                 }
                 break;
             case 1:
@@ -152,13 +152,13 @@ void Field::generateWayWithoutWalls(CellPoint start, CellPoint finish) {
                     sty += deltaY;
                     dist = calcDist(stx, sty, finx, finy);
                     field.setElem(CellPoint(stx, sty), Cell(
-                            CellObject(TypeCell::WAY, TypeObject::NOTHING)));
+                            CellObject(TypeCell::WAY, TypeObject::NOTHING, false)));
                 }
                 break;
         }
     }
 }
-
+// Удалять вещи из ThingsManager
 void Field::generateWalls(int countWalls) {
     if (!wayGenerated)
         throw -1; // путь не сгенерирован
@@ -171,7 +171,7 @@ void Field::generateWalls(int countWalls) {
     while (cntPlacedWalls < countWalls) {
         CellPoint point = CellPoint(rand() % field.getWidth(), rand() % field.getHeight());
         if (field.getElem(point).getValue().getTypeCell() == TypeCell::EMPTY) {
-            field.setElem(point, Cell(CellObject(TypeCell::WALL, TypeObject::NOTHING)));
+            field.setElem(point, Cell(CellObject(TypeCell::WALL, TypeObject::NOTHING, false)));
             cntPlacedWalls++;
         }
     }
@@ -185,39 +185,10 @@ bool Field::generateFullField(int countWalls) {
     return this->getStatusStartFinish() && this->getStatusWay() && this->getStatusWalls();
 }
 
-void Field::cleanStartFinishWay() { // удаляет путь между start и finish, но сами точки не трогает
-    field.setElem(start,
-                  Cell(CellObject(TypeCell::START, TypeObject::NOTHING)));
-
-    int deltaX = -(start.getX() - finish.getX()) /
-                 std::max(1, abs(start.getX() - finish.getX()));
-    int deltaY = -(start.getY() - finish.getY()) /
-                 std::max(1, abs(start.getY() - finish.getY()));
-    int stx = start.getX(), sty = start.getY(), finx = finish.getX(), finy = finish.getY();
-    while (stx != finx || sty != finy) {
-        if (this->field.isValidIndexes(stx + deltaX, sty) && (
-                field.getElem(CellPoint(stx + deltaX, sty)).getValue().getTypeCell() == TypeCell::WAY ||
-                field.getElem(CellPoint(stx + deltaX, sty)).getValue().getTypeCell() == TypeCell::FINISH)
-                ) {
-            stx += deltaX;
-            field.setElem(CellPoint(stx, sty), Cell(CellObject(TypeCell::EMPTY, TypeObject::NOTHING)));
-        } else if (this->field.isValidIndexes(stx, sty + deltaY) && (
-                field.getElem(CellPoint(stx, sty + deltaY)).getValue().getTypeCell() == TypeCell::WAY ||
-                field.getElem(CellPoint(stx, sty + deltaY)).getValue().getTypeCell() == TypeCell::FINISH)
-                ) {
-            sty += deltaY;
-            field.setElem(CellPoint(stx, sty), Cell(CellObject(TypeCell::EMPTY, TypeObject::NOTHING)));
-        }
-    }
-    wayGenerated = false;
-    field.setElem(finish,
-                  Cell(CellObject(TypeCell::FINISH, TypeObject::NOTHING)));
-}
-
 void Field::moveHero(CellPoint to) {
     if (getElem(to).getValue().getTypeCell() != TypeCell::WALL) {
-        setElem(heroPos, CellObject(getElem(heroPos).getValue().getTypeCell(), TypeObject::NOTHING));
-        setElem(to, CellObject(getElem(to).getValue().getTypeCell(), TypeObject::HERO));
+        setElem(heroPos, CellObject(getElem(heroPos).getValue().getTypeCell(), TypeObject::NOTHING, getElem(heroPos).getValue().isThing()));
+        setElem(to, CellObject(getElem(to).getValue().getTypeCell(), TypeObject::HERO, getElem(to).getValue().isThing()));
         heroPos = to;
     }
 }
@@ -278,10 +249,23 @@ CellPoint Field::getHeroPos() const{
 }
 
 void Field::setHeroOnStart() {
-    field.setElem(start, Cell(CellObject(TypeCell::START, TypeObject::HERO)));
+    field.setElem(start, Cell(CellObject(TypeCell::START, TypeObject::HERO, false)));
     heroPos = start;
 }
 
 void Field::createHero(double health, double attackPower, double protection, double stamina, double luck) {
     hero = MainHero(health, attackPower, protection, stamina, luck);
+}
+
+CellPoint Field::generateRandomFreePoint() {
+    int x, y;
+    do {
+        x = rand() % this->getWidth();
+        y = rand() % this->getHeight();
+    }
+    while (!this->field.isValidIndexes(x, y) &&
+    field.getElem(CellPoint(x, y)).getValue().getTypeCell() == TypeCell::EMPTY &&
+    field.getElem(CellPoint(x, y)).getValue().getTypeObject() == TypeObject::NOTHING
+    );
+    return {x, y};
 }

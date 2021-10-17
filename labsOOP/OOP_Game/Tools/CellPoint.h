@@ -9,5 +9,6 @@ public:
 	int getX() const;
 	int getY() const;
 
-    bool operator==(CellPoint point) const;
+    friend bool operator==(const CellPoint& point1, const CellPoint& point2);
+    friend bool operator<(const CellPoint& point1, const CellPoint& point2);
 };
