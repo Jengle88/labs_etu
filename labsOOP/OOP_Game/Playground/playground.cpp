@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-
+#include <iomanip>
 using namespace std;
 
 class Solve {
@@ -102,8 +102,12 @@ int main() { //проверено
 //    a.resize(3);
 //    std::cout << a[1];
 
-    std::cout << ENUM_SIZE;
-
+//    std::cout << ENUM_SIZE;
+    std::cout  << 1.1512 << '\n';
+    std::cout << std::fixed << std::setprecision(2) << 1.1512 << '\n';
+//    std::cout.unsetf(std::ios_base::fixed);
+    std::cout.unsetf(std::ios_base::floatfield);
+    std::cout << 1.1512 << '\n';
 
 //    int size = 10;
 //    int *arr = new int[size];

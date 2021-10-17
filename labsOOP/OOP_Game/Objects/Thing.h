@@ -27,6 +27,8 @@ class Thing {
     int thingObject;
     bool isVisualized;
     int countBattles; // -1, если не ограничено количеством боёв
+    friend bool operator==(const Thing& val1, const Thing& val2);
+
 public:
     Thing() = default;
     Thing(std::string nameThing, std::vector<double> properties, int thingObject, bool isVisualized, int countBattles = -1);
@@ -36,6 +38,5 @@ public:
     bool getStatusIsVisualized() const;
     int getCountBattles() const;
     std::vector<double> getInverseValueProperties() const;
-    // сделать функцию action, принимающую героя
 };
 

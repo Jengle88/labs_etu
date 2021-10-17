@@ -7,6 +7,7 @@ enum MoveSide{
     LEFT = 'a',
     RIGHT = 'd',
     DOWN = 's',
+    TAKE = 't',
     EXIT = '`'
 };
 
@@ -16,13 +17,15 @@ class FieldScreen {
     void showStartingParams();
     void showUpdatedScreen() const;
 
-    bool registerMovement(char &action);
-    void requestMoveObject(CellPoint from, CellPoint to);
-//    void requestGenerateObject(const CellPoint pos, const CellObject newObject); // на будущее
+    bool registerMovement(char &action, std::string& gameAction);
+    void requestMoveObject(CellPoint from, CellPoint to, std::string& gameAction);
+    void requestTakeObject(CellPoint point);
+    std::string generateTitleForThingAction(const std::string& nameThing, const std::vector<double>& properties);
 public:
     FieldScreen();
     ~FieldScreen();
     void showStartFieldScreen();
     void gameStatusObserver();
+    void printInventory() const;
 
 };

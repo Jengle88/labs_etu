@@ -20,12 +20,12 @@ class ThingsManager {
     void generateVisualThing();
     void checkThingsLevel(const std::vector<int> &achievements);
     void generateHealthThing();
-
+    void incCountSteps();
 public:
+
     ThingsManager(Field *field, std::map<CellPoint, Thing> visualThingsPlaces = std::map<CellPoint, Thing>(),
                   std::map<CellPoint, Thing> healthThingsPlaces = std::map<CellPoint, Thing>());
-
-    void generateThing(const MainHero &hero);
-    void incCountSteps();
-
+    void tryGenerateThing(const MainHero &hero);
+    std::pair<bool, Thing> checkCell(CellPoint point);
+    void deleteThingFromField(CellPoint point);
 };

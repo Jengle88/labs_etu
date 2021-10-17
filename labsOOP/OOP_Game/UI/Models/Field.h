@@ -13,21 +13,19 @@ class Field {
 	CellPoint start;
 	CellPoint finish;
     CellPoint heroPos;
-	bool wayGenerated = false;
+    MainHero hero;
+    bool wayGenerated = false;
     bool wallsGenerated = false;
     bool chosenStartFinish = false;
     int countWalls = 0;
     int distStartFinish = 2;
-
     bool isCorrectStartFinish(CellPoint start, CellPoint finish) const;
-	bool isCorrectDistStartFinish(CellPoint start, CellPoint finish) const;
+    bool isCorrectDistStartFinish(CellPoint start, CellPoint finish) const;
     CellPoint generateBorderPoint() const;
     void generateStartFinishWay();
     void generateWayWithoutWalls(CellPoint start, CellPoint finish);
     void generateWalls(int countWalls);
-
 public:
-    MainHero hero;
     Field();
     Field(int height, int width, CellPoint start = CellPoint(0,0), CellPoint finish = CellPoint(0,0), Grid grid = Grid());
     Field(const Field& field);
@@ -52,6 +50,8 @@ public:
     CellPoint getHeroPos() const;
     void setHeroOnStart();
     CellPoint generateRandomFreePoint();
+    MainHero& getHero();
+
     friend class FieldScreen; // т.к FieldScreen использует проверку данных
 };
 

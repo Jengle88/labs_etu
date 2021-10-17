@@ -22,6 +22,7 @@ public:
     void takeThing(Thing thing);
     void ejectThing(int pos);
     void replaceThing(int pos, Thing thing);
+    const std::vector<Thing> & getInventory() const;
     const std::vector<int> &getCountKilledEnemy() const;
 
 };

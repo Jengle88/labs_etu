@@ -41,12 +41,15 @@ void FieldScreen::showStartingParams() { // паттерн Builder
     int height, width, countWalls;
     while (!acceptedParams) {
         height = width = countWalls = -1;
-        enterSizeValue(height, height, width, ("Высота поля (мин = " + std::to_string(DOWN_LIMIT_HEIGHT) + ", макс = " + std::to_string(UP_LIMIT_HEIGHT) + "): ").c_str(),
+        enterSizeValue(height, height, width, ("Высота поля (мин = " + std::to_string(DOWN_LIMIT_HEIGHT) + ", макс = " +
+                                               std::to_string(UP_LIMIT_HEIGHT) + "): ").c_str(),
                        [](int val, int, int) { return !Grid::isValidHeight(val); });
-        enterSizeValue(width, height, width, ("Ширина поля (мин = " + std::to_string(DOWN_LIMIT_WIDTH) + ", макс = " + std::to_string(UP_LIMIT_WIDTH) +"): ").c_str(),
+        enterSizeValue(width, height, width, ("Ширина поля (мин = " + std::to_string(DOWN_LIMIT_WIDTH) + ", макс = " +
+                                              std::to_string(UP_LIMIT_WIDTH) + "): ").c_str(),
                        [](int val, int, int) { return !Grid::isValidWidth(val); });
         enterSizeValue(countWalls, height, width,
-                       ("Количество непроходимых клеток (макс процент покрытия - " + std::to_string(PERCENT_WALLS) + "% от площади поля): ").c_str(),
+                       ("Количество непроходимых клеток (макс процент покрытия - " + std::to_string(PERCENT_WALLS) +
+                        "% от площади поля): ").c_str(),
                        [](int val, int height, int width) {
                            return (double) val / (width * height) * 100 > PERCENT_WALLS;
                        });
@@ -64,12 +67,11 @@ void FieldScreen::showStartingParams() { // паттерн Builder
             acceptedParams = true;
     }
     field = new Field(height, width);
-    if(field->generateFullField(countWalls)) {
+    if (field->generateFullField(countWalls)) {
         field->setHeroOnStart();
         field->createHero(MAX_HEALTH, 0, 0, 2, 1);
         thingsManager = ThingsManager(field);
-    }
-    else {
+    } else {
         std::cout << "Не удалось сгенерировать поле!\n";
         throw -1;
     }
@@ -99,6 +101,7 @@ void FieldScreen::showUpdatedScreen() const {
     }
     std::cout << '\n';
 }
+
 /*
 char getch() {
     struct termios oldattr, newattr;
@@ -113,25 +116,28 @@ char getch() {
 }
  */
 
-bool FieldScreen::registerMovement(char &action) {
+bool FieldScreen::registerMovement(char &action, std::string &gameAction) {
 //    action = getch();
     action = getchar();
     std::cin.ignore(32767, '\n');
     CellPoint heroPos = field->getHeroPos();
-    thingsManager.generateThing(field->hero);
-    thingsManager.incCountSteps();
+    thingsManager.tryGenerateThing(field->hero); // считает шаги
+    std::pair<bool, Thing> thingOnPos;
     switch (tolower(action)) {
         case MoveSide::UP:
-            requestMoveObject(heroPos, CellPoint(heroPos.getX(), heroPos.getY() - 1));
+            requestMoveObject(heroPos, CellPoint(heroPos.getX(), heroPos.getY() - 1), gameAction);
             return true;
         case MoveSide::DOWN:
-            requestMoveObject(heroPos, CellPoint(heroPos.getX(), heroPos.getY() + 1));
+            requestMoveObject(heroPos, CellPoint(heroPos.getX(), heroPos.getY() + 1), gameAction);
             return true;
         case MoveSide::LEFT:
-            requestMoveObject(heroPos, CellPoint(heroPos.getX() - 1, heroPos.getY()));
+            requestMoveObject(heroPos, CellPoint(heroPos.getX() - 1, heroPos.getY()), gameAction);
             return true;
         case MoveSide::RIGHT:
-            requestMoveObject(heroPos, CellPoint(heroPos.getX() + 1, heroPos.getY()));
+            requestMoveObject(heroPos, CellPoint(heroPos.getX() + 1, heroPos.getY()), gameAction);
+            return true;
+        case MoveSide::TAKE:
+            requestTakeObject(heroPos);
             return true;
         case MoveSide::EXIT:
             return false;
@@ -141,11 +147,15 @@ bool FieldScreen::registerMovement(char &action) {
     return false;
 }
 
-void FieldScreen::requestMoveObject(CellPoint from, CellPoint to) {
+void FieldScreen::requestMoveObject(CellPoint from, CellPoint to, std::string& gameAction) {
     if (!field->field.isValidIndexes(to.getX(), to.getY()))
         return;
     if (field->getHeroPos() == from) {
         field->moveHero(to);
+    }
+    auto thingOnPos = thingsManager.checkCell(to);
+    if (thingOnPos.first) {
+        gameAction = generateTitleForThingAction(thingOnPos.second.getNameThing(), thingOnPos.second.getProperties());
     }
 }
 
@@ -159,12 +169,16 @@ void FieldScreen::gameStatusObserver() {
 //    char action = getch(); // считываем перенос строки
     std::cout << "Для выхода введите ` и нажмите enter.\n";
     showUpdatedScreen();
+    printInventory();
     while (action != MoveSide::EXIT) {
-        bool goodMovement = registerMovement(action);
+        std::string gameAction = "";
+        bool goodMovement = registerMovement(action, gameAction);
         if (goodMovement) {
             std::system("clear");
             std::cout << "Для выхода введите ` и нажмите enter.\n";
             showUpdatedScreen();
+            std::cout << gameAction << '\n';
+            printInventory();
         }
     }
     std::system("clear");
@@ -172,4 +186,39 @@ void FieldScreen::gameStatusObserver() {
 
 FieldScreen::~FieldScreen() {
     delete field;
+}
+
+std::string
+FieldScreen::generateTitleForThingAction(const std::string &nameThing, const std::vector<double> &properties) {
+    std::string res = "На этой клетке лежит " + nameThing + ", который даёт: " +
+           (properties[0] >= 1e-2 ? "Урон: " + std::to_string(round(properties[0] * 100) / 100) + " " : "") +
+           (properties[1] >= 1e-2 ? "Защита: " + std::to_string(round(properties[1] * 100) / 100) + " " : "") +
+           (properties[2] >= 1e-2 ? "Выносливость: " + std::to_string(round(properties[2] * 100) / 100) + " " : "") +
+           (properties[3] >= 1e-2 ? "Удача: " + std::to_string(round(properties[3] * 100) / 100) + " " : "") +
+           (properties[4] >= 1e-2 ? "Здоровье: " + std::to_string(round(properties[4] * 100) / 100) + " " : "") +
+           ". Нажмите ";
+    res.push_back(MoveSide::TAKE);
+    res += ", чтобы взять.";
+    return res;
+}
+
+void FieldScreen::printInventory() const {
+    auto inventory = this->field->getHero().getInventory();
+    std::cout << "Инвентарь: \n";
+    if (inventory.empty()) {
+        std::cout << "(Пустой)\n\n";
+        return;
+    }
+    for(const auto& thing : inventory) {
+        std::cout << thing.getNameThing() << '\n';
+    }
+    std::cout << '\n';
+}
+
+void FieldScreen::requestTakeObject(CellPoint point) {
+    auto thingOnPos = thingsManager.checkCell(point);
+    if (thingOnPos.first) {
+        field->getHero().takeThing(thingOnPos.second);
+        thingsManager.deleteThingFromField(point);
+    }
 }

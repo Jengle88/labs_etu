@@ -76,7 +76,7 @@ Field &Field::operator=(Field &&field) {
 
 bool Field::isCorrectStartFinish(CellPoint start, CellPoint finish) const {
     return this->field.isValidIndexes(start.getX(), start.getY()) &&
-            this->field.isValidIndexes(finish.getX(), finish.getY()) &&
+           this->field.isValidIndexes(finish.getX(), finish.getY()) &&
            isCorrectDistStartFinish(start, finish);
 }
 
@@ -103,6 +103,7 @@ CellPoint Field::generateBorderPoint() const {
     }
     return {0, 0};
 }
+
 // Удалять вещи из ThingsManager
 void Field::generateStartFinishWay() {
     srand(time(0));
@@ -119,6 +120,7 @@ void Field::generateStartFinishWay() {
                   Cell(CellObject(TypeCell::FINISH, TypeObject::NOTHING, false)));
     wayGenerated = true;
 }
+
 // Удалять вещи из ThingsManager
 void Field::generateWayWithoutWalls(CellPoint start, CellPoint finish) {
     auto calcDist = [](int stx, int sty, int finx, int finy) {
@@ -158,6 +160,7 @@ void Field::generateWayWithoutWalls(CellPoint start, CellPoint finish) {
         }
     }
 }
+
 // Удалять вещи из ThingsManager
 void Field::generateWalls(int countWalls) {
     if (!wayGenerated)
@@ -187,8 +190,10 @@ bool Field::generateFullField(int countWalls) {
 
 void Field::moveHero(CellPoint to) {
     if (getElem(to).getValue().getTypeCell() != TypeCell::WALL) {
-        setElem(heroPos, CellObject(getElem(heroPos).getValue().getTypeCell(), TypeObject::NOTHING, getElem(heroPos).getValue().isThing()));
-        setElem(to, CellObject(getElem(to).getValue().getTypeCell(), TypeObject::HERO, getElem(to).getValue().isThing()));
+        setElem(heroPos, CellObject(getElem(heroPos).getValue().getTypeCell(), TypeObject::NOTHING,
+                                    getElem(heroPos).getValue().isThing()));
+        setElem(to,
+                CellObject(getElem(to).getValue().getTypeCell(), TypeObject::HERO, getElem(to).getValue().isThing()));
         heroPos = to;
     }
 }
@@ -244,7 +249,7 @@ FieldIterator Field::getFieldIterator() {
     return FieldIterator(&(this->field));
 }
 
-CellPoint Field::getHeroPos() const{
+CellPoint Field::getHeroPos() const {
     return heroPos;
 }
 
@@ -262,10 +267,13 @@ CellPoint Field::generateRandomFreePoint() {
     do {
         x = rand() % this->getWidth();
         y = rand() % this->getHeight();
-    }
-    while (!this->field.isValidIndexes(x, y) &&
-    field.getElem(CellPoint(x, y)).getValue().getTypeCell() == TypeCell::EMPTY &&
-    field.getElem(CellPoint(x, y)).getValue().getTypeObject() == TypeObject::NOTHING
-    );
+    } while (!this->field.isValidIndexes(x, y) ||
+             field.getElem(CellPoint(x, y)).getValue().getTypeCell() != TypeCell::EMPTY ||
+             field.getElem(CellPoint(x, y)).getValue().getTypeObject() != TypeObject::NOTHING
+            );
     return {x, y};
+}
+
+MainHero& Field::getHero() {
+    return this->hero;
 }

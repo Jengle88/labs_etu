@@ -33,3 +33,11 @@ std::vector<double> Thing::getInverseValueProperties() const {
     return resProperties;
 }
 
+bool operator==(const Thing& val1, const Thing& val2) {
+    return val1.nameThing == val2.nameThing &&
+    val1.properties == val2.properties &&
+    val1.thingObject == val2.thingObject &&
+    val1.isVisualized == val2.isVisualized &&
+    val1.countBattles == val2.countBattles;
+}
+

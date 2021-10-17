@@ -66,4 +66,8 @@ const std::vector<int> &MainHero::getCountKilledEnemy() const {
     return countKilledEnemy;
 }
 
+const std::vector<Thing> & MainHero::getInventory() const {
+    return things;
+}
+
 
