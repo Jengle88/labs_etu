@@ -69,7 +69,7 @@ void FieldScreen::showStartingParams() { // паттерн Builder
     field = new Field(height, width);
     if (field->generateFullField(countWalls)) {
         field->setHeroOnStart();
-        field->createHero(MAX_HEALTH, 0, 0, 2, 1);
+        field->createHero(MAX_HEALTH, 0, 0, 1);
         thingsManager = ThingsManager(field);
     } else {
         std::cout << "Не удалось сгенерировать поле!\n";
@@ -193,7 +193,7 @@ FieldScreen::generateTitleForThingAction(const std::string &nameThing, const std
     std::string res = "На этой клетке лежит " + nameThing + ", который даёт: " +
            (properties[0] >= 1e-2 ? "Урон: " + std::to_string(round(properties[0] * 100) / 100) + " " : "") +
            (properties[1] >= 1e-2 ? "Защита: " + std::to_string(round(properties[1] * 100) / 100) + " " : "") +
-           (properties[2] >= 1e-2 ? "Выносливость: " + std::to_string(round(properties[2] * 100) / 100) + " " : "") +
+//           (properties[2] >= 1e-2 ? "Выносливость: " + std::to_string(round(properties[2] * 100) / 100) + " " : "") +
            (properties[3] >= 1e-2 ? "Удача: " + std::to_string(round(properties[3] * 100) / 100) + " " : "") +
            (properties[4] >= 1e-2 ? "Здоровье: " + std::to_string(round(properties[4] * 100) / 100) + " " : "") +
            ". Нажмите ";

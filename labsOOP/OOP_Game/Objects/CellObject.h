@@ -18,8 +18,6 @@ class CellObject {
 	int typeObject;
     bool hasThing;
 public:
-
-public:
 	explicit CellObject(int typeCell = TypeCell::EMPTY, int typeObject = TypeObject::NOTHING, bool hasThing = false): typeCell(typeCell), typeObject(typeObject), hasThing(hasThing) {}
     char getCellAsChar() const;
     int getTypeCell() const;

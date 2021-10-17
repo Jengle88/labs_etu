@@ -28,7 +28,7 @@ void ThingsManager::checkThingsLevel(const std::vector<int> &achievements) {
 
 void ThingsManager::generateHealthThing() {
     CellPoint point = field->generateRandomFreePoint();
-    this->healthThingsPlaces[point] = Thing("Лечебный эликсир", {0,0,0,0,20}, ThingObject::POTION_HEAL, false, -1);
+    this->healthThingsPlaces[point] = Thing("Лечебный эликсир", {0,0,0,20}, ThingObject::POTION_HEAL, false);
     field->setElem(point, CellObject(TypeCell::EMPTY, TypeObject::NOTHING, true));
 }
 
@@ -38,7 +38,7 @@ void ThingsManager::incCountSteps() {
 
 void ThingsManager::generateVisualThing() {
     constexpr auto getVectorFromMapPointThings = [](const std::map<CellPoint, Thing>& table) {
-        std::vector<Thing> res(THING_OBJECT_SIZE - 2);
+        std::vector<Thing> res(THING_OBJECT_SIZE - 1);
         for(auto &item : table)
             res[item.second.getThingObject()] = item.second;
         return res;

@@ -258,8 +258,8 @@ void Field::setHeroOnStart() {
     heroPos = start;
 }
 
-void Field::createHero(double health, double attackPower, double protection, double stamina, double luck) {
-    hero = MainHero(health, attackPower, protection, stamina, luck);
+void Field::createHero(double health, double attackPower, double protection, double luck) {
+    hero = MainHero(health, attackPower, protection, luck);
 }
 
 CellPoint Field::generateRandomFreePoint() {

@@ -1,6 +1,6 @@
 #include "MainHero.h"
 
-MainHero::MainHero(double health, double attackPower, double protection, double stamina, double luck) : Character(health, attackPower, protection), stamina(stamina), luck(std::max(luck, 1.0)) {
+MainHero::MainHero(double health, double attackPower, double protection, double luck) : Character(health, attackPower, protection), luck(std::max(luck, 1.0)) {
     countKilledEnemy.resize(EnemyType::ENEMY_TYPE_SIZE);
 }
 
@@ -25,7 +25,7 @@ bool MainHero::isCriticalCase(double luck) {
     srand(time(0)); // сделать глобально в начале игры????
     double checkCriticalAttack = std::sin(
             (rand() % 100 + 1 / double(rand() % 100)) * luck); // есть ли способ проще? //luck >= 1, поэтому проблем нет
-    return ((checkCriticalAttack - int(checkCriticalAttack)) <= ROOT_EPLISON_FOR_CRITICAL);
+    return ((checkCriticalAttack - int(checkCriticalAttack)) <= ROOT_EPSILON_FOR_CRITICAL);
 }
 
 bool MainHero::requestProtect(double attackPower) {
@@ -41,7 +41,6 @@ void MainHero::recalcCharacteristics(std::vector<double> thingProperties) {
     this->health += thingProperties[ThingProperties::HEAL];
     this->attackPower += thingProperties[ThingProperties::DAMAGE];
     this->protection += thingProperties[ThingProperties::PROTECTION];
-    this->stamina += thingProperties[ThingProperties::STAMINA];
     this->luck += thingProperties[ThingProperties::LUCK];
 }
 

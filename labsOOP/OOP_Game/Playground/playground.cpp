@@ -104,9 +104,7 @@ int main() { //проверено
 
 //    std::cout << ENUM_SIZE;
     std::cout  << 1.1512 << '\n';
-    std::cout << std::fixed << std::setprecision(2) << 1.1512 << '\n';
-//    std::cout.unsetf(std::ios_base::fixed);
-    std::cout.unsetf(std::ios_base::floatfield);
+    std::cout << std::fixed << std::setprecision(6) << 1.1512 << '\n';
     std::cout << 1.1512 << '\n';
 
 //    int size = 10;

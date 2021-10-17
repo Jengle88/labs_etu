@@ -2,7 +2,7 @@
 #include <vector>
 #include "../Tools/CellPoint.h"
 
-#define ROOT_EPLISON_FOR_CRITICAL 1e-2
+#define ROOT_EPSILON_FOR_CRITICAL 1e-2
 #define CRITICAL_FACTOR 1.75
 #define DODGE_FACTOR 0.6
 #define MAX_HEALTH 100

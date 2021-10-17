@@ -34,7 +34,7 @@ public:
     Field& operator=(Field&& field);
 
     bool generateFullField(int countWalls);
-    void createHero(double health, double attackPower, double protection, double stamina, double luck);
+    void createHero(double health, double attackPower, double protection, double luck);
     void moveHero(CellPoint to);
 
     void printField(); // нужно для DEMO
