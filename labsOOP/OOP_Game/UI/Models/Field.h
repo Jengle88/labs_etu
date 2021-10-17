@@ -2,11 +2,15 @@
 #include "../../Tools/Grid.h"
 #include "../../Tools/FieldIterator.h"
 #include "../../Characters/MainHero.h"
+#include "../../Characters/Enemy.h"
+#include "../../Characters/Monster.h"
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
 #include <iostream>
-#define PERCENT_WALLS 45
+#include <map>
+
+#define PERCENT_WALLS 35
 
 class Field {
 	Grid field;
@@ -14,6 +18,7 @@ class Field {
 	CellPoint finish;
     CellPoint heroPos;
     MainHero hero;
+    std::map<CellPoint, Enemy*> enemies;
     bool wayGenerated = false;
     bool wallsGenerated = false;
     bool chosenStartFinish = false;
@@ -32,13 +37,18 @@ public:
     Field& operator=(const Field& field);
     Field(Field && field);
     Field& operator=(Field&& field);
-
+    ~Field();
+    // Генераторы
     bool generateFullField(int countWalls);
     void createHero(double health, double attackPower, double protection, double luck);
+    void createMonster(double health, double attackPower, double protection);
     void moveHero(CellPoint to);
+    void moveEnemies();
+    void moveEnemy(const CellPoint &from, const CellPoint &to);
+    CellPoint generateRandomFreePoint();
 
     void printField(); // нужно для DEMO
-
+    // Геттеры/Сеттеры
     Cell getElem(CellPoint point) const;
     void setElem(CellPoint point, CellObject object);
     int getHeight() const;
@@ -49,7 +59,6 @@ public:
     FieldIterator getFieldIterator();
     CellPoint getHeroPos() const;
     void setHeroOnStart();
-    CellPoint generateRandomFreePoint();
     MainHero& getHero();
 
     friend class FieldScreen; // т.к FieldScreen использует проверку данных

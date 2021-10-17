@@ -277,3 +277,47 @@ CellPoint Field::generateRandomFreePoint() {
 MainHero& Field::getHero() {
     return this->hero;
 }
+
+void Field::moveEnemies() {
+    for (const auto &enemy: enemies) {
+        auto possibleSteps = enemy.second->makeMove(enemy.first, heroPos);
+        for (int i = 0; i < possibleSteps.size(); ++i) {
+            if (!field.isValidIndexes(possibleSteps[i].getX(), possibleSteps[i].getY()))
+                continue;
+            auto tempElem = getElem(possibleSteps[i]).getValue();
+            if (tempElem.getTypeCell() != TypeCell::WALL &&
+                tempElem.getTypeObject() != TypeObject::HERO &&
+                tempElem.getTypeObject() != TypeObject::ENEMY
+            ) {
+                moveEnemy(enemy.first, possibleSteps[i]);
+                break;
+            }
+        }
+    }
+}
+
+void Field::moveEnemy(const CellPoint &from, const CellPoint &to) {
+    auto enemy = enemies[from];
+    enemies.erase(from);
+    enemies[to] = enemy;
+    auto prevPointData = field.getElem(from);
+    auto newPointData = field.getElem(to);
+    field.setElem(from, Cell(CellObject(prevPointData.getValue().getTypeCell(), TypeObject::NOTHING, prevPointData.getValue().isThing())));
+    field.setElem(to, Cell(CellObject(newPointData.getValue().getTypeCell(), TypeObject::ENEMY, newPointData.getValue().isThing())));
+}
+
+void Field::createMonster(double health, double attackPower, double protection) {
+    CellPoint monsterStartPoint;
+    do {
+        monsterStartPoint = generateRandomFreePoint();
+    } while (Monster::inRangeVisibility(monsterStartPoint, heroPos) || enemies.count(monsterStartPoint));
+    enemies[monsterStartPoint] = new Monster(health, attackPower, protection);
+}
+
+Field::~Field() {
+    for (const auto &item: enemies) {
+        delete item.second;
+    }
+}
+
+

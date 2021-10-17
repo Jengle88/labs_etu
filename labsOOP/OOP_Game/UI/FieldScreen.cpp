@@ -69,7 +69,7 @@ void FieldScreen::showStartingParams() { // паттерн Builder
     field = new Field(height, width);
     if (field->generateFullField(countWalls)) {
         field->setHeroOnStart();
-        field->createHero(MAX_HEALTH, 0, 0, 1);
+        field->createHero(CHARACTER_MAX_HEALTH, 0, 0, 1);
         thingsManager = ThingsManager(field);
     } else {
         std::cout << "Не удалось сгенерировать поле!\n";
@@ -168,6 +168,7 @@ void FieldScreen::gameStatusObserver() {
     char action = getchar(); // считываем перенос строки
 //    char action = getch(); // считываем перенос строки
     std::cout << "Для выхода введите ` и нажмите enter.\n";
+    field->createMonster(MONSTER_MAX_HEALTH, 1, 1);
     showUpdatedScreen();
     printInventory();
     while (action != MoveSide::EXIT) {
@@ -176,6 +177,7 @@ void FieldScreen::gameStatusObserver() {
         if (goodMovement) {
             std::system("clear");
             std::cout << "Для выхода введите ` и нажмите enter.\n";
+            field->moveEnemies();
             showUpdatedScreen();
             std::cout << gameAction << '\n';
             printInventory();

@@ -103,10 +103,16 @@ int main() { //проверено
 //    std::cout << a[1];
 
 //    std::cout << ENUM_SIZE;
-    std::cout  << 1.1512 << '\n';
-    std::cout << std::fixed << std::setprecision(6) << 1.1512 << '\n';
-    std::cout << 1.1512 << '\n';
-
+//    std::cout  << 1.1512 << '\n';
+//    std::cout << std::fixed << std::setprecision(6) << 1.1512 << '\n';
+//    std::cout << 1.1512 << '\n';
+    for (int i = -2; i <= 2; ++i) {
+        for (int j = -2; j <= 2; ++j) { // получение ходов в форме +
+            if (i == 0 ^ j == 0) {
+                std::cout << i << ' ' << j << '\n';
+            }
+        }
+    }
 //    int size = 10;
 //    int *arr = new int[size];
 //    int *arr2 = new int[size];

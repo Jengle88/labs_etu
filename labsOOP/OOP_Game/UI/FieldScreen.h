@@ -14,9 +14,9 @@ enum MoveSide{
 class FieldScreen {
     Field *field;
     ThingsManager thingsManager;
+
     void showStartingParams();
     void showUpdatedScreen() const;
-
     bool registerMovement(char &action, std::string& gameAction);
     void requestMoveObject(CellPoint from, CellPoint to, std::string& gameAction);
     void requestTakeObject(CellPoint point);

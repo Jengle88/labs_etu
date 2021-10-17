@@ -78,7 +78,7 @@ public:
             field.createHero(25, 7, 2, 1);
 //            field.hero.takeThing(Thing("aba", {1,2,3,0,0}, ThingObject::SWORD, true, false));
             int z1 = 2;
-//            auto character = MainHero(MAX_HEALTH, 1, 1, 0, 0);
+//            auto character = MainHero(CHARACTER_MAX_HEALTH, 1, 1, 0, 0);
 //            field.hero.requestAttack(character);
 //            field.hero.requestAttack(character);
 //            field.hero.requestAttack(character);

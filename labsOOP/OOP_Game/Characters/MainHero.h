@@ -7,12 +7,10 @@
 
 
 class MainHero : public Character {
-    double luck; // >= 1
     std::vector<Thing> things;
     std::vector<int> countKilledEnemy;
-    bool isCriticalCase(double luck) override;
     bool requestProtect(double attackPower) override;
-    bool requestDodge() override;
+    bool requestDodge() const override;
     void recalcCharacteristics(std::vector<double> thingProperties);
 public:
     MainHero(double health, double attackPower, double protection, double luck);// : Character(health, attackPower, protection), stamina(stamina), luck(std::max(luck, 1.0)) {}
