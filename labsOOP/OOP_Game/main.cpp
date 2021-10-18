@@ -1,6 +1,6 @@
 #include "GameStart.h"
 
 int main() {
-    GameStart::startGameMode("game"); // "game" , "demo" , "features"
+    GameStart::startGameMode("features"); // "game" , "demo" , "features"
     return 0;
 }

@@ -11,6 +11,8 @@
 #include <map>
 
 #define PERCENT_WALLS 35
+#define MAX_COUNT_ENEMIES 5
+#define TIME_BETWEEN_GENERATE_ENEMY 15
 
 class Field {
 	Grid field;
@@ -24,12 +26,17 @@ class Field {
     bool chosenStartFinish = false;
     int countWalls = 0;
     int distStartFinish = 2;
+    long int counterSteps = 0;
     bool isCorrectStartFinish(CellPoint start, CellPoint finish) const;
     bool isCorrectDistStartFinish(CellPoint start, CellPoint finish) const;
     CellPoint generateBorderPoint() const;
     void generateStartFinishWay();
     void generateWayWithoutWalls(CellPoint start, CellPoint finish);
     void generateWalls(int countWalls);
+
+    void createMonster(double health, double attackPower, double protection);
+    void createArcher(double health, double attackPower, double protection);
+    void createGargoyle(double health, double attackPower, double protection);
 public:
     Field();
     Field(int height, int width, CellPoint start = CellPoint(0,0), CellPoint finish = CellPoint(0,0), Grid grid = Grid());
@@ -41,13 +48,14 @@ public:
     // Генераторы
     bool generateFullField(int countWalls);
     void createHero(double health, double attackPower, double protection, double luck);
-    void createMonster(double health, double attackPower, double protection);
+    void createRandomEnemy();
     void moveHero(CellPoint to);
     void moveEnemies();
-    void moveEnemy(const CellPoint &from, const CellPoint &to);
+    void moveEnemy(CellPoint from, CellPoint to);
     CellPoint generateRandomFreePoint();
 
     void printField(); // нужно для DEMO
+
     // Геттеры/Сеттеры
     Cell getElem(CellPoint point) const;
     void setElem(CellPoint point, CellObject object);
@@ -60,6 +68,8 @@ public:
     CellPoint getHeroPos() const;
     void setHeroOnStart();
     MainHero& getHero();
+    void incCountSteps();
+    long getCountSteps() const;
 
     friend class FieldScreen; // т.к FieldScreen использует проверку данных
 };

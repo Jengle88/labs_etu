@@ -1,4 +1,8 @@
 #pragma once
+
+#include <vector>
+#include "Character.h"
+
 class Enemy {
 public:
     virtual bool isCriticalCase(double lucky) const = 0;
@@ -8,4 +12,7 @@ public:
     virtual bool requestDodge() const = 0; // возвращает информацию, уклонился ли
     virtual std::vector<CellPoint> makeMove(CellPoint from, CellPoint heroPos) const = 0;
     virtual bool willFollowToHero() const = 0;
+    virtual int getCharacterType() const = 0;
+    virtual ~Enemy() = default;
+//    virtual bool inRangeVisibility(CellPoint monsterPos, CellPoint objectPos) const = 0;
 };

@@ -16,11 +16,9 @@ class ThingsManager {
     std::map<CellPoint, Thing> visualThingsPlaces;
     std::map<CellPoint, Thing> healthThingsPlaces;
     int levelThings = 1;
-    long int counterSteps = 0;
     void generateVisualThing();
     void checkThingsLevel(const std::vector<int> &achievements);
     void generateHealthThing();
-    void incCountSteps();
 public:
 
     ThingsManager(Field *field, std::map<CellPoint, Thing> visualThingsPlaces = std::map<CellPoint, Thing>(),

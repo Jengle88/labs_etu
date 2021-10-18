@@ -1,7 +1,7 @@
 #include "MainHero.h"
 
-MainHero::MainHero(double health, double attackPower, double protection, double luck) : Character(health, attackPower, protection, std::max(luck, 1.0)){
-    countKilledEnemy.resize(EnemyType::ENEMY_TYPE_SIZE);
+MainHero::MainHero(int characterType, double health, double attackPower, double protection, double luck) : Character(characterType, health, attackPower, protection, std::max(luck, 1.0)){
+    countKilledEnemy.resize(CharacterType::CHARACTER_TYPE_SIZE - 1);
 }
 
 

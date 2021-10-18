@@ -66,6 +66,7 @@ void FieldScreen::showStartingParams() { // паттерн Builder
         if (acceptSymbol == 'y')
             acceptedParams = true;
     }
+    srand(time(0));
     field = new Field(height, width);
     if (field->generateFullField(countWalls)) {
         field->setHeroOnStart();
@@ -121,7 +122,7 @@ bool FieldScreen::registerMovement(char &action, std::string &gameAction) {
     action = getchar();
     std::cin.ignore(32767, '\n');
     CellPoint heroPos = field->getHeroPos();
-    thingsManager.tryGenerateThing(field->hero); // считает шаги
+    thingsManager.tryGenerateThing(field->hero); // также считает шаги
     std::pair<bool, Thing> thingOnPos;
     switch (tolower(action)) {
         case MoveSide::UP:
@@ -168,7 +169,6 @@ void FieldScreen::gameStatusObserver() {
     char action = getchar(); // считываем перенос строки
 //    char action = getch(); // считываем перенос строки
     std::cout << "Для выхода введите ` и нажмите enter.\n";
-    field->createMonster(MONSTER_MAX_HEALTH, 1, 1);
     showUpdatedScreen();
     printInventory();
     while (action != MoveSide::EXIT) {
@@ -176,10 +176,13 @@ void FieldScreen::gameStatusObserver() {
         bool goodMovement = registerMovement(action, gameAction);
         if (goodMovement) {
             std::system("clear");
+            field->createRandomEnemy();
+//            field->createMonster(MONSTER_MAX_HEALTH, 1, 1);
             std::cout << "Для выхода введите ` и нажмите enter.\n";
             field->moveEnemies();
             showUpdatedScreen();
             std::cout << gameAction << '\n';
+            printEnemyInfo();
             printInventory();
         }
     }
@@ -223,4 +226,26 @@ void FieldScreen::requestTakeObject(CellPoint point) {
         field->getHero().takeThing(thingOnPos.second);
         thingsManager.deleteThingFromField(point);
     }
+}
+
+void FieldScreen::printEnemyInfo() const {
+    int cntMonster = 0, cntArcher = 0, cntGargoyle = 0; // Не очень оптимизировано
+    for (const auto &enemy: field->enemies) {
+        switch (enemy.second->getCharacterType()) {
+            case CharacterType::MONSTER:
+                cntMonster++;
+                break;
+            case CharacterType::SKELETON_ARCHER:
+                cntArcher++;
+                break;
+            case CharacterType::GARGOYLE:
+                cntGargoyle++;
+                break;
+        }
+    }
+    std:: cout << "Сейчас на поле: \n"
+                  "Монстр: " + std::to_string(cntMonster) + ",\n"
+                  "Скелет-лучник: " + std::to_string(cntArcher) + ",\n"
+                  "Горгулья: " + std::to_string(cntGargoyle) + "\n\n";
+
 }

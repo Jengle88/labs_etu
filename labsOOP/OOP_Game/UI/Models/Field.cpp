@@ -1,10 +1,13 @@
 #include "Field.h"
 
+#include <random>
+#include "../../Characters/Archer.h"
+#include "../../Characters/Gargoyle.h"
+
 Field::Field() {}
 
 
 Field::Field(int height, int width, CellPoint start, CellPoint finish, Grid grid) {
-//    if (field.field != nullptr)
     if (!grid.grid.empty())
         this->field = grid;
     else
@@ -106,7 +109,6 @@ CellPoint Field::generateBorderPoint() const {
 
 // Удалять вещи из ThingsManager
 void Field::generateStartFinishWay() {
-    srand(time(0));
     distStartFinish = std::max((field.getWidth() + field.getHeight()) / 2, 2);
     while (!isCorrectDistStartFinish(this->start, this->finish)) {
         this->start = generateBorderPoint(); // нельзя выносить за while, тк возможна генерация в середине сетки,
@@ -133,7 +135,6 @@ void Field::generateWayWithoutWalls(CellPoint start, CellPoint finish) {
     }; // функция для контроля приближения к финишной точке
 
     int dist = calcDist(start.getX(), start.getY(), finish.getX(), finish.getY());
-    srand(time(0));
     int deltaX = -(start.getX() - finish.getX()) /
                  std::max(1, abs(start.getX() - finish.getX()));
     int deltaY = -(start.getY() - finish.getY()) /
@@ -170,7 +171,6 @@ void Field::generateWalls(int countWalls) {
         std::cerr << "Слишком много стен. Количество уменьшено до " << countWalls << '\n';
     }
     int cntPlacedWalls = 0;
-    srand(time(0));
     while (cntPlacedWalls < countWalls) {
         CellPoint point = CellPoint(rand() % field.getWidth(), rand() % field.getHeight());
         if (field.getElem(point).getValue().getTypeCell() == TypeCell::EMPTY) {
@@ -259,7 +259,7 @@ void Field::setHeroOnStart() {
 }
 
 void Field::createHero(double health, double attackPower, double protection, double luck) {
-    hero = MainHero(health, attackPower, protection, luck);
+    hero = MainHero(CharacterType::MAIN_HERO, health, attackPower, protection, luck);
 }
 
 CellPoint Field::generateRandomFreePoint() {
@@ -281,6 +281,7 @@ MainHero& Field::getHero() {
 void Field::moveEnemies() {
     for (const auto &enemy: enemies) {
         auto possibleSteps = enemy.second->makeMove(enemy.first, heroPos);
+        std::shuffle(possibleSteps.begin(),  possibleSteps.end(), std::mt19937(std::random_device()()));
         for (int i = 0; i < possibleSteps.size(); ++i) {
             if (!field.isValidIndexes(possibleSteps[i].getX(), possibleSteps[i].getY()))
                 continue;
@@ -296,7 +297,7 @@ void Field::moveEnemies() {
     }
 }
 
-void Field::moveEnemy(const CellPoint &from, const CellPoint &to) {
+void Field::moveEnemy(const CellPoint from, const CellPoint to) {
     auto enemy = enemies[from];
     enemies.erase(from);
     enemies[to] = enemy;
@@ -318,6 +319,45 @@ Field::~Field() {
     for (const auto &item: enemies) {
         delete item.second;
     }
+}
+
+void Field::incCountSteps() {
+    counterSteps++;
+}
+
+long Field::getCountSteps() const {
+    return counterSteps;
+}
+
+void Field::createRandomEnemy() {
+    if (counterSteps % TIME_BETWEEN_GENERATE_ENEMY == 0 && enemies.size() < MAX_COUNT_ENEMIES) {
+        switch (rand() % 3) {
+            case 0:
+                createMonster(MONSTER_MAX_HEALTH, 1, 2);
+                break;
+            case 1:
+                createArcher(ARCHER_MAX_HEALTH, 2, 1);
+                break;
+            case 2:
+                createGargoyle(GARGOYLE_MAX_HEALTH, 3, 2);
+        }
+    }
+}
+
+void Field::createArcher(double health, double attackPower, double protection) {
+    CellPoint archerStartPoint;
+    do {
+        archerStartPoint = generateRandomFreePoint();
+    } while (Archer::inRangeVisibility(archerStartPoint, heroPos) || enemies.count(archerStartPoint));
+    enemies[archerStartPoint] = new Archer(health, attackPower, protection);
+}
+
+void Field::createGargoyle(double health, double attackPower, double protection) {
+    CellPoint gargoyleStartPoint;
+    do {
+        gargoyleStartPoint = generateRandomFreePoint();
+    } while (Gargoyle::inRangeVisibility(gargoyleStartPoint, heroPos) || enemies.count(gargoyleStartPoint));
+    enemies[gargoyleStartPoint] = new Gargoyle(health, attackPower, protection);
 }
 
 

@@ -13,7 +13,7 @@ class MainHero : public Character {
     bool requestDodge() const override;
     void recalcCharacteristics(std::vector<double> thingProperties);
 public:
-    MainHero(double health, double attackPower, double protection, double luck);// : Character(health, attackPower, protection), stamina(stamina), luck(std::max(luck, 1.0)) {}
+    MainHero(int characterType, double health, double attackPower, double protection, double luck);// : Character(health, attackPower, protection), stamina(stamina), luck(std::max(luck, 1.0)) {}
     MainHero() = default;
     std::vector<double> requestAttack(Character &enemy) override;
     void takeThing(Thing thing);

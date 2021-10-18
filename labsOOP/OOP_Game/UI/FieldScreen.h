@@ -7,7 +7,7 @@ enum MoveSide{
     LEFT = 'a',
     RIGHT = 'd',
     DOWN = 's',
-    TAKE = 't',
+    TAKE = 'e',
     EXIT = '`'
 };
 
@@ -27,5 +27,6 @@ public:
     void showStartFieldScreen();
     void gameStatusObserver();
     void printInventory() const;
+    void printEnemyInfo() const;
 
 };

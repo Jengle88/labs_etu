@@ -5,23 +5,23 @@ ThingsManager::ThingsManager(Field *field, std::map<CellPoint, Thing> visualThin
         : field(field), visualThingsPlaces(visualThingsPlaces), healthThingsPlaces(healthThingsPlaces), dataManager(DataManager()){}
 
 void ThingsManager::tryGenerateThing(const MainHero& hero) {
-    this->incCountSteps();
+    field->incCountSteps();
     const auto& achievements = hero.getCountKilledEnemy();
     if (hero.getHealth() * 100 / CHARACTER_MAX_HEALTH <= LOW_HEALTH_PERCENT && healthThingsPlaces.size() <= MAX_COUNT_HEALTH_THINGS) {
         generateHealthThing();
         return;
     }
     checkThingsLevel(achievements);
-    if (counterSteps % STEP_MULTIPLICITY == 0 && visualThingsPlaces.size() <= ThingObject::THING_OBJECT_SIZE - 2) {
+    if (field->getCountSteps() % STEP_MULTIPLICITY == 0 && visualThingsPlaces.size() <= ThingObject::THING_OBJECT_SIZE - 2) {
         generateVisualThing();
     }
 }
 
 void ThingsManager::checkThingsLevel(const std::vector<int> &achievements) {
-    if (levelThings == 1 && achievements[EnemyType::MONSTER] >= 3 && achievements[EnemyType::SKELETON_ARCHER] >= 1 && achievements[EnemyType::GARGOYLE] >= 1) {
+    if (levelThings == 1 && achievements[CharacterType::MONSTER] >= 3 && achievements[CharacterType::SKELETON_ARCHER] >= 1 && achievements[CharacterType::GARGOYLE] >= 1) {
         levelThings = 2;
     }
-    if (levelThings == 2 && achievements[EnemyType::MONSTER] >= 7 && achievements[EnemyType::SKELETON_ARCHER] >= 5 && achievements[EnemyType::GARGOYLE] >= 2) {
+    if (levelThings == 2 && achievements[CharacterType::MONSTER] >= 7 && achievements[CharacterType::SKELETON_ARCHER] >= 5 && achievements[CharacterType::GARGOYLE] >= 2) {
         levelThings = 3;
     }
 }
@@ -32,9 +32,6 @@ void ThingsManager::generateHealthThing() {
     field->setElem(point, CellObject(TypeCell::EMPTY, TypeObject::NOTHING, true));
 }
 
-void ThingsManager::incCountSteps() {
-    counterSteps++;
-}
 
 void ThingsManager::generateVisualThing() {
     constexpr auto getVectorFromMapPointThings = [](const std::map<CellPoint, Thing>& table) {

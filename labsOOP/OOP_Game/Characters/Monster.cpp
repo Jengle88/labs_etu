@@ -1,6 +1,7 @@
 #include "Monster.h"
 
-Monster::Monster(double health, double attackPower, double protection) : Character(health, attackPower, protection, 1) {}
+Monster::Monster(double health, double attackPower, double protection)
+        : Character(CharacterType::MONSTER, health, attackPower, protection, MONSTER_LUCK) {}
 
 bool Monster::requestProtect(double attackPower) {
     bool wasDodge = this->requestDodge();
@@ -16,7 +17,7 @@ bool Monster::requestDodge() const {
 }
 
 std::vector<double> Monster::requestAttack(Character &enemy) {
-    std::vector<double> actionTable(3);
+    std::vector<double> actionTable(3); // таблица событий при ударе
     bool wasCriticalAttack = isCriticalCase(luck);
     double startEnemyHealth = enemy.getHealth();
     bool wasDodge;
@@ -30,7 +31,7 @@ std::vector<double> Monster::requestAttack(Character &enemy) {
 std::vector<CellPoint> Monster::makeMove(CellPoint from, CellPoint heroPos) const {
     std::vector<CellPoint> res;
     res.reserve(4);
-    if (inRangeVisibility(from, heroPos) && willFollowToHero()) {
+    if (Monster::inRangeVisibility(from, heroPos) && willFollowToHero()) {
         int deltaX = -(from.getX() - heroPos.getX()) /
                      std::max(1, abs(from.getX() - heroPos.getX()));
         int deltaY = -(from.getY() - heroPos.getY()) /
@@ -39,8 +40,8 @@ std::vector<CellPoint> Monster::makeMove(CellPoint from, CellPoint heroPos) cons
         res.emplace_back(from.getX(), from.getY() + deltaY);
         return res;
     }
-    for (int i = -1; i <= 1; ++i) {
-        for (int j = -1; j <= 1; ++j) {
+    for (int i = -MONSTER_MOVE; i <= MONSTER_MOVE; ++i) {
+        for (int j = -MONSTER_MOVE; j <= MONSTER_MOVE; ++j) {
             if (i == 0 ^ j == 0) {
                 res.emplace_back(from.getX() + i,from.getY() + j);
             }
@@ -49,10 +50,10 @@ std::vector<CellPoint> Monster::makeMove(CellPoint from, CellPoint heroPos) cons
     return res;
 }
 
-bool Monster::willFollowToHero() const {
-    int k = (2.0 * 3.1416 * MONSTER_PERCENT_FOR_FOLLOW_TO_HERO / std::ceil(100 / 3.1416)); // коэффициент для того, чтобы на промежутке от 0 до 100 было PERCENT корней
-    double chance = std::sin((rand() % 100 + 1 / double(rand() % 100) * k)); // шанс того, что монстр пойдёт за героем
-    return (chance - int(chance)) <= ROOT_EPSILON;
+bool Monster::willFollowToHero() const { // FIXME: исправить, формула неверная
+    double k = (2.0 * 3.1416 * MONSTER_PERCENT_FOR_FOLLOW_TO_HERO / std::ceil(100 / 3.1416)); // коэффициент для того, чтобы на промежутке от 0 до 100 было PERCENT корней
+    double chance = std::sin((rand() % 100 + 1 / double(std::max(rand(),1) % 100)) * k); // шанс того, что монстр пойдёт за героем
+    return std::abs(chance - int(chance)) <= ROOT_EPSILON;
 
 }
 
@@ -62,9 +63,8 @@ bool Monster::inRangeVisibility(CellPoint monsterPos, CellPoint objectPos) {
 }
 
 bool Monster::isCriticalCase(double lucky) const {
-    srand(time(0)); // сделать глобально в начале игры????
     double checkCriticalAttack = std::sin(
-            (rand() % 100 + 1 / double(rand() % 100)) * luck); // есть ли способ проще? //luck >= 1, поэтому проблем нет
+            (rand() % 100 + 1 / double(std::max(rand(),1) % 100)) * luck); // есть ли способ проще? //luck >= 1, поэтому проблем нет
     return ((checkCriticalAttack - int(checkCriticalAttack)) <= ROOT_EPSILON);
 }
 
@@ -72,4 +72,7 @@ double Monster::calcReflectionArmor() const {
     return 1 / (this->protection + 2) + 0.5; // функция 1/(x+2) + 0.5 для расчёта множителя отражения удара доспехом
 }
 
+int Monster::getCharacterType() const {
+    return this->characterType;
+}
 

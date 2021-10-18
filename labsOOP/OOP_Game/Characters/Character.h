@@ -11,15 +11,17 @@
 #define LOW_HEALTH_PERCENT 30
 #define MAX_COUNT_HEALTH_THINGS 3
 
-enum EnemyType {
+enum CharacterType {
+    MAIN_HERO,
     MONSTER,
     SKELETON_ARCHER,
     GARGOYLE,
-    ENEMY_TYPE_SIZE
+    CHARACTER_TYPE_SIZE
 };
 
 class Character {
 protected:
+    int characterType;
     double health;
     double attackPower;
     double protection;
@@ -27,7 +29,7 @@ protected:
     virtual bool isCriticalCase(double luck) const;
     virtual double calcReflectionArmor() const;
 public:
-    Character(double health, double attackPower, double protection, double luck);
+    Character(int characterType, double health, double attackPower, double protection, double luck);
     Character();
     virtual std::vector<double> requestAttack(Character &enemy) = 0; // возвращает информацию, был ли критический удар, уклонение и изменение здоровья
     virtual bool requestProtect(double attackPower) = 0; // возвращает информацию, было ли уклонение
