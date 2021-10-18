@@ -12,10 +12,10 @@
 #define MAX_COUNT_HEALTH_THINGS 3
 
 enum CharacterType {
-    MAIN_HERO,
     MONSTER,
     SKELETON_ARCHER,
     GARGOYLE,
+    MAIN_HERO,
     CHARACTER_TYPE_SIZE
 };
 
@@ -35,5 +35,4 @@ public:
     virtual bool requestProtect(double attackPower) = 0; // возвращает информацию, было ли уклонение
     virtual bool requestDodge() const = 0; // возвращает информацию, уклонился ли
     double getHealth() const;
-
 };

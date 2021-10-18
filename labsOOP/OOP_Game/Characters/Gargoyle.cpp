@@ -38,7 +38,7 @@ double Gargoyle::calcReflectionArmor() const {
     return 1 / (this->protection + 2) + 0.5; // функция 1/(x+2) + 0.5 для расчёта множителя отражения удара доспехом
 }
 
-std::vector<CellPoint> Gargoyle::makeMove(CellPoint from, CellPoint heroPos) const {
+std::vector<CellPoint> Gargoyle::makeMove(CellPoint from, CellPoint heroPos) const { // Паттерн: Strategy
     std::vector<CellPoint> res;
     res.reserve(8);
     if (Gargoyle::inRangeVisibility(from, heroPos) && willFollowToHero()) {
@@ -75,5 +75,9 @@ int Gargoyle::getCharacterType() const {
 bool Gargoyle::inRangeVisibility(CellPoint monsterPos, CellPoint objectPos) {
     return abs(monsterPos.getX() - objectPos.getX()) <= GARGOYLE_RANGE_VISIBILITY && //попадает в прямоугольник видимости
            abs(monsterPos.getY() - objectPos.getY()) <= GARGOYLE_RANGE_VISIBILITY;
+}
+
+bool Gargoyle::checkPositiveHealth() const {
+    return health > 0;
 }
 

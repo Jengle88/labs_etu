@@ -4,7 +4,7 @@
 #include "Character.h"
 #include "../Objects/Thing.h"
 
-
+#define MAIN_HERO_VISIBILITY 1
 
 class MainHero : public Character {
     std::vector<Thing> things;
@@ -18,8 +18,9 @@ public:
     std::vector<double> requestAttack(Character &enemy) override;
     void takeThing(Thing thing);
     void ejectThing(int pos);
+    bool useThing(int pos);
     void replaceThing(int pos, Thing thing);
     const std::vector<Thing> & getInventory() const;
     const std::vector<int> &getCountKilledEnemy() const;
-
+    bool checkPositiveHealth() const;
 };

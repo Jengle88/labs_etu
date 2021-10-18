@@ -1,6 +1,7 @@
 #include <termios.h>
 #include <unistd.h>
 #include "FieldScreen.h"
+#include "../Tools/Printer.h"
 
 
 FieldScreen::FieldScreen() : thingsManager(field) {
@@ -82,25 +83,7 @@ void FieldScreen::showUpdatedScreen() const {
     if (!this->field->getStatusStartFinish() || !this->field->getStatusWay()) {
         throw -1;
     }
-
-    for (int i = 0; i < field->getWidth() + 2; ++i) {
-        std::cout << '_';
-    }
-    std::cout << '\n';
-    auto fieldIterator = field->getFieldIterator();
-    for (int i = 0; i < field->getHeight(); ++i) {
-        std::cout << '|';
-        for (int j = 0; j < field->getWidth(); ++j) {
-            char c = (fieldIterator++).getElem().getValue().getCellAsChar();
-            std::cout << (c == '#' ? ' ' : c);
-        }
-        std::cout << '|';
-        std::cout << '\n';
-    }
-    for (int i = 0; i < field->getWidth() + 2; ++i) {
-        std::cout << '_';
-    }
-    std::cout << '\n';
+    Printer::printFullField(field);
 }
 
 /*
@@ -124,6 +107,7 @@ bool FieldScreen::registerMovement(char &action, std::string &gameAction) {
     CellPoint heroPos = field->getHeroPos();
     thingsManager.tryGenerateThing(field->hero); // также считает шаги
     std::pair<bool, Thing> thingOnPos;
+    int status = 1;
     switch (tolower(action)) {
         case MoveSide::UP:
             requestMoveObject(heroPos, CellPoint(heroPos.getX(), heroPos.getY() - 1), gameAction);
@@ -139,6 +123,9 @@ bool FieldScreen::registerMovement(char &action, std::string &gameAction) {
             return true;
         case MoveSide::TAKE:
             requestTakeObject(heroPos);
+            return true;
+        case MoveSide::FIGHT:
+            status = requestStartFight(heroPos); // TODO Как обработать GAME_OVER???
             return true;
         case MoveSide::EXIT:
             return false;
@@ -170,7 +157,7 @@ void FieldScreen::gameStatusObserver() {
 //    char action = getch(); // считываем перенос строки
     std::cout << "Для выхода введите ` и нажмите enter.\n";
     showUpdatedScreen();
-    printInventory();
+    Printer::printInventory(&(this->field->getHero()));
     while (action != MoveSide::EXIT) {
         std::string gameAction = "";
         bool goodMovement = registerMovement(action, gameAction);
@@ -182,8 +169,8 @@ void FieldScreen::gameStatusObserver() {
             field->moveEnemies();
             showUpdatedScreen();
             std::cout << gameAction << '\n';
-            printEnemyInfo();
-            printInventory();
+            Printer::printEnemyInfo(&(field->enemies));
+            Printer::printInventory(&(this->field->getHero()));
         }
     }
     std::system("clear");
@@ -207,18 +194,18 @@ FieldScreen::generateTitleForThingAction(const std::string &nameThing, const std
     return res;
 }
 
-void FieldScreen::printInventory() const {
-    auto inventory = this->field->getHero().getInventory();
-    std::cout << "Инвентарь: \n";
-    if (inventory.empty()) {
-        std::cout << "(Пустой)\n\n";
-        return;
-    }
-    for(const auto& thing : inventory) {
-        std::cout << thing.getNameThing() << '\n';
-    }
-    std::cout << '\n';
-}
+//void FieldScreen::printInventory() const {
+//    auto inventory = this->field->getHero().getInventory();
+//    std::cout << "Инвентарь: \n";
+//    if (inventory.empty()) {
+//        std::cout << "(Пустой)\n\n";
+//        return;
+//    }
+//    for(const auto& thing : inventory) {
+//        std::cout << thing.getNameThing() << '\n';
+//    }
+//    std::cout << '\n';
+//}
 
 void FieldScreen::requestTakeObject(CellPoint point) {
     auto thingOnPos = thingsManager.checkCell(point);
@@ -228,24 +215,38 @@ void FieldScreen::requestTakeObject(CellPoint point) {
     }
 }
 
-void FieldScreen::printEnemyInfo() const {
-    int cntMonster = 0, cntArcher = 0, cntGargoyle = 0; // Не очень оптимизировано
-    for (const auto &enemy: field->enemies) {
-        switch (enemy.second->getCharacterType()) {
-            case CharacterType::MONSTER:
-                cntMonster++;
-                break;
-            case CharacterType::SKELETON_ARCHER:
-                cntArcher++;
-                break;
-            case CharacterType::GARGOYLE:
-                cntGargoyle++;
-                break;
+//void FieldScreen::printEnemyInfo() const {
+//    int cntMonster = 0, cntArcher = 0, cntGargoyle = 0; // Не очень оптимизировано
+//    for (const auto &enemy: field->enemies) {
+//        switch (enemy.second->getCharacterType()) {
+//            case CharacterType::MONSTER:
+//                cntMonster++;
+//                break;
+//            case CharacterType::SKELETON_ARCHER:
+//                cntArcher++;
+//                break;
+//            case CharacterType::GARGOYLE:
+//                cntGargoyle++;
+//                break;
+//        }
+//    }
+//    std:: cout << "Сейчас на поле: \n"
+//                  "Монстр: " + std::to_string(cntMonster) + ",\n"
+//                  "Скелет-лучник: " + std::to_string(cntArcher) + ",\n"
+//                  "Горгулья: " + std::to_string(cntGargoyle) + "\n\n";
+//
+//}
+
+int FieldScreen::requestStartFight(CellPoint point) {
+    int statusFight = 1;
+    for (int i = -MAIN_HERO_VISIBILITY; i <= MAIN_HERO_VISIBILITY; ++i) {
+        for (int j = -MAIN_HERO_VISIBILITY; j <= MAIN_HERO_VISIBILITY; ++j) {
+            if (field->enemies.count(CellPoint(i,j))) {
+                // system("clear");
+                // statusFight = fightScreen(...);
+                // TODO показать экран боя
+            }
         }
     }
-    std:: cout << "Сейчас на поле: \n"
-                  "Монстр: " + std::to_string(cntMonster) + ",\n"
-                  "Скелет-лучник: " + std::to_string(cntArcher) + ",\n"
-                  "Горгулья: " + std::to_string(cntGargoyle) + "\n\n";
-
+    return statusFight;
 }

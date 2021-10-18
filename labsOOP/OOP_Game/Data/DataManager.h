@@ -8,11 +8,11 @@ public:
     DataManager();
     Thing getThing(int level, int typeThing);
     // Герой
-    std::vector<std::string> getModelHeroHead();
-    std::vector<std::string> getModelHeroBodyWait(bool withSword = false, bool withArmor = false);
-    std::vector<std::string> getModelHeroLegs();
+    std::vector<std::string> getModelHeroHead() const;
+    std::vector<std::string> getModelHeroBodyWait(bool withSword = false, bool withArmor = false) const;
+    std::vector<std::string> getModelHeroLegs() const;
     // Враги
-    std::vector<std::string> getModelMonsterWait();
-    std::vector<std::string> getModelArcherWait();
-    std::vector<std::string> getModelGargoyleWait();
+    std::vector<std::string> getModelMonsterWait() const;
+    std::vector<std::string> getModelArcherWait() const;
+    std::vector<std::string> getModelGargoyleWait() const;
 };

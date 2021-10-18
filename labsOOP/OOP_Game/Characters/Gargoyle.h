@@ -26,5 +26,6 @@ public:
     std::vector<CellPoint> makeMove(CellPoint from, CellPoint heroPos) const override;
     static bool inRangeVisibility(CellPoint monsterPos, CellPoint objectPos);
     int getCharacterType() const override;
+    bool checkPositiveHealth() const override;
     ~Gargoyle() override = default;
 };

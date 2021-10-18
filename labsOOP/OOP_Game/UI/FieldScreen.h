@@ -8,6 +8,7 @@ enum MoveSide{
     RIGHT = 'd',
     DOWN = 's',
     TAKE = 'e',
+    FIGHT = 'f',
     EXIT = '`'
 };
 
@@ -20,13 +21,13 @@ class FieldScreen {
     bool registerMovement(char &action, std::string& gameAction);
     void requestMoveObject(CellPoint from, CellPoint to, std::string& gameAction);
     void requestTakeObject(CellPoint point);
+    int requestStartFight(CellPoint point);
     std::string generateTitleForThingAction(const std::string& nameThing, const std::vector<double>& properties);
 public:
     FieldScreen();
     ~FieldScreen();
     void showStartFieldScreen();
     void gameStatusObserver();
-    void printInventory() const;
-    void printEnemyInfo() const;
+//    void printEnemyInfo() const;
 
 };

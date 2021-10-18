@@ -34,9 +34,9 @@ class Field {
     void generateWayWithoutWalls(CellPoint start, CellPoint finish);
     void generateWalls(int countWalls);
 
-    void createMonster(double health, double attackPower, double protection);
-    void createArcher(double health, double attackPower, double protection);
-    void createGargoyle(double health, double attackPower, double protection);
+    void createMonster(double health, double attackPower, double protection); // Паттерн: фабрика
+    void createArcher(double health, double attackPower, double protection); // Паттерн: фабрика
+    void createGargoyle(double health, double attackPower, double protection); // Паттерн: фабрика
 public:
     Field();
     Field(int height, int width, CellPoint start = CellPoint(0,0), CellPoint finish = CellPoint(0,0), Grid grid = Grid());

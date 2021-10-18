@@ -28,7 +28,7 @@ std::vector<double> Monster::requestAttack(Character &enemy) {
     return {double(wasCriticalAttack), double(wasDodge), startEnemyHealth - enemy.getHealth()};
 }
 
-std::vector<CellPoint> Monster::makeMove(CellPoint from, CellPoint heroPos) const {
+std::vector<CellPoint> Monster::makeMove(CellPoint from, CellPoint heroPos) const { // Паттерн: Strategy
     std::vector<CellPoint> res;
     res.reserve(4);
     if (Monster::inRangeVisibility(from, heroPos) && willFollowToHero()) {
@@ -54,7 +54,6 @@ bool Monster::willFollowToHero() const { // FIXME: исправить, форм�
     double k = (2.0 * 3.1416 * MONSTER_PERCENT_FOR_FOLLOW_TO_HERO / std::ceil(100 / 3.1416)); // коэффициент для того, чтобы на промежутке от 0 до 100 было PERCENT корней
     double chance = std::sin((rand() % 100 + 1 / double(std::max(rand(),1) % 100)) * k); // шанс того, что монстр пойдёт за героем
     return std::abs(chance - int(chance)) <= ROOT_EPSILON;
-
 }
 
 bool Monster::inRangeVisibility(CellPoint monsterPos, CellPoint objectPos) {
@@ -74,5 +73,9 @@ double Monster::calcReflectionArmor() const {
 
 int Monster::getCharacterType() const {
     return this->characterType;
+}
+
+bool Monster::checkPositiveHealth() const {
+    return health > 0;
 }
 

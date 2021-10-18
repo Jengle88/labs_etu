@@ -39,7 +39,7 @@ bool Archer::requestDodge() const {
     return isCriticalCase(luck);
 }
 
-std::vector<CellPoint> Archer::makeMove(CellPoint from, CellPoint heroPos) const {
+std::vector<CellPoint> Archer::makeMove(CellPoint from, CellPoint heroPos) const { // Паттерн: Strategy
     std::vector<CellPoint> res;
     res.reserve(4);
     if (Archer::inRangeVisibility(from, heroPos) && willFollowToHero()) {
@@ -75,5 +75,9 @@ bool Archer::inRangeVisibility(CellPoint monsterPos, CellPoint objectPos) {
 
 int Archer::getCharacterType() const {
     return this->characterType;
+}
+
+bool Archer::checkPositiveHealth() const {
+    return health > 0;
 }
 

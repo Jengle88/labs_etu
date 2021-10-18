@@ -33,3 +33,7 @@ bool operator==(const Thing& val1, const Thing& val2) {
     val1.isVisualized == val2.isVisualized;
 }
 
+bool Thing::isActiveThing() const {
+    return thingObject == ThingObject::POTION_HEAL;
+}
+

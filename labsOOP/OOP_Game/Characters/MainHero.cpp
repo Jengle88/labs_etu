@@ -1,6 +1,7 @@
 #include "MainHero.h"
 
-MainHero::MainHero(int characterType, double health, double attackPower, double protection, double luck) : Character(characterType, health, attackPower, protection, std::max(luck, 1.0)){
+MainHero::MainHero(int characterType, double health, double attackPower, double protection, double luck) : Character(
+        characterType, health, attackPower, protection, std::max(luck, 1.0)) {
     countKilledEnemy.resize(CharacterType::CHARACTER_TYPE_SIZE - 1);
 }
 
@@ -58,8 +59,26 @@ const std::vector<int> &MainHero::getCountKilledEnemy() const {
     return countKilledEnemy;
 }
 
-const std::vector<Thing> & MainHero::getInventory() const {
+const std::vector<Thing> &MainHero::getInventory() const {
     return things;
+}
+
+bool MainHero::checkPositiveHealth() const {
+    return health > 0;
+}
+
+bool MainHero::useThing(int pos) {
+    if (0 <= pos && pos < things.size()) {
+        if (things[pos].isActiveThing()) {
+            auto properties = things[pos].getProperties();
+            health += properties[ThingProperties::HEAL];
+            attackPower += properties[ThingProperties::DAMAGE];
+            protection += properties[ThingProperties::PROTECTION];
+            luck += properties[ThingProperties::LUCK];
+            return true;
+        }
+    }
+    return false;
 }
 
 

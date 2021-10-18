@@ -29,5 +29,6 @@ public:
     static bool inRangeVisibility(CellPoint monsterPos, CellPoint objectPos);
     using Character::getHealth;
     int getCharacterType() const override;
+    bool checkPositiveHealth() const override;
     ~Monster() override = default;
 };

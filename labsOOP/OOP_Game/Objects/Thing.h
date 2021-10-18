@@ -36,7 +36,7 @@ public:
     const std::vector<double>& getProperties() const;
     int getThingObject() const;
     bool getStatusIsVisualized() const;
-
+    bool isActiveThing() const;
     std::vector<double> getInverseValueProperties() const;
 };
 

@@ -19,7 +19,7 @@ Thing DataManager::getThing(int level, int typeThing) {
     return levelToThings[level][typeThing];
 }
 
-std::vector<std::string> DataManager::getModelHeroHead() {
+std::vector<std::string> DataManager::getModelHeroHead() const {
     return {
               "  _____ ",
              " //.,.\\\\",
@@ -31,7 +31,7 @@ std::vector<std::string> DataManager::getModelHeroHead() {
              */
 }
 
-std::vector<std::string> DataManager::getModelHeroBodyWait(bool withSword, bool withArmor) {
+std::vector<std::string> DataManager::getModelHeroBodyWait(bool withSword, bool withArmor) const {
     if (withArmor && withSword) {
         return {
                  "  _ | _   /",
@@ -84,7 +84,7 @@ std::vector<std::string> DataManager::getModelHeroBodyWait(bool withSword, bool 
     }
 }
 
-std::vector<std::string> DataManager::getModelHeroLegs() {
+std::vector<std::string> DataManager::getModelHeroLegs() const {
     return {
           "  /   \\  ",
           "_/     \\_"
@@ -95,7 +95,7 @@ std::vector<std::string> DataManager::getModelHeroLegs() {
      */
 }
 
-std::vector<std::string> DataManager::getModelMonsterWait() {
+std::vector<std::string> DataManager::getModelMonsterWait() const {
     return {
         "     /_// ",
         "    /0_0\\ ",
@@ -120,7 +120,7 @@ std::vector<std::string> DataManager::getModelMonsterWait() {
      */
 }
 
-std::vector<std::string> DataManager::getModelArcherWait() {
+std::vector<std::string> DataManager::getModelArcherWait() const {
     return {
         "     /---\\ ",
         "    -|x x|-",
@@ -145,7 +145,7 @@ std::vector<std::string> DataManager::getModelArcherWait() {
      */
 }
 
-std::vector<std::string> DataManager::getModelGargoyleWait() {
+std::vector<std::string> DataManager::getModelGargoyleWait() const {
     return {
         "     /_//   ",
         "    /*_*\\   ",
