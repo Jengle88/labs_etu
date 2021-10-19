@@ -303,7 +303,9 @@ void Field::moveEnemy(const CellPoint from, const CellPoint to) {
     enemies[to] = enemy;
     auto prevPointData = field.getElem(from);
     auto newPointData = field.getElem(to);
-    field.setElem(from, Cell(CellObject(prevPointData.getValue().getTypeCell(), TypeObject::NOTHING, prevPointData.getValue().isThing())));
+    field.setElem(from, Cell(CellObject(prevPointData.getValue().getTypeCell(),
+                                        prevPointData.getValue().getTypeObject() == TypeObject::HERO ? TypeObject::HERO : TypeObject::NOTHING,
+                                        prevPointData.getValue().isThing())));
     field.setElem(to, Cell(CellObject(newPointData.getValue().getTypeCell(), TypeObject::ENEMY, newPointData.getValue().isThing())));
 }
 
@@ -316,7 +318,7 @@ void Field::createMonster(double health, double attackPower, double protection) 
 }
 
 Field::~Field() {
-    for (const auto &item: enemies) {
+    for (auto &item: enemies) {
         delete item.second;
     }
 }
@@ -362,6 +364,13 @@ void Field::createGargoyle(double health, double attackPower, double protection)
 
 Enemy& Field::getEnemyFromPoint(CellPoint point) {
     return static_cast<Enemy &>(*enemies[point]);
+}
+
+void Field::killEnemy(CellPoint from) {
+
+    delete enemies[from]; // TODO check
+    enemies.erase(from);
+    setElem(from, CellObject(getElem(from).getValue().getTypeCell(), TypeObject::NOTHING, getElem(from).getValue().isThing()));
 }
 
 

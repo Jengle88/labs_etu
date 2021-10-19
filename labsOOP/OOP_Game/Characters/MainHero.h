@@ -6,6 +6,9 @@
 #include <algorithm>
 
 #define MAIN_HERO_VISIBILITY 1
+#define MAIN_HERO_DAMAGE 1
+#define MAIN_HERO_PROTECTION 1
+#define MAIN_HERO_LUCK 1
 
 class MainHero : public Character {
     std::vector<Thing> things;

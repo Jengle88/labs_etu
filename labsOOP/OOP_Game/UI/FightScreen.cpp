@@ -6,7 +6,7 @@ FightScreen::FightScreen(MainHero &mainHero, Enemy &enemy) : mainHero(mainHero),
                                                              dataManager(DataManager()),
                                                              enemy(enemy) {}
 
-bool FightScreen::fightObserver(/*MainHero &mainHero, Enemy &enemy*/) {
+int FightScreen::fightObserver() {
     showUpdatedScreen();
     Printer::printHealthPoint(std::max(mainHero.getHealth(), 0.0), std::max(dynamic_cast<Character&>(enemy).getHealth(), 0.0));
     while (mainHero.checkPositiveHealth() && enemy.checkPositiveHealth()) {
@@ -14,14 +14,16 @@ bool FightScreen::fightObserver(/*MainHero &mainHero, Enemy &enemy*/) {
         std::system("clear");
         if(!requestAction(action)) {
             getchar(); // считываем перенос строки
-            return mainHero.checkPositiveHealth();
+            return FightStatus::LEAVE_FIGHT;
         }
         showUpdatedScreen();
         Printer::printHealthPoint(std::max(mainHero.getHealth(), 0.0), std::max(dynamic_cast<Character&>(enemy).getHealth(), 0.0));
     }
+
     if (mainHero.checkPositiveHealth())
         mainHero.writeKill(enemy.getCharacterType());
-    getchar(); // считываем перенос строки
+    std::cout << "Вы победили!\nНажмите любую кнопку, чтобы продолжить.";
+    getchar();
     return mainHero.checkPositiveHealth();
 }
 

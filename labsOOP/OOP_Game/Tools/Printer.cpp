@@ -86,3 +86,9 @@ void Printer::printAttackInfo(int characterType, double damage, bool wasDodge, b
               (wasCritical ? "нанёс критический урон.\n" : "не нанёс критический урон.\n");
 }
 
+void Printer::printHeroAchievement(const std::vector<int> &achievement) {
+    std::cout << "Вы убили " << achievement[CharacterType::MONSTER] << " монстров.\n";
+    std::cout << "Вы убили " << achievement[CharacterType::SKELETON_ARCHER] << " скелетов-лучников.\n";
+    std::cout << "Вы убили " << achievement[CharacterType::GARGOYLE] << " горгулий.\n";
+}
+

@@ -7,7 +7,11 @@ ThingsManager::ThingsManager(Field *field, std::map<CellPoint, Thing> visualThin
 void ThingsManager::tryGenerateThing(const MainHero& hero) {
     field->incCountSteps();
     const auto& achievements = hero.getCountKilledEnemy();
-    if (hero.getHealth() * 100 / CHARACTER_MAX_HEALTH <= LOW_HEALTH_PERCENT && healthThingsPlaces.size() <= MAX_COUNT_HEALTH_THINGS) {
+    const auto& heroInventory = hero.getInventory();
+
+    if (hero.getHealth() * 100 / CHARACTER_MAX_HEALTH <= LOW_HEALTH_PERCENT && healthThingsPlaces.size()
+    + std::count_if(heroInventory.begin(),  heroInventory.end(),
+                    [](const Thing& thing) {return thing.getThingObject() == ThingObject::POTION_HEAL;}) <= MAX_COUNT_HEALTH_THINGS) {
         generateHealthThing();
         return;
     }

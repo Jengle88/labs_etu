@@ -11,8 +11,8 @@
 #include <map>
 
 #define PERCENT_WALLS 35
-#define MAX_COUNT_ENEMIES 5
-#define TIME_BETWEEN_GENERATE_ENEMY 4
+#define MAX_COUNT_ENEMIES 1
+#define TIME_BETWEEN_GENERATE_ENEMY 2
 
 class Field {
 	Grid field;
@@ -52,6 +52,7 @@ public:
     void moveHero(CellPoint to);
     void moveEnemies();
     void moveEnemy(CellPoint from, CellPoint to);
+    void killEnemy(CellPoint from);
     CellPoint generateRandomFreePoint();
 
     void printField(); // нужно для DEMO
