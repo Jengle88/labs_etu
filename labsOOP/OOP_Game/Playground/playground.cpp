@@ -96,16 +96,15 @@ enum ENUM {
 };
 
 #define MONSTER_PERCENT_FOR_FOLLOW_TO_HERO 80
-#define ROOT_EPSILON 1.3e-2
 
-bool willFollowToHero() {
-    double k = ((long double) (2 * 3.1416 * MONSTER_PERCENT_FOR_FOLLOW_TO_HERO) /
-                std::ceil(100 / 3.1416)); // коэффициент для того, чтобы на промежутке от 0 до 100 было PERCENT корней
-    double chance = std::sin(
-            (rand() % 100 + 1 / double(std::max(rand(), 1) % 100) * k)); // шанс того, что монстр пойдёт за героем
-    return (chance - int(chance)) <= ROOT_EPSILON;
-
-}
+//bool willFollowToHero() {
+//    double k = ((long double) (2 * 3.1416 * MONSTER_PERCENT_FOR_FOLLOW_TO_HERO) /
+//                std::ceil(100 / 3.1416)); // коэффициент для того, чтобы на промежутке от 0 до 100 было PERCENT корней
+//    double chance = std::sin(
+//            (rand() % 100 + 1 / double(std::max(rand(), 1) % 100) * k)); // шанс того, что монстр пойдёт за героем
+//    return (chance - int(chance)) <= ROOT_EPSILON;
+//
+//}
 
 int main() { //проверено
 
@@ -136,15 +135,25 @@ int main() { //проверено
 //            }
 //        }
 //    }
+
+
+
+
+#define ROOT_EPSILON 1e-3
     int percent = 354;
 
-    int k = int((100.0 / percent) * 100);
+    auto k = double((3.1416 * (percent - 1)) / 100);
     int cnt = 0;
-    for (double i = 0.01; i <= 100; i += 0.01) {
-        if (int(i * 100) % k == 0)
+    for (double i = 0.00001; k*i <= 100; i += 0.00001) {
+        if (abs(sin(k*i) - int(sin(k*i))) <= ROOT_EPSILON)
             cnt++;
     }
     cout << cnt;
+
+
+
+
+
 
 //    int cnt = 0;
 //    int percent = 20;
