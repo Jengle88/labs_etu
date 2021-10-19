@@ -58,8 +58,8 @@ void Printer::printEnemyInfo(std::map<CellPoint, Enemy *> *enemies) {
                  std::to_string(cntGargoyle) + "\n\n";
 }
 
-void Printer::printHealthPoint(const double heroHealth, const double enemyHealth) {
-    std::cout << "HP: " << heroHealth << "\t\t" << "HP: " << enemyHealth << '\n';
+void Printer::printHealthInfo(const double heroHealth, const double enemyHealth) {
+    std::cout << "HP: " << heroHealth << "\t\t\t\t" << "HP: " << enemyHealth << '\n';
 }
 
 void Printer::printAttackInfo(int characterType, double damage, bool wasDodge, bool wasCritical) {

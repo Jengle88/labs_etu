@@ -8,7 +8,8 @@ FightScreen::FightScreen(MainHero &mainHero, Enemy &enemy) : mainHero(mainHero),
 
 int FightScreen::fightObserver() {
     showUpdatedScreen();
-    Printer::printHealthPoint(std::max(mainHero.getHealth(), 0.0), std::max(dynamic_cast<Character&>(enemy).getHealth(), 0.0));
+    Printer::printHealthInfo(std::max(mainHero.getHealth(), 0.0),
+                             std::max(dynamic_cast<Character &>(enemy).getHealth(), 0.0));
     while (mainHero.checkPositiveHealth() && enemy.checkPositiveHealth()) {
         char action = getchar();
         std::system("clear");
@@ -17,7 +18,8 @@ int FightScreen::fightObserver() {
             return FightStatus::LEAVE_FIGHT;
         }
         showUpdatedScreen();
-        Printer::printHealthPoint(std::max(mainHero.getHealth(), 0.0), std::max(dynamic_cast<Character&>(enemy).getHealth(), 0.0));
+        Printer::printHealthInfo(std::max(mainHero.getHealth(), 0.0),
+                                 std::max(dynamic_cast<Character &>(enemy).getHealth(), 0.0));
     }
 
     if (mainHero.checkPositiveHealth())

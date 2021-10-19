@@ -11,8 +11,8 @@
 #include <map>
 
 #define PERCENT_WALLS 35
-#define MAX_COUNT_ENEMIES 1
-#define TIME_BETWEEN_GENERATE_ENEMY 2
+#define MAX_COUNT_ENEMIES 4
+#define TIME_BETWEEN_GENERATE_ENEMY 3
 
 class Field {
 	Grid field;

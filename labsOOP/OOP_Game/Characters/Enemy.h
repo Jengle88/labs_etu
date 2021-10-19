@@ -15,5 +15,4 @@ public:
     virtual int getCharacterType() const = 0;
     virtual bool checkPositiveHealth() const = 0;
     virtual ~Enemy() = default;
-//    virtual bool inRangeVisibility(CellPoint monsterPos, CellPoint objectPos) const = 0;
 };

@@ -8,73 +8,75 @@
 using namespace std;
 
 class Solve {
-	int n;
-	int m;
-	int stx;
-	int sty;
-	int finx;
-	int finy;
+    int n;
+    int m;
+    int stx;
+    int sty;
+    int finx;
+    int finy;
 public:
 
-	Solve(int n, int m, int stx, int sty, int finx, int finy) : n(n), m(m), stx(stx), sty(sty), finx(finx),
-	                                                            finy(finy) {}
+    Solve(int n, int m, int stx, int sty, int finx, int finy) : n(n), m(m), stx(stx), sty(sty), finx(finx),
+                                                                finy(finy) {}
 
-	int calcDist(int stx, int sty) const {
-		return abs(stx - finx) + abs(sty - finy);
-	}
+    int calcDist(int stx, int sty) const {
+        return abs(stx - finx) + abs(sty - finy);
+    }
 
 
-	bool rightWay(int stx, int sty, int curDist) {
-		return 0 <= stx && stx < m && 0 <= sty && sty < n && calcDist(stx, sty) < curDist;
-	}
+    bool rightWay(int stx, int sty, int curDist) {
+        return 0 <= stx && stx < m && 0 <= sty && sty < n && calcDist(stx, sty) < curDist;
+    }
 
-	void solve() {
-		vector <vector<char>> nodes(n, vector<char>(m, '.'));
-		vector <pair<int, int>> points;
-		nodes[sty][stx] = 'S';
-		int dist = calcDist(stx, sty);
-		srand(time(0));
-		int deltaX = -(stx - finx) / max(1,abs(stx - finx));
-		int deltaY = -(sty - finy) / max(1,abs(sty - finy));
-		while (stx != finx || sty != finy) {
-			switch (rand() % 2) {
-				case 0:
-					if (rightWay(stx + deltaX, sty, dist)) {
-						stx += deltaX;
-						dist = calcDist(stx, sty);
-						points.emplace_back(sty, stx);
-					}
-					break;
-				case 1:
-					if (rightWay(stx, sty + deltaY, dist)) {
-						sty += deltaY;
-						dist = calcDist(stx, sty);
-						points.emplace_back(sty, stx);
-					}
-					break;
-			}
-		}
-		for (auto &point: points) {
-			nodes[point.first][point.second] = 'X';
-		}
-		nodes[finy][finx] = 'F';
-		for (int i = 0; i < n; ++i) {
-			for (int j = 0; j < m; ++j) {
-				cout << nodes[i][j];
-			}
-			cout << '\n';
-		}
-	}
+    void solve() {
+        vector<vector<char>> nodes(n, vector<char>(m, '.'));
+        vector<pair<int, int>> points;
+        nodes[sty][stx] = 'S';
+        int dist = calcDist(stx, sty);
+        srand(time(0));
+        int deltaX = -(stx - finx) / max(1, abs(stx - finx));
+        int deltaY = -(sty - finy) / max(1, abs(sty - finy));
+        while (stx != finx || sty != finy) {
+            switch (rand() % 2) {
+                case 0:
+                    if (rightWay(stx + deltaX, sty, dist)) {
+                        stx += deltaX;
+                        dist = calcDist(stx, sty);
+                        points.emplace_back(sty, stx);
+                    }
+                    break;
+                case 1:
+                    if (rightWay(stx, sty + deltaY, dist)) {
+                        sty += deltaY;
+                        dist = calcDist(stx, sty);
+                        points.emplace_back(sty, stx);
+                    }
+                    break;
+            }
+        }
+        for (auto &point: points) {
+            nodes[point.first][point.second] = 'X';
+        }
+        nodes[finy][finx] = 'F';
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                cout << nodes[i][j];
+            }
+            cout << '\n';
+        }
+    }
 
 };
 
 class A {
 public:
     vector<int> b;
+
     A() {
         std::cout << "constr\n";
         b = vector<int>(10);
     }
+
     ~A() {
         std::cout << "destr\n";
     }
@@ -94,20 +96,23 @@ enum ENUM {
 };
 
 #define MONSTER_PERCENT_FOR_FOLLOW_TO_HERO 80
-#define ROOT_EPSILON 1e-6
+#define ROOT_EPSILON 1.3e-2
+
 bool willFollowToHero() {
-    double k = ((long double)(2 * 3.1416 * MONSTER_PERCENT_FOR_FOLLOW_TO_HERO) / std::ceil(100 / 3.1416)); // коэффициент для того, чтобы на промежутке от 0 до 100 было PERCENT корней
-    double chance = std::sin((rand() % 100 + 1 / double(std::max(rand(),1) % 100) * k)); // шанс того, что монстр пойдёт за героем
+    double k = ((long double) (2 * 3.1416 * MONSTER_PERCENT_FOR_FOLLOW_TO_HERO) /
+                std::ceil(100 / 3.1416)); // коэффициент для того, чтобы на промежутке от 0 до 100 было PERCENT корней
+    double chance = std::sin(
+            (rand() % 100 + 1 / double(std::max(rand(), 1) % 100) * k)); // шанс того, что монстр пойдёт за героем
     return (chance - int(chance)) <= ROOT_EPSILON;
 
 }
 
 int main() { //проверено
 
-    auto enemy = DataManager().getHero(true, true);
-    for (int i = 0; i < enemy.size(); ++i) {
-        std::cout << enemy[i] << '\n';
-    }
+//    auto enemy = DataManager().getHero(true, true);
+//    for (int i = 0; i < enemy.size(); ++i) {
+//        std::cout << enemy[i] << '\n';
+//    }
 //	int n;
 //	int m;
 //	int stx, sty, finx, finy;
@@ -131,14 +136,30 @@ int main() { //проверено
 //            }
 //        }
 //    }
+    int percent = 354;
+
+    int k = int((100.0 / percent) * 100);
+    int cnt = 0;
+    for (double i = 0.01; i <= 100; i += 0.01) {
+        if (int(i * 100) % k == 0)
+            cnt++;
+    }
+    cout << cnt;
 
 //    int cnt = 0;
-//    int k = ((long double)(2 * 3.1416 * MONSTER_PERCENT_FOR_FOLLOW_TO_HERO) / std::ceil(100 / 3.1416)); // коэффициент для того, чтобы на промежутке от 0 до 100 было PERCENT корней
-//    for (double i = 0.00; i <= 100; i += 0.000001) {
+//    int percent = 20;
+//    double k = ((long double)(3.1416 * double(percent)) / 100); // коэффициент для того, чтобы на промежутке от 0 до 100 было PERCENT корней
+//    for (double i = 0.00; i <= 100; i += 0.01) {
 ////        double chance = std::sin((rand() % 100 + 1 / double(std::max(rand(),1) % 100) * k)); // шанс того, что монстр пойдёт за героем
-//        double z = (sin(k*i) - int(sin(k*i)));
-//        if (abs(z) <= ROOT_EPSILON)
+//        if (abs(i -  1.235) < ROOT_EPSILON)
+//            int z1 = 2;
+//        double z2 = sin(k*i);
+//        double z3 = int(sin(k*i));
+//        double z = abs(z2 - z3);
+//        if (abs(z) <= ROOT_EPSILON) {
+//            std::cout << cnt + 1 << ") " << i << '\n';
 //            cnt++;
+//        }
 //    }
 //    cout << cnt;
 
@@ -154,5 +175,5 @@ int main() { //проверено
 //    for (int i = 0; i < size; ++i) {
 //        std::cout << arr2[i] << ' ';
 //    }
-	return 0;
+    return 0;
 }

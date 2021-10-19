@@ -16,7 +16,7 @@ void ThingsManager::tryGenerateThing(const MainHero& hero) {
         return;
     }
     checkThingsLevel(achievements);
-    if (field->getCountSteps() % STEP_MULTIPLICITY == 0 && visualThingsPlaces.size() <= ThingObject::THING_OBJECT_SIZE - 2) {
+    if (field->getCountSteps() % TIME_BETWEEN_GENERATE_THING == 0 && visualThingsPlaces.size() <= ThingObject::THING_OBJECT_SIZE - 2) {
         generateVisualThing();
     }
 }

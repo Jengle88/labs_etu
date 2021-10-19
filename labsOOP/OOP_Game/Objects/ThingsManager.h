@@ -8,7 +8,7 @@
 #include "../UI/Models/Field.h"
 #include "../Data/DataManager.h"
 
-#define STEP_MULTIPLICITY 15
+#define TIME_BETWEEN_GENERATE_THING 15
 
 class ThingsManager {
     Field *field;

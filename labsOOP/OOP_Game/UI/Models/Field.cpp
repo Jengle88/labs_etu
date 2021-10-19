@@ -279,7 +279,8 @@ MainHero& Field::getHero() {
 }
 
 void Field::moveEnemies() {
-    for (const auto &enemy: enemies) {
+    auto tempEnemies = enemies;
+    for (const auto &enemy: tempEnemies) {
         auto possibleSteps = enemy.second->makeMove(enemy.first, heroPos);
         std::shuffle(possibleSteps.begin(),  possibleSteps.end(), std::mt19937(std::random_device()()));
         for (int i = 0; i < possibleSteps.size(); ++i) {
