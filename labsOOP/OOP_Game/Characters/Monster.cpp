@@ -25,7 +25,7 @@ std::vector<double> Monster::requestAttack(Character &enemy) {
         wasDodge = enemy.requestProtect(this->attackPower * MONSTER_CRITICAL_FACTOR);
     else
         wasDodge = enemy.requestProtect(this->attackPower);
-    return {double(wasCriticalAttack), double(wasDodge), startEnemyHealth - enemy.getHealth()};
+    return {startEnemyHealth - enemy.getHealth(), double(wasDodge), double(wasCriticalAttack)};
 }
 
 std::vector<CellPoint> Monster::makeMove(CellPoint from, CellPoint heroPos) const { // Паттерн: Strategy

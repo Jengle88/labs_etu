@@ -23,7 +23,8 @@ std::vector<double> Archer::requestAttack(Character &enemy) {
         wasDodge = enemy.requestProtect(this->attackPower * ARCHER_CRITICAL_FACTOR);
     else
         wasDodge = enemy.requestProtect(this->attackPower);
-    return {double(wasCriticalAttack), double(wasDodge), startEnemyHealth - enemy.getHealth()};
+    return {startEnemyHealth - enemy.getHealth(), double(wasDodge), double(wasCriticalAttack)};
+
 }
 
 bool Archer::requestProtect(double attackPower) {

@@ -1,6 +1,10 @@
 #include "../Characters/MainHero.h"
 #include "../Characters/Enemy.h"
 #include "../Data/DataManager.h"
+#include <unistd.h>
+
+//на 0.3 сек
+#define COOl_DOWN 300000UL
 
 enum FightAction {
     ATTACK = 'a',
@@ -8,13 +12,13 @@ enum FightAction {
 };
 
 class FightScreen {
-    MainHero* mainHero;
+    MainHero& mainHero;
+    Enemy& enemy;
     DataManager dataManager;
-    Enemy* enemy;
 public:
-    FightScreen(MainHero* mainHero, DataManager dataManager, Enemy* enemy);
-    bool fightObserver(MainHero &mainHero, Enemy& enemy);
+    FightScreen(MainHero& mainHero, Enemy& enemy);
+    bool fightObserver(/*MainHero &mainHero, Enemy& enemy*/);
     void showUpdatedScreen();
-    void requestAction(char action);
+    bool requestAction(char action);
 
 };

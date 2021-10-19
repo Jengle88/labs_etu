@@ -24,7 +24,7 @@ std::vector<double> Gargoyle::requestAttack(Character &enemy) {
         wasDodge = enemy.requestProtect(this->attackPower * GARGOYLE_CRITICAL_FACTOR);
     else
         wasDodge = enemy.requestProtect(this->attackPower);
-    return {double(wasCriticalAttack), double(wasDodge), startEnemyHealth - enemy.getHealth()}; // был ли крит, было ли уклонение, уменьшение здоровья
+    return {startEnemyHealth - enemy.getHealth(), double(wasDodge), double(wasCriticalAttack)}; // был ли крит, было ли уклонение, уменьшение здоровья
 }
 
 bool Gargoyle::isCriticalCase(double lucky) const {

@@ -68,6 +68,7 @@ public:
     CellPoint getHeroPos() const;
     void setHeroOnStart();
     MainHero& getHero();
+    Enemy& getEnemyFromPoint(CellPoint point);
     void incCountSteps();
     long getCountSteps() const;
 

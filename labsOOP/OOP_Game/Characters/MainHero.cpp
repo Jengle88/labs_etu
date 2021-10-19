@@ -15,7 +15,7 @@ std::vector<double> MainHero::requestAttack(Character &enemy) {
         wasDodge = enemy.requestProtect(this->attackPower * CHARACTER_CRITICAL_FACTOR);
     else
         wasDodge = enemy.requestProtect(this->attackPower);
-    return {double(wasCriticalAttack), double(wasDodge), startEnemyHealth - enemy.getHealth()};
+    return {startEnemyHealth - enemy.getHealth(), double(wasDodge), double(wasCriticalAttack)};
 }
 
 bool MainHero::requestDodge() const {
@@ -40,19 +40,15 @@ void MainHero::recalcCharacteristics(std::vector<double> thingProperties) {
 
 void MainHero::takeThing(Thing thing) {
     things.push_back(thing);
-    recalcCharacteristics(thing.getProperties());
+    if (!thing.isActiveThing())
+        recalcCharacteristics(thing.getProperties());
 }
 
 void MainHero::ejectThing(int pos) {
     auto prevThing = things[pos];
     things.erase(things.begin() + pos);
-    recalcCharacteristics(prevThing.getInverseValueProperties());
-}
-
-void MainHero::replaceThing(int pos, Thing thing) {
-    recalcCharacteristics(things[pos].getInverseValueProperties());
-    recalcCharacteristics(thing.getProperties());
-    things[pos] = thing;
+    if (!prevThing.isActiveThing())
+        recalcCharacteristics(prevThing.getInverseValueProperties());
 }
 
 const std::vector<int> &MainHero::getCountKilledEnemy() const {
@@ -71,14 +67,24 @@ bool MainHero::useThing(int pos) {
     if (0 <= pos && pos < things.size()) {
         if (things[pos].isActiveThing()) {
             auto properties = things[pos].getProperties();
-            health += properties[ThingProperties::HEAL];
-            attackPower += properties[ThingProperties::DAMAGE];
-            protection += properties[ThingProperties::PROTECTION];
-            luck += properties[ThingProperties::LUCK];
+            recalcCharacteristics(properties);
+//            health += properties[ThingProperties::HEAL];
+//            attackPower += properties[ThingProperties::DAMAGE];
+//            protection += properties[ThingProperties::PROTECTION];
+//            luck += properties[ThingProperties::LUCK];
             return true;
         }
     }
     return false;
+}
+
+bool MainHero::hasThing(int thingObject) const {
+    return std::find_if(things.begin(),  things.end(),
+                        [&thingObject](const Thing& thing) {return thingObject == thing.getThingObject();}) != things.end();
+}
+
+void MainHero::writeKill(int enemyType) {
+    countKilledEnemy[enemyType]++;
 }
 
 

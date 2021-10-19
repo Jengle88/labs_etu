@@ -73,10 +73,10 @@ public:
             int w = 30;
             int countWalls = 250;
             DataManager dataManager;
-            auto enemy = dataManager.getModelGargoyleWait();
-            for (int i = 0; i < enemy.size(); ++i) {
-                std::cout << enemy[i] << '\n';
-            }
+//            auto enemy = dataManager.getModelGargoyleWait();
+//            for (int i = 0; i < enemy.size(); ++i) {
+//                std::cout << enemy[i] << '\n';
+//            }
 //            auto hero = dataManager.getModelHeroHead();
 //            for (int i = 0; i < dataManager.getModelHeroBodyWait(true, true).size(); ++i) {
 //                hero.push_back(dataManager.getModelHeroBodyWait(true, true)[i]);

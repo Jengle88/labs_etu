@@ -30,7 +30,7 @@ void Printer::printInventory(MainHero *hero, bool withSerialNumber) {
     }
     for (int i = 0; i < inventory.size(); ++i) {
         if (withSerialNumber)
-            std::cout << i+1 << ") ";
+            std::cout << i + 1 << ") ";
         std::cout << inventory[i].getNameThing() << '\n';
     }
     std::cout << '\n';
@@ -53,11 +53,36 @@ void Printer::printEnemyInfo(std::map<CellPoint, Enemy *> *enemies) {
     }
     std::cout << "Сейчас на поле: \n"
                  "Монстр: " + std::to_string(cntMonster) + ",\n"
-                 "Скелет-лучник: " + std::to_string(cntArcher) + ",\n"
-                 "Горгулья: " + std::to_string(cntGargoyle) + "\n\n";
+                                                           "Скелет-лучник: " + std::to_string(cntArcher) + ",\n"
+                                                                                                           "Горгулья: " +
+                 std::to_string(cntGargoyle) + "\n\n";
 }
 
-void Printer::printFight(const DataManager &dataManager, const MainHero &hero, const Enemy &enemy) {
-    auto heroHead = dataManager.getModelHeroHead();
-
+void Printer::printHealthPoint(const double heroHealth, const double enemyHealth) {
+    std::cout << "HP: " << heroHealth << "\t\t" << "HP: " << enemyHealth << '\n';
 }
+
+void Printer::printAttackInfo(int characterType, double damage, bool wasDodge, bool wasCritical) {
+    std::string nameCharacter;
+    switch (characterType) {
+        case CharacterType::MAIN_HERO:
+            nameCharacter = "Герой";
+            break;
+        case CharacterType::MONSTER:
+            nameCharacter = "Монстр";
+            break;
+        case CharacterType::SKELETON_ARCHER:
+            nameCharacter = "Скелет-лучник";
+            break;
+        case CharacterType::GARGOYLE:
+            nameCharacter = "Горгулья";
+            break;
+        default:
+            nameCharacter = "<Неизвестный>";
+            break;
+    }
+    std::cout << "Персонаж " << nameCharacter << " нанёс " << damage << " урона, " <<
+              (wasDodge ? "совершил уклонение, " : "не совершил уклонение, ") <<
+              (wasCritical ? "нанёс критический урон.\n" : "не нанёс критический урон.\n");
+}
+

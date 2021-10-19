@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include "FieldScreen.h"
 #include "../Tools/Printer.h"
+#include "FightScreen.h"
 
 
 FieldScreen::FieldScreen() : thingsManager(field) {
@@ -71,7 +72,7 @@ void FieldScreen::showStartingParams() { // паттерн Builder
     field = new Field(height, width);
     if (field->generateFullField(countWalls)) {
         field->setHeroOnStart();
-        field->createHero(CHARACTER_MAX_HEALTH, 0, 0, 1);
+        field->createHero(CHARACTER_MAX_HEALTH, 1, 1, 1);
         thingsManager = ThingsManager(field);
     } else {
         std::cout << "Не удалось сгенерировать поле!\n";
@@ -107,7 +108,7 @@ bool FieldScreen::registerMovement(char &action, std::string &gameAction) {
     CellPoint heroPos = field->getHeroPos();
     thingsManager.tryGenerateThing(field->hero); // также считает шаги
     std::pair<bool, Thing> thingOnPos;
-    int status = 1;
+    bool status = true;
     switch (tolower(action)) {
         case MoveSide::UP:
             requestMoveObject(heroPos, CellPoint(heroPos.getX(), heroPos.getY() - 1), gameAction);
@@ -126,6 +127,12 @@ bool FieldScreen::registerMovement(char &action, std::string &gameAction) {
             return true;
         case MoveSide::FIGHT:
             status = requestStartFight(heroPos); // TODO Как обработать GAME_OVER???
+            if (!status) {
+                std::cout << "Вы проиграли.\nНажмите любую кнопку, чтобы выйти...\n";
+                getchar();
+                action = MoveSide::EXIT;
+                return false;
+            }
             return true;
         case MoveSide::EXIT:
             return false;
@@ -238,12 +245,15 @@ void FieldScreen::requestTakeObject(CellPoint point) {
 //}
 
 int FieldScreen::requestStartFight(CellPoint point) {
-    int statusFight = 1;
+    bool statusFight = true;
     for (int i = -MAIN_HERO_VISIBILITY; i <= MAIN_HERO_VISIBILITY; ++i) {
         for (int j = -MAIN_HERO_VISIBILITY; j <= MAIN_HERO_VISIBILITY; ++j) {
-            if (field->enemies.count(CellPoint(i,j))) {
-                // system("clear");
-                // statusFight = fightScreen(...);
+            if (field->enemies.count(CellPoint(point.getX() + i, point.getY() + j))) {
+                 system("clear");
+                 auto fightScreen = FightScreen(this->field->getHero(), this->field->getEnemyFromPoint(CellPoint(point.getX() + i, point.getY() + j)));
+                 statusFight = fightScreen.fightObserver();
+                 return statusFight;
+//                 statusFight = fightScreen(...);
                 // TODO показать экран боя
             }
         }

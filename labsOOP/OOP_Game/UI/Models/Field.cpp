@@ -311,7 +311,7 @@ void Field::createMonster(double health, double attackPower, double protection) 
     CellPoint monsterStartPoint;
     do {
         monsterStartPoint = generateRandomFreePoint();
-    } while (Monster::inRangeVisibility(monsterStartPoint, heroPos) || enemies.count(monsterStartPoint));
+    } while (enemies.count(monsterStartPoint));
     enemies[monsterStartPoint] = new Monster(health, attackPower, protection);
 }
 
@@ -339,7 +339,7 @@ void Field::createRandomEnemy() {
                 createArcher(ARCHER_MAX_HEALTH, 2, 1);
                 break;
             case 2:
-                createGargoyle(GARGOYLE_MAX_HEALTH, 3, 2);
+                createGargoyle(GARGOYLE_MAX_HEALTH, 2, 2);
         }
     }
 }
@@ -348,7 +348,7 @@ void Field::createArcher(double health, double attackPower, double protection) {
     CellPoint archerStartPoint;
     do {
         archerStartPoint = generateRandomFreePoint();
-    } while (Archer::inRangeVisibility(archerStartPoint, heroPos) || enemies.count(archerStartPoint));
+    } while (enemies.count(archerStartPoint));
     enemies[archerStartPoint] = new Archer(health, attackPower, protection);
 }
 
@@ -356,8 +356,12 @@ void Field::createGargoyle(double health, double attackPower, double protection)
     CellPoint gargoyleStartPoint;
     do {
         gargoyleStartPoint = generateRandomFreePoint();
-    } while (Gargoyle::inRangeVisibility(gargoyleStartPoint, heroPos) || enemies.count(gargoyleStartPoint));
+    } while (enemies.count(gargoyleStartPoint));
     enemies[gargoyleStartPoint] = new Gargoyle(health, attackPower, protection);
+}
+
+Enemy& Field::getEnemyFromPoint(CellPoint point) {
+    return static_cast<Enemy &>(*enemies[point]);
 }
 
 

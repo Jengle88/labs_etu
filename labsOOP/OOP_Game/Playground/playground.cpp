@@ -2,6 +2,9 @@
 #include <vector>
 #include <iomanip>
 #include <cmath>
+#include "../Data/DataManager.h"
+#include "../Characters/Monster.h"
+
 using namespace std;
 
 class Solve {
@@ -89,6 +92,7 @@ enum ENUM {
     C,
     ENUM_SIZE
 };
+
 #define MONSTER_PERCENT_FOR_FOLLOW_TO_HERO 80
 #define ROOT_EPSILON 1e-6
 bool willFollowToHero() {
@@ -99,6 +103,11 @@ bool willFollowToHero() {
 }
 
 int main() { //проверено
+
+    auto enemy = DataManager().getHero(true, true);
+    for (int i = 0; i < enemy.size(); ++i) {
+        std::cout << enemy[i] << '\n';
+    }
 //	int n;
 //	int m;
 //	int stx, sty, finx, finy;
@@ -123,15 +132,15 @@ int main() { //проверено
 //        }
 //    }
 
-    int cnt = 0;
-    int k = ((long double)(2 * 3.1416 * MONSTER_PERCENT_FOR_FOLLOW_TO_HERO) / std::ceil(100 / 3.1416)); // коэффициент для того, чтобы на промежутке от 0 до 100 было PERCENT корней
-    for (double i = 0.00; i <= 100; i += 0.000001) {
-//        double chance = std::sin((rand() % 100 + 1 / double(std::max(rand(),1) % 100) * k)); // шанс того, что монстр пойдёт за героем
-        double z = (sin(k*i) - int(sin(k*i)));
-        if (abs(z) <= ROOT_EPSILON)
-            cnt++;
-    }
-    cout << cnt;
+//    int cnt = 0;
+//    int k = ((long double)(2 * 3.1416 * MONSTER_PERCENT_FOR_FOLLOW_TO_HERO) / std::ceil(100 / 3.1416)); // коэффициент для того, чтобы на промежутке от 0 до 100 было PERCENT корней
+//    for (double i = 0.00; i <= 100; i += 0.000001) {
+////        double chance = std::sin((rand() % 100 + 1 / double(std::max(rand(),1) % 100) * k)); // шанс того, что монстр пойдёт за героем
+//        double z = (sin(k*i) - int(sin(k*i)));
+//        if (abs(z) <= ROOT_EPSILON)
+//            cnt++;
+//    }
+//    cout << cnt;
 
 //    int size = 10;
 //    int *arr = new int[size];

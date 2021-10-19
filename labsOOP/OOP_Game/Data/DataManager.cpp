@@ -1,4 +1,5 @@
 #include "DataManager.h"
+#include "../Characters/Monster.h"
 
 DataManager::DataManager() {
     levelToThings[1] = {
@@ -21,9 +22,9 @@ Thing DataManager::getThing(int level, int typeThing) {
 
 std::vector<std::string> DataManager::getModelHeroHead() const {
     return {
-              "  _____ ",
-             " //.,.\\\\",
-             " \\\\ _ //"
+             "  _____    ",
+             " //.,.\\\\   ",
+             " \\\\ _ //   "
     };
             /*  _____
                //.,.\\
@@ -34,10 +35,15 @@ std::vector<std::string> DataManager::getModelHeroHead() const {
 std::vector<std::string> DataManager::getModelHeroBodyWait(bool withSword, bool withArmor) const {
     if (withArmor && withSword) {
         return {
+//                 "  _ | _   / ",
+//                 "|//|#|\\\\ /  ",
+//                 "|/ |#| \\/   ",
+//                 "|  |#|      "
                  "  _ | _   /",
-                 "|//|#|\\\\ / ",
-                 "|/ |#| \\/  ",
-                 "|  |#|     "
+                 " //|#|\\\\ / ",
+                 " / |#| \\/  ",
+                 "   |#|     "
+
                  /*  _ | _   /
                    |//|#|\\ /
                    |/ |#| \/
@@ -46,10 +52,15 @@ std::vector<std::string> DataManager::getModelHeroBodyWait(bool withSword, bool 
         };
     } else if (withSword) {
         return {
+//                 "    |     / ",
+//                 "  /|-|\\  /  ",
+//                 " / | | \\/   ",
+//                 "   |_|      "
                  "    |     /",
                  "  /|-|\\  / ",
                  " / | | \\/  ",
                  "   |_|     "
+
                  /*    |     /
                      /|-|\  /
                     / | | \/
@@ -58,10 +69,14 @@ std::vector<std::string> DataManager::getModelHeroBodyWait(bool withSword, bool 
         };
     } else if (withArmor) {
         return {
-            "  _ | _ ",
-            " //|#|\\",
-            " / |#| \\",
-            "   |#|  "
+//            "  _ | _  ",
+//            " //|#|\\ ",
+//            " / |#| \\ ",
+//            "   |#|   "
+            "    |      ",
+            "  /|#|\\    ",
+            " / |#| \\   ",
+            "   |#|     "
         };
         /*  _ | _
            //|#|\\
@@ -70,10 +85,14 @@ std::vector<std::string> DataManager::getModelHeroBodyWait(bool withSword, bool 
         */
     } else {
         return {
-          "    |   ",
-          "  /|-|\\ ",
-          " / | | \\",
-          "   |_|  ",
+//          "    |    ",
+//          "  /|-|\\  ",
+//          " / | | \\ ",
+//          "   |_|   ",
+          "    |      ",
+          "  /|-|\\    ",
+          " / | | \\   ",
+          "   |_|     "
         };
         /*
             |
@@ -104,8 +123,8 @@ std::vector<std::string> DataManager::getModelMonsterWait() const {
         "//\\\\/   \\ ",
         "   |     |",
         "   |-----|",
-        "   //  // ",
-        "   /|  /| "
+        "     //  // ",
+        "     /|  /| "
     };
     /*
           /_//
@@ -129,8 +148,8 @@ std::vector<std::string> DataManager::getModelArcherWait() const {
         " /| /|/I\\||",
         "| |-/|/I\\||",
         " \\|  |___| ",
-        "      / \\  ",
-        "     |   | "
+        "        / \\  ",
+        "       |   | "
     };
     /*
           /---\
@@ -154,8 +173,8 @@ std::vector<std::string> DataManager::getModelGargoyleWait() const {
         "/\\  /   \\//|",
         " \\\\|     |//",
         "   |-----|v ",
-        "    \\\\ \\\\   ",
-        "     \\\\ \\\\  "
+        "      \\\\ \\\\   ",
+        "       \\\\ \\\\  ",
     };
     /*
           /_//
@@ -168,4 +187,29 @@ std::vector<std::string> DataManager::getModelGargoyleWait() const {
          \\ \\
           \\ \\
      */
+}
+
+std::vector<std::string> DataManager::getEnemy(int enemyType) const {
+    switch (enemyType) {
+        case CharacterType::MONSTER:
+            return getModelMonsterWait();
+        case CharacterType::SKELETON_ARCHER:
+            return getModelArcherWait();
+        case CharacterType::GARGOYLE:
+            return getModelGargoyleWait();
+        default:
+            return {};
+    }
+}
+
+std::vector<std::string> DataManager::getHero(bool withSword, bool withArmor) const {
+    auto heroHead = getModelHeroHead();
+    auto heroBody = getModelHeroBodyWait(withSword, withArmor);
+    auto heroLegs = getModelHeroLegs();
+    std::vector<std::string> mainHeroModel;
+    mainHeroModel.reserve(heroHead.size() + heroBody.size() + heroLegs.size());
+    std::move(heroHead.begin(),  heroHead.end(), std::back_inserter(mainHeroModel));
+    std::move(heroBody.begin(),  heroBody.end(), std::back_inserter(mainHeroModel));
+    std::move(heroLegs.begin(),  heroLegs.end(), std::back_inserter(mainHeroModel));
+    return mainHeroModel;
 }
