@@ -190,12 +190,11 @@ FieldScreen::~FieldScreen() {
 std::string
 FieldScreen::generateTitleForThingAction(const std::string &nameThing, const std::vector<double> &properties) {
     std::string res = "На этой клетке лежит " + nameThing + ", который даёт: " +
-           (properties[0] >= 1e-2 ? "Урон: " + std::to_string(round(properties[0] * 100) / 100) + " " : "") +
-           (properties[1] >= 1e-2 ? "Защита: " + std::to_string(round(properties[1] * 100) / 100) + " " : "") +
-//           (properties[2] >= 1e-2 ? "Выносливость: " + std::to_string(round(properties[2] * 100) / 100) + " " : "") +
-           (properties[3] >= 1e-2 ? "Удача: " + std::to_string(round(properties[3] * 100) / 100) + " " : "") +
-           (properties[4] >= 1e-2 ? "Здоровье: " + std::to_string(round(properties[4] * 100) / 100) + " " : "") +
-           ". Нажмите ";
+            (properties[ThingProperties::DAMAGE] >= 1e-2 ? "Урон: " + std::to_string(round(properties[ThingProperties::DAMAGE] * 100) / 100) + " " : "") +
+            (properties[ThingProperties::PROTECTION] >= 1e-2 ? "Защита: " + std::to_string(round(properties[ThingProperties::PROTECTION] * 100) / 100) + " " : "") +
+            (properties[ThingProperties::LUCK] >= 1e-2 ? "Удача: " + std::to_string(round(properties[ThingProperties::LUCK] * 100) / 100) + " " : "") +
+            (properties[ThingProperties::HEALTH] >= 1e-2 ? "Здоровье: " + std::to_string(round(properties[ThingProperties::HEALTH] * 100) / 100) + " " : "") +
+                      ". Нажмите ";
     res.push_back(MoveSide::TAKE);
     res += ", чтобы взять.";
     return res;

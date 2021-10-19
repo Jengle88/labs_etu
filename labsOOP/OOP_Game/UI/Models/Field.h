@@ -12,7 +12,7 @@
 
 #define PERCENT_WALLS 35
 #define MAX_COUNT_ENEMIES 5
-#define TIME_BETWEEN_GENERATE_ENEMY 15
+#define TIME_BETWEEN_GENERATE_ENEMY 4
 
 class Field {
 	Grid field;

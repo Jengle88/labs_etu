@@ -56,11 +56,10 @@ bool FightScreen::requestAction(char action) {
             break;
         case FightAction::USE:
             std::cin >> numberThing;
-            if (!mainHero.useThing(numberThing)) {
-                std::cout << "Предмет был использован\n";
-                // TODO добавить сообщение об ошибке
+            if (!mainHero.useThing(numberThing - 1)) {
+                std::cout << "Предмета нет или он не может быть использован\n";
             }
-            // TODO Сообщение об использовании вещи
+            break;
         case MoveSide::EXIT:
             return false;
     }

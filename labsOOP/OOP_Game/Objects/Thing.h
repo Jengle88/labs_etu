@@ -17,7 +17,7 @@ enum ThingProperties {
     PROTECTION,
 //    STAMINA,
     LUCK,
-    HEAL,
+    HEALTH,
     THING_PROPERTIES_SIZE
 };
 

@@ -32,7 +32,7 @@ bool MainHero::requestProtect(double attackPower) {
 }
 
 void MainHero::recalcCharacteristics(std::vector<double> thingProperties) {
-    this->health += thingProperties[ThingProperties::HEAL];
+    this->health += thingProperties[ThingProperties::HEALTH];
     this->attackPower += thingProperties[ThingProperties::DAMAGE];
     this->protection += thingProperties[ThingProperties::PROTECTION];
     this->luck += thingProperties[ThingProperties::LUCK];
@@ -67,8 +67,9 @@ bool MainHero::useThing(int pos) {
     if (0 <= pos && pos < things.size()) {
         if (things[pos].isActiveThing()) {
             auto properties = things[pos].getProperties();
+            things.erase(things.begin() + pos);
             recalcCharacteristics(properties);
-//            health += properties[ThingProperties::HEAL];
+//            health += properties[ThingProperties::HEALTH];
 //            attackPower += properties[ThingProperties::DAMAGE];
 //            protection += properties[ThingProperties::PROTECTION];
 //            luck += properties[ThingProperties::LUCK];
