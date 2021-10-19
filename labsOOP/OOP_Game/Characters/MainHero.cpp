@@ -69,10 +69,6 @@ bool MainHero::useThing(int pos) {
             auto properties = things[pos].getProperties();
             things.erase(things.begin() + pos);
             recalcCharacteristics(properties);
-//            health += properties[ThingProperties::HEALTH];
-//            attackPower += properties[ThingProperties::DAMAGE];
-//            protection += properties[ThingProperties::PROTECTION];
-//            luck += properties[ThingProperties::LUCK];
             return true;
         }
     }

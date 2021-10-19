@@ -5,11 +5,14 @@
 
 #define GARGOYLE_CRITICAL_FACTOR 2
 #define GARGOYLE_DODGE_FACTOR 0.6
-#define GARGOYLE_MAX_HEALTH 95
 #define GARGOYLE_RANGE_VISIBILITY 5
 #define GARGOYLE_PERCENT_FOR_FOLLOW_TO_HERO 5000 // значения варьируются от 0 до 10000
-#define GARGOYLE_LUCK 1.5
 #define GARGOYLE_MOVE 1
+#define GARGOYLE_MAX_HEALTH 95
+#define GARGOYLE_LUCK 0.75
+#define GARGOYLE_DAMAGE 2
+#define GARGOYLE_PROTECTION 2
+
 
 class Gargoyle: public Character, public Enemy {
     double luck = GARGOYLE_LUCK;

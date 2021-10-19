@@ -223,8 +223,8 @@ void FieldScreen::requestTakeObject(CellPoint point) {
 
 int FieldScreen::requestStartFight(CellPoint point) {
     int statusFight = 1;
-    for (int i = -MAIN_HERO_VISIBILITY; i <= MAIN_HERO_VISIBILITY; ++i) {
-        for (int j = -MAIN_HERO_VISIBILITY; j <= MAIN_HERO_VISIBILITY; ++j) {
+    for (int i = -MAIN_HERO_RANGE_VISIBILITY; i <= MAIN_HERO_RANGE_VISIBILITY; ++i) {
+        for (int j = -MAIN_HERO_RANGE_VISIBILITY; j <= MAIN_HERO_RANGE_VISIBILITY; ++j) {
             if (field->enemies.count(CellPoint(point.getX() + i, point.getY() + j))) {
                 system("clear");
                 auto fightScreen = FightScreen(this->field->getHero(), this->field->getEnemyFromPoint(

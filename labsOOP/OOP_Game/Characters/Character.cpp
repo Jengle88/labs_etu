@@ -14,9 +14,8 @@ double Character::getHealth() const {
 }
 
 bool Character::isCriticalCase(double luck) const {
-    srand(time(0)); // сделать глобально в начале игры????
     double checkCriticalAttack = std::sin(
             (rand() % 100 + 1 / double(std::max(rand(), 1) % 100)) *
-            luck); // есть ли способ проще? //luck >= 1, поэтому проблем нет
+            luck); // luck >= 1, поэтому проблем нет
     return ((checkCriticalAttack - int(checkCriticalAttack)) <= ROOT_EPSILON);
 }

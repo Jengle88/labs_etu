@@ -5,10 +5,10 @@
 #include "../Objects/Thing.h"
 #include <algorithm>
 
-#define MAIN_HERO_VISIBILITY 1
+#define MAIN_HERO_RANGE_VISIBILITY 1
 #define MAIN_HERO_DAMAGE 1
 #define MAIN_HERO_PROTECTION 1
-#define MAIN_HERO_LUCK 1
+#define MAIN_HERO_LUCK 0.65
 
 class MainHero : public Character {
     std::vector<Thing> things;
@@ -17,7 +17,7 @@ class MainHero : public Character {
     bool requestDodge() const override;
     void recalcCharacteristics(std::vector<double> thingProperties);
 public:
-    MainHero(int characterType, double health, double attackPower, double protection, double luck);// : Character(health, attackPower, protection), stamina(stamina), luck(std::max(luck, 1.0)) {}
+    MainHero(int characterType, double health, double attackPower, double protection, double luck);
     MainHero() = default;
 
     // урон, уклонение и крит

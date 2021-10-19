@@ -29,9 +29,8 @@ std::vector<double> Gargoyle::requestAttack(Character &enemy) {
 
 bool Gargoyle::isCriticalCase(double lucky) const {
     double checkCriticalAttack = std::sin(
-            (rand() % 100 + 1 / double(std::max(rand(),1) % 100)) * luck); // есть ли способ проще? //luck >= 1, поэтому проблем нет
+            (rand() % 100 + 1 / double(std::max(rand(),1) % 100)) * luck); //luck >= 1, поэтому проблем нет
     return ((checkCriticalAttack - int(checkCriticalAttack)) <= ROOT_EPSILON);
-
 }
 
 double Gargoyle::calcReflectionArmor() const {
@@ -61,16 +60,12 @@ std::vector<CellPoint> Gargoyle::makeMove(CellPoint from, CellPoint heroPos) con
     return res;
 }
 
-bool Gargoyle::willFollowToHero() const { // FIXME: исправить, формула неверная
+bool Gargoyle::willFollowToHero() const {
     int k = int((100.0 / GARGOYLE_PERCENT_FOR_FOLLOW_TO_HERO) * 100);
     int num = int((rand() % 100 + double(1) / (rand() % 100)) * 100);
     if (num % k == 0)
         return true;
     return false;
-    //    double k = (2.0 * 3.1416 * GARGOYLE_PERCENT_FOR_FOLLOW_TO_HERO / std::ceil(100 / 3.1416)); // коэффициент для того, чтобы на промежутке от 0 до 100 было PERCENT корней
-//    double chance = std::sin((rand() % 100 + 1 / double(std::max(rand(),1) % 100)) * k); // шанс того, что монстр пойдёт за героем
-//    return std::abs(chance - int(chance)) <= ROOT_EPSILON;
-
 }
 
 int Gargoyle::getCharacterType() const {

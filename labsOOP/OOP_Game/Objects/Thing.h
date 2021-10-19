@@ -3,19 +3,15 @@
 #include <vector>
 
 enum ThingObject {
-//    HELMET,
     ARMOR,
-//    SHIELD,
     SWORD,
     POTION_HEAL,
-//    RING_LUCKY,
     THING_OBJECT_SIZE
 };
 
 enum ThingProperties {
     DAMAGE,
     PROTECTION,
-//    STAMINA,
     LUCK,
     HEALTH,
     THING_PROPERTIES_SIZE
@@ -23,10 +19,9 @@ enum ThingProperties {
 
 class Thing {
     std::string nameThing;
-    std::vector<double> properties; // дельта свойства, максимум 3 элементов
+    std::vector<double> properties; // дельта свойств, максимум 3 элемента
     int thingObject;
     bool isVisualized;
-//    int countBattles; // -1, если не ограничено количеством боёв
     friend bool operator==(const Thing& val1, const Thing& val2);
 
 public:

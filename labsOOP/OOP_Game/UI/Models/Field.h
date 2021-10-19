@@ -12,7 +12,7 @@
 
 #define PERCENT_WALLS 35
 #define MAX_COUNT_ENEMIES 4
-#define TIME_BETWEEN_GENERATE_ENEMY 3
+#define TIME_BETWEEN_GENERATE_ENEMY 10
 
 class Field {
 	Grid field;
@@ -45,19 +45,22 @@ public:
     Field(Field && field);
     Field& operator=(Field&& field);
     ~Field();
+
     // Генераторы
     bool generateFullField(int countWalls);
     void createHero(double health, double attackPower, double protection, double luck);
     void createRandomEnemy();
-    void moveHero(CellPoint to);
-    void moveEnemies();
-    void moveEnemy(CellPoint from, CellPoint to);
-    void killEnemy(CellPoint from);
     CellPoint generateRandomFreePoint();
+
+    // Передвижение персонажей
+    void moveHero(CellPoint to);
+    void moveEnemy(CellPoint from, CellPoint to);
+    void moveEnemies();
+    void killEnemy(CellPoint from);
 
     void printField(); // нужно для DEMO
 
-    // Геттеры/Сеттеры
+    // Геттеры / Сеттеры
     Cell getElem(CellPoint point) const;
     void setElem(CellPoint point, CellObject object);
     int getHeight() const;

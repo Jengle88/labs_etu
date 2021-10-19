@@ -283,15 +283,15 @@ void Field::moveEnemies() {
     for (const auto &enemy: tempEnemies) {
         auto possibleSteps = enemy.second->makeMove(enemy.first, heroPos);
         std::shuffle(possibleSteps.begin(),  possibleSteps.end(), std::mt19937(std::random_device()()));
-        for (int i = 0; i < possibleSteps.size(); ++i) {
-            if (!field.isValidIndexes(possibleSteps[i].getX(), possibleSteps[i].getY()))
+        for (auto & possibleStep : possibleSteps) {
+            if (!field.isValidIndexes(possibleStep.getX(), possibleStep.getY()))
                 continue;
-            auto tempElem = getElem(possibleSteps[i]).getValue();
+            auto tempElem = getElem(possibleStep).getValue();
             if (tempElem.getTypeCell() != TypeCell::WALL &&
                 tempElem.getTypeObject() != TypeObject::HERO &&
                 tempElem.getTypeObject() != TypeObject::ENEMY
             ) {
-                moveEnemy(enemy.first, possibleSteps[i]);
+                moveEnemy(enemy.first, possibleStep);
                 break;
             }
         }
@@ -336,13 +336,14 @@ void Field::createRandomEnemy() {
     if (counterSteps % TIME_BETWEEN_GENERATE_ENEMY == 0 && enemies.size() < MAX_COUNT_ENEMIES) {
         switch (rand() % 3) {
             case 0:
-                createMonster(MONSTER_MAX_HEALTH, 1, 2);
+                createMonster(MONSTER_MAX_HEALTH, MONSTER_DAMAGE, MONSTER_PROTECTION);
                 break;
             case 1:
-                createArcher(ARCHER_MAX_HEALTH, 2, 1);
+                createArcher(ARCHER_MAX_HEALTH, ARCHER_DAMAGE, ARCHER_PROTECTION);
                 break;
             case 2:
-                createGargoyle(GARGOYLE_MAX_HEALTH, 2, 2);
+                createGargoyle(GARGOYLE_MAX_HEALTH, GARGOYLE_DAMAGE, GARGOYLE_PROTECTION);
+                break;
         }
     }
 }
@@ -368,8 +369,7 @@ Enemy& Field::getEnemyFromPoint(CellPoint point) {
 }
 
 void Field::killEnemy(CellPoint from) {
-
-    delete enemies[from]; // TODO check
+    delete enemies[from];
     enemies.erase(from);
     setElem(from, CellObject(getElem(from).getValue().getTypeCell(), TypeObject::NOTHING, getElem(from).getValue().isThing()));
 }

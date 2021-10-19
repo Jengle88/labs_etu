@@ -5,7 +5,7 @@ Archer::Archer(double health, double attackPower, double protection)
 
 bool Archer::isCriticalCase(double lucky) const {
     double checkCriticalAttack = std::sin(
-            (rand() % 100 + 1 / double(std::max(rand(),1) % 100)) * luck); // есть ли способ проще? //luck >= 1, поэтому проблем нет
+            (rand() % 100 + 1 / double(std::max(rand(),1) % 100)) * luck); // luck >= 1, поэтому проблем нет
     return ((checkCriticalAttack - int(checkCriticalAttack)) <= ROOT_EPSILON);
 
 }
@@ -62,17 +62,12 @@ std::vector<CellPoint> Archer::makeMove(CellPoint from, CellPoint heroPos) const
     return res;
 }
 
-bool Archer::willFollowToHero() const {  // FIXME: исправить, формула неверная
+bool Archer::willFollowToHero() const {
     int k = int((100.0 / ARCHER_PERCENT_FOR_FOLLOW_TO_HERO) * 100);
     int num = int((rand() % 100 + double(1) / (rand() % 100)) * 100);
     if (num % k == 0)
         return true;
     return false;
-
-
-//    double k = (2.0 * 3.1416 * ARCHER_PERCENT_FOR_FOLLOW_TO_HERO / std::ceil(100 / 3.1416)); // коэффициент для того, чтобы на промежутке от 0 до 100 было PERCENT корней
-//    double chance = std::sin((rand() % 100 + 1 / double(std::max(rand(),1) % 100)) * k); // шанс того, что монстр пойдёт за героем
-//    return std::abs(chance - int(chance)) <= ROOT_EPSILON;
 }
 
 bool Archer::inRangeVisibility(CellPoint monsterPos, CellPoint objectPos) {

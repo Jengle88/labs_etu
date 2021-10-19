@@ -4,12 +4,12 @@
 #include <ctime>
 #include <cstdlib>
 #include <cmath>
+
 #define ROOT_EPSILON 1e-2
 #define CHARACTER_CRITICAL_FACTOR 1.75
 #define CHARACTER_DODGE_FACTOR 0.6
 #define CHARACTER_MAX_HEALTH 100
 #define LOW_HEALTH_PERCENT 30
-#define MAX_COUNT_HEALTH_THINGS 3
 
 enum CharacterType {
     MONSTER,

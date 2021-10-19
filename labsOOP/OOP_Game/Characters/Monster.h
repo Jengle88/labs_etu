@@ -7,16 +7,16 @@
 
 #define MONSTER_CRITICAL_FACTOR 1.25
 #define MONSTER_DODGE_FACTOR 0.8
-#define MONSTER_MAX_HEALTH 60
 #define MONSTER_RANGE_VISIBILITY 3
 #define MONSTER_PERCENT_FOR_FOLLOW_TO_HERO 5000 // значения варьируются от 0 до 10000
-#define MONSTER_LUCK 1
 #define MONSTER_MOVE 1
+#define MONSTER_MAX_HEALTH 60
+#define MONSTER_LUCK 0.6
+#define MONSTER_DAMAGE 1
+#define MONSTER_PROTECTION 2
 
 class Monster : public Character, public Enemy {
     double luck = MONSTER_LUCK;
-//    using Character::calcReflectionArmor;
-//    using Character::isCriticalCase;
     bool isCriticalCase(double lucky) const override;
     double calcReflectionArmor() const override; // по-хорошему, изменить под использования реализации в Character
     bool requestProtect(double attackPower) override;
