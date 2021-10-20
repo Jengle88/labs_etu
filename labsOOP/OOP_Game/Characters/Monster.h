@@ -20,7 +20,7 @@ class Monster : public virtual Character, public virtual Enemy {
     bool requestProtect(double attackPower) override;
     bool requestDodge() const override;
     bool isCriticalCase() const override;
-    double calcReflectionArmor() const override; // по-хорошему, изменить под использования реализации в Character
+    double calcReflectionArmor() const override;
     bool willFollowToHero() const override;
 public:
     Monster(double health, double attackPower, double protection);

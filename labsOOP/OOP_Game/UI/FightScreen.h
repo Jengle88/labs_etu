@@ -1,7 +1,10 @@
+#pragma once
 #include "../Characters/MainHero.h"
 #include "../Characters/Enemy.h"
 #include "../Data/DataManager.h"
 #include <unistd.h>
+#include "FieldScreen.h"
+#include "../Tools/Printer.h"
 
 //на 0.3 сек
 #define COOl_DOWN 300000UL

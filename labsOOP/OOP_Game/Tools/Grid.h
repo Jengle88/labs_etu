@@ -25,7 +25,7 @@ class Grid {
 
 public:
 	Grid();
-	Grid(int height, int width, std::vector<std::vector<Cell>> grid = std::vector<std::vector<Cell>>()/*Cell **field = nullptr*/);
+	Grid(int height, int width, std::vector<std::vector<Cell>> grid = std::vector<std::vector<Cell>>());
     ~Grid() = default;
     Grid(const Grid& grid);
     Grid& operator=(const Grid& grid);

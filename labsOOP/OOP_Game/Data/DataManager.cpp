@@ -1,5 +1,4 @@
 #include "DataManager.h"
-#include "../Characters/Monster.h"
 
 DataManager::DataManager() {
     levelToThings[1] = {

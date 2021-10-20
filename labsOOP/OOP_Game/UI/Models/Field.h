@@ -4,6 +4,9 @@
 #include "../../Characters/MainHero.h"
 #include "../../Characters/Enemy.h"
 #include "../../Characters/Monster.h"
+#include "../../Characters/Archer.h"
+#include "../../Characters/Gargoyle.h"
+#include <random>
 #include <cstdlib>
 #include <ctime>
 #include <algorithm>
@@ -12,7 +15,7 @@
 
 #define PERCENT_WALLS 35
 #define MAX_COUNT_ENEMIES 4
-#define TIME_BETWEEN_GENERATE_ENEMY 2
+#define TIME_BETWEEN_GENERATE_ENEMY 10
 
 class Field {
 	Grid field;

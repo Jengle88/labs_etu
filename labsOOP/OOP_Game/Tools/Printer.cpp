@@ -53,9 +53,8 @@ void Printer::printEnemyInfo(std::map<CellPoint, Enemy *> *enemies) {
     }
     std::cout << "Сейчас на поле: \n"
                  "Монстр: " + std::to_string(cntMonster) + ",\n"
-                                                           "Скелет-лучник: " + std::to_string(cntArcher) + ",\n"
-                                                                                                           "Горгулья: " +
-                 std::to_string(cntGargoyle) + "\n\n";
+                 "Скелет-лучник: " + std::to_string(cntArcher) + ",\n"
+                 "Горгулья: " + std::to_string(cntGargoyle) + "\n\n";
 }
 
 void Printer::printHealthInfo(const double heroHealth, const double enemyHealth) {

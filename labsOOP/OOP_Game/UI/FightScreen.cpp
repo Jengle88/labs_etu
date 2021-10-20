@@ -1,6 +1,4 @@
 #include "FightScreen.h"
-#include "FieldScreen.h"
-#include "../Tools/Printer.h"
 
 FightScreen::FightScreen(MainHero &mainHero, Enemy &enemy) : mainHero(mainHero),
                                                              dataManager(DataManager()),

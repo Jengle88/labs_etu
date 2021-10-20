@@ -1,9 +1,4 @@
-#include <termios.h>
-#include <unistd.h>
 #include "FieldScreen.h"
-#include "../Tools/Printer.h"
-#include "FightScreen.h"
-
 
 FieldScreen::FieldScreen() {
     field = nullptr;

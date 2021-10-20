@@ -1,5 +1,4 @@
 #pragma once
-
 #include <utility>
 #include <map>
 #include "Thing.h"

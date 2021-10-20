@@ -1,3 +1,4 @@
+#pragma once
 #include "../../Objects/CellObject.h"
 #include "../../Tools/CellPoint.h"
 

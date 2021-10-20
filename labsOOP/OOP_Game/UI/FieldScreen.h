@@ -1,6 +1,10 @@
 #pragma once
 #include "Models/Field.h"
 #include "../Objects/ThingsManager.h"
+#include <termios.h>
+#include <unistd.h>
+#include "../Tools/Printer.h"
+#include "FightScreen.h"
 
 enum MoveSide{
     UP = 'w',

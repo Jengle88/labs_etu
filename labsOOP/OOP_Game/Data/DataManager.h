@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include "../Objects/Thing.h"
+#include "../Characters/Monster.h"
 
 class DataManager {
     std::map<int, std::vector<Thing>> levelToThings;

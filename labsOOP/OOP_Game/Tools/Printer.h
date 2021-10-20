@@ -1,3 +1,4 @@
+#pragma once
 #include "../UI/Models/Field.h"
 #include "../Data/DataManager.h"
 
