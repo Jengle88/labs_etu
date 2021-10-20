@@ -6,11 +6,11 @@ MainHero::MainHero(int characterType, double health, double attackPower, double 
 }
 
 std::vector<double> MainHero::requestAttack(Character &enemy) {
-    return Character::requestAttack(enemy, CHARACTER_CRITICAL_FACTOR, CHARACTER_DODGE_FACTOR);
+    return Character::requestAttack(enemy, CHARACTER_CRITICAL_FACTOR);
 }
 
 bool MainHero::requestProtect(double attackPower) {
-    return Character::requestProtect(attackPower, CHARACTER_DODGE_FACTOR);
+    return Character::requestProtect(attackPower);
 }
 
 bool MainHero::requestDodge() const {
@@ -64,6 +64,10 @@ const std::vector<Thing> &MainHero::getInventory() const {
 
 const std::vector<int> &MainHero::getCountKilledEnemy() const {
     return countKilledEnemy;
+}
+
+double MainHero::getDodgeFactor() const {
+    return CHARACTER_DODGE_FACTOR;
 }
 
 bool MainHero::checkPositiveHealth() const {

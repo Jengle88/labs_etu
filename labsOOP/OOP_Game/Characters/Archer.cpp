@@ -4,11 +4,11 @@ Archer::Archer(double health, double attackPower, double protection)
         : Character(CharacterType::SKELETON_ARCHER, health, attackPower, protection, ARCHER_LUCK) {}
 
 std::vector<double> Archer::requestAttack(Character &enemy) {
-    return Character::requestAttack(enemy, ARCHER_CRITICAL_FACTOR, ARCHER_DODGE_FACTOR);
+    return Character::requestAttack(enemy, ARCHER_CRITICAL_FACTOR);
 }
 
 bool Archer::requestProtect(double attackPower) {
-    return Character::requestProtect(attackPower, ARCHER_DODGE_FACTOR);
+    return Character::requestProtect(attackPower);
 }
 
 bool Archer::requestDodge() const {
@@ -63,6 +63,10 @@ int Archer::getCharacterType() const {
 
 double Archer::getHealth() const {
     return Character::getHealth();
+}
+
+double Archer::getDodgeFactor() const {
+    return ARCHER_DODGE_FACTOR;
 }
 
 bool Archer::checkPositiveHealth() const {

@@ -4,11 +4,11 @@ Gargoyle::Gargoyle(double health, double attackPower, double protection)
             : Character(CharacterType::GARGOYLE, health, attackPower, protection, GARGOYLE_LUCK) {}
 
 std::vector<double> Gargoyle::requestAttack(Character &enemy) {
-    return Character::requestAttack(enemy, GARGOYLE_CRITICAL_FACTOR, GARGOYLE_DODGE_FACTOR);
+    return Character::requestAttack(enemy, GARGOYLE_CRITICAL_FACTOR);
 }
 
 bool Gargoyle::requestProtect(double attackPower) {
-    return Character::requestProtect(attackPower, GARGOYLE_DODGE_FACTOR);
+    return Character::requestProtect(attackPower);
 }
 
 bool Gargoyle::requestDodge() const {
@@ -63,6 +63,10 @@ int Gargoyle::getCharacterType() const {
 
 double Gargoyle::getHealth() const {
     return Character::getHealth();
+}
+
+double Gargoyle::getDodgeFactor() const {
+    return GARGOYLE_DODGE_FACTOR;
 }
 
 bool Gargoyle::checkPositiveHealth() const {

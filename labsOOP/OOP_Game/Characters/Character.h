@@ -31,8 +31,9 @@ protected:
 public:
     Character(int characterType, double health, double attackPower, double protection, double luck);
     Character() = default;
-    virtual std::vector<double> requestAttack(Character &enemy, double criticalFactor, double dodgeFactor); // возвращает информацию, был ли критический удар, уклонение и изменение здоровья
-    virtual bool requestProtect(double attackPower, double dodgeFactor); // возвращает информацию, было ли уклонение
+    virtual std::vector<double> requestAttack(Character &enemy, double criticalFactor); // возвращает информацию, был ли критический удар, уклонение и изменение здоровья
+    virtual bool requestProtect(double attackPower); // возвращает информацию, было ли уклонение
     virtual bool requestDodge() const; // возвращает информацию, уклонился ли
+    virtual double getDodgeFactor() const = 0;
     double getHealth() const;
 };

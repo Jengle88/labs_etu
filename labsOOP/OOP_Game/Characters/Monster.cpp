@@ -4,11 +4,11 @@ Monster::Monster(double health, double attackPower, double protection)
         : Character(CharacterType::MONSTER, health, attackPower, protection, MONSTER_LUCK) {}
 
 std::vector<double> Monster::requestAttack(Character &enemy) {
-    return Character::requestAttack(enemy, MONSTER_CRITICAL_FACTOR, MONSTER_DODGE_FACTOR);
+    return Character::requestAttack(enemy, MONSTER_CRITICAL_FACTOR);
 }
 
 bool Monster::requestProtect(double attackPower) {
-    return Character::requestProtect(attackPower, MONSTER_DODGE_FACTOR);
+    return Character::requestProtect(attackPower);
 }
 
 bool Monster::requestDodge() const {
@@ -62,6 +62,10 @@ int Monster::getCharacterType() const {
 
 double Monster::getHealth() const {
     return Character::getHealth();
+}
+
+double Monster::getDodgeFactor() const {
+    return MONSTER_DODGE_FACTOR;
 }
 
 bool Monster::checkPositiveHealth() const {

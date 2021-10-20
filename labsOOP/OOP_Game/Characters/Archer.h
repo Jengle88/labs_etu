@@ -29,5 +29,6 @@ public:
     static bool inRangeVisibility(CellPoint monsterPos, CellPoint objectPos);
     int getCharacterType() const override;
     double getHealth() const override;
+    double getDodgeFactor() const override;
     bool checkPositiveHealth() const override;
 };

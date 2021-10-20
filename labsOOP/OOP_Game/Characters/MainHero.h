@@ -28,5 +28,6 @@ public:
     void writeKill(int enemyType);
     const std::vector<Thing> & getInventory() const;
     const std::vector<int> &getCountKilledEnemy() const;
+    double getDodgeFactor() const override;
     bool checkPositiveHealth() const;
 };
