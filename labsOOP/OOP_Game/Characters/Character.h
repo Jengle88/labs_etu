@@ -26,7 +26,7 @@ protected:
     double attackPower;
     double protection;
     double luck = 1; // >= 1
-    virtual bool isCriticalCase(double luck) const;
+    virtual bool isCriticalCase() const;
     virtual double calcReflectionArmor() const;
 public:
     Character(int characterType, double health, double attackPower, double protection, double luck);

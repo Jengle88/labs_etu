@@ -189,7 +189,8 @@ bool Field::generateFullField(int countWalls) {
 }
 
 void Field::moveHero(CellPoint to) {
-    if (getElem(to).getValue().getTypeCell() != TypeCell::WALL) {
+    auto cellInfo = getElem(to).getValue();
+    if (cellInfo.getTypeCell() != TypeCell::WALL && cellInfo.getTypeObject() != TypeObject::ENEMY) {
         setElem(heroPos, CellObject(getElem(heroPos).getValue().getTypeCell(), TypeObject::NOTHING,
                                     getElem(heroPos).getValue().isThing()));
         setElem(to,

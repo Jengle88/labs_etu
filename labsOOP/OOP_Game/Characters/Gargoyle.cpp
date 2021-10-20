@@ -12,12 +12,12 @@ bool Gargoyle::requestProtect(double attackPower) {
 }
 
 bool Gargoyle::requestDodge() const {
-    return isCriticalCase(luck);
+    return isCriticalCase();
 }
 
 std::vector<double> Gargoyle::requestAttack(Character &enemy) {
     std::vector<double> actionTable(3); // таблица событий при ударе
-    bool wasCriticalAttack = isCriticalCase(luck);
+    bool wasCriticalAttack = isCriticalCase();
     double startEnemyHealth = enemy.getHealth();
     bool wasDodge;
     if (wasCriticalAttack)
@@ -27,14 +27,12 @@ std::vector<double> Gargoyle::requestAttack(Character &enemy) {
     return {startEnemyHealth - enemy.getHealth(), double(wasDodge), double(wasCriticalAttack)}; // был ли крит, было ли уклонение, уменьшение здоровья
 }
 
-bool Gargoyle::isCriticalCase(double lucky) const {
-    double checkCriticalAttack = std::sin(
-            (rand() % 100 + 1 / double(std::max(rand(),1) % 100)) * luck); //luck >= 1, поэтому проблем нет
-    return ((checkCriticalAttack - int(checkCriticalAttack)) <= ROOT_EPSILON);
+bool Gargoyle::isCriticalCase() const {
+    return Character::isCriticalCase();
 }
 
 double Gargoyle::calcReflectionArmor() const {
-    return 1 / (this->protection + 2) + 0.5; // функция 1/(x+2) + 0.5 для расчёта множителя отражения удара доспехом
+    return Character::calcReflectionArmor();
 }
 
 std::vector<CellPoint> Gargoyle::makeMove(CellPoint from, CellPoint heroPos) const { // Паттерн: Strategy
@@ -61,9 +59,7 @@ std::vector<CellPoint> Gargoyle::makeMove(CellPoint from, CellPoint heroPos) con
 }
 
 bool Gargoyle::willFollowToHero() const {
-    int k = int((100.0 / GARGOYLE_PERCENT_FOR_FOLLOW_TO_HERO) * 100);
-    int num = int((rand() % 100 + double(1) / (rand() % 100)) * 100);
-    if (num % k == 0)
+    if (rand() % 100 < GARGOYLE_PERCENT_FOR_FOLLOW_TO_HERO)
         return true;
     return false;
 }
@@ -79,5 +75,9 @@ bool Gargoyle::inRangeVisibility(CellPoint monsterPos, CellPoint objectPos) {
 
 bool Gargoyle::checkPositiveHealth() const {
     return health > 0;
+}
+
+double Gargoyle::getHealth() const {
+    return Character::getHealth();
 }
 

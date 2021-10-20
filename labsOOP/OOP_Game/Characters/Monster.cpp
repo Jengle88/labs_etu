@@ -13,12 +13,12 @@ bool Monster::requestProtect(double attackPower) {
 }
 
 bool Monster::requestDodge() const {
-    return isCriticalCase(luck);
+    return isCriticalCase();
 }
 
 std::vector<double> Monster::requestAttack(Character &enemy) {
     std::vector<double> actionTable(3); // таблица событий при ударе
-    bool wasCriticalAttack = isCriticalCase(luck);
+    bool wasCriticalAttack = isCriticalCase();
     double startEnemyHealth = enemy.getHealth();
     bool wasDodge;
     if (wasCriticalAttack)
@@ -51,9 +51,7 @@ std::vector<CellPoint> Monster::makeMove(CellPoint from, CellPoint heroPos) cons
 }
 
 bool Monster::willFollowToHero() const {
-    int k = int((100.0 / MONSTER_PERCENT_FOR_FOLLOW_TO_HERO) * 100);
-    int num = int((rand() % 100 + double(1) / (rand() % 100)) * 100);
-    if (num % k == 0)
+    if (rand() % 100 < MONSTER_PERCENT_FOR_FOLLOW_TO_HERO)
         return true;
     return false;
 }
@@ -63,14 +61,12 @@ bool Monster::inRangeVisibility(CellPoint monsterPos, CellPoint objectPos) {
            abs(monsterPos.getY() - objectPos.getY()) <= MONSTER_RANGE_VISIBILITY;
 }
 
-bool Monster::isCriticalCase(double lucky) const {
-    double checkCriticalAttack = std::sin(
-            (rand() % 100 + 1 / double(std::max(rand(),1) % 100)) * luck); //luck >= 1, поэтому проблем нет
-    return ((checkCriticalAttack - int(checkCriticalAttack)) <= ROOT_EPSILON);
+bool Monster::isCriticalCase() const {
+    return Character::isCriticalCase();
 }
 
 double Monster::calcReflectionArmor() const {
-    return 1 / (this->protection + 2) + 0.5; // функция 1/(x+2) + 0.5 для расчёта множителя отражения удара доспехом
+    return Character::calcReflectionArmor();
 }
 
 int Monster::getCharacterType() const {
@@ -79,5 +75,9 @@ int Monster::getCharacterType() const {
 
 bool Monster::checkPositiveHealth() const {
     return health > 0;
+}
+
+double Monster::getHealth() const {
+    return Character::getHealth();
 }
 

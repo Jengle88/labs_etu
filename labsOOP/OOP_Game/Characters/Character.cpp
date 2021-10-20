@@ -13,7 +13,7 @@ double Character::getHealth() const {
     return health;
 }
 
-bool Character::isCriticalCase(double luck) const {
+bool Character::isCriticalCase() const {
     double checkCriticalAttack = std::sin(
             (rand() % 100 + 1 / double(std::max(rand(), 1) % 100)) *
             luck); // luck >= 1, поэтому проблем нет

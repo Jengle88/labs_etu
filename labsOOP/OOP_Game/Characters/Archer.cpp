@@ -3,20 +3,17 @@
 Archer::Archer(double health, double attackPower, double protection)
         : Character(CharacterType::SKELETON_ARCHER, health, attackPower, protection, ARCHER_LUCK) {}
 
-bool Archer::isCriticalCase(double lucky) const {
-    double checkCriticalAttack = std::sin(
-            (rand() % 100 + 1 / double(std::max(rand(),1) % 100)) * luck); // luck >= 1, поэтому проблем нет
-    return ((checkCriticalAttack - int(checkCriticalAttack)) <= ROOT_EPSILON);
-
+bool Archer::isCriticalCase() const {
+    return Character::isCriticalCase();
 }
 
 double Archer::calcReflectionArmor() const {
-    return 1 / (this->protection + 2) + 0.5; // функция 1/(x+2) + 0.5 для расчёта множителя отражения удара доспехом
+    return Character::calcReflectionArmor();
 }
 
 std::vector<double> Archer::requestAttack(Character &enemy) {
     std::vector<double> actionTable(3); // таблица событий при ударе
-    bool wasCriticalAttack = isCriticalCase(luck);
+    bool wasCriticalAttack = isCriticalCase();
     double startEnemyHealth = enemy.getHealth();
     bool wasDodge;
     if (wasCriticalAttack)
@@ -37,7 +34,7 @@ bool Archer::requestProtect(double attackPower) {
 }
 
 bool Archer::requestDodge() const {
-    return isCriticalCase(luck);
+    return isCriticalCase();
 }
 
 std::vector<CellPoint> Archer::makeMove(CellPoint from, CellPoint heroPos) const { // Паттерн: Strategy
@@ -63,9 +60,7 @@ std::vector<CellPoint> Archer::makeMove(CellPoint from, CellPoint heroPos) const
 }
 
 bool Archer::willFollowToHero() const {
-    int k = int((100.0 / ARCHER_PERCENT_FOR_FOLLOW_TO_HERO) * 100);
-    int num = int((rand() % 100 + double(1) / (rand() % 100)) * 100);
-    if (num % k == 0)
+    if (rand() % 100 < ARCHER_PERCENT_FOR_FOLLOW_TO_HERO)
         return true;
     return false;
 }
@@ -82,5 +77,9 @@ int Archer::getCharacterType() const {
 
 bool Archer::checkPositiveHealth() const {
     return health > 0;
+}
+
+double Archer::getHealth() const {
+    return Character::getHealth();
 }
 

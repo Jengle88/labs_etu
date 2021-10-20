@@ -5,7 +5,7 @@
 #define ARCHER_CRITICAL_FACTOR 2
 #define ARCHER_DODGE_FACTOR 0.6
 #define ARCHER_RANGE_VISIBILITY 4
-#define ARCHER_PERCENT_FOR_FOLLOW_TO_HERO 5000 // значения варьируются от 0 до 10000
+#define ARCHER_PERCENT_FOR_FOLLOW_TO_HERO 70 // значения варьируются от 0 до 100
 #define ARCHER_MOVE 1
 #define ARCHER_MAX_HEALTH 80
 #define ARCHER_LUCK 0.55
@@ -14,7 +14,7 @@
 
 class Archer final: public Character, public Enemy {
     double luck = ARCHER_LUCK;
-    bool isCriticalCase(double lucky) const override;
+    bool isCriticalCase() const override;
     double calcReflectionArmor() const override;
     bool requestProtect(double attackPower) override;
     bool requestDodge() const override;
@@ -24,10 +24,11 @@ public:
 
     Archer(double health, double attackPower, double protection);
     std::vector<double> requestAttack(Character &enemy) override;
-    using Character::getHealth;
+    double getHealth() const override;
     std::vector<CellPoint> makeMove(CellPoint from, CellPoint heroPos) const override;
     static bool inRangeVisibility(CellPoint monsterPos, CellPoint objectPos);
     int getCharacterType() const override;
+
     bool checkPositiveHealth() const override;
     ~Archer() override = default;
 };

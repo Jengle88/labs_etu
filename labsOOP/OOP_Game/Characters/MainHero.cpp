@@ -8,7 +8,7 @@ MainHero::MainHero(int characterType, double health, double attackPower, double 
 
 std::vector<double> MainHero::requestAttack(Character &enemy) {
     std::vector<double> actionTable(3);
-    bool wasCriticalAttack = isCriticalCase(luck);
+    bool wasCriticalAttack = isCriticalCase();
     double startEnemyHealth = enemy.getHealth();
     bool wasDodge;
     if (wasCriticalAttack)
@@ -19,7 +19,7 @@ std::vector<double> MainHero::requestAttack(Character &enemy) {
 }
 
 bool MainHero::requestDodge() const {
-    return isCriticalCase(luck);
+    return isCriticalCase();
 }
 
 bool MainHero::requestProtect(double attackPower) {
