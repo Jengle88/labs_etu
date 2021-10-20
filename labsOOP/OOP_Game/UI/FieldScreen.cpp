@@ -5,7 +5,7 @@
 #include "FightScreen.h"
 
 
-FieldScreen::FieldScreen() : thingsManager(field) {
+FieldScreen::FieldScreen() {
     field = nullptr;
 }
 
@@ -160,7 +160,7 @@ void FieldScreen::requestMoveHero(CellPoint from, CellPoint to, std::string &gam
     if (field->getHeroPos() == from) {
         field->moveHero(to);
     }
-    auto thingOnPos = thingsManager.checkCell(to);
+    auto thingOnPos = thingsManager.checkCellHasSmth(to);
     if (thingOnPos.first) {
         gameAction = generateTitleForThingAction(thingOnPos.second.getNameThing(), thingOnPos.second.getProperties());
     }
@@ -168,53 +168,8 @@ void FieldScreen::requestMoveHero(CellPoint from, CellPoint to, std::string &gam
         gameAction = "Вы на финишной клетке. Закончить игру? Нажмите q, чтобы выйти.\n";
 }
 
-void FieldScreen::showStartFieldScreen() {
-    showStartingParams();
-    std::system("clear");
-}
-
-void FieldScreen::gameStatusObserver() {
-    char action = getchar(); // считываем перенос строки
-//    char action = getch(); // считываем перенос строки
-    std::cout << "Для выхода введите ` и нажмите enter.\n";
-    showUpdatedScreen();
-    Printer::printInventory(&(this->field->getHero()));
-    while (action != MoveSide::EXIT) {
-        std::string gameAction = "";
-        bool goodMovement = registerMovement(action, gameAction);
-        field->moveEnemies();
-        if (goodMovement) {
-            std::system("clear");
-            field->createRandomEnemy();
-            std::cout << "Для выхода введите ` и нажмите enter.\n";
-            showUpdatedScreen();
-            std::cout << gameAction << '\n';
-            Printer::printEnemyInfo(&(field->enemies));
-            Printer::printInventory(&(this->field->getHero()));
-        }
-    }
-    std::system("clear");
-}
-
-std::string
-FieldScreen::generateTitleForThingAction(const std::string &nameThing, const std::vector<double> &properties) {
-    std::string res = "На этой клетке лежит " + nameThing + ", который даёт: " +
-                      (properties[ThingProperties::DAMAGE] >= 1e-2 ? "Урон: " + std::to_string(
-                              round(properties[ThingProperties::DAMAGE] * 100) / 100) + " " : "") +
-                      (properties[ThingProperties::PROTECTION] >= 1e-2 ? "Защита: " + std::to_string(
-                              round(properties[ThingProperties::PROTECTION] * 100) / 100) + " " : "") +
-                      (properties[ThingProperties::LUCK] >= 1e-2 ? "Удача: " + std::to_string(
-                              round(properties[ThingProperties::LUCK] * 100) / 100) + " " : "") +
-                      (properties[ThingProperties::HEALTH] >= 1e-2 ? "Здоровье: " + std::to_string(
-                              round(properties[ThingProperties::HEALTH] * 100) / 100) + " " : "") +
-                      ". Нажмите ";
-    res.push_back(MoveSide::TAKE);
-    res += ", чтобы взять.";
-    return res;
-}
-
 void FieldScreen::requestTakeObject(CellPoint point) {
-    auto thingOnPos = thingsManager.checkCell(point);
+    auto thingOnPos = thingsManager.checkCellHasSmth(point);
     if (thingOnPos.first) {
         field->getHero().takeThing(thingOnPos.second);
         thingsManager.deleteThingFromField(point);
@@ -246,4 +201,49 @@ bool FieldScreen::requestMoveOut() const {
         return true;
     }
     return false;
+}
+
+std::string
+FieldScreen::generateTitleForThingAction(const std::string &nameThing, const std::vector<double> &properties) {
+    std::string res = "На этой клетке лежит " + nameThing + ", который даёт: " +
+                      (properties[ThingProperties::DAMAGE] >= 1e-2 ? "Урон: " + std::to_string(
+                              round(properties[ThingProperties::DAMAGE] * 100) / 100) + " " : "") +
+                      (properties[ThingProperties::PROTECTION] >= 1e-2 ? "Защита: " + std::to_string(
+                              round(properties[ThingProperties::PROTECTION] * 100) / 100) + " " : "") +
+                      (properties[ThingProperties::LUCK] >= 1e-2 ? "Удача: " + std::to_string(
+                              round(properties[ThingProperties::LUCK] * 100) / 100) + " " : "") +
+                      (properties[ThingProperties::HEALTH] >= 1e-2 ? "Здоровье: " + std::to_string(
+                              round(properties[ThingProperties::HEALTH] * 100) / 100) + " " : "") +
+                      ". Нажмите ";
+    res.push_back(MoveSide::TAKE);
+    res += ", чтобы взять.";
+    return res;
+}
+
+void FieldScreen::showStartFieldScreen() {
+    showStartingParams();
+    std::system("clear");
+}
+
+void FieldScreen::gameStatusObserver() {
+    char action = getchar(); // считываем перенос строки
+//    char action = getch(); // считываем перенос строки
+    std::cout << "Для выхода введите ` и нажмите enter.\n";
+    showUpdatedScreen();
+    Printer::printInventory(&(this->field->getHero()));
+    while (action != MoveSide::EXIT) {
+        std::string gameAction = "";
+        bool goodMovement = registerMovement(action, gameAction);
+        field->moveEnemies();
+        if (goodMovement) {
+            std::system("clear");
+            field->createRandomEnemy();
+            std::cout << "Для выхода введите ` и нажмите enter.\n";
+            showUpdatedScreen();
+            std::cout << gameAction << '\n';
+            Printer::printEnemyInfo(&(field->enemies));
+            Printer::printInventory(&(this->field->getHero()));
+        }
+    }
+    std::system("clear");
 }

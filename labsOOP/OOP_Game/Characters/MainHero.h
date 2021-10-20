@@ -13,22 +13,20 @@
 class MainHero : public Character {
     std::vector<Thing> things;
     std::vector<int> countKilledEnemy;
-    bool requestProtect(double attackPower) override;
+    bool requestProtect(double attackPower);
     bool requestDodge() const override;
     void recalcCharacteristics(std::vector<double> thingProperties);
 public:
     MainHero(int characterType, double health, double attackPower, double protection, double luck);
     MainHero() = default;
-
     // урон, уклонение и крит
-    std::vector<double> requestAttack(Character &enemy) override;
+    std::vector<double> requestAttack(Character &enemy);
     void takeThing(Thing thing);
     void ejectThing(int pos);
     bool useThing(int pos);
-
+    bool hasThing(int thingObject) const;
+    void writeKill(int enemyType);
     const std::vector<Thing> & getInventory() const;
     const std::vector<int> &getCountKilledEnemy() const;
-    void writeKill(int enemyType);
     bool checkPositiveHealth() const;
-    bool hasThing(int thingObject) const;
 };

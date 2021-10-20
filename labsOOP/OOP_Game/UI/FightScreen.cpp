@@ -32,7 +32,7 @@ int FightScreen::fightObserver() {
 void FightScreen::showUpdatedScreen() {
     auto fightModel = dataManager.getHero(mainHero.hasThing(ThingObject::SWORD),
                                           mainHero.hasThing(ThingObject::ARMOR));
-    int distBetweenCharacters = 7;
+    int distBetweenCharacters = 7; // пространство между героем и врагом на экране
     std::for_each(fightModel.begin(), fightModel.end(),
                   [&distBetweenCharacters](std::string &str) { str += std::string(distBetweenCharacters, ' '); });
     auto enemyModel = dataManager.getEnemy(enemy.getCharacterType());

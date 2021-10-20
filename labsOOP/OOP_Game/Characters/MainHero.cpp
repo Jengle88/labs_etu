@@ -5,30 +5,16 @@ MainHero::MainHero(int characterType, double health, double attackPower, double 
     countKilledEnemy.resize(CharacterType::CHARACTER_TYPE_SIZE - 1);
 }
 
-
 std::vector<double> MainHero::requestAttack(Character &enemy) {
-    std::vector<double> actionTable(3);
-    bool wasCriticalAttack = isCriticalCase();
-    double startEnemyHealth = enemy.getHealth();
-    bool wasDodge;
-    if (wasCriticalAttack)
-        wasDodge = enemy.requestProtect(this->attackPower * CHARACTER_CRITICAL_FACTOR);
-    else
-        wasDodge = enemy.requestProtect(this->attackPower);
-    return {startEnemyHealth - enemy.getHealth(), double(wasDodge), double(wasCriticalAttack)};
-}
-
-bool MainHero::requestDodge() const {
-    return isCriticalCase();
+    return Character::requestAttack(enemy, CHARACTER_CRITICAL_FACTOR, CHARACTER_DODGE_FACTOR);
 }
 
 bool MainHero::requestProtect(double attackPower) {
-    bool wasDodge = this->requestDodge();
-    if (wasDodge)
-        this->health -= attackPower * calcReflectionArmor() * CHARACTER_DODGE_FACTOR;
-    else
-        this->health -= attackPower * calcReflectionArmor();
-    return wasDodge;
+    return Character::requestProtect(attackPower, CHARACTER_DODGE_FACTOR);
+}
+
+bool MainHero::requestDodge() const {
+    return Character::isCriticalCase();
 }
 
 void MainHero::recalcCharacteristics(std::vector<double> thingProperties) {
@@ -51,18 +37,6 @@ void MainHero::ejectThing(int pos) {
         recalcCharacteristics(prevThing.getInverseValueProperties());
 }
 
-const std::vector<int> &MainHero::getCountKilledEnemy() const {
-    return countKilledEnemy;
-}
-
-const std::vector<Thing> &MainHero::getInventory() const {
-    return things;
-}
-
-bool MainHero::checkPositiveHealth() const {
-    return health > 0;
-}
-
 bool MainHero::useThing(int pos) {
     if (0 <= pos && pos < things.size()) {
         if (things[pos].isActiveThing()) {
@@ -82,6 +56,18 @@ bool MainHero::hasThing(int thingObject) const {
 
 void MainHero::writeKill(int enemyType) {
     countKilledEnemy[enemyType]++;
+}
+
+const std::vector<Thing> &MainHero::getInventory() const {
+    return things;
+}
+
+const std::vector<int> &MainHero::getCountKilledEnemy() const {
+    return countKilledEnemy;
+}
+
+bool MainHero::checkPositiveHealth() const {
+    return health > 0;
 }
 
 

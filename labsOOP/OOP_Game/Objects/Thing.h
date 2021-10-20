@@ -21,17 +21,15 @@ class Thing {
     std::string nameThing;
     std::vector<double> properties; // дельта свойств, максимум 3 элемента
     int thingObject;
-    bool isVisualized;
     friend bool operator==(const Thing& val1, const Thing& val2);
 
 public:
-    Thing() = default;
     Thing(std::string nameThing, std::vector<double> properties, int thingObject, bool isVisualized);
+    Thing() = default;
     std::string getNameThing() const;
     const std::vector<double>& getProperties() const;
-    int getThingObject() const;
-    bool getStatusIsVisualized() const;
     bool isActiveThing() const;
+    int getThingObject() const;
     std::vector<double> getInverseValueProperties() const;
 };
 

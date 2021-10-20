@@ -12,12 +12,12 @@ class Grid {
 	int height;
 	int width;
 	std::vector<std::vector<Cell>> grid;
+    bool isValidIndexes(int x, int y) const;
     bool isValidXPos(int x) const;
     bool isValidYPos(int y) const;
-    bool isValidIndexes(int x, int y) const;
+    bool isValidSizes(int height, int width) const;
     static bool isValidHeight(int height);
-	static bool isValidWidth(int width);
-	bool isValidSizes(int height, int width) const;
+    static bool isValidWidth(int width);
 
     friend class FieldScreen; // для доступа к функциям проверки высоты и ширины
     friend class Field; // т.к Field работает с Grid
@@ -26,17 +26,15 @@ class Grid {
 public:
 	Grid();
 	Grid(int height, int width, std::vector<std::vector<Cell>> grid = std::vector<std::vector<Cell>>()/*Cell **field = nullptr*/);
+    ~Grid() = default;
     Grid(const Grid& grid);
     Grid& operator=(const Grid& grid);
     Grid(Grid&& grid);
     Grid& operator=(Grid&& grid);
 
-    ~Grid();
-
 	int getHeight() const;
 	int getWidth() const;
 	void setElem(CellPoint point, Cell cell);
 	Cell getElem(CellPoint point) const;
-	void clear();
-	void resizeCleanGrid(int height, int width, std::vector<std::vector<Cell>> grid = std::vector<std::vector<Cell>>());
+
 };

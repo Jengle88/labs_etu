@@ -38,7 +38,7 @@ class Field {
     void createArcher(double health, double attackPower, double protection); // Паттерн: фабрика
     void createGargoyle(double health, double attackPower, double protection); // Паттерн: фабрика
 public:
-    Field();
+    Field() = default;
     Field(int height, int width, CellPoint start = CellPoint(0,0), CellPoint finish = CellPoint(0,0), Grid grid = Grid());
     Field(const Field& field);
     Field& operator=(const Field& field);
@@ -57,8 +57,6 @@ public:
     void moveEnemy(CellPoint from, CellPoint to);
     void moveEnemies();
     void killEnemy(CellPoint from);
-
-    void printField(); // нужно для DEMO
 
     // Геттеры / Сеттеры
     Cell getElem(CellPoint point) const;

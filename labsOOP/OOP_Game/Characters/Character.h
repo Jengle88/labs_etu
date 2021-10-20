@@ -30,9 +30,9 @@ protected:
     virtual double calcReflectionArmor() const;
 public:
     Character(int characterType, double health, double attackPower, double protection, double luck);
-    Character();
-    virtual std::vector<double> requestAttack(Character &enemy) = 0; // возвращает информацию, был ли критический удар, уклонение и изменение здоровья
-    virtual bool requestProtect(double attackPower) = 0; // возвращает информацию, было ли уклонение
-    virtual bool requestDodge() const = 0; // возвращает информацию, уклонился ли
+    Character() = default;
+    virtual std::vector<double> requestAttack(Character &enemy, double criticalFactor, double dodgeFactor); // возвращает информацию, был ли критический удар, уклонение и изменение здоровья
+    virtual bool requestProtect(double attackPower, double dodgeFactor); // возвращает информацию, было ли уклонение
+    virtual bool requestDodge() const; // возвращает информацию, уклонился ли
     double getHealth() const;
 };

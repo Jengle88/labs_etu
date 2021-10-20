@@ -9,5 +9,4 @@ public:
     static void printHealthInfo(const double heroHealth, const double enemyHealth);
     static void printAttackInfo(int characterType, double damage, bool wasDodge, bool wasCritical);
     static void printHeroAchievement(const std::vector<int>& achievement);
-//    static void printFight(const DataManager& dataManager, const MainHero& hero, const Enemy& enemy);
 };

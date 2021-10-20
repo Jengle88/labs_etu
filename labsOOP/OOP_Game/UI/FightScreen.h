@@ -21,7 +21,7 @@ class FightScreen {
     DataManager dataManager;
 public:
     FightScreen(MainHero& mainHero, Enemy& enemy);
-    int fightObserver(/*MainHero &mainHero, Enemy& enemy*/);
+    int fightObserver();
     void showUpdatedScreen();
     bool requestAction(char action);
 

@@ -4,8 +4,6 @@
 #include "../../Characters/Archer.h"
 #include "../../Characters/Gargoyle.h"
 
-Field::Field() {}
-
 
 Field::Field(int height, int width, CellPoint start, CellPoint finish, Grid grid) {
     if (!grid.grid.empty())
@@ -77,6 +75,12 @@ Field &Field::operator=(Field &&field) {
     return *this;
 }
 
+Field::~Field() {
+    for (auto &item: enemies) {
+        delete item.second;
+    }
+}
+
 bool Field::isCorrectStartFinish(CellPoint start, CellPoint finish) const {
     return this->field.isValidIndexes(start.getX(), start.getY()) &&
            this->field.isValidIndexes(finish.getX(), finish.getY()) &&
@@ -87,7 +91,6 @@ bool Field::isCorrectDistStartFinish(CellPoint start, CellPoint finish) const {
     return abs(start.getX() - finish.getX()) +
            abs(start.getY() - finish.getY()) >= distStartFinish;
 }
-
 
 CellPoint Field::generateBorderPoint() const {
     switch (rand() % 4) {
@@ -188,6 +191,62 @@ bool Field::generateFullField(int countWalls) {
     return this->getStatusStartFinish() && this->getStatusWay() && this->getStatusWalls();
 }
 
+void Field::createHero(double health, double attackPower, double protection, double luck) {
+    hero = MainHero(CharacterType::MAIN_HERO, health, attackPower, protection, luck);
+}
+
+void Field::createMonster(double health, double attackPower, double protection) {
+    CellPoint monsterStartPoint;
+    do {
+        monsterStartPoint = generateRandomFreePoint();
+    } while (enemies.count(monsterStartPoint));
+    enemies[monsterStartPoint] = new Monster(health, attackPower, protection);
+}
+
+void Field::createArcher(double health, double attackPower, double protection) {
+    CellPoint archerStartPoint;
+    do {
+        archerStartPoint = generateRandomFreePoint();
+    } while (enemies.count(archerStartPoint));
+    enemies[archerStartPoint] = new Archer(health, attackPower, protection);
+}
+
+void Field::createGargoyle(double health, double attackPower, double protection) {
+    CellPoint gargoyleStartPoint;
+    do {
+        gargoyleStartPoint = generateRandomFreePoint();
+    } while (enemies.count(gargoyleStartPoint));
+    enemies[gargoyleStartPoint] = new Gargoyle(health, attackPower, protection);
+}
+
+void Field::createRandomEnemy() {
+    if (counterSteps % TIME_BETWEEN_GENERATE_ENEMY == 0 && enemies.size() < MAX_COUNT_ENEMIES) {
+        switch (rand() % 3) {
+            case 0:
+                createMonster(MONSTER_MAX_HEALTH, MONSTER_DAMAGE, MONSTER_PROTECTION);
+                break;
+            case 1:
+                createArcher(ARCHER_MAX_HEALTH, ARCHER_DAMAGE, ARCHER_PROTECTION);
+                break;
+            case 2:
+                createGargoyle(GARGOYLE_MAX_HEALTH, GARGOYLE_DAMAGE, GARGOYLE_PROTECTION);
+                break;
+        }
+    }
+}
+
+CellPoint Field::generateRandomFreePoint() {
+    int x, y;
+    do {
+        x = rand() % this->getWidth();
+        y = rand() % this->getHeight();
+    } while (!this->field.isValidIndexes(x, y) ||
+             field.getElem(CellPoint(x, y)).getValue().getTypeCell() != TypeCell::EMPTY ||
+             field.getElem(CellPoint(x, y)).getValue().getTypeObject() != TypeObject::NOTHING
+            );
+    return {x, y};
+}
+
 void Field::moveHero(CellPoint to) {
     auto cellInfo = getElem(to).getValue();
     if (cellInfo.getTypeCell() != TypeCell::WALL && cellInfo.getTypeObject() != TypeObject::ENEMY) {
@@ -199,23 +258,42 @@ void Field::moveHero(CellPoint to) {
     }
 }
 
-void Field::printField() {
-    for (int i = 0; i < field.getWidth() + 2; ++i) {
-        std::cout << '_';
-    }
-    std::cout << '\n';
-    for (int i = 0; i < field.getHeight(); ++i) {
-        std::cout << '|';
-        for (int j = 0; j < field.getWidth(); ++j) {
-            std::cout << field.getElem(CellPoint(j, i)).getValue().getCellAsChar();
+void Field::moveEnemy(const CellPoint from, const CellPoint to) {
+    auto enemy = enemies[from];
+    enemies.erase(from);
+    enemies[to] = enemy;
+    auto prevPointData = field.getElem(from);
+    auto newPointData = field.getElem(to);
+    field.setElem(from, Cell(CellObject(prevPointData.getValue().getTypeCell(),
+                                        prevPointData.getValue().getTypeObject() == TypeObject::HERO ? TypeObject::HERO : TypeObject::NOTHING,
+                                        prevPointData.getValue().isThing())));
+    field.setElem(to, Cell(CellObject(newPointData.getValue().getTypeCell(), TypeObject::ENEMY, newPointData.getValue().isThing())));
+}
+
+void Field::moveEnemies() {
+    auto tempEnemies = enemies;
+    for (const auto &enemy: tempEnemies) {
+        auto possibleSteps = enemy.second->makeMove(enemy.first, heroPos);
+        std::shuffle(possibleSteps.begin(),  possibleSteps.end(), std::mt19937(std::random_device()()));
+        for (auto & possibleStep : possibleSteps) {
+            if (!field.isValidIndexes(possibleStep.getX(), possibleStep.getY()))
+                continue;
+            auto tempElem = getElem(possibleStep).getValue();
+            if (tempElem.getTypeCell() != TypeCell::WALL &&
+                tempElem.getTypeObject() != TypeObject::HERO &&
+                tempElem.getTypeObject() != TypeObject::ENEMY
+                    ) {
+                moveEnemy(enemy.first, possibleStep);
+                break;
+            }
         }
-        std::cout << '|';
-        std::cout << '\n';
     }
-    for (int i = 0; i < field.getWidth() + 2; ++i) {
-        std::cout << '_';
-    }
-    std::cout << '\n';
+}
+
+void Field::killEnemy(CellPoint from) {
+    delete enemies[from];
+    enemies.erase(from);
+    setElem(from, CellObject(getElem(from).getValue().getTypeCell(), TypeObject::NOTHING, getElem(from).getValue().isThing()));
 }
 
 Cell Field::getElem(CellPoint point) const {
@@ -259,70 +337,12 @@ void Field::setHeroOnStart() {
     heroPos = start;
 }
 
-void Field::createHero(double health, double attackPower, double protection, double luck) {
-    hero = MainHero(CharacterType::MAIN_HERO, health, attackPower, protection, luck);
-}
-
-CellPoint Field::generateRandomFreePoint() {
-    int x, y;
-    do {
-        x = rand() % this->getWidth();
-        y = rand() % this->getHeight();
-    } while (!this->field.isValidIndexes(x, y) ||
-             field.getElem(CellPoint(x, y)).getValue().getTypeCell() != TypeCell::EMPTY ||
-             field.getElem(CellPoint(x, y)).getValue().getTypeObject() != TypeObject::NOTHING
-            );
-    return {x, y};
-}
-
 MainHero& Field::getHero() {
     return this->hero;
 }
 
-void Field::moveEnemies() {
-    auto tempEnemies = enemies;
-    for (const auto &enemy: tempEnemies) {
-        auto possibleSteps = enemy.second->makeMove(enemy.first, heroPos);
-        std::shuffle(possibleSteps.begin(),  possibleSteps.end(), std::mt19937(std::random_device()()));
-        for (auto & possibleStep : possibleSteps) {
-            if (!field.isValidIndexes(possibleStep.getX(), possibleStep.getY()))
-                continue;
-            auto tempElem = getElem(possibleStep).getValue();
-            if (tempElem.getTypeCell() != TypeCell::WALL &&
-                tempElem.getTypeObject() != TypeObject::HERO &&
-                tempElem.getTypeObject() != TypeObject::ENEMY
-            ) {
-                moveEnemy(enemy.first, possibleStep);
-                break;
-            }
-        }
-    }
-}
-
-void Field::moveEnemy(const CellPoint from, const CellPoint to) {
-    auto enemy = enemies[from];
-    enemies.erase(from);
-    enemies[to] = enemy;
-    auto prevPointData = field.getElem(from);
-    auto newPointData = field.getElem(to);
-    field.setElem(from, Cell(CellObject(prevPointData.getValue().getTypeCell(),
-                                        prevPointData.getValue().getTypeObject() == TypeObject::HERO ? TypeObject::HERO : TypeObject::NOTHING,
-                                        prevPointData.getValue().isThing())));
-    field.setElem(to, Cell(CellObject(newPointData.getValue().getTypeCell(), TypeObject::ENEMY, newPointData.getValue().isThing())));
-}
-
-void Field::createMonster(double health, double attackPower, double protection) {
-    CellPoint monsterStartPoint;
-    do {
-        monsterStartPoint = generateRandomFreePoint();
-    } while (enemies.count(monsterStartPoint));
-    enemies[monsterStartPoint] = new Monster(health, attackPower, protection);
-}
-
-Field::~Field() {
-    for (auto &item: enemies) {
-        delete item.second;
-    }
+Enemy& Field::getEnemyFromPoint(CellPoint point) {
+    return static_cast<Enemy &>(*enemies[point]);
 }
 
 void Field::incCountSteps() {
@@ -331,48 +351,6 @@ void Field::incCountSteps() {
 
 long Field::getCountSteps() const {
     return counterSteps;
-}
-
-void Field::createRandomEnemy() {
-    if (counterSteps % TIME_BETWEEN_GENERATE_ENEMY == 0 && enemies.size() < MAX_COUNT_ENEMIES) {
-        switch (rand() % 3) {
-            case 0:
-                createMonster(MONSTER_MAX_HEALTH, MONSTER_DAMAGE, MONSTER_PROTECTION);
-                break;
-            case 1:
-                createArcher(ARCHER_MAX_HEALTH, ARCHER_DAMAGE, ARCHER_PROTECTION);
-                break;
-            case 2:
-                createGargoyle(GARGOYLE_MAX_HEALTH, GARGOYLE_DAMAGE, GARGOYLE_PROTECTION);
-                break;
-        }
-    }
-}
-
-void Field::createArcher(double health, double attackPower, double protection) {
-    CellPoint archerStartPoint;
-    do {
-        archerStartPoint = generateRandomFreePoint();
-    } while (enemies.count(archerStartPoint));
-    enemies[archerStartPoint] = new Archer(health, attackPower, protection);
-}
-
-void Field::createGargoyle(double health, double attackPower, double protection) {
-    CellPoint gargoyleStartPoint;
-    do {
-        gargoyleStartPoint = generateRandomFreePoint();
-    } while (enemies.count(gargoyleStartPoint));
-    enemies[gargoyleStartPoint] = new Gargoyle(health, attackPower, protection);
-}
-
-Enemy& Field::getEnemyFromPoint(CellPoint point) {
-    return static_cast<Enemy &>(*enemies[point]);
-}
-
-void Field::killEnemy(CellPoint from) {
-    delete enemies[from];
-    enemies.erase(from);
-    setElem(from, CellObject(getElem(from).getValue().getTypeCell(), TypeObject::NOTHING, getElem(from).getValue().isThing()));
 }
 
 

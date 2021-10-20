@@ -15,20 +15,20 @@
 #define MONSTER_DAMAGE 1
 #define MONSTER_PROTECTION 2
 
-class Monster : public Character, public Enemy {
+class Monster : public virtual Character, public virtual Enemy {
     double luck = MONSTER_LUCK;
-    bool isCriticalCase() const override;
-    double calcReflectionArmor() const override; // по-хорошему, изменить под использования реализации в Character
     bool requestProtect(double attackPower) override;
     bool requestDodge() const override;
+    bool isCriticalCase() const override;
+    double calcReflectionArmor() const override; // по-хорошему, изменить под использования реализации в Character
     bool willFollowToHero() const override;
 public:
     Monster(double health, double attackPower, double protection);
+    ~Monster() override = default;
     std::vector<double> requestAttack(Character &enemy) override;
     std::vector<CellPoint> makeMove(CellPoint from, CellPoint heroPos) const override;
     static bool inRangeVisibility(CellPoint monsterPos, CellPoint objectPos);
-    double getHealth() const override;
     int getCharacterType() const override;
+    double getHealth() const override;
     bool checkPositiveHealth() const override;
-    ~Monster() override = default;
 };

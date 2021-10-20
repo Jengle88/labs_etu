@@ -24,7 +24,8 @@ public:
 
     ThingsManager(Field *field, std::map<CellPoint, Thing> visualThingsPlaces = std::map<CellPoint, Thing>(),
                   std::map<CellPoint, Thing> healthThingsPlaces = std::map<CellPoint, Thing>());
+    ThingsManager() = default;
     void tryGenerateThing(const MainHero &hero);
-    std::pair<bool, Thing> checkCell(CellPoint point);
+    std::pair<bool, Thing> checkCellHasSmth(CellPoint point);
     void deleteThingFromField(CellPoint point);
 };

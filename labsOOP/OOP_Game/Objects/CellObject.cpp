@@ -41,16 +41,8 @@ int CellObject::getTypeCell() const {
 	return this->typeCell;
 }
 
-void CellObject::setTypeCell(TypeCell typeCell) {
-    this->typeCell = typeCell;
-}
-
 int CellObject::getTypeObject() const {
 	return this->typeObject;
-}
-
-void CellObject::setTypeObject(TypeObject typeObject) {
-	this->typeObject = typeObject;
 }
 
 bool CellObject::isThing() const {

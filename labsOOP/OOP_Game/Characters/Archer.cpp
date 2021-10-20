@@ -3,6 +3,18 @@
 Archer::Archer(double health, double attackPower, double protection)
         : Character(CharacterType::SKELETON_ARCHER, health, attackPower, protection, ARCHER_LUCK) {}
 
+std::vector<double> Archer::requestAttack(Character &enemy) {
+    return Character::requestAttack(enemy, ARCHER_CRITICAL_FACTOR, ARCHER_DODGE_FACTOR);
+}
+
+bool Archer::requestProtect(double attackPower) {
+    return Character::requestProtect(attackPower, ARCHER_DODGE_FACTOR);
+}
+
+bool Archer::requestDodge() const {
+    return Character::requestDodge();
+}
+
 bool Archer::isCriticalCase() const {
     return Character::isCriticalCase();
 }
@@ -11,30 +23,10 @@ double Archer::calcReflectionArmor() const {
     return Character::calcReflectionArmor();
 }
 
-std::vector<double> Archer::requestAttack(Character &enemy) {
-    std::vector<double> actionTable(3); // таблица событий при ударе
-    bool wasCriticalAttack = isCriticalCase();
-    double startEnemyHealth = enemy.getHealth();
-    bool wasDodge;
-    if (wasCriticalAttack)
-        wasDodge = enemy.requestProtect(this->attackPower * ARCHER_CRITICAL_FACTOR);
-    else
-        wasDodge = enemy.requestProtect(this->attackPower);
-    return {startEnemyHealth - enemy.getHealth(), double(wasDodge), double(wasCriticalAttack)};
-
-}
-
-bool Archer::requestProtect(double attackPower) {
-    bool wasDodge = this->requestDodge();
-    if (wasDodge)
-        this->health -= attackPower * calcReflectionArmor() * ARCHER_DODGE_FACTOR;
-    else
-        this->health -= attackPower * calcReflectionArmor();
-    return wasDodge;
-}
-
-bool Archer::requestDodge() const {
-    return isCriticalCase();
+bool Archer::willFollowToHero() const {
+    if (rand() % 100 < ARCHER_PERCENT_FOR_FOLLOW_TO_HERO)
+        return true;
+    return false;
 }
 
 std::vector<CellPoint> Archer::makeMove(CellPoint from, CellPoint heroPos) const { // Паттерн: Strategy
@@ -59,12 +51,6 @@ std::vector<CellPoint> Archer::makeMove(CellPoint from, CellPoint heroPos) const
     return res;
 }
 
-bool Archer::willFollowToHero() const {
-    if (rand() % 100 < ARCHER_PERCENT_FOR_FOLLOW_TO_HERO)
-        return true;
-    return false;
-}
-
 bool Archer::inRangeVisibility(CellPoint monsterPos, CellPoint objectPos) {
     return abs(monsterPos.getX() - objectPos.getX()) <= ARCHER_RANGE_VISIBILITY && //попадает в прямоугольник видимости
            abs(monsterPos.getY() - objectPos.getY()) <= ARCHER_RANGE_VISIBILITY;
@@ -75,11 +61,11 @@ int Archer::getCharacterType() const {
     return this->characterType;
 }
 
-bool Archer::checkPositiveHealth() const {
-    return health > 0;
-}
-
 double Archer::getHealth() const {
     return Character::getHealth();
+}
+
+bool Archer::checkPositiveHealth() const {
+    return health > 0;
 }
 

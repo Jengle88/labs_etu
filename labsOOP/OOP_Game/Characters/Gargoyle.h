@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Character.h"
 #include "Enemy.h"
 
@@ -13,22 +12,21 @@
 #define GARGOYLE_DAMAGE 2
 #define GARGOYLE_PROTECTION 2
 
-
-class Gargoyle: public Character, public Enemy {
+class Gargoyle: public virtual Character, public virtual Enemy {
     double luck = GARGOYLE_LUCK;
-    bool isCriticalCase() const override;
-    double calcReflectionArmor() const override;
     bool requestProtect(double attackPower) override;
     bool requestDodge() const override;
+    bool isCriticalCase() const override;
+    double calcReflectionArmor() const override;
     bool willFollowToHero() const override;
 
 public:
     Gargoyle(double health, double attackPower, double protection);
+    ~Gargoyle() override = default;
     std::vector<double> requestAttack(Character &enemy) override;
-    double getHealth() const override;
     std::vector<CellPoint> makeMove(CellPoint from, CellPoint heroPos) const override;
     static bool inRangeVisibility(CellPoint monsterPos, CellPoint objectPos);
     int getCharacterType() const override;
+    double getHealth() const override;
     bool checkPositiveHealth() const override;
-    ~Gargoyle() override = default;
 };

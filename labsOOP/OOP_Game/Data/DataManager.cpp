@@ -16,6 +16,81 @@ Thing DataManager::getThing(int level, int typeThing) {
     return levelToThings[level][typeThing];
 }
 
+std::vector<std::string> DataManager::getModelMonsterWait() const {
+    return {
+            "     /_// ",
+            "    /0_0\\ ",
+            "    |шшш| ",
+            "     |-|  ",
+            "//\\\\/   \\ ",
+            "   |     |",
+            "   |-----|",
+            "     //  // ",
+            "     /|  /| "
+    };
+    /*
+          /_//
+         /0_0\
+         |шшш|
+          |-|
+     //\\/   \
+        |     |
+        |-----|
+        //  //
+        /|  /|
+     */
+}
+
+std::vector<std::string> DataManager::getModelArcherWait() const {
+    return {
+            "     /---\\ ",
+            "    -|x x|-",
+            "     |vvv| ",
+            "       I ww",
+            " /| /|/I\\||",
+            "| |-/|/I\\||",
+            " \\|  |___| ",
+            "        / \\  ",
+            "       |   | "
+    };
+    /*
+          /---\
+         -|x x|-
+          |vvv|
+            I ww
+      /| /|/I\||
+     | |-/|/I\||
+      \|  |___|
+           / \
+          |   |
+     */
+}
+
+std::vector<std::string> DataManager::getModelGargoyleWait() const {
+    return {
+            "     /_//   ",
+            "    /*_*\\   ",
+            "    |www|   ",
+            "     | |  /|",
+            "/\\  /   \\//|",
+            " \\\\|     |//",
+            "   |-----|v ",
+            "      \\\\ \\\\   ",
+            "       \\\\ \\\\  ",
+    };
+    /*
+          /_//
+         /*_*\
+         |www|
+          | |  /|
+     /\  /   \//|
+      \\|     |//
+        |-----|v
+         \\ \\
+          \\ \\
+     */
+}
+
 std::vector<std::string> DataManager::getModelHeroHead() const {
     return {
              "  _____    ",
@@ -31,10 +106,6 @@ std::vector<std::string> DataManager::getModelHeroHead() const {
 std::vector<std::string> DataManager::getModelHeroBodyWait(bool withSword, bool withArmor) const {
     if (withArmor && withSword) {
         return {
-//                 "  _ | _   / ",
-//                 "|//|#|\\\\ /  ",
-//                 "|/ |#| \\/   ",
-//                 "|  |#|      "
                  "  _ | _   /",
                  " //|#|\\\\ / ",
                  " / |#| \\/  ",
@@ -48,10 +119,6 @@ std::vector<std::string> DataManager::getModelHeroBodyWait(bool withSword, bool 
         };
     } else if (withSword) {
         return {
-//                 "    |     / ",
-//                 "  /|-|\\  /  ",
-//                 " / | | \\/   ",
-//                 "   |_|      "
                  "    |     /",
                  "  /|-|\\  / ",
                  " / | | \\/  ",
@@ -65,10 +132,6 @@ std::vector<std::string> DataManager::getModelHeroBodyWait(bool withSword, bool 
         };
     } else if (withArmor) {
         return {
-//            "  _ | _  ",
-//            " //|#|\\ ",
-//            " / |#| \\ ",
-//            "   |#|   "
             "    |      ",
             "  /|#|\\    ",
             " / |#| \\   ",
@@ -81,10 +144,6 @@ std::vector<std::string> DataManager::getModelHeroBodyWait(bool withSword, bool 
         */
     } else {
         return {
-//          "    |    ",
-//          "  /|-|\\  ",
-//          " / | | \\ ",
-//          "   |_|   ",
           "    |      ",
           "  /|-|\\    ",
           " / | | \\   ",
@@ -107,81 +166,6 @@ std::vector<std::string> DataManager::getModelHeroLegs() const {
     /*
        /   \
      _/     \_
-     */
-}
-
-std::vector<std::string> DataManager::getModelMonsterWait() const {
-    return {
-        "     /_// ",
-        "    /0_0\\ ",
-        "    |шшш| ",
-        "     |-|  ",
-        "//\\\\/   \\ ",
-        "   |     |",
-        "   |-----|",
-        "     //  // ",
-        "     /|  /| "
-    };
-    /*
-          /_//
-         /0_0\
-         |шшш|
-          |-|
-     //\\/   \
-        |     |
-        |-----|
-        //  //
-        /|  /|
-     */
-}
-
-std::vector<std::string> DataManager::getModelArcherWait() const {
-    return {
-        "     /---\\ ",
-        "    -|x x|-",
-        "     |vvv| ",
-        "       I ww",
-        " /| /|/I\\||",
-        "| |-/|/I\\||",
-        " \\|  |___| ",
-        "        / \\  ",
-        "       |   | "
-    };
-    /*
-          /---\
-         -|x x|-
-          |vvv|
-            I ww
-      /| /|/I\||
-     | |-/|/I\||
-      \|  |___|
-           / \
-          |   |
-     */
-}
-
-std::vector<std::string> DataManager::getModelGargoyleWait() const {
-    return {
-        "     /_//   ",
-        "    /*_*\\   ",
-        "    |www|   ",
-        "     | |  /|",
-        "/\\  /   \\//|",
-        " \\\\|     |//",
-        "   |-----|v ",
-        "      \\\\ \\\\   ",
-        "       \\\\ \\\\  ",
-    };
-    /*
-          /_//
-         /*_*\
-         |www|
-          | |  /|
-     /\  /   \//|
-      \\|     |//
-        |-----|v
-         \\ \\
-          \\ \\
      */
 }
 

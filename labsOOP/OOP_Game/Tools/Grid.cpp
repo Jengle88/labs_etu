@@ -63,10 +63,16 @@ Grid& Grid::operator=(Grid &&grid) {
     return *this;
 }
 
-Grid::~Grid() {}
-
 bool Grid::isValidIndexes(int x, int y) const {
     return isValidXPos(x) && isValidYPos(y);
+}
+
+bool Grid::isValidXPos(int x) const {
+    return 0 <= x && x < this->width;
+}
+
+bool Grid::isValidYPos(int y) const {
+    return 0 <= y && y < this->height;
 }
 
 bool Grid::isValidSizes(int height, int width) const {
@@ -79,15 +85,6 @@ bool Grid::isValidHeight(int height) {
 
 bool Grid::isValidWidth(int width) {
     return DOWN_LIMIT_WIDTH <= width && width <= UP_LIMIT_WIDTH;
-}
-
-bool Grid::isValidXPos(int x) const {
-    return 0 <= x && x < this->width;
-}
-
-
-bool Grid::isValidYPos(int y) const {
-    return 0 <= y && y < this->height;
 }
 
 int Grid::getHeight() const {
@@ -114,25 +111,3 @@ Cell Grid::getElem(CellPoint point) const {
     }
 }
 
-void Grid::clear() {
-    grid.clear();
-    height = 0;
-    width = 0;
-}
-
-void Grid::resizeCleanGrid(int height, int width, std::vector<std::vector<Cell>> grid) {
-    if (!isValidSizes(height, width)) {
-        throw -1;
-    }
-    this->grid.resize(height);
-    for (int i = 0; i < height; ++i) {
-        this->grid[i].resize(width);
-        if (!grid.empty()) {
-            for (int j = 0; j < grid.size(); ++j) {
-                this->grid[i][j] = grid[i][j];
-            }
-        }
-    }
-    this->height = height;
-    this->width = width;
-}
