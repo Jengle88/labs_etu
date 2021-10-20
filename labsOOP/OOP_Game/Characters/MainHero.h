@@ -17,7 +17,7 @@ class MainHero : public Character {
     bool requestDodge() const override;
     void recalcCharacteristics(std::vector<double> thingProperties);
 public:
-    MainHero(int characterType, double health, double attackPower, double protection, double luck);
+    MainHero(double health, double attackPower, double protection, double luck);
     MainHero() = default;
     // урон, уклонение и крит
     std::vector<double> requestAttack(Character &enemy);
@@ -28,6 +28,7 @@ public:
     void writeKill(int enemyType);
     const std::vector<Thing> & getInventory() const;
     const std::vector<int> &getCountKilledEnemy() const;
+    MainHero * clone() const override;
     double getDodgeFactor() const override;
     bool checkPositiveHealth() const;
 };

@@ -187,7 +187,7 @@ bool Field::generateFullField(int countWalls) {
 }
 
 void Field::createHero(double health, double attackPower, double protection, double luck) {
-    hero = MainHero(CharacterType::MAIN_HERO, health, attackPower, protection, luck);
+    hero = MainHero(health, attackPower, protection, luck);
 }
 
 void Field::createMonster(double health, double attackPower, double protection) {

@@ -1,7 +1,7 @@
 #include "MainHero.h"
 
-MainHero::MainHero(int characterType, double health, double attackPower, double protection, double luck) : Character(
-        characterType, health, attackPower, protection, std::max(luck, 1.0)) {
+MainHero::MainHero(double health, double attackPower, double protection, double luck) : Character(
+        MAIN_HERO, health, attackPower, protection, std::max(luck, 1.0)) {
     countKilledEnemy.resize(CharacterType::CHARACTER_TYPE_SIZE - 1);
 }
 
@@ -72,6 +72,13 @@ double MainHero::getDodgeFactor() const {
 
 bool MainHero::checkPositiveHealth() const {
     return health > 0;
+}
+
+MainHero * MainHero::clone() const {
+    auto res = new MainHero(health, attackPower, protection, luck);
+    res->things = things;
+    res->countKilledEnemy = countKilledEnemy;
+    return res;
 }
 
 
