@@ -9,9 +9,14 @@
 #define CHARACTER_CRITICAL_FACTOR 1.75
 #define CHARACTER_DODGE_FACTOR 0.6
 #define CHARACTER_MAX_HEALTH 100
+#define CHARACTER_DAMAGE 1
+#define CHARACTER_PROTECTION 1
+#define CHARACTER_LUCK 1
+
 #define LOW_HEALTH_PERCENT 30
 
 enum CharacterType {
+    CHARACTER,
     MONSTER,
     SKELETON_ARCHER,
     GARGOYLE,
@@ -34,6 +39,7 @@ public:
     virtual std::vector<double> requestAttack(Character &enemy, double criticalFactor); // возвращает информацию, был ли критический удар, уклонение и изменение здоровья
     virtual bool requestProtect(double attackPower); // возвращает информацию, было ли уклонение
     virtual bool requestDodge() const; // возвращает информацию, уклонился ли
-    virtual double getDodgeFactor() const = 0;
+    virtual Character* clone() const; // Паттерн: Прототип
+    virtual double getDodgeFactor() const;
     double getHealth() const;
 };

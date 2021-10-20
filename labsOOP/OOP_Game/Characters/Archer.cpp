@@ -69,6 +69,10 @@ double Archer::getDodgeFactor() const {
     return ARCHER_DODGE_FACTOR;
 }
 
+Archer* Archer::clone() const {
+    return new Archer(health, attackPower, protection);
+}
+
 bool Archer::checkPositiveHealth() const {
     return health > 0;
 }

@@ -30,5 +30,6 @@ public:
     int getCharacterType() const override;
     double getHealth() const override;
     double getDodgeFactor() const override;
+    Archer* clone() const override;
     bool checkPositiveHealth() const override;
 };

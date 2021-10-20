@@ -44,6 +44,15 @@ double Character::calcReflectionArmor() const {
     return 1 / (this->protection + 2) + 0.5; // функция 1/(x+2) + 0.5 для расчёта множителя отражения удара доспехом
 }
 
+Character* Character::clone() const {
+    return new Character(characterType, health, attackPower, protection, luck);
+}
+
+double Character::getDodgeFactor() const {
+    return CHARACTER_DODGE_FACTOR;
+}
+
 double Character::getHealth() const {
     return health;
 }
+

@@ -6,96 +6,96 @@
 #include "../Characters/Monster.h"
 
 using namespace std;
+//
+//class Solve {
+//    int n;
+//    int m;
+//    int stx;
+//    int sty;
+//    int finx;
+//    int finy;
+//public:
+//
+//    Solve(int n, int m, int stx, int sty, int finx, int finy) : n(n), m(m), stx(stx), sty(sty), finx(finx),
+//                                                                finy(finy) {}
+//
+//    int calcDist(int stx, int sty) const {
+//        return abs(stx - finx) + abs(sty - finy);
+//    }
+//
+//
+//    bool rightWay(int stx, int sty, int curDist) {
+//        return 0 <= stx && stx < m && 0 <= sty && sty < n && calcDist(stx, sty) < curDist;
+//    }
+//
+//    void solve() {
+//        vector<vector<char>> nodes(n, vector<char>(m, '.'));
+//        vector<pair<int, int>> points;
+//        nodes[sty][stx] = 'S';
+//        int dist = calcDist(stx, sty);
+//        srand(time(0));
+//        int deltaX = -(stx - finx) / max(1, abs(stx - finx));
+//        int deltaY = -(sty - finy) / max(1, abs(sty - finy));
+//        while (stx != finx || sty != finy) {
+//            switch (rand() % 2) {
+//                case 0:
+//                    if (rightWay(stx + deltaX, sty, dist)) {
+//                        stx += deltaX;
+//                        dist = calcDist(stx, sty);
+//                        points.emplace_back(sty, stx);
+//                    }
+//                    break;
+//                case 1:
+//                    if (rightWay(stx, sty + deltaY, dist)) {
+//                        sty += deltaY;
+//                        dist = calcDist(stx, sty);
+//                        points.emplace_back(sty, stx);
+//                    }
+//                    break;
+//            }
+//        }
+//        for (auto &point: points) {
+//            nodes[point.first][point.second] = 'X';
+//        }
+//        nodes[finy][finx] = 'F';
+//        for (int i = 0; i < n; ++i) {
+//            for (int j = 0; j < m; ++j) {
+//                cout << nodes[i][j];
+//            }
+//            cout << '\n';
+//        }
+//    }
+//
+//};
+//
+//class A {
+//public:
+//    vector<int> b;
+//
+//    A() {
+//        std::cout << "constr\n";
+//        b = vector<int>(10);
+//    }
+//
+//    ~A() {
+//        std::cout << "destr\n";
+//    }
+//};
+//
+//void func() {
+//    A a = A();
+//    std::cout << a.b.size() << '\n';
+//    std::cout << "func exit\n";
+//}
+//
+//enum ENUM {
+//    A,
+//    B,
+//    C,
+//    ENUM_SIZE
+//};
 
-class Solve {
-    int n;
-    int m;
-    int stx;
-    int sty;
-    int finx;
-    int finy;
-public:
-
-    Solve(int n, int m, int stx, int sty, int finx, int finy) : n(n), m(m), stx(stx), sty(sty), finx(finx),
-                                                                finy(finy) {}
-
-    int calcDist(int stx, int sty) const {
-        return abs(stx - finx) + abs(sty - finy);
-    }
-
-
-    bool rightWay(int stx, int sty, int curDist) {
-        return 0 <= stx && stx < m && 0 <= sty && sty < n && calcDist(stx, sty) < curDist;
-    }
-
-    void solve() {
-        vector<vector<char>> nodes(n, vector<char>(m, '.'));
-        vector<pair<int, int>> points;
-        nodes[sty][stx] = 'S';
-        int dist = calcDist(stx, sty);
-        srand(time(0));
-        int deltaX = -(stx - finx) / max(1, abs(stx - finx));
-        int deltaY = -(sty - finy) / max(1, abs(sty - finy));
-        while (stx != finx || sty != finy) {
-            switch (rand() % 2) {
-                case 0:
-                    if (rightWay(stx + deltaX, sty, dist)) {
-                        stx += deltaX;
-                        dist = calcDist(stx, sty);
-                        points.emplace_back(sty, stx);
-                    }
-                    break;
-                case 1:
-                    if (rightWay(stx, sty + deltaY, dist)) {
-                        sty += deltaY;
-                        dist = calcDist(stx, sty);
-                        points.emplace_back(sty, stx);
-                    }
-                    break;
-            }
-        }
-        for (auto &point: points) {
-            nodes[point.first][point.second] = 'X';
-        }
-        nodes[finy][finx] = 'F';
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < m; ++j) {
-                cout << nodes[i][j];
-            }
-            cout << '\n';
-        }
-    }
-
-};
-
-class A {
-public:
-    vector<int> b;
-
-    A() {
-        std::cout << "constr\n";
-        b = vector<int>(10);
-    }
-
-    ~A() {
-        std::cout << "destr\n";
-    }
-};
-
-void func() {
-    A a = A();
-    std::cout << a.b.size() << '\n';
-    std::cout << "func exit\n";
-}
-
-enum ENUM {
-    A,
-    B,
-    C,
-    ENUM_SIZE
-};
-
-#define MONSTER_PERCENT_FOR_FOLLOW_TO_HERO 80
+//#define MONSTER_PERCENT_FOR_FOLLOW_TO_HERO 80
 
 //bool willFollowToHero() {
 //    double k = ((long double) (2 * 3.1416 * MONSTER_PERCENT_FOR_FOLLOW_TO_HERO) /
@@ -107,6 +107,23 @@ enum ENUM {
 //}
 
 int main() { //проверено
+
+    std::string str1 ="Абобус 228\n";
+    std::cout << str1;
+    setlocale(LC_ALL, "");
+    std::cout << str1;
+
+
+
+
+
+
+
+
+
+
+
+
 
 //    auto enemy = DataManager().getHero(true, true);
 //    for (int i = 0; i < enemy.size(); ++i) {
@@ -136,19 +153,26 @@ int main() { //проверено
 //        }
 //    }
 
+//    Monster character1(150, 25, 30);
+//    Monster character2(1,1,1);
+//    character1.clone(character2);
+//    int n = 50;
+//    char c = ' ';
+//    char str[n];
+//    cin.getline(str, n, ' ');
+//    cout << str;
 
 
-
-#define ROOT_EPSILON 1e-3
-    int percent = 354;
-
-    auto k = double((3.1416 * (percent - 1)) / 100);
-    int cnt = 0;
-    for (double i = 0.00001; k*i <= 100; i += 0.00001) {
-        if (abs(sin(k*i) - int(sin(k*i))) <= ROOT_EPSILON)
-            cnt++;
-    }
-    cout << cnt;
+//#define ROOT_EPSILON 1e-3
+//    int percent = 354;
+//
+//    auto k = double((3.1416 * (percent - 1)) / 100);
+//    int cnt = 0;
+//    for (double i = 0.00001; k*i <= 100; i += 0.00001) {
+//        if (abs(sin(k*i) - int(sin(k*i))) <= ROOT_EPSILON)
+//            cnt++;
+//    }
+//    cout << cnt;
 
 
 

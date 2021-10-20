@@ -37,9 +37,9 @@ class Field {
     void generateWayWithoutWalls(CellPoint start, CellPoint finish);
     void generateWalls(int countWalls);
 
-    void createMonster(double health, double attackPower, double protection); // Паттерн: фабрика
-    void createArcher(double health, double attackPower, double protection); // Паттерн: фабрика
-    void createGargoyle(double health, double attackPower, double protection); // Паттерн: фабрика
+    void createMonster(double health, double attackPower, double protection);
+    void createArcher(double health, double attackPower, double protection);
+    void createGargoyle(double health, double attackPower, double protection);
 public:
     Field() = default;
     Field(int height, int width, CellPoint start = CellPoint(0,0), CellPoint finish = CellPoint(0,0), Grid grid = Grid());
@@ -52,7 +52,7 @@ public:
     // Генераторы
     bool generateFullField(int countWalls);
     void createHero(double health, double attackPower, double protection, double luck);
-    void createRandomEnemy();
+    void createRandomEnemy(); // Паттерн: Фабрика
     CellPoint generateRandomFreePoint();
 
     // Передвижение персонажей

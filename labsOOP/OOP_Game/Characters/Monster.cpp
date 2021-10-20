@@ -68,6 +68,10 @@ double Monster::getDodgeFactor() const {
     return MONSTER_DODGE_FACTOR;
 }
 
+Monster *Monster::clone() const {
+    return new Monster(health, attackPower, protection);
+}
+
 bool Monster::checkPositiveHealth() const {
     return health > 0;
 }

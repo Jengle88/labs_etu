@@ -69,6 +69,10 @@ double Gargoyle::getDodgeFactor() const {
     return GARGOYLE_DODGE_FACTOR;
 }
 
+Gargoyle* Gargoyle::clone() const {
+    return new Gargoyle(health, attackPower, protection);
+}
+
 bool Gargoyle::checkPositiveHealth() const {
     return health > 0;
 }

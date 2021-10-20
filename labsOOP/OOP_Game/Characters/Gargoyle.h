@@ -29,5 +29,6 @@ public:
     int getCharacterType() const override;
     double getHealth() const override;
     double getDodgeFactor() const override;
+    Gargoyle* clone() const override;
     bool checkPositiveHealth() const override;
 };
