@@ -1,0 +1,101 @@
+<objects>
+    <countModels>
+        3
+    </countModels>
+    <namePart>
+        Monster
+    </namePart>
+    <drawPart>
+     /_// ;
+    /0_0\ ;
+    |шшш| ;
+     |-|  ;
+//\\/   \ ;
+   |     |;
+   |-----|;
+   //  // ;
+   /|  /| ;
+    </drawPart>
+    <namePart>
+        Archer
+    </namePart>
+    <drawPart>
+     /---\ ;
+    -|x x|-;
+     |vvv| ;
+       I ww;
+ /| /|/I\||;
+| |-/|/I\||;
+ \|  |___| ;
+      / \  ;
+     |   | ;
+    </drawPart>
+    <namePart>
+        Gargoyle
+    </namePart>
+    <drawPart>
+     /_//   ;
+    /*_*\   ;
+    |www|   ;
+     | |  /|;
+/\  /   \//|;
+ \\|     |//;
+   |-----|v ;
+    \\ \\   ;
+     \\ \\  ;
+    </drawPart>
+    <countModels>
+        6
+    </countModels>
+    <namePart>
+        Hero head
+    </namePart>
+    <drawPart>
+   _____    ;
+  //.,.\\   ;
+  \\ _ //   ;
+    </drawPart>
+    <namePart>
+        Hero body default
+    </namePart>
+    <drawPart>
+     |      ;
+   /|-|\    ;
+  / | | \   ;
+    |_|     ;
+    </drawPart>
+    <namePart>
+        Hero body withSword
+    </namePart>
+    <drawPart>
+     |     /;
+   /|-|\  / ;
+  / | | \/  ;
+    |_|     ;
+    </drawPart>
+    <namePart>
+        Hero body withArmor
+    </namePart>
+    <drawPart>
+   _ | _    ;
+  //|#|\\   ;
+  / |#| \   ;
+    |#|     ;
+    </drawPart>
+    <namePart>
+        Hero body withSwordArmor
+    </namePart>
+    <drawPart>
+   _ | _   /;
+  //|#|\\ / ;
+  / |#| \/  ;
+    |#|     ;
+    </drawPart>
+    <namePart>
+        Hero legs
+    </namePart>
+    <drawPart>
+   /   \    ;
+ _/     \_  ;
+    </drawPart>
+</objects>

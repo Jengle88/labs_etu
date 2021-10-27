@@ -1,7 +1,7 @@
 #include "FightScreen.h"
 
-FightScreen::FightScreen(MainHero &mainHero, Enemy &enemy) : mainHero(mainHero),
-                                                             dataManager(DataManager()),
+FightScreen::FightScreen(MainHero &mainHero, Enemy &enemy, DataManager* dataManager) : mainHero(mainHero),
+                                                             dataManager(dataManager),
                                                              enemy(enemy) {}
 
 int FightScreen::fightObserver() {
@@ -20,20 +20,21 @@ int FightScreen::fightObserver() {
                                  std::max(dynamic_cast<Character &>(enemy).getHealth(), 0.0));
     }
 
-    if (mainHero.checkPositiveHealth())
-        mainHero.writeKill(enemy.getCharacterType());
-    std::cout << "Вы победили!\nНажмите любую кнопку, чтобы продолжить.";
-    getchar();
+    if (mainHero.checkPositiveHealth()) {
+        mainHero.writeKill(enemy.getName());
+        std::cout << "Вы победили!\nНажмите любую кнопку, чтобы продолжить.";
+        getchar();
+    }
     return mainHero.checkPositiveHealth();
 }
 
 void FightScreen::showUpdatedScreen() {
-    auto fightModel = dataManager.getHero(mainHero.hasThing(ThingObject::SWORD),
+    auto fightModel = dataManager->getHero(mainHero.hasThing(ThingObject::SWORD),
                                           mainHero.hasThing(ThingObject::ARMOR));
     int distBetweenCharacters = 7; // пространство между героем и врагом на экране
     std::for_each(fightModel.begin(), fightModel.end(),
                   [&distBetweenCharacters](std::string &str) { str += std::string(distBetweenCharacters, ' '); });
-    auto enemyModel = dataManager.getEnemy(enemy.getCharacterType());
+    auto enemyModel = enemy.getModel();
     for (int i = 0; i < fightModel.size(); ++i) {
         fightModel[i] += enemyModel[i];
     }
@@ -50,11 +51,11 @@ bool FightScreen::requestAction(char action) {
     std::vector<double> enemyAttackInfo;
     switch (tolower(action)) {
         case FightAction::ATTACK:
-            heroAttackInfo = mainHero.requestAttack(dynamic_cast<Character &>(enemy)); // TODO Вывод инфы об уроне
-            Printer::printAttackInfo(CharacterType::MAIN_HERO, heroAttackInfo[0], heroAttackInfo[1] > 0, heroAttackInfo[2] > 0);
+            heroAttackInfo = mainHero.requestAttack(dynamic_cast<Character &>(enemy));
+            Printer::printAttackInfo("Hero", heroAttackInfo[0], heroAttackInfo[1] > 0, heroAttackInfo[2] > 0);
 //            usleep(COOl_DOWN); // Торможение на 0.3 сек
             enemyAttackInfo = enemy.requestAttack(dynamic_cast<Character &>(mainHero));
-            Printer::printAttackInfo(enemy.getCharacterType(), enemyAttackInfo[0], enemyAttackInfo[1] > 0, enemyAttackInfo[2] > 0);
+            Printer::printAttackInfo(enemy.getName(), enemyAttackInfo[0], enemyAttackInfo[1] > 0, enemyAttackInfo[2] > 0);
             break;
         case FightAction::USE:
             std::cin >> numberThing;

@@ -8,7 +8,7 @@ FieldScreen::~FieldScreen() {
     delete field;
 }
 
-void FieldScreen::showStartingParams() { // паттерн Builder
+void FieldScreen::showStartingParamsAndGenerateField(DataManager *dataManager) { // паттерн Builder
     std::cout << "Введите значения параметров:\n";
     bool acceptedParams = false;
     auto enterSizeValue = [](
@@ -68,10 +68,11 @@ void FieldScreen::showStartingParams() { // паттерн Builder
             acceptedParams = true;
     }
     srand(time(0));
-    field = new Field(height, width);
+    field = new Field(height, width, dataManager);
+    this->dataManager = dataManager;
     if (field->generateFullField(countWalls)) {
         field->setHeroOnStart();
-        field->createHero(CHARACTER_MAX_HEALTH, MAIN_HERO_DAMAGE, MAIN_HERO_PROTECTION, MAIN_HERO_LUCK);
+        field->createHero();
         thingsManager = ThingsManager(field);
     } else {
         std::cout << "Не удалось сгенерировать поле!\n";
@@ -86,26 +87,12 @@ void FieldScreen::showUpdatedScreen() const {
     Printer::printFullField(field);
 }
 
-/*
-char getch() {
-    struct termios oldattr, newattr;
-    int ch;
-    tcgetattr( STDIN_FILENO, &oldattr );
-    newattr = oldattr;
-    newattr.c_lflag &= ~( ICANON | ECHO );
-    tcsetattr( STDIN_FILENO, TCSANOW, &newattr );
-    ch = getchar();
-    tcsetattr( STDIN_FILENO, TCSANOW, &oldattr );
-    return ch;
-}
- */
 
 bool FieldScreen::registerMovement(char &action, std::string &gameAction) {
-//    action = getch();
     action = getchar();
     std::cin.ignore(32767, '\n');
     CellPoint heroPos = field->getHeroPos();
-    thingsManager.tryGenerateThing(field->hero); // также считает шаги
+    thingsManager.tryGenerateThing(field->hero, dataManager); // также считает шаги
     std::pair<bool, Thing> thingOnPos;
     bool status = true;
     switch (tolower(action)) {
@@ -135,7 +122,9 @@ bool FieldScreen::registerMovement(char &action, std::string &gameAction) {
         case MoveSide::FIGHT:
             status = requestStartFight(heroPos);
             if (status == FightStatus::KILLED_HERO) {
-                std::cout << "Вы проиграли.\nНажмите любую кнопку, чтобы выйти...\n";
+                std::cout << "Вы проиграли.\n";
+                Printer::printHeroAchievement(field->getHero().getCountKilledEnemy());
+                std::cout << "Нажмите любую кнопку, чтобы выйти...\n";
                 getchar();
                 action = MoveSide::EXIT;
                 return false;
@@ -167,18 +156,24 @@ void FieldScreen::requestTakeObject(CellPoint point) {
     auto thingOnPos = thingsManager.checkCellHasSmth(point);
     if (thingOnPos.first) {
         field->getHero().takeThing(thingOnPos.second);
+        if (thingOnPos.second.isActiveThing()) {
+            field->getHero().resetModel(
+                    dataManager->getHero(
+                            field->getHero().hasThing(ThingObject::SWORD),
+                            field->getHero().hasThing(ThingObject::ARMOR)));
+        }
         thingsManager.deleteThingFromField(point);
     }
 }
 
 int FieldScreen::requestStartFight(CellPoint point) {
     int statusFight = 1;
-    for (int i = -MAIN_HERO_RANGE_VISIBILITY; i <= MAIN_HERO_RANGE_VISIBILITY; ++i) {
-        for (int j = -MAIN_HERO_RANGE_VISIBILITY; j <= MAIN_HERO_RANGE_VISIBILITY; ++j) {
+    for (int i = -MainHero::MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY; i <= MainHero::MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY; ++i) {
+        for (int j = -MainHero::MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY; j <= MainHero::MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY; ++j) {
             if (field->enemies.count(CellPoint(point.getX() + i, point.getY() + j))) {
                 system("clear");
                 auto fightScreen = FightScreen(this->field->getHero(), this->field->getEnemyFromPoint(
-                        CellPoint(point.getX() + i, point.getY() + j)));
+                        CellPoint(point.getX() + i, point.getY() + j)), this->dataManager);
                 statusFight = fightScreen.fightObserver();
                 if (statusFight == FightStatus::KILLED_ENEMY) {
                     this->field->killEnemy(CellPoint(point.getX() + i, point.getY() + j));
@@ -215,14 +210,13 @@ FieldScreen::generateTitleForThingAction(const std::string &nameThing, const std
     return res;
 }
 
-void FieldScreen::showStartFieldScreen() {
-    showStartingParams();
+void FieldScreen::showStartFieldScreen(DataManager *dataManager) {
+    showStartingParamsAndGenerateField(dataManager);
     std::system("clear");
 }
 
 void FieldScreen::gameStatusObserver() {
     char action = getchar(); // считываем перенос строки
-//    char action = getch(); // считываем перенос строки
     std::cout << "Для выхода введите ` и нажмите enter.\n";
     showUpdatedScreen();
     Printer::printInventory(&(this->field->getHero()));

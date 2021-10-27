@@ -7,7 +7,7 @@ public:
     static void printFullField(Field *field) ;
     static void printInventory(MainHero *hero, bool withSerialNumber = false);
     static void printEnemyInfo(std::map<CellPoint, Enemy*> *enemies);
-    static void printHealthInfo(const double heroHealth, const double enemyHealth);
-    static void printAttackInfo(int characterType, double damage, bool wasDodge, bool wasCritical);
-    static void printHeroAchievement(const std::vector<int>& achievement);
+    static void printHealthInfo(double heroHealth, double enemyHealth);
+    static void printAttackInfo(std::string nameCharacter, double damage, bool wasDodge, bool wasCritical);
+    static void printHeroAchievement(std::map<std::string, int>& achievement);
 };

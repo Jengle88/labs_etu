@@ -39,16 +39,12 @@ void Printer::printInventory(MainHero *hero, bool withSerialNumber) {
 void Printer::printEnemyInfo(std::map<CellPoint, Enemy *> *enemies) {
     int cntMonster = 0, cntArcher = 0, cntGargoyle = 0; // Не очень оптимизировано
     for (const auto &enemy: *enemies) {
-        switch (enemy.second->getCharacterType()) {
-            case CharacterType::MONSTER:
-                cntMonster++;
-                break;
-            case CharacterType::SKELETON_ARCHER:
-                cntArcher++;
-                break;
-            case CharacterType::GARGOYLE:
-                cntGargoyle++;
-                break;
+        if (enemy.second->getName() == "Monster") {
+            cntMonster++;
+        } else if (enemy.second->getName() == "Archer") {
+            cntArcher++;
+        } else if (enemy.second->getName() == "Gargoyle") {
+            cntGargoyle++;
         }
     }
     std::cout << "Сейчас на поле: \n"
@@ -57,37 +53,19 @@ void Printer::printEnemyInfo(std::map<CellPoint, Enemy *> *enemies) {
                  "Горгулья: " + std::to_string(cntGargoyle) + "\n\n";
 }
 
-void Printer::printHealthInfo(const double heroHealth, const double enemyHealth) {
-    std::cout << "HP: " << heroHealth << "\t\t\t\t" << "HP: " << enemyHealth << '\n';
+void Printer::printHealthInfo(double heroHealth, double enemyHealth) {
+    std::cout << "HP: " << heroHealth << "\t\t\t" << "HP: " << enemyHealth << '\n';
 }
 
-void Printer::printAttackInfo(int characterType, double damage, bool wasDodge, bool wasCritical) {
-    std::string nameCharacter;
-    switch (characterType) {
-        case CharacterType::MAIN_HERO:
-            nameCharacter = "Герой";
-            break;
-        case CharacterType::MONSTER:
-            nameCharacter = "Монстр";
-            break;
-        case CharacterType::SKELETON_ARCHER:
-            nameCharacter = "Скелет-лучник";
-            break;
-        case CharacterType::GARGOYLE:
-            nameCharacter = "Горгулья";
-            break;
-        default:
-            nameCharacter = "<Неизвестный>";
-            break;
-    }
+void Printer::printAttackInfo(std::string nameCharacter, double damage, bool wasDodge, bool wasCritical) {
     std::cout << "Персонаж " << nameCharacter << " нанёс " << damage << " урона, " <<
               (wasDodge ? "совершил уклонение, " : "не совершил уклонение, ") <<
               (wasCritical ? "нанёс критический урон.\n" : "не нанёс критический урон.\n");
 }
 
-void Printer::printHeroAchievement(const std::vector<int> &achievement) {
-    std::cout << "Вы убили " << achievement[CharacterType::MONSTER] << " монстров.\n";
-    std::cout << "Вы убили " << achievement[CharacterType::SKELETON_ARCHER] << " скелетов-лучников.\n";
-    std::cout << "Вы убили " << achievement[CharacterType::GARGOYLE] << " горгулий.\n";
+void Printer::printHeroAchievement(std::map<std::string, int> &achievement) {
+    std::cout << "Вы убили " << achievement["Monster"] << " монстров.\n";
+    std::cout << "Вы убили " << achievement["Archer"] << " скелетов-лучников.\n";
+    std::cout << "Вы убили " << achievement["Gargoyle"] << " горгулий.\n";
 }
 

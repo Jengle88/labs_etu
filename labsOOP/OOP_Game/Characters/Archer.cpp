@@ -1,10 +1,10 @@
 #include "Archer.h"
 
-Archer::Archer(double health, double attackPower, double protection)
-        : Character(CharacterType::SKELETON_ARCHER, health, attackPower, protection, ARCHER_LUCK) {}
+Archer::Archer(std::vector<std::string> model, std::string name, double health, double attackPower, double protection, double luck)
+        : Character(model, name, health, attackPower, protection, luck) {}
 
 std::vector<double> Archer::requestAttack(Character &enemy) {
-    return Character::requestAttack(enemy, ARCHER_CRITICAL_FACTOR);
+    return Character::requestAttack(enemy, ArcherProperties::ARCHER_CRITICAL_FACTOR);
 }
 
 bool Archer::requestProtect(double attackPower) {
@@ -24,7 +24,7 @@ double Archer::calcReflectionArmor() const {
 }
 
 bool Archer::willFollowToHero() const {
-    if (rand() % 100 < ARCHER_PERCENT_FOR_FOLLOW_TO_HERO)
+    if (rand() % 100 < ArcherProperties::ARCHER_PERCENT_FOR_FOLLOW_TO_HERO)
         return true;
     return false;
 }
@@ -41,10 +41,10 @@ std::vector<CellPoint> Archer::makeMove(CellPoint from, CellPoint heroPos) const
         res.emplace_back(from.getX(), from.getY() + deltaY);
         return res;
     }
-    for (int i = -ARCHER_MOVE; i <= ARCHER_MOVE; ++i) {
-        for (int j = -ARCHER_MOVE; j <= ARCHER_MOVE; ++j) {
+    for (int i = -ArcherProperties::ARCHER_MOVE; i <= ArcherProperties::ARCHER_MOVE; ++i) {
+        for (int j = -ArcherProperties::ARCHER_MOVE; j <= ArcherProperties::ARCHER_MOVE; ++j) {
             if (i == 0 ^ j == 0) {
-                res.emplace_back(from.getX() + i,from.getY() + j);
+                res.emplace_back(from.getX() + i, from.getY() + j);
             }
         }
     }
@@ -52,13 +52,10 @@ std::vector<CellPoint> Archer::makeMove(CellPoint from, CellPoint heroPos) const
 }
 
 bool Archer::inRangeVisibility(CellPoint monsterPos, CellPoint objectPos) {
-    return abs(monsterPos.getX() - objectPos.getX()) <= ARCHER_RANGE_VISIBILITY && //попадает в прямоугольник видимости
-           abs(monsterPos.getY() - objectPos.getY()) <= ARCHER_RANGE_VISIBILITY;
+    return abs(monsterPos.getX() - objectPos.getX()) <= ArcherProperties::ARCHER_RANGE_VISIBILITY &&
+           //попадает в прямоугольник видимости
+           abs(monsterPos.getY() - objectPos.getY()) <= ArcherProperties::ARCHER_RANGE_VISIBILITY;
 
-}
-
-int Archer::getCharacterType() const {
-    return this->characterType;
 }
 
 double Archer::getHealth() const {
@@ -66,14 +63,22 @@ double Archer::getHealth() const {
 }
 
 double Archer::getDodgeFactor() const {
-    return ARCHER_DODGE_FACTOR;
+    return ArcherProperties::ARCHER_DODGE_FACTOR;
 }
 
-Archer* Archer::clone() const {
-    return new Archer(health, attackPower, protection);
+Archer *Archer::clone() const {
+    return new Archer(model, name, health, attackPower, protection);
 }
 
 bool Archer::checkPositiveHealth() const {
     return health > 0;
+}
+
+std::vector<std::string> Archer::getModel() const {
+    return Character::getModel();
+}
+
+std::string Archer::getName() const {
+    return Character::getName();
 }
 

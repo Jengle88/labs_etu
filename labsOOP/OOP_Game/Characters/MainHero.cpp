@@ -1,12 +1,11 @@
 #include "MainHero.h"
 
-MainHero::MainHero(double health, double attackPower, double protection, double luck) : Character(
-        MAIN_HERO, health, attackPower, protection, std::max(luck, 1.0)) {
-    countKilledEnemy.resize(CharacterType::CHARACTER_TYPE_SIZE - 1);
+MainHero::MainHero(std::vector<std::string> model, std::string name, double health, double attackPower, double protection, double luck) : Character(
+        model, name, health, attackPower, protection, luck) {
 }
 
 std::vector<double> MainHero::requestAttack(Character &enemy) {
-    return Character::requestAttack(enemy, CHARACTER_CRITICAL_FACTOR);
+    return Character::requestAttack(enemy, CharacterProperties::CHARACTER_CRITICAL_FACTOR);
 }
 
 bool MainHero::requestProtect(double attackPower) {
@@ -25,6 +24,14 @@ void MainHero::recalcCharacteristics(std::vector<double> thingProperties) {
 }
 
 void MainHero::takeThing(Thing thing) {
+    auto duplicateThing = std::find_if(things.begin(), things.end(),
+                                       [&thing](Thing& inventoryThing){return inventoryThing.getThingObject() == thing.getThingObject() && !inventoryThing.isActiveThing();});
+    if (duplicateThing != things.end()){
+        recalcCharacteristics(duplicateThing->getInverseValueProperties());
+        *duplicateThing = thing;
+        recalcCharacteristics(duplicateThing->getProperties());
+        return;
+    }
     things.push_back(thing);
     if (!thing.isActiveThing())
         recalcCharacteristics(thing.getProperties());
@@ -54,20 +61,20 @@ bool MainHero::hasThing(int thingObject) const {
                         [&thingObject](const Thing& thing) {return thingObject == thing.getThingObject();}) != things.end();
 }
 
-void MainHero::writeKill(int enemyType) {
-    countKilledEnemy[enemyType]++;
+void MainHero::writeKill(std::string enemyName) {
+    countKilledEnemy[enemyName]++;
 }
 
 const std::vector<Thing> &MainHero::getInventory() const {
     return things;
 }
 
-const std::vector<int> &MainHero::getCountKilledEnemy() const {
+std::map<std::string, int> &MainHero::getCountKilledEnemy() {
     return countKilledEnemy;
 }
 
 double MainHero::getDodgeFactor() const {
-    return CHARACTER_DODGE_FACTOR;
+    return CharacterProperties::CHARACTER_DODGE_FACTOR;
 }
 
 bool MainHero::checkPositiveHealth() const {
@@ -75,10 +82,22 @@ bool MainHero::checkPositiveHealth() const {
 }
 
 MainHero * MainHero::clone() const {
-    auto res = new MainHero(health, attackPower, protection, luck);
+    auto res = new MainHero(model, name, health, attackPower, protection, luck);
     res->things = things;
     res->countKilledEnemy = countKilledEnemy;
     return res;
+}
+
+std::string MainHero::getName() const {
+    return Character::getName();
+}
+
+std::vector<std::string> MainHero::getModel() const {
+    return Character::getModel();
+}
+
+void MainHero::resetModel(std::vector<std::string> newModel) {
+    model = newModel;
 }
 
 

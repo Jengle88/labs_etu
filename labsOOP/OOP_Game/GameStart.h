@@ -6,9 +6,12 @@ public:
     static void startGameMode(std::string modeName) {
         if (modeName == "game") {
             std::setlocale(LC_ALL, "");
+            auto *dataManager = new DataManager();
+            dataManager->uploadModels();
             FieldScreen mainScreen;
-            mainScreen.showStartFieldScreen();
+            mainScreen.showStartFieldScreen(dataManager);
             mainScreen.gameStatusObserver();
+            delete dataManager;
         }
         else if (modeName == "features")
         {
@@ -34,7 +37,7 @@ public:
 //            field.generateFullField(countWalls);
 //            field.setHeroOnStart();
 //            field.createHero(25, 7, 2, 1);
-//            field.hero.takeThing(Thing("aba", {1,2,3,0,0}, ThingObject::SWORD, true, false));
+//            field.hero.takeThing(ThingObject("aba", {1,2,3,0,0}, ThingObjectsName::SWORD, true, false));
 //            int z1 = 2;
 //            auto character = MainHero(CHARACTER_MAX_HEALTH, 1, 1, 0, 0);
 //            field.hero.requestAttack(character);

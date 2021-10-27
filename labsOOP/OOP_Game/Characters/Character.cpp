@@ -1,8 +1,7 @@
-#include <iostream>
 #include "Character.h"
 
-Character::Character(int characterType, double health, double attackPower, double protection, double luck)
-        : characterType(characterType), health(health), attackPower(attackPower), protection(protection), luck(luck) {}
+Character::Character(std::vector<std::string> model, std::string name, double health, double attackPower, double protection, double luck)
+        : name(name), health(health), attackPower(attackPower), protection(protection), luck(luck), model(model) {}
 
 std::vector<double> Character::requestAttack(Character &enemy, double criticalFactor) {
     std::vector<double> actionTable(3); // таблица событий при ударе
@@ -45,14 +44,22 @@ double Character::calcReflectionArmor() const {
 }
 
 Character* Character::clone() const {
-    return new Character(characterType, health, attackPower, protection, luck);
+    return new Character(model, name, health, attackPower, protection);
 }
 
 double Character::getDodgeFactor() const {
-    return CHARACTER_DODGE_FACTOR;
+    return CharacterProperties::CHARACTER_DODGE_FACTOR;
 }
 
 double Character::getHealth() const {
     return health;
+}
+
+std::vector<std::string> Character::getModel() const {
+    return model;
+}
+
+std::string Character::getName() const {
+    return name;
 }
 

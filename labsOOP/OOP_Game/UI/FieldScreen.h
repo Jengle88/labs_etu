@@ -20,8 +20,8 @@ enum MoveSide{
 class FieldScreen {
     Field *field;
     ThingsManager thingsManager;
-
-    void showStartingParams();
+    DataManager *dataManager;
+    void showStartingParamsAndGenerateField(DataManager *dataManager);
     void showUpdatedScreen() const;
     bool registerMovement(char &action, std::string& gameAction);
     void requestMoveHero(CellPoint from, CellPoint to, std::string& gameAction);
@@ -32,7 +32,7 @@ class FieldScreen {
 public:
     FieldScreen();
     ~FieldScreen();
-    void showStartFieldScreen();
+    void showStartFieldScreen(DataManager *dataManager);
     void gameStatusObserver();
 
 };

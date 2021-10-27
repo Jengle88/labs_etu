@@ -5,32 +5,39 @@
 #include <cmath>
 #include <ctime>
 
-#define MONSTER_CRITICAL_FACTOR 1.25
-#define MONSTER_DODGE_FACTOR 0.8
-#define MONSTER_RANGE_VISIBILITY 3
-#define MONSTER_PERCENT_FOR_FOLLOW_TO_HERO 70 // значения варьируются от 0 до 100
-#define MONSTER_MOVE 1
-#define MONSTER_MAX_HEALTH 60
-#define MONSTER_LUCK 0.6
-#define MONSTER_DAMAGE 1
-#define MONSTER_PROTECTION 2
-
-class Monster : public virtual Character, public virtual Enemy {
-    double luck = MONSTER_LUCK;
+class Monster : public Character, public Enemy {
+    struct MonsterProperties{
+        constexpr static char   MONSTER_NAME[] = "Monster";
+        constexpr static double MONSTER_CRITICAL_FACTOR = 1.25;
+        constexpr static double MONSTER_DODGE_FACTOR = 0.8;
+        constexpr static double MONSTER_RANGE_VISIBILITY = 3;
+        constexpr static double MONSTER_PERCENT_FOR_FOLLOW_TO_HERO = 70;
+        constexpr static double MONSTER_MOVE = 1;
+        constexpr static double MONSTER_MAX_HEALTH = 60;
+        constexpr static double MONSTER_DAMAGE = 1;
+        constexpr static double MONSTER_PROTECTION = 2;
+        constexpr static double MONSTER_LUCK = 0.6;
+    };
     bool requestProtect(double attackPower) override;
     bool requestDodge() const override;
     bool isCriticalCase() const override;
     double calcReflectionArmor() const override;
     bool willFollowToHero() const override;
 public:
-    Monster(double health, double attackPower, double protection);
+    Monster(std::vector<std::string> model,
+            std::string name = MonsterProperties::MONSTER_NAME,
+            double health = MonsterProperties::MONSTER_MAX_HEALTH,
+            double attackPower = MonsterProperties::MONSTER_DAMAGE,
+            double protection = MonsterProperties::MONSTER_PROTECTION,
+            double luck = MonsterProperties::MONSTER_LUCK);
     ~Monster() override = default;
     std::vector<double> requestAttack(Character &enemy) override;
     std::vector<CellPoint> makeMove(CellPoint from, CellPoint heroPos) const override;
     static bool inRangeVisibility(CellPoint monsterPos, CellPoint objectPos);
-    int getCharacterType() const override;
     double getHealth() const override;
     double getDodgeFactor() const override;
+    std::string getName() const override;
+    std::vector<std::string> getModel() const override;
     Monster *clone() const override;
     bool checkPositiveHealth() const override;
 };

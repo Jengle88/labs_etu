@@ -1,6 +1,6 @@
 #include "Thing.h"
 
-Thing::Thing(std::string nameThing, std::vector<double> properties, int thingObject, bool isVisualized)
+Thing::Thing(std::string nameThing, std::vector<double> properties, int thingObject)
         : nameThing(nameThing), properties(properties), thingObject(thingObject) {}
 
 bool operator==(const Thing& val1, const Thing& val2) {

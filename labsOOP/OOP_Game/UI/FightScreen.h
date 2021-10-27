@@ -21,9 +21,9 @@ enum FightAction {
 class FightScreen {
     MainHero& mainHero;
     Enemy& enemy;
-    DataManager dataManager;
+    DataManager *dataManager;
 public:
-    FightScreen(MainHero& mainHero, Enemy& enemy);
+    FightScreen(MainHero& mainHero, Enemy& enemy, DataManager *dataManager);
     int fightObserver();
     void showUpdatedScreen();
     bool requestAction(char action);

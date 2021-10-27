@@ -4,6 +4,7 @@
 #include <cmath>
 #include "../Data/DataManager.h"
 #include "../Characters/Monster.h"
+#include "../Tools/ModelDataReader.h"
 
 using namespace std;
 //
@@ -108,13 +109,23 @@ using namespace std;
 
 int main() { //проверено
 
-    std::string str1 ="Абобус 228\n";
-    std::cout << str1;
-    setlocale(LC_ALL, "");
-    std::cout << str1;
+//    std::string str1 ="Абобус 228\n";
+//    std::cout << str1;
+//    setlocale(LC_ALL, "");
+//    std::cout << str1;
 
+    std::string s;
+    char str[] = "aba";
+    s = str;
+    std::cout << s;
 
-
+//    ModelDataReader reader;
+//    auto data = reader.readXMLModelData("../Data/ObjectModel.xml");
+//    for (int i = 0; i < data.size(); ++i) {
+//        for (int j = 0; j < data[i].second.size(); ++j) {
+//            std::cout << data[i].second[j] << '\n';
+//        }
+//    }
 
 
 

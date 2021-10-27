@@ -19,12 +19,14 @@ enum ThingProperties {
 
 class Thing {
     std::string nameThing;
-    std::vector<double> properties; // дельта свойств, максимум 3 элемента
+
+    //желательно заменить на map, чтобы обращаться к свойству по названию
+    std::vector<double> properties; // дельта свойств, максимум 4 элемента
     int thingObject;
     friend bool operator==(const Thing& val1, const Thing& val2);
 
 public:
-    Thing(std::string nameThing, std::vector<double> properties, int thingObject, bool isVisualized);
+    Thing(std::string nameThing, std::vector<double> properties, int thingObject);
     Thing() = default;
     std::string getNameThing() const;
     const std::vector<double>& getProperties() const;

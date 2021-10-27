@@ -1,10 +1,10 @@
 #include "Gargoyle.h"
 
-Gargoyle::Gargoyle(double health, double attackPower, double protection)
-            : Character(CharacterType::GARGOYLE, health, attackPower, protection, GARGOYLE_LUCK) {}
+Gargoyle::Gargoyle(std::vector<std::string> model, std::string name, double health, double attackPower, double protection, double luck)
+            : Character(model, name, health, attackPower, protection, luck) {}
 
 std::vector<double> Gargoyle::requestAttack(Character &enemy) {
-    return Character::requestAttack(enemy, GARGOYLE_CRITICAL_FACTOR);
+    return Character::requestAttack(enemy, GargoyleProperties::GARGOYLE_CRITICAL_FACTOR);
 }
 
 bool Gargoyle::requestProtect(double attackPower) {
@@ -24,7 +24,7 @@ double Gargoyle::calcReflectionArmor() const {
 }
 
 bool Gargoyle::willFollowToHero() const {
-    if (rand() % 100 < GARGOYLE_PERCENT_FOR_FOLLOW_TO_HERO)
+    if (rand() % 100 < GargoyleProperties::GARGOYLE_PERCENT_FOR_FOLLOW_TO_HERO)
         return true;
     return false;
 }
@@ -42,8 +42,8 @@ std::vector<CellPoint> Gargoyle::makeMove(CellPoint from, CellPoint heroPos) con
         res.emplace_back(from.getX() + deltaX, from.getY() + deltaY);
         return res;
     }
-    for (int i = -GARGOYLE_MOVE; i <= GARGOYLE_MOVE; ++i) {
-        for (int j = -GARGOYLE_MOVE; j <= GARGOYLE_MOVE; ++j) {
+    for (int i = -GargoyleProperties::GARGOYLE_MOVE; i <= GargoyleProperties::GARGOYLE_MOVE; ++i) {
+        for (int j = -GargoyleProperties::GARGOYLE_MOVE; j <= GargoyleProperties::GARGOYLE_MOVE; ++j) {
             if (i != 0 && j != 0) {
                 res.emplace_back(from.getX() + i,from.getY() + j);
             }
@@ -53,12 +53,8 @@ std::vector<CellPoint> Gargoyle::makeMove(CellPoint from, CellPoint heroPos) con
 }
 
 bool Gargoyle::inRangeVisibility(CellPoint monsterPos, CellPoint objectPos) {
-    return abs(monsterPos.getX() - objectPos.getX()) <= GARGOYLE_RANGE_VISIBILITY && //попадает в прямоугольник видимости
-           abs(monsterPos.getY() - objectPos.getY()) <= GARGOYLE_RANGE_VISIBILITY;
-}
-
-int Gargoyle::getCharacterType() const {
-    return this->characterType;
+    return abs(monsterPos.getX() - objectPos.getX()) <= GargoyleProperties::GARGOYLE_RANGE_VISIBILITY && //попадает в прямоугольник видимости
+           abs(monsterPos.getY() - objectPos.getY()) <= GargoyleProperties::GARGOYLE_RANGE_VISIBILITY;
 }
 
 double Gargoyle::getHealth() const {
@@ -66,14 +62,22 @@ double Gargoyle::getHealth() const {
 }
 
 double Gargoyle::getDodgeFactor() const {
-    return GARGOYLE_DODGE_FACTOR;
+    return GargoyleProperties::GARGOYLE_DODGE_FACTOR;
 }
 
 Gargoyle* Gargoyle::clone() const {
-    return new Gargoyle(health, attackPower, protection);
+    return new Gargoyle(model, name, health, attackPower, protection);
 }
 
 bool Gargoyle::checkPositiveHealth() const {
     return health > 0;
+}
+
+std::vector<std::string> Gargoyle::getModel() const {
+    return Character::getModel();
+}
+
+std::string Gargoyle::getName() const {
+    return Character::getName();
 }
 

@@ -1,12 +1,13 @@
 #include "Field.h"
 
-Field::Field(int height, int width, CellPoint start, CellPoint finish, Grid grid) {
+Field::Field(int height, int width, DataManager *dataManager, CellPoint start, CellPoint finish, Grid grid) {
     if (!grid.grid.empty())
         this->field = grid;
     else
         this->field = Grid(height, width);
     this->start = start;
     this->finish = finish;
+    this->dataManager = dataManager;
     if (isCorrectStartFinish(start, finish)) {
         chosenStartFinish = true;
     }
@@ -14,12 +15,17 @@ Field::Field(int height, int width, CellPoint start, CellPoint finish, Grid grid
 
 Field::Field(const Field &field) {
     this->field = field.field;
-    this->start = field.start;
-    this->finish = field.finish;
-    this->wayGenerated = field.wayGenerated;
-    this->wallsGenerated = field.wallsGenerated;
-    this->chosenStartFinish = field.chosenStartFinish;
-    this->countWalls = field.countWalls;
+    start = field.start;
+    finish = field.finish;
+    heroPos = field.heroPos;
+    hero = field.hero;
+    enemies = field.enemies;
+    wayGenerated = field.wayGenerated;
+    wallsGenerated = field.wallsGenerated;
+    chosenStartFinish = field.chosenStartFinish;
+    countWalls = field.countWalls;
+    distStartFinish = field.distStartFinish;
+    counterSteps = field.counterSteps;
 }
 
 Field &Field::operator=(const Field &field) {
@@ -28,45 +34,70 @@ Field &Field::operator=(const Field &field) {
     this->field = field.field;
     start = field.start;
     finish = field.finish;
+    heroPos = field.heroPos;
+    hero = field.hero;
+    enemies = field.enemies;
     wayGenerated = field.wayGenerated;
     wallsGenerated = field.wallsGenerated;
     chosenStartFinish = field.chosenStartFinish;
     countWalls = field.countWalls;
+    distStartFinish = field.distStartFinish;
+    counterSteps = field.counterSteps;
     return *this;
 }
 
 Field::Field(Field &&field) {
     this->field = std::move(field.field);
-    this->start = field.start;
-    this->finish = field.finish;
-    this->chosenStartFinish = field.chosenStartFinish;
-    this->wayGenerated = field.wayGenerated;
-    this->wallsGenerated = field.wallsGenerated;
-    this->countWalls = field.countWalls;
+    start = field.start;
+    finish = field.finish;
+    heroPos = field.heroPos;
+    hero = field.hero;
+    enemies = field.enemies;
+    wayGenerated = field.wayGenerated;
+    wallsGenerated = field.wallsGenerated;
+    chosenStartFinish = field.chosenStartFinish;
+    countWalls = field.countWalls;
+    distStartFinish = field.distStartFinish;
+    counterSteps = field.counterSteps;
     field.start = CellPoint();
     field.finish = CellPoint();
-    field.chosenStartFinish = false;
+    field.heroPos = CellPoint();
+    field.hero = MainHero();
+    field.enemies.clear();
     field.wayGenerated = false;
     field.wallsGenerated = false;
+    field.chosenStartFinish = false;
     field.countWalls = 0;
+    distStartFinish = 0;
+    counterSteps = 0;
 }
 
 Field &Field::operator=(Field &&field) {
     if (&field == this)
         return *this;
     this->field = std::move(field.field);
-    this->start = field.start;
-    this->finish = field.finish;
-    this->chosenStartFinish = field.chosenStartFinish;
-    this->wayGenerated = field.wayGenerated;
-    this->wallsGenerated = field.wallsGenerated;
-    this->countWalls = field.countWalls;
+    start = field.start;
+    finish = field.finish;
+    heroPos = field.heroPos;
+    hero = std::move(field.hero);
+    enemies = std::move(field.enemies);
+    wayGenerated = field.wayGenerated;
+    wallsGenerated = field.wallsGenerated;
+    chosenStartFinish = field.chosenStartFinish;
+    countWalls = field.countWalls;
+    distStartFinish = field.distStartFinish;
+    counterSteps = field.counterSteps;
     field.start = CellPoint();
     field.finish = CellPoint();
-    field.chosenStartFinish = false;
+    field.heroPos = CellPoint();
+    field.hero = MainHero();
+    field.enemies.clear();
     field.wayGenerated = false;
     field.wallsGenerated = false;
+    field.chosenStartFinish = false;
     field.countWalls = 0;
+    distStartFinish = 0;
+    counterSteps = 0;
     return *this;
 }
 
@@ -186,45 +217,45 @@ bool Field::generateFullField(int countWalls) {
     return this->getStatusStartFinish() && this->getStatusWay() && this->getStatusWalls();
 }
 
-void Field::createHero(double health, double attackPower, double protection, double luck) {
-    hero = MainHero(health, attackPower, protection, luck);
+void Field::createHero() {
+    hero = MainHero(dataManager->getHero());
 }
 
-void Field::createMonster(double health, double attackPower, double protection) {
+void Field::createMonster() {
     CellPoint monsterStartPoint;
     do {
         monsterStartPoint = generateRandomFreePoint();
     } while (enemies.count(monsterStartPoint));
-    enemies[monsterStartPoint] = new Monster(health, attackPower, protection);
+    enemies[monsterStartPoint] = new Monster(dataManager->getModelCharacter("Monster"));
 }
 
-void Field::createArcher(double health, double attackPower, double protection) {
+void Field::createArcher() {
     CellPoint archerStartPoint;
     do {
         archerStartPoint = generateRandomFreePoint();
     } while (enemies.count(archerStartPoint));
-    enemies[archerStartPoint] = new Archer(health, attackPower, protection);
+    enemies[archerStartPoint] = new Archer(dataManager->getModelCharacter("Archer"));
 }
 
-void Field::createGargoyle(double health, double attackPower, double protection) {
+void Field::createGargoyle() {
     CellPoint gargoyleStartPoint;
     do {
         gargoyleStartPoint = generateRandomFreePoint();
     } while (enemies.count(gargoyleStartPoint));
-    enemies[gargoyleStartPoint] = new Gargoyle(health, attackPower, protection);
+    enemies[gargoyleStartPoint] = new Gargoyle(dataManager->getModelCharacter("Archer"));
 }
 
 void Field::createRandomEnemy() {
     if (counterSteps % TIME_BETWEEN_GENERATE_ENEMY == 0 && enemies.size() < MAX_COUNT_ENEMIES) {
         switch (rand() % 3) {
             case 0:
-                createMonster(MONSTER_MAX_HEALTH, MONSTER_DAMAGE, MONSTER_PROTECTION);
+                createMonster();
                 break;
             case 1:
-                createArcher(ARCHER_MAX_HEALTH, ARCHER_DAMAGE, ARCHER_PROTECTION);
+                createArcher();
                 break;
             case 2:
-                createGargoyle(GARGOYLE_MAX_HEALTH, GARGOYLE_DAMAGE, GARGOYLE_PROTECTION);
+                createGargoyle();
                 break;
         }
     }

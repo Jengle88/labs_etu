@@ -6,6 +6,7 @@
 #include "../../Characters/Monster.h"
 #include "../../Characters/Archer.h"
 #include "../../Characters/Gargoyle.h"
+#include "../../Data/DataManager.h"
 #include <random>
 #include <cstdlib>
 #include <ctime>
@@ -23,6 +24,7 @@ class Field {
 	CellPoint finish;
     CellPoint heroPos;
     MainHero hero;
+    DataManager *dataManager;
     std::map<CellPoint, Enemy*> enemies;
     bool wayGenerated = false;
     bool wallsGenerated = false;
@@ -37,12 +39,11 @@ class Field {
     void generateWayWithoutWalls(CellPoint start, CellPoint finish);
     void generateWalls(int countWalls);
 
-    void createMonster(double health, double attackPower, double protection);
-    void createArcher(double health, double attackPower, double protection);
-    void createGargoyle(double health, double attackPower, double protection);
+    void createMonster();
+    void createArcher();
+    void createGargoyle();
 public:
-    Field() = default;
-    Field(int height, int width, CellPoint start = CellPoint(0,0), CellPoint finish = CellPoint(0,0), Grid grid = Grid());
+    Field(int height, int width, DataManager *dataManager, CellPoint start = CellPoint(0,0), CellPoint finish = CellPoint(0,0), Grid grid = Grid());
     Field(const Field& field);
     Field& operator=(const Field& field);
     Field(Field && field);
@@ -51,7 +52,7 @@ public:
 
     // Генераторы
     bool generateFullField(int countWalls);
-    void createHero(double health, double attackPower, double protection, double luck);
+    void createHero();
     void createRandomEnemy(); // Паттерн: Фабрика
     CellPoint generateRandomFreePoint();
 

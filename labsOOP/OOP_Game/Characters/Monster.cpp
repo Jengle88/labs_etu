@@ -1,10 +1,10 @@
 #include "Monster.h"
 
-Monster::Monster(double health, double attackPower, double protection)
-        : Character(CharacterType::MONSTER, health, attackPower, protection, MONSTER_LUCK) {}
+Monster::Monster(std::vector<std::string> model, std::string name, double health, double attackPower, double protection, double luck)
+        : Character(model, name, health, attackPower, protection, luck) {}
 
 std::vector<double> Monster::requestAttack(Character &enemy) {
-    return Character::requestAttack(enemy, MONSTER_CRITICAL_FACTOR);
+    return Character::requestAttack(enemy, MonsterProperties::MONSTER_CRITICAL_FACTOR);
 }
 
 bool Monster::requestProtect(double attackPower) {
@@ -24,7 +24,7 @@ double Monster::calcReflectionArmor() const {
 }
 
 bool Monster::willFollowToHero() const {
-    if (rand() % 100 < MONSTER_PERCENT_FOR_FOLLOW_TO_HERO)
+    if (rand() % 100 < MonsterProperties::MONSTER_PERCENT_FOR_FOLLOW_TO_HERO)
         return true;
     return false;
 }
@@ -41,8 +41,8 @@ std::vector<CellPoint> Monster::makeMove(CellPoint from, CellPoint heroPos) cons
         res.emplace_back(from.getX(), from.getY() + deltaY);
         return res;
     }
-    for (int i = -MONSTER_MOVE; i <= MONSTER_MOVE; ++i) {
-        for (int j = -MONSTER_MOVE; j <= MONSTER_MOVE; ++j) {
+    for (int i = -MonsterProperties::MONSTER_MOVE; i <= MonsterProperties::MONSTER_MOVE; ++i) {
+        for (int j = -MonsterProperties::MONSTER_MOVE; j <= MonsterProperties::MONSTER_MOVE; ++j) {
             if (i == 0 ^ j == 0) {
                 res.emplace_back(from.getX() + i,from.getY() + j);
             }
@@ -52,12 +52,8 @@ std::vector<CellPoint> Monster::makeMove(CellPoint from, CellPoint heroPos) cons
 }
 
 bool Monster::inRangeVisibility(CellPoint monsterPos, CellPoint objectPos) {
-    return abs(monsterPos.getX() - objectPos.getX()) <= MONSTER_RANGE_VISIBILITY && //попадает в прямоугольник видимости
-           abs(monsterPos.getY() - objectPos.getY()) <= MONSTER_RANGE_VISIBILITY;
-}
-
-int Monster::getCharacterType() const {
-    return this->characterType;
+    return abs(monsterPos.getX() - objectPos.getX()) <= MonsterProperties::MONSTER_RANGE_VISIBILITY && //попадает в прямоугольник видимости
+           abs(monsterPos.getY() - objectPos.getY()) <= MonsterProperties::MONSTER_RANGE_VISIBILITY;
 }
 
 double Monster::getHealth() const {
@@ -65,14 +61,22 @@ double Monster::getHealth() const {
 }
 
 double Monster::getDodgeFactor() const {
-    return MONSTER_DODGE_FACTOR;
+    return MonsterProperties::MONSTER_DODGE_FACTOR;
 }
 
 Monster *Monster::clone() const {
-    return new Monster(health, attackPower, protection);
+    return new Monster(model, name, health, attackPower, protection);
 }
 
 bool Monster::checkPositiveHealth() const {
     return health > 0;
+}
+
+std::vector<std::string> Monster::getModel() const {
+    return Character::getModel();
+}
+
+std::string Monster::getName() const {
+    return Character::getName();
 }
 
