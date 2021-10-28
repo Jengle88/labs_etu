@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <map>
 
 enum ThingObject {
     ARMOR,
@@ -9,29 +10,20 @@ enum ThingObject {
     THING_OBJECT_SIZE
 };
 
-enum ThingProperties {
-    DAMAGE,
-    PROTECTION,
-    LUCK,
-    HEALTH,
-    THING_PROPERTIES_SIZE
-};
-
 class Thing {
     std::string nameThing;
 
-    //желательно заменить на map, чтобы обращаться к свойству по названию
-    std::vector<double> properties; // дельта свойств, максимум 4 элемента
+    std::map<std::string, double> properties; // дельта свойств, максимум 4 элемента
     int thingObject;
     friend bool operator==(const Thing& val1, const Thing& val2);
 
 public:
-    Thing(std::string nameThing, std::vector<double> properties, int thingObject);
+    Thing(std::string nameThing, std::map<std::string, double> properties, int thingObject);
     Thing() = default;
     std::string getNameThing() const;
-    const std::vector<double>& getProperties() const;
+    const std::map<std::string, double>& getProperties() const;
     bool isActiveThing() const;
     int getThingObject() const;
-    std::vector<double> getInverseValueProperties() const;
+    std::map<std::string, double> getInverseValueProperties() const;
 };
 

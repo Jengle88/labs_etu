@@ -7,7 +7,7 @@
 #include "../UI/Models/Field.h"
 #include "../Data/DataManager.h"
 
-#define TIME_BETWEEN_GENERATE_THING 8
+#define TIME_BETWEEN_GENERATE_THING 15
 #define MAX_COUNT_HEALTH_THINGS 3
 
 class ThingsManager {

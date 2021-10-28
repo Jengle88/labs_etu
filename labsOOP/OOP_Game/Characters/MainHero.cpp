@@ -16,11 +16,11 @@ bool MainHero::requestDodge() const {
     return Character::isCriticalCase();
 }
 
-void MainHero::recalcCharacteristics(std::vector<double> thingProperties) {
-    this->health += thingProperties[ThingProperties::HEALTH];
-    this->attackPower += thingProperties[ThingProperties::DAMAGE];
-    this->protection += thingProperties[ThingProperties::PROTECTION];
-    this->luck += thingProperties[ThingProperties::LUCK];
+void MainHero::recalcCharacteristics(std::map<std::string, double> thingProperties) {
+    this->health += thingProperties.at("health");
+    this->attackPower += thingProperties.at("damage");
+    this->protection += thingProperties.at("protection");
+    this->luck += thingProperties.at("luck");
 }
 
 void MainHero::takeThing(Thing thing) {

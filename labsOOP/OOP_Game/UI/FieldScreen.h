@@ -28,7 +28,7 @@ class FieldScreen {
     void requestTakeObject(CellPoint point);
     int requestStartFight(CellPoint point);
     bool requestMoveOut() const;
-    std::string generateTitleForThingAction(const std::string& nameThing, const std::vector<double>& properties);
+    std::string generateTitleForThingAction(const std::string& nameThing, const std::map<std::string, double>& properties);
 public:
     FieldScreen();
     ~FieldScreen();

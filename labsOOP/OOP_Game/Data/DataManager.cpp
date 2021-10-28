@@ -3,12 +3,12 @@
 
 DataManager::DataManager() {
     levelToThings[1] = {
-            Thing("Железный нагрудник", {0, 1, 0, 0}, ThingObject::ARMOR),
-            Thing("Железный меч", {1.2, 0, 0, 0}, ThingObject::SWORD)
+            Thing("Железный нагрудник", {{"damage",0},{"protection", 1},{"luck", 0}, {"health", 0}}, ThingObject::ARMOR),
+            Thing("Железный меч", {{"damage", 1.2},{"protection", 0},{"luck", 0}, {"health", 0}}, ThingObject::SWORD)
     };
     levelToThings[2] = {
-            Thing("Стальной нагрудник", {0, 1.3, 0, 0}, ThingObject::ARMOR),
-            Thing("Стальной меч", {1.6, 0, 0, 0}, ThingObject::SWORD)
+            Thing("Стальной нагрудник", {{"damage",0},{"protection", 1.3},{"luck", 0}, {"health", 0}}, ThingObject::ARMOR),
+            Thing("Стальной меч", {{"damage", 1.6},{"protection", 0},{"luck", 0}, {"health", 0}}, ThingObject::SWORD)
     };
 }
 
@@ -17,7 +17,7 @@ Thing DataManager::getThing(int level, int typeThing) {
 }
 
 Thing DataManager::getHealthThing() const {
-    return Thing("Лечебный эликсир", {0,0,0,20}, ThingObject::POTION_HEAL);
+    return Thing("Лечебный эликсир", {{"damage", 0},{"protection", 0},{"luck", 0}, {"health", 20}}, ThingObject::POTION_HEAL);
 }
 
 std::vector<std::string> DataManager::getModelHeroHead() const {

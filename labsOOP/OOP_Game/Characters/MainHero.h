@@ -12,7 +12,7 @@ class MainHero : public Character {
     std::map<std::string, int> countKilledEnemy;
     bool requestProtect(double attackPower);
     bool requestDodge() const override;
-    void recalcCharacteristics(std::vector<double> thingProperties);
+    void recalcCharacteristics(std::map<std::string, double> thingProperties);
 public:
     struct MainHeroProperties{
         constexpr static char MAIN_HERO_NAME[] = "Hero";

@@ -1,6 +1,6 @@
 #include "Thing.h"
 
-Thing::Thing(std::string nameThing, std::vector<double> properties, int thingObject)
+Thing::Thing(std::string nameThing, std::map<std::string, double> properties, int thingObject)
         : nameThing(nameThing), properties(properties), thingObject(thingObject) {}
 
 bool operator==(const Thing& val1, const Thing& val2) {
@@ -13,7 +13,7 @@ std::string Thing::getNameThing() const {
     return nameThing;
 }
 
-const std::vector<double>& Thing::getProperties() const {
+const std::map<std::string, double>& Thing::getProperties() const {
     return properties;
 }
 
@@ -25,10 +25,10 @@ int Thing::getThingObject() const {
     return thingObject;
 }
 
-std::vector<double> Thing::getInverseValueProperties() const {
-    std::vector<double> resProperties = getProperties();
-    for (double & resProperty : resProperties)
-        resProperty = -resProperty;
+std::map<std::string, double> Thing::getInverseValueProperties() const {
+    std::map<std::string, double> resProperties = getProperties();
+    for (auto & resProperty : resProperties)
+        resProperty.second = -resProperty.second;
     return resProperties;
 }
 
