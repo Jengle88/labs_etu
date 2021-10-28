@@ -1,5 +1,4 @@
 #include "DataManager.h"
-#include "../Tools/ModelDataReader.h"
 
 DataManager::DataManager() {
     levelToThings[1] = {

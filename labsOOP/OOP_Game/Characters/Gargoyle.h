@@ -20,7 +20,6 @@ class Gargoyle: public Character, public Enemy {
     bool requestDodge() const override;
     bool isCriticalCase() const override;
     double calcReflectionArmor() const override;
-
     bool willFollowToHero() const override;
 public:
 

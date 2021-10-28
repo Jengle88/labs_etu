@@ -195,7 +195,6 @@ void Field::generateWayWithoutWalls(CellPoint start, CellPoint finish) {
     }
 }
 
-// Удалять вещи из ThingsManager
 void Field::generateWalls(int countWalls) {
     if (!wayGenerated)
         throw -1; // путь не сгенерирован

@@ -1,7 +1,7 @@
 #include "ModelDataReader.h"
 
 
-std::string & ModelDataReader::stripStr(std::string &str) {
+std::string & ModelDataReader::stripStr(std::string &str) const {
     int rightIndex = str.size() - 1;
     while (std::isspace(str[rightIndex]) && rightIndex - 1 >= 0)
         rightIndex--; // ищем первый не пробельный символ
@@ -17,7 +17,7 @@ std::string & ModelDataReader::stripStr(std::string &str) {
     return str;
 }
 
-std::string ModelDataReader::readXMLStripStr(std::istream &input, const std::string& startTags) {
+std::string ModelDataReader::readXMLStripStr(std::istream &input, const std::string& startTags) const {
     std::string str;
     getline(input, str); // считываем начальный заголовок
     if (stripStr(str) == startTags) {
@@ -25,12 +25,11 @@ std::string ModelDataReader::readXMLStripStr(std::istream &input, const std::str
         stripStr(str);
         std::string temp;
         getline(input, temp); // считываем конечный заголовок
-//        int z = 2;
     }
     return str;
 }
 
-std::vector<std::string> ModelDataReader::readXMLModelDataInLines(std::istream &input, int countLine) {
+std::vector<std::string> ModelDataReader::readXMLModelDataInLines(std::istream &input, int countLine) const {
     std::string title;
     getline(input, title); // считываем заголовок
     std::vector<std::string> modelData(countLine);
@@ -42,13 +41,13 @@ std::vector<std::string> ModelDataReader::readXMLModelDataInLines(std::istream &
     return modelData;
 }
 
-std::pair<std::string, std::vector<std::string>> ModelDataReader::readXMLModelEnemy(std::istream &input) {
+std::pair<std::string, std::vector<std::string>> ModelDataReader::readXMLModelEnemy(std::istream &input) const {
     std::string name = readXMLStripStr(input, xmlTags.namePartStartTag);
     auto data = readXMLModelDataInLines(input, modelHeight);
     return {name, data};
 }
 
-std::vector<std::pair<std::string, std::vector<std::string>>> ModelDataReader::readXMLModelHeroData(std::istream &input) {
+std::vector<std::pair<std::string, std::vector<std::string>>> ModelDataReader::readXMLModelHeroData(std::istream &input) const {
     int countModels = std::stoi(readXMLStripStr(input, xmlTags.countModelsStartTag));
     std::vector<std::pair<std::string, std::vector<std::string>>> data(countModels);
     for (int i = 0; i < countModels; ++i) {
@@ -70,7 +69,7 @@ std::vector<std::pair<std::string, std::vector<std::string>>> ModelDataReader::r
     return data;
 }
 
-std::vector<std::pair<std::string, std::vector<std::string>>> ModelDataReader::readXMLModelData(const std::string nameFile) {
+std::vector<std::pair<std::string, std::vector<std::string>>> ModelDataReader::readXMLModelData(const std::string nameFile) const {
     std::vector<std::pair<std::string, std::vector<std::string>>> data;
     std::fstream input(nameFile, std::ios_base::in);
     std::string str;

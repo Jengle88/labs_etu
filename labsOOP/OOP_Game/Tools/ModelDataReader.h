@@ -21,13 +21,13 @@ class ModelDataReader {
     const int modelHeadHeight = 3;
     const int modelBodyHeight = 4;
     const int modelLegsHeight = 2;
-    const std::set<std::string> enemyNames = {"Monster", "Archer", "Gargoyle"};
-    std::string & stripStr(std::string &str);
-    std::vector<std::string> readXMLModelDataInLines(std::istream &input, int countLine);
-    std::string readXMLStripStr(std::istream &input, const std::string& startTags);
-    std::pair<std::string, std::vector<std::string>> readXMLModelEnemy(std::istream &input); // имя + модель
-    std::vector<std::pair<std::string, std::vector<std::string>>> readXMLModelHeroData(std::istream &input);// массив {имя, модель}
+
+    std::string & stripStr(std::string &str) const;
+    std::vector<std::string> readXMLModelDataInLines(std::istream &input, int countLine) const;
+    std::string readXMLStripStr(std::istream &input, const std::string& startTags) const;
+    std::pair<std::string, std::vector<std::string>> readXMLModelEnemy(std::istream &input) const; // имя + модель
+    std::vector<std::pair<std::string, std::vector<std::string>>> readXMLModelHeroData(std::istream &input) const;// массив {имя, модель}
 public:
-    std::vector<std::pair<std::string, std::vector<std::string>>> readXMLModelData(const std::string nameFile); //  массив {имя, модель}
+    std::vector<std::pair<std::string, std::vector<std::string>>> readXMLModelData(std::string nameFile) const; //  массив {имя, модель}
 
 };
