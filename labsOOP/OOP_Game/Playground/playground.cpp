@@ -107,17 +107,16 @@ using namespace std;
 //
 //}
 
+class A {
+public:
+    static std::map<int, int> a;
+};
+
+std::map<int,int> A::a;
+
 int main() { //проверено
+        A::a[4] = 3;
 
-//    std::string str1 ="Абобус 228\n";
-//    std::cout << str1;
-//    setlocale(LC_ALL, "");
-//    std::cout << str1;
-
-    std::string s;
-    char str[] = "aba";
-    s = str;
-    std::cout << s;
 
 //    ModelDataReader reader;
 //    auto data = reader.readXMLModelData("../Data/ObjectModel.xml");

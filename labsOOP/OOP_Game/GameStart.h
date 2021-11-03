@@ -1,20 +1,23 @@
+#pragma once
 #include <string>
 #include "UI/FieldScreen.h"
+#include "Tools/Logger.hpp"
 
 class GameStart {
 public:
     static void startGameMode(std::string modeName) {
         if (modeName == "game") {
             std::setlocale(LC_ALL, "");
+            Logger *logger = Logger::getInstance();
             auto *dataManager = new DataManager();
             dataManager->uploadModels();
             FieldScreen mainScreen;
             mainScreen.showStartFieldScreen(dataManager);
             mainScreen.gameStatusObserver();
             delete dataManager;
+            delete logger;
         }
-        else if (modeName == "features")
-        {
+        else if (modeName == "features") {
             int h = 30;
             int w = 30;
             int countWalls = 250;
