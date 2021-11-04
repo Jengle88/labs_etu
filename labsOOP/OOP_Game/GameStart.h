@@ -9,12 +9,19 @@ public:
         if (modeName == "game") {
             std::setlocale(LC_ALL, "");
             Logger *logger = Logger::getInstance();
-            auto *dataManager = new DataManager();
-            dataManager->uploadModels();
-            FieldScreen mainScreen;
-            mainScreen.showStartFieldScreen(dataManager);
-            mainScreen.gameStatusObserver();
-            delete dataManager;
+            int a = 5;
+            Logger::writeInfoDataToConsole(a, "line - " + std::to_string(__LINE__));
+            Logger::writeWarningDataToConsole(a, "line - " + std::to_string(__LINE__));
+            Logger::writeInfoDataToConsole(a);
+            Logger::writeErrorDataToConsole(a);
+            Logger::writeInfoDataToConsole(a);
+
+//            auto *dataManager = new DataManager();
+//            dataManager->uploadModels();
+//            FieldScreen mainScreen;
+//            mainScreen.showStartFieldScreen(dataManager);
+//            mainScreen.gameStatusObserver();
+//            delete dataManager;
             delete logger;
         }
         else if (modeName == "features") {

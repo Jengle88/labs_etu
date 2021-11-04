@@ -4,12 +4,17 @@
 #include <fstream>
 
 class Logger {
+    struct DefinitionColor {
+        static constexpr char NONE[] = "\033[0m";
+        static constexpr char RED[] = "\033[0;31m";
+        static constexpr char YELLOW[] = "\033[0;33m";
+    };
     static std::map<std::string, std::fstream> outputs;
     static Logger* logger;
     template<typename T>
     static void writeData(std::string typeMessage, std::string key, T& data, std::string additionData = "");
     template<typename T>
-    static void writeDataToConsole(std::string typeMessage, T& data, std::string additionData = "");
+    static void writeDataToConsole(std::string typeMessage, std::string color, T &data, std::string additionData);
     Logger();
 
 public:
@@ -37,7 +42,16 @@ public:
 std::map<std::string, std::fstream> Logger::outputs;
 Logger* Logger::logger = nullptr;
 
+Logger::Logger() {}
+
+Logger::~Logger() {
+    closeAllStreams();
+    logger = nullptr;
+}
+
 void Logger::setKeyOutputFile(std::string key, std::string filePath) {
+    if (logger == nullptr) // должен быть создан объект
+        throw -1;
     if (Logger::outputs.count(key)) {
         Logger::outputs[key].close();
     }
@@ -68,12 +82,21 @@ void Logger::writeData(std::string typeMessage, std::string key, T& data, std::s
 }
 
 template<typename T>
-void Logger::writeDataToConsole(std::string typeMessage, T &data, std::string additionData) {
+void Logger::writeDataToConsole(std::string typeMessage, std::string color, T &data, std::string additionData) {
     if (!additionData.empty()) {
-        std::cout << typeMessage + ": " + additionData << '\n';
-        std::cout << "Data: " << data << '\n';
+        if (!color.empty()) {
+            std::cout << color << typeMessage + ": " + additionData << '\n' ;
+            std::cout << "Data: " << data << DefinitionColor::NONE << '\n';
+        }
+        else {
+            std::cout << typeMessage + ": " + additionData << '\n';
+            std::cout << "Data: " << data << '\n';
+        }
     } else {
-        std::cout << typeMessage + ": " << data << '\n';
+        if (!color.empty())
+            std::cout << color << typeMessage + ": " << data << DefinitionColor::NONE << '\n';
+        else
+            std::cout << typeMessage + ": " << data << '\n';
     }
 }
 
@@ -94,17 +117,17 @@ void Logger::writeErrorData(std::string key, T &data, std::string additionData) 
 
 template<typename T>
 void Logger::writeInfoDataToConsole(T &data, std::string additionData) {
-    writeDataToConsole("Info", (T&)data, additionData);
+    writeDataToConsole("Info", "", data, additionData);
 }
 
 template<typename T>
 void Logger::writeWarningDataToConsole(T &data, std::string additionData) {
-    writeDataToConsole("Warning", data, additionData);
+    writeDataToConsole("Warning", DefinitionColor::YELLOW, data, additionData);
 }
 
 template<typename T>
 void Logger::writeErrorDataToConsole(T &data, std::string additionData) {
-    writeDataToConsole("Error", data, additionData);
+    writeDataToConsole("Error", DefinitionColor::RED, data, additionData);
 }
 
 Logger* Logger::getInstance() {
@@ -112,10 +135,4 @@ Logger* Logger::getInstance() {
         Logger::logger = new Logger();
     }
     return Logger::logger;
-}
-
-Logger::Logger() {}
-
-Logger::~Logger() {
-    closeAllStreams();
 }
