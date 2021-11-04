@@ -1,35 +1,35 @@
 //#include "Logger.hpp"
 //
-//std::map<std::string, std::fstream> Logger::outputs;
+//std::map<std::string, std::fstream> Logger::fileOutputs;
 //Logger* Logger::logger = nullptr;
 //
 //void Logger::setKeyOutputFile(std::string key, std::string filePath) {
-//    if (Logger::outputs.count(key)) {
-//        Logger::outputs[key].close();
+//    if (Logger::fileOutputs.count(key)) {
+//        Logger::fileOutputs[key].close();
 //    }
-//    Logger::outputs[key].open(filePath, std::ios_base::out);
+//    Logger::fileOutputs[key].open(filePath, std::ios_base::out);
 //}
 //
 //void Logger::closeOutputFile(std::string key) {
-//    if (Logger::outputs.count(key)) {
-//        Logger::outputs[key].close();
+//    if (Logger::fileOutputs.count(key)) {
+//        Logger::fileOutputs[key].close();
 //    }
 //}
 //
 //void Logger::closeAllStreams() {
-//    for(auto &output : outputs) {
+//    for(auto &output : fileOutputs) {
 //        output.second.close();
 //    }
-//    outputs.clear();
+//    fileOutputs.clear();
 //}
 //
 ////template<typename T>
-//void Logger::writeData(std::string typeMessage, std::string key, int& data, std::string additionData) {
+//void Logger::writeDataFile(std::string typeMessage, std::string key, int& data, std::string additionData) {
 //    if (!additionData.empty()) {
-//        Logger::outputs[key] << typeMessage + ": " + additionData << '\n';
-//        Logger::outputs[key] << "Data: " << data << '\n';
+//        Logger::fileOutputs[key] << typeMessage + ": " + additionData << '\n';
+//        Logger::fileOutputs[key] << "Data: " << data << '\n';
 //    } else {
-//        Logger::outputs[key] << typeMessage + ": " << data << '\n';
+//        Logger::fileOutputs[key] << typeMessage + ": " << data << '\n';
 //    }
 //}
 //
@@ -45,17 +45,17 @@
 //
 //template<typename T>
 //void Logger::writeInfoData(std::string key, T &data, std::string additionData) {
-//    writeData("Info", key, data, additionData);
+//    writeDataFile("Info", key, data, additionData);
 //}
 //
 //template<typename T>
 //void Logger::writeWarningData(std::string key, T &data, std::string additionData) {
-//    writeData("Warning", key, data, additionData);
+//    writeDataFile("Warning", key, data, additionData);
 //}
 //
 //template<typename T>
 //void Logger::writeErrorData(std::string key, T &data, std::string additionData) {
-//    writeData("Error", key, data, additionData);
+//    writeDataFile("Error", key, data, additionData);
 //}
 //
 //template<typename T>

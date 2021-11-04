@@ -32,3 +32,14 @@ std::map<std::string, double> Thing::getInverseValueProperties() const {
     return resProperties;
 }
 
+std::ostream &operator<<(std::ostream &os, const Thing &thing) {
+    os << "Thing: { nameThing: " << thing.nameThing << ", properties: [";
+    auto prevEnd = std::prev(thing.properties.end());
+    for (auto it = thing.properties.begin(); it != prevEnd; it++) {
+        os << it->first << " : " << it->second << ", ";
+    }
+    os << prevEnd->first << " : " << prevEnd->second << "], ";
+    os << "thingObject: "<< thing.thingObject << " }";
+    return os;
+}
+

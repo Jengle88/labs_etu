@@ -4,20 +4,20 @@
 #include <fstream>
 
 class Logger {
-    struct DefinitionColor {
+    struct LoggingColor {
         static constexpr char NONE[] = "\033[0m";
         static constexpr char RED[] = "\033[0;31m";
         static constexpr char YELLOW[] = "\033[0;33m";
     };
-    static std::map<std::string, std::fstream> outputs;
+    static std::map<std::string, std::fstream> fileOutputs;
     static Logger* logger;
-    template<typename T>
-    static void writeData(std::string typeMessage, std::string key, T& data, std::string additionData = "");
-    template<typename T>
-    static void writeDataToConsole(std::string typeMessage, std::string color, T &data, std::string additionData);
     Logger();
-
 public:
+    struct LoggingType {
+        static constexpr int Info = 1;
+        static constexpr int Warning = 2;
+        static constexpr int Error = 3;
+    };
     static Logger* getInstance();
     ~Logger();
 
@@ -25,21 +25,18 @@ public:
     static void closeOutputFile(std::string key);
     void closeAllStreams();
 
+    static void writeMessageToConsole(std::string message, int typeMessage = LoggingType::Info, std::ostream& output = std::cout);
+    static void writeMessageToFile(std::string key, std::string message, int typeMessage = LoggingType::Info);
+    static void writeMessageInBoth(std::string key, std::string message, int typeMessage = LoggingType::Info, std::ostream& output = std::cout);
     template<typename T>
-    static void writeInfoData(std::string key, T& data, std::string additionData = "");
+    static void writeDataToFile(std::string key, T data, int typeMessage = LoggingType::Info, std::string additionData = "");
     template<typename T>
-    static void writeWarningData(std::string key, T& data, std::string additionData = "");
+    static void writeDataToConsole(T data, int typeMessage = LoggingType::Info, std::ostream &output = std::cout, std::string additionData = "");
     template<typename T>
-    static void writeErrorData(std::string key, T& data, std::string additionData = "");
-    template<typename T>
-    static void writeInfoDataToConsole(T& data, std::string additionData = "");
-    template<typename T>
-    static void writeWarningDataToConsole(T& data, std::string additionData = "");
-    template<typename T>
-    static void writeErrorDataToConsole(T& data, std::string additionData = "");
+    static void writeDataInBoth(std::string key, T data, int typeMessage = LoggingType::Info, std::ostream &output = std::cout, std::string additionData = "");
 };
 
-std::map<std::string, std::fstream> Logger::outputs;
+std::map<std::string, std::fstream> Logger::fileOutputs;
 Logger* Logger::logger = nullptr;
 
 Logger::Logger() {}
@@ -50,84 +47,25 @@ Logger::~Logger() {
 }
 
 void Logger::setKeyOutputFile(std::string key, std::string filePath) {
-    if (logger == nullptr) // должен быть создан объект
+    if (logger == nullptr) // должен быть создан объект, чтобы в конце вызывался деструктор
         throw -1;
-    if (Logger::outputs.count(key)) {
-        Logger::outputs[key].close();
+    if (Logger::fileOutputs.count(key)) {
+        Logger::fileOutputs[key].close();
     }
-    Logger::outputs[key].open(filePath, std::ios_base::out);
+    Logger::fileOutputs[key].open(filePath, std::ios_base::out);
 }
 
 void Logger::closeOutputFile(std::string key) {
-    if (Logger::outputs.count(key)) {
-        Logger::outputs[key].close();
+    if (Logger::fileOutputs.count(key)) {
+        Logger::fileOutputs[key].close();
     }
 }
 
 void Logger::closeAllStreams() {
-    for(auto &output : outputs) {
+    for(auto &output : fileOutputs) {
         output.second.close();
     }
-    outputs.clear();
-}
-
-template<typename T>
-void Logger::writeData(std::string typeMessage, std::string key, T& data, std::string additionData) {
-    if (!additionData.empty()) {
-        Logger::outputs[key] << typeMessage + ": " + additionData << '\n';
-        Logger::outputs[key] << "Data: " << data << '\n';
-    } else {
-        Logger::outputs[key] << typeMessage + ": " << data << '\n';
-    }
-}
-
-template<typename T>
-void Logger::writeDataToConsole(std::string typeMessage, std::string color, T &data, std::string additionData) {
-    if (!additionData.empty()) {
-        if (!color.empty()) {
-            std::cout << color << typeMessage + ": " + additionData << '\n' ;
-            std::cout << "Data: " << data << DefinitionColor::NONE << '\n';
-        }
-        else {
-            std::cout << typeMessage + ": " + additionData << '\n';
-            std::cout << "Data: " << data << '\n';
-        }
-    } else {
-        if (!color.empty())
-            std::cout << color << typeMessage + ": " << data << DefinitionColor::NONE << '\n';
-        else
-            std::cout << typeMessage + ": " << data << '\n';
-    }
-}
-
-template<typename T>
-void Logger::writeInfoData(std::string key, T &data, std::string additionData) {
-    writeData("Info", key, data, additionData);
-}
-
-template<typename T>
-void Logger::writeWarningData(std::string key, T &data, std::string additionData) {
-    writeData("Warning", key, data, additionData);
-}
-
-template<typename T>
-void Logger::writeErrorData(std::string key, T &data, std::string additionData) {
-    writeData("Error", key, data, additionData);
-}
-
-template<typename T>
-void Logger::writeInfoDataToConsole(T &data, std::string additionData) {
-    writeDataToConsole("Info", "", data, additionData);
-}
-
-template<typename T>
-void Logger::writeWarningDataToConsole(T &data, std::string additionData) {
-    writeDataToConsole("Warning", DefinitionColor::YELLOW, data, additionData);
-}
-
-template<typename T>
-void Logger::writeErrorDataToConsole(T &data, std::string additionData) {
-    writeDataToConsole("Error", DefinitionColor::RED, data, additionData);
+    fileOutputs.clear();
 }
 
 Logger* Logger::getInstance() {
@@ -135,4 +73,85 @@ Logger* Logger::getInstance() {
         Logger::logger = new Logger();
     }
     return Logger::logger;
+}
+
+template<typename T>
+void Logger::writeDataToFile(std::string key, T data, int typeMessage, std::string additionData) {
+    if (!fileOutputs.count(key))
+        return;
+    switch (typeMessage) {
+        case LoggingType::Info:
+            fileOutputs[key] << "Info: " + (additionData.empty() ? "" : additionData + "\nData: ") << data << '\n';
+            break;
+        case LoggingType::Warning:
+            fileOutputs[key] << "Warning: " + (additionData.empty() ? "" : additionData + "\nData: ") << data << '\n';
+            break;
+        case LoggingType::Error:
+            fileOutputs[key] << "Error: " + (additionData.empty() ? "" : additionData + "\nData: ") << data << '\n';
+            break;
+        default:
+            return;
+    }
+}
+
+template<typename T>
+void Logger::writeDataToConsole(T data, int typeMessage, std::ostream &output, std::string additionData) {
+    switch (typeMessage) {
+        case LoggingType::Info:
+            output << LoggingColor::NONE << "Info: " + (additionData.empty() ? "" : additionData + "\nData: ") << data << "\n" << LoggingColor::NONE;
+            break;
+        case LoggingType::Warning:
+            output << LoggingColor::YELLOW << "Warning: " + (additionData.empty() ? "" : additionData + "\nData: ") << data << "\n" << LoggingColor::NONE;
+            break;
+        case LoggingType::Error:
+            output << LoggingColor::RED << "Error: " + (additionData.empty() ? "" : additionData + "\nData: ") << data << "\n" << LoggingColor::NONE;
+            break;
+        default:
+            return;
+    }
+}
+
+template<typename T>
+void Logger::writeDataInBoth(std::string key, T data, int typeMessage, std::ostream &output, std::string additionData) {
+    writeDataToFile(key, data, typeMessage, additionData);
+    writeDataToConsole(data, typeMessage, output, additionData);
+}
+
+void Logger::writeMessageToConsole(std::string message, int typeMessage, std::ostream &output) {
+    switch (typeMessage) {
+        case LoggingType::Info:
+            output << LoggingColor::NONE << message << LoggingColor::NONE;
+            break;
+        case LoggingType::Warning:
+            output << LoggingColor::YELLOW << "Warning: " + message + "\n" << LoggingColor::NONE;
+            break;
+        case LoggingType::Error:
+            output << LoggingColor::RED << "Error: " + message + "\n" << LoggingColor::NONE;
+            break;
+        default:
+            return;
+    }
+}
+
+void Logger::writeMessageToFile(std::string key, std::string message, int typeMessage) {
+    if (!fileOutputs.count(key))
+        return;
+    switch (typeMessage) {
+        case LoggingType::Info:
+            fileOutputs[key] << "Info: " + message +  "\n";
+            break;
+        case LoggingType::Warning:
+            fileOutputs[key] << "Warning: " + message +  "\n";
+            break;
+        case LoggingType::Error:
+            fileOutputs[key] << "Error: " + message +  "\n";
+            break;
+        default:
+            return;
+    }
+}
+
+void Logger::writeMessageInBoth(std::string key, std::string message, int typeMessage, std::ostream &output) {
+    writeMessageToFile(key, message, typeMessage);
+    writeMessageToConsole(message, typeMessage, output);
 }

@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <ostream>
 
 enum ThingObject {
     ARMOR,
@@ -12,12 +13,11 @@ enum ThingObject {
 
 class Thing {
     std::string nameThing;
-
     std::map<std::string, double> properties; // дельта свойств, максимум 4 элемента
     int thingObject;
     friend bool operator==(const Thing& val1, const Thing& val2);
-
 public:
+
     Thing(std::string nameThing, std::map<std::string, double> properties, int thingObject);
     Thing() = default;
     std::string getNameThing() const;
@@ -25,5 +25,6 @@ public:
     bool isActiveThing() const;
     int getThingObject() const;
     std::map<std::string, double> getInverseValueProperties() const;
+    friend std::ostream &operator<<(std::ostream &os, const Thing &thing);
 };
 

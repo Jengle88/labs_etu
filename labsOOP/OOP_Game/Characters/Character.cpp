@@ -63,3 +63,9 @@ std::string Character::getName() const {
     return name;
 }
 
+std::ostream &operator<<(std::ostream &os, const Character &character) {
+    os << "Character: { name: " << character.name << ", health: " << character.health << ", attackPower: " << character.attackPower
+       << ", protection: " << character.protection << ", luck: " << character.luck << " }";
+    return os;
+}
+

@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cmath>
 #include <string>
+#include <ostream>
 
 #define ROOT_EPSILON 1e-2
 #define LOW_HEALTH_PERCENT 30
@@ -29,6 +30,7 @@ protected:
     virtual bool isCriticalCase() const;
     virtual double calcReflectionArmor() const;
 public:
+    friend std::ostream &operator<<(std::ostream &os, const Character &character);
 
     Character(std::vector<std::string> model,
                 std::string name = CharacterProperties::CHARACTER_NAME,

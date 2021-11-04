@@ -9,19 +9,23 @@ public:
         if (modeName == "game") {
             std::setlocale(LC_ALL, "");
             Logger *logger = Logger::getInstance();
-            int a = 5;
-            Logger::writeInfoDataToConsole(a, "line - " + std::to_string(__LINE__));
-            Logger::writeWarningDataToConsole(a, "line - " + std::to_string(__LINE__));
-            Logger::writeInfoDataToConsole(a);
-            Logger::writeErrorDataToConsole(a);
-            Logger::writeInfoDataToConsole(a);
-
-//            auto *dataManager = new DataManager();
-//            dataManager->uploadModels();
+            auto *dataManager = new DataManager();
+            dataManager->uploadModels();
+            auto thing = dataManager->getHealthThing();
+            Logger::writeDataToConsole(dataManager->getThing(1, ThingObject::SWORD), Logger::LoggingType::Warning,
+                                       std::cout, "Attention!");
+            std::string archer = "Archer";
+            Logger::writeDataToConsole(Archer(dataManager->getModelCharacter(archer)));
+            std::string monster = "Monster";
+            Logger::writeDataToConsole(Monster(dataManager->getModelCharacter(monster)));
+            std::string gargoyle = "Gargoyle";
+            Logger::writeDataToConsole(Gargoyle(dataManager->getModelCharacter(gargoyle)));
+            Logger::writeDataToConsole(MainHero(dataManager->getHero(true, true)));
+            Logger::writeMessageToConsole("Aboba", Logger::LoggingType::Error);
 //            FieldScreen mainScreen;
 //            mainScreen.showStartFieldScreen(dataManager);
 //            mainScreen.gameStatusObserver();
-//            delete dataManager;
+            delete dataManager;
             delete logger;
         }
         else if (modeName == "features") {
