@@ -1,10 +1,13 @@
 #include "FieldIterator.h"
+#include "Logger.hpp"
 
 Cell FieldIterator::getElem() const {
     if (rootGrid->isValidIndexes(posX, posY))
         return rootGrid->getElem(CellPoint(posX, posY));
-    else
+    else {
+        Logger::writeMessageToFile("gameLogs", std::string("Были переданы невалидные индексы в getElem, файл") + __FILE__, Logger::LoggingType::Error);
         throw -1;
+    }
 }
 
 CellPoint FieldIterator::getCurrentPosition() const {

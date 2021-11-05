@@ -1,4 +1,5 @@
 #include "Grid.h"
+#include "Logger.hpp"
 
 Grid::Grid() {
     height = 0;
@@ -99,6 +100,7 @@ void Grid::setElem(CellPoint point, Cell cell) {
     if (isValidIndexes(point.getX(), point.getY())) {
         grid[point.getY()][point.getX()] = cell;
     } else {
+        Logger::writeMessageToFile("gameLogs", std::string("Были переданы невалидные индексы в setElem, файл") + __FILE__, Logger::LoggingType::Error);
         throw -1;
     }
 }
@@ -107,6 +109,7 @@ Cell Grid::getElem(CellPoint point) const {
     if(isValidIndexes(point.getX(), point.getY())) {
         return grid[point.getY()][point.getX()];
     } else {
+        Logger::writeMessageToFile("gameLogs", std::string("Были переданы невалидные индексы в getElem, файл") + __FILE__, Logger::LoggingType::Error);
         throw -1;
     }
 }

@@ -20,7 +20,9 @@ enum FightAction {
 
 class FightScreen {
     MainHero& mainHero;
+    std::vector<std::string> heroModel;
     Enemy& enemy;
+    std::vector<std::string> enemyModel;
     DataManager *dataManager;
 public:
     FightScreen(MainHero& mainHero, Enemy& enemy, DataManager *dataManager);

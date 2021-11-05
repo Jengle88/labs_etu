@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 class CellPoint {
 	int x;
 	int y;
@@ -12,4 +14,5 @@ public:
 
     friend bool operator==(const CellPoint& point1, const CellPoint& point2);
     friend bool operator<(const CellPoint& point1, const CellPoint& point2);
+    friend std::ostream& operator<<(std::ostream& os, const CellPoint& point);
 };
