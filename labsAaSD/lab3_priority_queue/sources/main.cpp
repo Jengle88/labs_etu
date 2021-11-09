@@ -6,14 +6,15 @@ struct ParallelProcess {
     friend bool operator<(const ParallelProcess& a, const ParallelProcess& b) {
         return a.finishTime < b.finishTime || (a.finishTime == b.finishTime && a.idProcess < b.idProcess);
     }
-    explicit ParallelProcess(int idProcess = -1, int leftTime = -1): idProcess(idProcess), finishTime(leftTime) {}
+    explicit ParallelProcess(int idProcess = -1, int finishTime = -1): idProcess(idProcess), finishTime(finishTime) {}
 };
 
 class BinaryLimitMinHeap {
     ParallelProcess *array;
+    int maxSize;
     int currentSize;
 
-    void heapify(int i) {
+    void siftDown(int i) {
         int left, right, less;
         while (true) {
             left = 2 * i + 1;
@@ -29,18 +30,28 @@ class BinaryLimitMinHeap {
             i = less;
         }
     }
+
+    void siftUp(int i) {
+        int parent = (i - 1) / 2;
+        while (i > 0 && array[i] < array[parent]) {
+            std::swap(array[i], array[parent]);
+
+            i = parent;
+            parent = (i - 1) / 2;
+        }
+    }
 public:
-    BinaryLimitMinHeap() = default;
     explicit BinaryLimitMinHeap(int maxSize, int arrSize = 0, const ParallelProcess *arr = nullptr) {
+        this->maxSize = maxSize;
         array = new ParallelProcess[maxSize];
         currentSize = 0;
         if (arr != nullptr) {
-            currentSize = std::min(arrSize, maxSize);
+            currentSize = std::min(arrSize, maxSize); // если массив инициализации меньше или больше допустимого
             for (int i = 0; i < currentSize; ++i) {
                 array[i] = arr[i];
             }
             for (int i = currentSize / 2; i >= 0; i--) {
-                heapify(i);
+                siftDown(i);
             }
         }
     }
@@ -50,13 +61,7 @@ public:
     void add(ParallelProcess val) {
         array[currentSize++] = val;
         int i = currentSize - 1;
-        int parent = (i - 1) / 2;
-        while (i > 0 && array[i] < array[parent]) {
-            std::swap(array[i], array[parent]);
-
-            i = parent;
-            parent = (i - 1) / 2;
-        }
+        siftUp(i);
     }
     ParallelProcess getMin() const {
         if (currentSize > 0)
@@ -70,7 +75,7 @@ public:
         ParallelProcess res = array[0];
         array[0] = array[currentSize - 1];
         currentSize--;
-        heapify(0);
+        siftDown(0);
         return res;
     }
 };
@@ -93,7 +98,7 @@ public:
 struct ResultTask {
     int idProcess;
     int startTime;
-    ResultTask(int idProcess = -1, int startTime = -1) : idProcess(idProcess), startTime(startTime) {}
+    explicit ResultTask(int idProcess = -1, int startTime = -1) : idProcess(idProcess), startTime(startTime) {}
 };
 
 void solve() {
@@ -101,29 +106,23 @@ void solve() {
     std::cin >> n >> m;
     PriorityLimitMinQueue queue(n);
     auto* res = new ResultTask[m];
-    int t = 0;
     int duration;
     for (int i = 0; i < n; ++i) {
-        std::cin >> duration;
         if (i < m) {
+            std::cin >> duration;
             queue.push(ParallelProcess(i, duration));
             res[i] = ResultTask(i, 0);
-        } else { // задач меньше, чем процессов
-            for (int j = 0; j < m; ++j) {
-                std::cout << res[j].idProcess << ' ' << res[j].startTime << '\n';
-            }
-            delete[] res;
-            return;
+        } else { // количество задач меньше или равно количеству процессов
+            break;
         }
     }
-    for (int i = n; i < m;) { // задач больше, чем процессов
-        auto currentTime = queue.top().finishTime;
-        t = currentTime;
-        while (queue.top().finishTime == t && i < m) { // если в один момент освободилось больше одного процесса
+    for (int i = n; i < m;) { // количество задач больше, чем процессов
+        int currentTime = queue.top().finishTime;
+        while (queue.top().finishTime == currentTime && i < m) { // если в один момент освободилось больше одного процесса
             auto topProcess = queue.pop();
+            res[i] = ResultTask(topProcess.idProcess, currentTime); // начало новой задачи
             std::cin >> duration;
-            res[i] = ResultTask(topProcess.idProcess, t);
-            queue.push(ParallelProcess(topProcess.idProcess, t + duration));
+            queue.push(ParallelProcess(topProcess.idProcess, currentTime + duration));
             i++;
         }
     }
