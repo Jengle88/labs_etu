@@ -57,7 +57,7 @@ public:
     CellPoint generateRandomFreePoint();
 
     // Передвижение персонажей
-    void moveHero(CellPoint to);
+    bool moveHero(CellPoint to);
     void moveEnemy(CellPoint from, CellPoint to);
     void moveEnemies();
     void killEnemy(CellPoint from);

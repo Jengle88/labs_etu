@@ -1,5 +1,5 @@
 #include "FieldIterator.h"
-#include "Logger.hpp"
+#include "../Logger/Logger.hpp"
 
 Cell FieldIterator::getElem() const {
     if (rootGrid->isValidIndexes(posX, posY))

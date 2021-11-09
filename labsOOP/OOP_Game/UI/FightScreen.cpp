@@ -26,7 +26,7 @@ int FightScreen::fightObserver() {
 
     if (mainHero.checkPositiveHealth()) {
         mainHero.writeKill(enemy.getName());
-        Logger::writeDataToFile("gameLogs",dynamic_cast<Character&>(enemy), Logger::LoggingType::Info, "Герой победил данного врага");
+        Logger::writeDataToFile("gameLogs", LoggerDataAdapter<Character>(dynamic_cast<Character&>(enemy),"Герой победил данного врага"), Logger::LoggingType::Info);
         std::cout << "Вы победили!\nНажмите любую кнопку, чтобы продолжить.";
         getchar();
     }
@@ -56,11 +56,11 @@ bool FightScreen::requestAction(char action) {
             Logger::writeMessageToFile("gameLogs", "Герой произвёл атаку");
             heroAttackInfo = mainHero.requestAttack(dynamic_cast<Character &>(enemy));
             Printer::printAttackInfo("Hero", heroAttackInfo[0], heroAttackInfo[1] > 0, heroAttackInfo[2] > 0);
-            Logger::writeDataToFile("gameLogs", mainHero, Logger::LoggingType::Info, "Статус героя");
+            Logger::writeDataToFile("gameLogs", LoggerDataAdapter<MainHero&>(mainHero, "Статус героя"), Logger::LoggingType::Info);
 //            usleep(COOl_DOWN); // Торможение на 0.3 сек
             enemyAttackInfo = enemy.requestAttack(dynamic_cast<Character &>(mainHero));
             Printer::printAttackInfo(enemy.getName(), enemyAttackInfo[0], enemyAttackInfo[1] > 0, enemyAttackInfo[2] > 0);
-            Logger::writeDataToFile("gameLogs", dynamic_cast<Character&>(enemy), Logger::LoggingType::Info, "Статус врага");
+            Logger::writeDataToFile("gameLogs", LoggerDataAdapter<Character&>(dynamic_cast<Character&>(enemy), "Статус врага"), Logger::LoggingType::Info);
             break;
         case FightAction::USE:
             std::cin >> numberThing;

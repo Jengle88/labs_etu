@@ -23,6 +23,7 @@ public:
     std::string getNameThing() const;
     const std::map<std::string, double>& getProperties() const;
     bool isActiveThing() const;
+    bool isVisualThing() const;
     int getThingObject() const;
     std::map<std::string, double> getInverseValueProperties() const;
     friend std::ostream &operator<<(std::ostream &os, const Thing &thing);

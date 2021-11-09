@@ -1,5 +1,5 @@
 #include "Field.h"
-#include "../../Tools/Logger.hpp"
+#include "../../Logger/Logger.hpp"
 
 Field::Field(int height, int width, DataManager *dataManager, CellPoint start, CellPoint finish, Grid grid) {
     if (!grid.grid.empty())
@@ -152,8 +152,8 @@ void Field::generateStartFinishWay() {
     chosenStartFinish = true;
     field.setElem(start,
                   Cell(CellObject(TypeCell::START, TypeObject::NOTHING, false)));
-    Logger::writeDataToFile("gameLogs", this->start, Logger::LoggingType::Info, "Точка старта");
-    Logger::writeDataToFile("gameLogs", this->finish, Logger::LoggingType::Info, "Точка финиша");
+    Logger::writeDataToFile("gameLogs", LoggerDataAdapter<CellPoint>(this->start, "Точка старта"), Logger::LoggingType::Info);
+    Logger::writeDataToFile("gameLogs", LoggerDataAdapter<CellPoint>(this->finish, "Точка финиша"), Logger::LoggingType::Info);
     generateWayWithoutWalls(this->start, this->finish);
     Logger::writeMessageToFile("gameLogs","Путь между стартом и финишем был сгенерирован");
     field.setElem(finish,
@@ -230,7 +230,7 @@ bool Field::generateFullField(int countWalls) {
 
 void Field::createHero() {
     hero = MainHero(dataManager->getHero());
-    Logger::writeDataToFile("gameLogs", hero, Logger::LoggingType::Info, "Главный герой загружен");
+    Logger::writeDataToFile("gameLogs", LoggerDataAdapter<MainHero>(hero, "Главный герой загружен"));
 }
 
 void Field::createMonster() {
@@ -239,7 +239,7 @@ void Field::createMonster() {
         monsterStartPoint = generateRandomFreePoint();
     } while (enemies.count(monsterStartPoint));
     enemies[monsterStartPoint] = new Monster(dataManager->getModelCharacter("Monster"));
-    Logger::writeDataToFile("gameLogs", monsterStartPoint, Logger::LoggingType::Info, "Сгенерирован монстр");
+    Logger::writeDataToFile("gameLogs", LoggerDataAdapter<CellPoint>(monsterStartPoint,"Сгенерирован монстр"));
 }
 
 void Field::createArcher() {
@@ -248,7 +248,7 @@ void Field::createArcher() {
         archerStartPoint = generateRandomFreePoint();
     } while (enemies.count(archerStartPoint));
     enemies[archerStartPoint] = new Archer(dataManager->getModelCharacter("Archer"));
-    Logger::writeDataToFile("gameLogs", archerStartPoint, Logger::LoggingType::Info, "Сгенерирован скелет-лучник");
+    Logger::writeDataToFile("gameLogs", LoggerDataAdapter<CellPoint>(archerStartPoint,"Сгенерирован скелет-лучник"));
 }
 
 void Field::createGargoyle() {
@@ -257,7 +257,8 @@ void Field::createGargoyle() {
         gargoyleStartPoint = generateRandomFreePoint();
     } while (enemies.count(gargoyleStartPoint));
     enemies[gargoyleStartPoint] = new Gargoyle(dataManager->getModelCharacter("Gargoyle"));
-    Logger::writeDataToFile("gameLogs", gargoyleStartPoint, Logger::LoggingType::Info, "Сгенерирована гаргулья");
+    Logger::writeDataToFile("gameLogs", LoggerDataAdapter<CellPoint>(gargoyleStartPoint,"Сгенерирована горгулья"));
+
 }
 
 void Field::createRandomEnemy() {
@@ -288,7 +289,7 @@ CellPoint Field::generateRandomFreePoint() {
     return {x, y};
 }
 
-void Field::moveHero(CellPoint to) {
+bool Field::moveHero(CellPoint to) {
     auto cellInfo = getElem(to).getValue();
     if (cellInfo.getTypeCell() != TypeCell::WALL && cellInfo.getTypeObject() != TypeObject::ENEMY) {
         setElem(heroPos, CellObject(getElem(heroPos).getValue().getTypeCell(), TypeObject::NOTHING,
@@ -296,7 +297,9 @@ void Field::moveHero(CellPoint to) {
         setElem(to,
                 CellObject(getElem(to).getValue().getTypeCell(), TypeObject::HERO, getElem(to).getValue().isThing()));
         heroPos = to;
-    }
+        return true;
+    } else
+        return false;
 }
 
 void Field::moveEnemy(const CellPoint from, const CellPoint to) {

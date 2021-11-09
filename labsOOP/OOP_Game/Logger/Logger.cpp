@@ -10,7 +10,7 @@ Logger::~Logger() {
     logger = nullptr;
 }
 
-void Logger::setKeyOutputFile(std::string key, std::string filePath) {
+void Logger::setKeyOutputFile(const std::string& key, const std::string& filePath) {
     if (logger == nullptr) // должен быть создан объект, чтобы в конце вызывался деструктор при освобождении памяти
         throw -1;
     if (Logger::fileOutputs.count(key)) {
@@ -19,7 +19,7 @@ void Logger::setKeyOutputFile(std::string key, std::string filePath) {
     Logger::fileOutputs[key].open(filePath, std::ios_base::out);
 }
 
-void Logger::closeOutputFile(std::string key) {
+void Logger::closeOutputFile(const std::string& key) {
     if (Logger::fileOutputs.count(key)) {
         Logger::fileOutputs[key].close();
     }
@@ -39,10 +39,10 @@ Logger* Logger::getInstance() {
     return Logger::logger;
 }
 
-void Logger::writeMessageToConsole(std::string message, int typeMessage, std::ostream &output) {
+void Logger::writeMessageToConsole(const std::string& message, int typeMessage, std::ostream &output) {
     switch (typeMessage) {
         case LoggingType::Info:
-            output << LoggingColor::NONE << message << LoggingColor::NONE;
+            output << LoggingColor::NONE << "Info: " <<  message + "\n" << LoggingColor::NONE;
             break;
         case LoggingType::Warning:
             output << LoggingColor::YELLOW << "Warning: " + message + "\n" << LoggingColor::NONE;
@@ -55,7 +55,7 @@ void Logger::writeMessageToConsole(std::string message, int typeMessage, std::os
     }
 }
 
-void Logger::writeMessageToFile(std::string key, std::string message, int typeMessage) {
+void Logger::writeMessageToFile(const std::string& key, const std::string& message, int typeMessage) {
     if (!fileOutputs.count(key))
         return;
     switch (typeMessage) {
@@ -73,7 +73,7 @@ void Logger::writeMessageToFile(std::string key, std::string message, int typeMe
     }
 }
 
-void Logger::writeMessageInBoth(std::string key, std::string message, int typeMessage, std::ostream &output) {
+void Logger::writeMessageInBoth(const std::string& key, const std::string& message, int typeMessage, std::ostream &output) {
     writeMessageToFile(key, message, typeMessage);
     writeMessageToConsole(message, typeMessage, output);
 }

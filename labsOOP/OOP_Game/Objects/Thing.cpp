@@ -43,3 +43,7 @@ std::ostream &operator<<(std::ostream &os, const Thing &thing) {
     return os;
 }
 
+bool Thing::isVisualThing() const {
+    return this->thingObject == ThingObject::ARMOR || this->thingObject == ThingObject::SWORD;
+}
+

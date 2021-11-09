@@ -54,9 +54,9 @@ void FieldScreen::showStartingParamsAndGenerateField(DataManager *dataManager) {
                        [](int val, int height, int width) {
                            return (double) val / (width * height) * 100 > PERCENT_WALLS;
                        });
-        Logger::writeDataToFile("gameLogs", height, Logger::LoggingType::Info, "Высота поля");
-        Logger::writeDataToFile("gameLogs", width, Logger::LoggingType::Info, "Ширина поля");
-        Logger::writeDataToFile("gameLogs", countWalls, Logger::LoggingType::Info, "Количество непроходимых клеток поля");
+        Logger::writeDataToFile("gameLogs", LoggerDataAdapter<int>(height, "Высота поля"));
+        Logger::writeDataToFile("gameLogs", LoggerDataAdapter<int>(width, "Ширина поля"));
+        Logger::writeDataToFile("gameLogs", LoggerDataAdapter<int>(countWalls, "Количество непроходимых клеток поля"));
         std::cout << "Значения приняты. Сгенерировать поле? (y - сгенерировать / n - изменить параметры) ";
         char acceptSymbol = getchar(); // считываем лишний символ после ввода числа непроходимых клеток
         while (true) {
@@ -106,19 +106,19 @@ bool FieldScreen::registerMovement(char &action, std::string &gameAction) {
     switch (tolower(action)) {
         case MoveSide::UP:
             requestMoveHero(heroPos, CellPoint(heroPos.getX(), heroPos.getY() - 1), gameAction);
-            Logger::writeDataToFile("gameLogs", heroPos, Logger::LoggingType::Info, "Герой сменил позицию");
+            Logger::writeDataToFile("gameLogs", LoggerDataAdapter<CellPoint>(heroPos, "Герой сменил позицию"));
             return true;
         case MoveSide::DOWN:
             requestMoveHero(heroPos, CellPoint(heroPos.getX(), heroPos.getY() + 1), gameAction);
-            Logger::writeDataToFile("gameLogs", heroPos, Logger::LoggingType::Info, "Герой сменил позицию");
+            Logger::writeDataToFile("gameLogs", LoggerDataAdapter<CellPoint>(heroPos, "Герой сменил позицию"));
             return true;
         case MoveSide::LEFT:
             requestMoveHero(heroPos, CellPoint(heroPos.getX() - 1, heroPos.getY()), gameAction);
-            Logger::writeDataToFile("gameLogs", heroPos, Logger::LoggingType::Info, "Герой сменил позицию");
+            Logger::writeDataToFile("gameLogs", LoggerDataAdapter<CellPoint>(heroPos, "Герой сменил позицию"));
             return true;
         case MoveSide::RIGHT:
             requestMoveHero(heroPos, CellPoint(heroPos.getX() + 1, heroPos.getY()), gameAction);
-            Logger::writeDataToFile("gameLogs", heroPos, Logger::LoggingType::Info, "Герой сменил позицию");
+            Logger::writeDataToFile("gameLogs", LoggerDataAdapter<CellPoint>(heroPos, "Герой сменил позицию"));
             return true;
         case MoveSide::FINISH_OUT:
             if (requestMoveOut()) {
@@ -156,23 +156,26 @@ bool FieldScreen::registerMovement(char &action, std::string &gameAction) {
 void FieldScreen::requestMoveHero(CellPoint from, CellPoint to, std::string &gameAction) {
     if (!field->field.isValidIndexes(to.getX(), to.getY()))
         return;
+    bool moved = false;
     if (field->getHeroPos() == from) {
-        field->moveHero(to);
+        moved = field->moveHero(to);
     }
-    auto thingOnPos = thingsManager.checkCellHasSmth(to);
-    if (thingOnPos.first) {
-        gameAction = generateTitleForThingAction(thingOnPos.second.getNameThing(), thingOnPos.second.getProperties());
+    if (moved) {
+        auto thingOnPos = thingsManager.checkCellHasSmth(to);
+        if (thingOnPos.first) {
+            gameAction = generateTitleForThingAction(thingOnPos.second.getNameThing(), thingOnPos.second.getProperties());
+        }
+        if (field->getElem(to).getValue().getTypeCell() == TypeCell::FINISH)
+            gameAction = "Вы на финишной клетке. Закончить игру? Нажмите q, чтобы выйти.\n";
     }
-    if (field->getElem(to).getValue().getTypeCell() == TypeCell::FINISH)
-        gameAction = "Вы на финишной клетке. Закончить игру? Нажмите q, чтобы выйти.\n";
 }
 
 void FieldScreen::requestTakeObject(CellPoint point) {
     auto thingOnPos = thingsManager.checkCellHasSmth(point);
     if (thingOnPos.first) {
         field->getHero().takeThing(thingOnPos.second);
-        Logger::writeDataToFile("gameLogs", thingOnPos.second, Logger::LoggingType::Info, "Герой подобрал предмет");
-        if (thingOnPos.second.isActiveThing()) {
+        Logger::writeDataToFile("gameLogs", LoggerDataAdapter<Thing>(thingOnPos.second, "Герой подобрал предмет"));
+        if (thingOnPos.second.isVisualThing()) {
             field->getHero().resetModel(
                     dataManager->getHero(
                             field->getHero().hasThing(ThingObject::SWORD),
@@ -188,18 +191,21 @@ int FieldScreen::requestStartFight(CellPoint point) {
         for (int j = -MainHero::MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY; j <= MainHero::MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY; ++j) {
             if (field->enemies.count(CellPoint(point.getX() + i, point.getY() + j))) {
                 system("clear");
-                Logger::writeDataToFile("gameLogs",
-                                        dynamic_cast<Character&>(this->field->getEnemyFromPoint(CellPoint(point.getX() + i, point.getY() + j))),
-                                        Logger::LoggingType::Info,"Герой начал сражение с врагом");
+
+                Logger::writeDataToFile("gameLogs", LoggerDataAdapter<Character&>(
+                        dynamic_cast<Character&>(this->field->getEnemyFromPoint(CellPoint(point.getX() + i, point.getY() + j))),
+                        "Герой начал сражение с врагом"
+                        ));
                 auto fightScreen = FightScreen(this->field->getHero(), this->field->getEnemyFromPoint(
                         CellPoint(point.getX() + i, point.getY() + j)), this->dataManager);
                 statusFight = fightScreen.fightObserver();
                 if (statusFight == FightStatus::KILLED_ENEMY) {
                     this->field->killEnemy(CellPoint(point.getX() + i, point.getY() + j));
                 } else if (statusFight == FightStatus::KILLED_HERO) {
-                    Logger::writeDataToFile("gameLogs",
-                                            dynamic_cast<Character&>(this->field->getEnemyFromPoint(CellPoint(point.getX() + i, point.getY() + j))),
-                                            Logger::LoggingType::Info,"Герой побеждён врагом");
+                    Logger::writeDataToFile("gameLogs", LoggerDataAdapter<Character&>(
+                            dynamic_cast<Character&>(this->field->getEnemyFromPoint(CellPoint(point.getX() + i, point.getY() + j))),
+                            "Герой побеждён врагом"
+                    ));
                 }
                 return statusFight;
             }

@@ -107,16 +107,25 @@ using namespace std;
 //
 //}
 
+//class A {
+//public:
+//    static std::map<int, int> a;
+//};
+//
+//std::map<int,int> A::a;
 class A {
 public:
-    static std::map<int, int> a;
+    int a;
+    explicit A(int a) : a(a){}
 };
 
-std::map<int,int> A::a;
+void func(const A &str) {
+    std::cout << str.a;
+}
 
 int main() { //проверено
-        A::a[4] = 3;
-
+//        A::a[4] = 3;
+    func(A(5));
 
 //    ModelDataReader reader;
 //    auto data = reader.readXMLModelData("../Data/ObjectModel.xml");

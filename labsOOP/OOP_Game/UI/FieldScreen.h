@@ -3,7 +3,7 @@
 #include "../Objects/ThingsManager.h"
 #include "../Tools/Printer.h"
 #include "FightScreen.h"
-#include "../Tools/Logger.hpp"
+#include "../Logger/Logger.hpp"
 
 enum MoveSide{
     UP = 'w',

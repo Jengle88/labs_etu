@@ -1,5 +1,5 @@
 #include "Grid.h"
-#include "Logger.hpp"
+#include "../Logger/Logger.hpp"
 
 Grid::Grid() {
     height = 0;

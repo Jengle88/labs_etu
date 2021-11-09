@@ -1,5 +1,5 @@
 #include "DataManager.h"
-#include "../Tools/Logger.hpp"
+#include "../Logger/Logger.hpp"
 
 DataManager::DataManager() {
     levelToThings[1] = {
