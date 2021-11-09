@@ -105,28 +105,34 @@ struct ResultTask {
 ResultTask* solve(int n, int m, const std::vector<int> &arrayDuration) {
 //    int n, m;
 //    std::cin >> n >> m;
-    PriorityLimitMinQueue queue(n);
+    PriorityLimitMinQueue minQueue(n);
     auto* res = new ResultTask[m];
     int duration;
+    int inputIndex = 0;
     int indexDuration = 0;
-    for (int i = 0; i < n; ++i) {
-        if (i < m) {
-//        std::cin >> duration;
+    for (int cntBusyProcess = 0; cntBusyProcess < n; ++cntBusyProcess) {
+        if (inputIndex < m) {
+//            std::cin >> duration;
             duration = arrayDuration[indexDuration++];
-            queue.push(ParallelProcess(i, duration));
-            res[i] = ResultTask(i, 0);
+            res[inputIndex] = ResultTask(cntBusyProcess, 0);
+            if (duration == 0) { // если задача выполняется мгновенно
+                cntBusyProcess--;
+            } else {
+                minQueue.push(ParallelProcess(cntBusyProcess, duration));
+            }
+            inputIndex++;
         } else { // количество задач меньше или равно количеству процессов
             break;
         }
     }
-    for (int i = n; i < m;) { // количество задач больше, чем процессов
-        int currentTime = queue.top().finishTime;
-        while (queue.top().finishTime == currentTime && i < m) { // если в один момент освободилось больше одного процесса
-            auto topProcess = queue.pop();
+    for (int i = inputIndex; i < m;) { // количество задач больше, чем процессов
+        int currentTime = minQueue.top().finishTime;
+        while (minQueue.top().finishTime == currentTime && i < m) { // если в один момент освободилось больше одного процесса
+            auto topProcess = minQueue.pop();
             res[i] = ResultTask(topProcess.idProcess, currentTime); // начало новой задачи
 //            std::cin >> duration;
             duration = arrayDuration[indexDuration++];
-            queue.push(ParallelProcess(topProcess.idProcess, currentTime + duration));
+            minQueue.push(ParallelProcess(topProcess.idProcess, currentTime + duration));
             i++;
         }
     }

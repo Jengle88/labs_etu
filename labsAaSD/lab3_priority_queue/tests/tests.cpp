@@ -21,6 +21,9 @@ TEST_CASE("mainTests", "[test]")
     REQUIRE(testCase(1, 2, {5, 2}, {ResultTask(0, 0), ResultTask(0, 5)}));
     REQUIRE(testCase(2, 2, {5, 2}, {ResultTask(0, 0), ResultTask(1, 0)}));
     REQUIRE(testCase(3, 2, {5, 2}, {ResultTask(0, 0), ResultTask(1, 0)}));
+    REQUIRE(testCase(2, 5, {0, 2, 0, 2, 0}, {ResultTask(0, 0), ResultTask(0, 0), ResultTask(1, 0), ResultTask(1, 0), ResultTask(0, 2)}));
+    REQUIRE(testCase(3, 5, {0, 0, 0, 0, 0}, {ResultTask(0, 0), ResultTask(0, 0), ResultTask(0, 0), ResultTask(0, 0), ResultTask(0, 0)}));
+    REQUIRE(testCase(3, 5, {0, 0, 1, 2, 2}, {ResultTask(0, 0), ResultTask(0, 0), ResultTask(0, 0), ResultTask(1, 0), ResultTask(2, 0)}));
     REQUIRE(testCase(3, 10, {1, 1, 1, 2, 2, 2, 3, 3, 3, 4}, {
             ResultTask(0, 0), ResultTask(1, 0), ResultTask(2, 0), ResultTask(0, 1), ResultTask(1, 1), ResultTask(2, 1),
             ResultTask(0, 3), ResultTask(1, 3), ResultTask(2, 3), ResultTask(0, 6)

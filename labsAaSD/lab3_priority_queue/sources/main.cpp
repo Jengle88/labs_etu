@@ -107,16 +107,22 @@ void solve() {
     PriorityLimitMinQueue queue(n);
     auto* res = new ResultTask[m];
     int duration;
-    for (int i = 0; i < n; ++i) {
-        if (i < m) {
+    int inputIndex = 0;
+    for (int cntBusyProcess = 0; cntBusyProcess < n; ++cntBusyProcess) {
+        if (inputIndex < m) {
             std::cin >> duration;
-            queue.push(ParallelProcess(i, duration));
-            res[i] = ResultTask(i, 0);
+            res[inputIndex] = ResultTask(cntBusyProcess, 0);
+            if (duration == 0) { // если задача выполняется мгновенно
+                cntBusyProcess--;
+            } else {
+                queue.push(ParallelProcess(cntBusyProcess, duration));
+            }
+            inputIndex++;
         } else { // количество задач меньше или равно количеству процессов
             break;
         }
     }
-    for (int i = n; i < m;) { // количество задач больше, чем процессов
+    for (int i = inputIndex; i < m;) { // количество задач больше, чем процессов
         int currentTime = queue.top().finishTime;
         while (queue.top().finishTime == currentTime && i < m) { // если в один момент освободилось больше одного процесса
             auto topProcess = queue.pop();
