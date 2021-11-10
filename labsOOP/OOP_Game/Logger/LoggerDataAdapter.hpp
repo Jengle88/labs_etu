@@ -4,7 +4,7 @@
 #include <utility>
 
 template<typename T>
-class LoggerDataAdapter { // Паттерн: Адаптер
+class LoggerDataAdapter {
     T data;
     std::string message;
 public:

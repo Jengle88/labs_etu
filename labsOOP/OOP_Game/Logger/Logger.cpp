@@ -1,6 +1,6 @@
 #include "Logger.hpp"
 
-std::map<std::string, std::fstream> Logger::fileOutputs;
+std::unordered_map<std::string, std::fstream> Logger::fileOutputs;
 Logger* Logger::logger = nullptr;
 
 Logger::Logger() {}
