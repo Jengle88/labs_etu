@@ -9,8 +9,9 @@ struct ParallelProcess {
     explicit ParallelProcess(int idProcess = -1, int finishTime = -1): idProcess(idProcess), finishTime(finishTime) {}
 };
 
+template<typename T>
 class BinaryLimitMinHeap {
-    ParallelProcess *array;
+    T *array;
     int maxSize;
     int currentSize;
 
@@ -41,9 +42,9 @@ class BinaryLimitMinHeap {
         }
     }
 public:
-    explicit BinaryLimitMinHeap(int maxSize, int arrSize = 0, const ParallelProcess *arr = nullptr) {
+    explicit BinaryLimitMinHeap(int maxSize, int arrSize = 0, const T *arr = nullptr) {
         this->maxSize = maxSize;
-        array = new ParallelProcess[maxSize];
+        array = new T[maxSize];
         currentSize = 0;
         if (arr != nullptr) {
             currentSize = std::min(arrSize, maxSize); // если массив инициализации меньше или больше допустимого
@@ -58,21 +59,21 @@ public:
     ~BinaryLimitMinHeap() {
         delete[] array;
     }
-    void add(ParallelProcess val) {
+    void add(T val) {
         array[currentSize++] = val;
         int i = currentSize - 1;
         siftUp(i);
     }
-    ParallelProcess getMin() const {
+    T getMin() const {
         if (currentSize > 0)
             return array[0];
         else
             throw -1;
     }
-    ParallelProcess popMin() {
+    T popMin() {
         if (currentSize <= 0)
             throw -1;
-        ParallelProcess res = array[0];
+        T res = array[0];
         array[0] = array[currentSize - 1];
         currentSize--;
         siftDown(0);
@@ -80,17 +81,18 @@ public:
     }
 };
 
+template<typename T>
 class PriorityLimitMinQueue {
-    BinaryLimitMinHeap heap;
+    BinaryLimitMinHeap<T> heap;
 public:
-    explicit PriorityLimitMinQueue(int size, int arrSize = 0, ParallelProcess* arr = nullptr) : heap(BinaryLimitMinHeap(size, arrSize, arr)) {}
-    ParallelProcess top() const {
+    explicit PriorityLimitMinQueue(int size, int arrSize = 0, T* arr = nullptr) : heap(BinaryLimitMinHeap<T>(size, arrSize, arr)) {}
+    T top() const {
         return heap.getMin();
     }
-    ParallelProcess pop() {
+    T pop() {
         return heap.popMin();
     }
-    void push(ParallelProcess val) {
+    void push(T val) {
         heap.add(val);
     }
 };
@@ -105,7 +107,7 @@ struct ResultTask {
 ResultTask* solve(int n, int m, const std::vector<int> &arrayDuration) {
 //    int n, m;
 //    std::cin >> n >> m;
-    PriorityLimitMinQueue minQueue(n);
+    PriorityLimitMinQueue<ParallelProcess> minQueue(n);
     auto* res = new ResultTask[m];
     int duration;
     int inputIndex = 0;
