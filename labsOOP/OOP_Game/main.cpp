@@ -16,8 +16,8 @@ int main() {
  *
  *  Паттерны 3:
  *  1) Адаптер - файл LoggerDataAdapter.hpp
- *  2) Декоратор - файл Logger.hpp
- *  3) Мост? - файл Logger.hpp
- *  4) Синглтон - файл Logger.hpp
+ *  2) Декоратор - файл LoggerDefault.hpp
+ *  3) Мост? - файл LoggerDefault.hpp
+ *  4) Синглтон - файл LoggerDefault.hpp
  *
  */

@@ -113,19 +113,25 @@ using namespace std;
 //};
 //
 //std::map<int,int> A::a;
-class A {
-public:
-    int a;
-    explicit A(int a) : a(a){}
-};
-
-void func(const A &str) {
-    std::cout << str.a;
-}
+//class A {
+//public:
+//    int a;
+//    explicit A(int a) : a(a){}
+//};
+//
+//void func(const A &str) {
+//    std::cout << str.a;
+//}
 
 int main() { //проверено
 //        A::a[4] = 3;
-    func(A(5));
+//    func(A(5));
+
+    auto out = fstream("logs.txt", ios_base::out);
+    ostream* os = &out;
+    *os << "Hi32524525q";
+    out.close();
+
 
 //    ModelDataReader reader;
 //    auto data = reader.readXMLModelData("../Data/ObjectModel.xml");
