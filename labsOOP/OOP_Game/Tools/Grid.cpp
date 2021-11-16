@@ -1,5 +1,4 @@
 #include "Grid.h"
-#include "../Logger/LoggerDefault.hpp"
 #include "../Logger/LoggerDataAdapter.hpp"
 #include "../Logger/LoggerPull.h"
 

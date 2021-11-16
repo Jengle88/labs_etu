@@ -1,5 +1,4 @@
 #include "DataManager.h"
-#include "../Logger/LoggerDefault.hpp"
 #include "../Logger/LoggerPull.h"
 
 DataManager::DataManager() {

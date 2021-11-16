@@ -1,5 +1,4 @@
 #include "Field.h"
-#include "../../Logger/LoggerDefault.hpp"
 #include "../../Logger/LoggerPull.h"
 
 Field::Field(int height, int width, DataManager *dataManager, CellPoint start, CellPoint finish, Grid grid) {

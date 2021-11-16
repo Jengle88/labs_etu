@@ -1,5 +1,4 @@
 #include "FieldIterator.h"
-#include "../Logger/LoggerDefault.hpp"
 #include "../Logger/LoggerPull.h"
 
 Cell FieldIterator::getElem() const {

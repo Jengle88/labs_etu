@@ -1,5 +1,4 @@
 #include "ThingsManager.h"
-#include "../Logger/LoggerDefault.hpp"
 #include "../Logger/LoggerPull.h"
 
 ThingsManager::ThingsManager(Field *field, std::map<CellPoint, Thing> visualThingsPlaces,

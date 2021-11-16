@@ -1,7 +1,6 @@
 #pragma once
 #include <string>
 #include "UI/FieldScreen.h"
-#include "Logger/LoggerDefault.hpp"
 #include "Logger/ConsoleLogger.h"
 #include "Logger/LoggerPull.h"
 
