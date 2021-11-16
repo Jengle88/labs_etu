@@ -8,6 +8,6 @@ void Logger::writePostInfo(const std::string &info) {
     *output << info;
 }
 
-void Logger::writeStyle(const std::string &style) {
+void Logger::writeStyleInfo(const std::string &style) {
     *output << style;
 }

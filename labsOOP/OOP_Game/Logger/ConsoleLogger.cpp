@@ -13,6 +13,6 @@ void ConsoleLogger::writePostInfo(const std::string &info) {
     Logger::writePostInfo(info);
 }
 
-void ConsoleLogger::writeStyle(const std::string &style) {
-    Logger::writeStyle(style);
+void ConsoleLogger::writeStyleInfo(const std::string &style) {
+    Logger::writeStyleInfo(style);
 }

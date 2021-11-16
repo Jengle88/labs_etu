@@ -12,24 +12,25 @@ class LoggerPull {
         static constexpr char RED[] = "\033[0;31m";
         static constexpr char YELLOW[] = "\033[0;33m";
     };
-    static std::unordered_map<std::string, Logger*> loggers;
-    static LoggerPull* loggerPull;
-    LoggerPull();
-public:
-    struct LoggingType {
-        static constexpr char Info[] = "Info";
-        static constexpr char Warning[] = "Warning";
-        static constexpr char Error[] = "Error";
-    };
-private:
     struct LoggerTypeData {
         const char* type = nullptr;
         const char* color = nullptr;
         LoggerTypeData(){};
         LoggerTypeData(const char* type, const char* color): type(type), color(color) {}
     };
+
+    static std::unordered_map<std::string, Logger*> loggers;
     static std::unordered_map<const char*, LoggerTypeData> loggerTypeData;
+    static LoggerPull* loggerPull;
+    LoggerPull();
+
 public:
+    struct LoggingType {
+        static constexpr char Info[] = "Info";
+        static constexpr char Warning[] = "Warning";
+        static constexpr char Error[] = "Error";
+    };
+
     ~LoggerPull();
     static LoggerPull* getInstance();
     static void addFileLogger(const std::string& key, FileLogger *fileLogger);

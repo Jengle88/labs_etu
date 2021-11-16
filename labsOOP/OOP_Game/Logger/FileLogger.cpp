@@ -18,7 +18,6 @@ void FileLogger::writePostInfo(const std::string &info) {
     Logger::writePostInfo(info);
 }
 
-void FileLogger::writeStyle(const std::string &style) {
-//    Logger::writeStyle(style);
+void FileLogger::writeStyleInfo(const std::string &style) {
 }
 

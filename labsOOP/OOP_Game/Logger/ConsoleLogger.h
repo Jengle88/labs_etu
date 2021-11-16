@@ -8,6 +8,6 @@ public:
 protected:
     void writePreInfo(const std::string &info) override;
     void writePostInfo(const std::string &info) override;
-    void writeStyle(const std::string &style) override;
+    void writeStyleInfo(const std::string &style) override;
 };
 
