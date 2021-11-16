@@ -1,5 +1,6 @@
 #include "ThingsManager.h"
 #include "../Logger/LoggerDefault.hpp"
+#include "../Logger/LoggerPull.h"
 
 ThingsManager::ThingsManager(Field *field, std::map<CellPoint, Thing> visualThingsPlaces,
                              std::map<CellPoint, Thing> healthThingsPlaces)
@@ -68,5 +69,5 @@ void ThingsManager::deleteThingFromField(CellPoint point) {
         visualThingsPlaces.erase(point);
     else if (healthThingsPlaces.count(point))
         healthThingsPlaces.erase(point);
-    LoggerDefault::writeDataToFile("gameLogs", LoggerDataAdapter<CellPoint>(point, "Предмет на данной позиции был взят героем"), LoggerDefault::LoggingType::Info);
+    LoggerPull::writeData("gameLogs", LoggerDataAdapter<CellPoint>(point, "Предмет на данной позиции был взят героем"));
 }

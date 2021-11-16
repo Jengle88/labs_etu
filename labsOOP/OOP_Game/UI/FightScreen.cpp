@@ -1,4 +1,5 @@
 #include "FightScreen.h"
+#include "../Logger/LoggerPull.h"
 
 FightScreen::FightScreen(MainHero &mainHero, Enemy &enemy, DataManager* dataManager) : mainHero(mainHero),
                                                              dataManager(dataManager),
@@ -9,7 +10,7 @@ FightScreen::FightScreen(MainHero &mainHero, Enemy &enemy, DataManager* dataMana
 
 int FightScreen::fightObserver() {
     showUpdatedScreen();
-    LoggerDefault::writeMessageToFile("gameLogs", "Отображён экран боя");
+    LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Отображён экран боя"));
     Printer::printHealthInfo(std::max(mainHero.getHealth(), 0.0),
                              std::max(dynamic_cast<Character &>(enemy).getHealth(), 0.0));
     while (mainHero.checkPositiveHealth() && enemy.checkPositiveHealth()) {
@@ -26,7 +27,7 @@ int FightScreen::fightObserver() {
 
     if (mainHero.checkPositiveHealth()) {
         mainHero.writeKill(enemy.getName());
-        LoggerDefault::writeDataToFile("gameLogs", LoggerDataAdapter<Character>(dynamic_cast<Character&>(enemy),"Герой победил данного врага"), LoggerDefault::LoggingType::Info);
+        LoggerPull::writeData("gameLogs",LoggerDataAdapter<Character>(dynamic_cast<Character&>(enemy), "Герой победил данного врага"));
         std::cout << "Вы победили!\nНажмите любую кнопку, чтобы продолжить.";
         getchar();
     }
@@ -53,14 +54,14 @@ bool FightScreen::requestAction(char action) {
     std::vector<double> enemyAttackInfo;
     switch (tolower(action)) {
         case FightAction::ATTACK:
-            LoggerDefault::writeMessageToFile("gameLogs", "Герой произвёл атаку");
+            LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Герой произвёл атаку"));
             heroAttackInfo = mainHero.requestAttack(dynamic_cast<Character &>(enemy));
             Printer::printAttackInfo("Hero", heroAttackInfo[0], heroAttackInfo[1] > 0, heroAttackInfo[2] > 0);
-            LoggerDefault::writeDataToFile("gameLogs", LoggerDataAdapter<MainHero&>(mainHero, "Статус героя"), LoggerDefault::LoggingType::Info);
+            LoggerPull::writeData("gameLogs",LoggerDataAdapter<MainHero&>(mainHero, "Статус героя"));
 //            usleep(COOl_DOWN); // Торможение на 0.3 сек
             enemyAttackInfo = enemy.requestAttack(dynamic_cast<Character &>(mainHero));
             Printer::printAttackInfo(enemy.getName(), enemyAttackInfo[0], enemyAttackInfo[1] > 0, enemyAttackInfo[2] > 0);
-            LoggerDefault::writeDataToFile("gameLogs", LoggerDataAdapter<Character&>(dynamic_cast<Character&>(enemy), "Статус врага"), LoggerDefault::LoggingType::Info);
+            LoggerPull::writeData("gameLogs",LoggerDataAdapter<Character&>(dynamic_cast<Character&>(enemy), "Статус врага"));
             break;
         case FightAction::USE:
             std::cin >> numberThing;

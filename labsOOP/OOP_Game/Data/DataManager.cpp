@@ -1,5 +1,6 @@
 #include "DataManager.h"
 #include "../Logger/LoggerDefault.hpp"
+#include "../Logger/LoggerPull.h"
 
 DataManager::DataManager() {
     levelToThings[1] = {
@@ -49,7 +50,9 @@ std::vector<std::string> DataManager::getHero(bool withSword, bool withArmor) co
     std::move(heroHead.begin(),  heroHead.end(), std::back_inserter(mainHeroModel));
     std::move(heroBody.begin(),  heroBody.end(), std::back_inserter(mainHeroModel));
     std::move(heroLegs.begin(),  heroLegs.end(), std::back_inserter(mainHeroModel));
-    LoggerDefault::writeMessageToFile("gameLogs", "Данные о модели героя получены");
+    LoggerPull::writeData("gameLogs",
+                          LoggerDataAdapter<std::string>("Данные о модели героя получены"));
+
     return mainHeroModel;
 }
 

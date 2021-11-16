@@ -1,12 +1,15 @@
 #include "FieldIterator.h"
 #include "../Logger/LoggerDefault.hpp"
+#include "../Logger/LoggerPull.h"
 
 Cell FieldIterator::getElem() const {
     if (rootGrid->isValidIndexes(posX, posY))
         return rootGrid->getElem(CellPoint(posX, posY));
     else {
-        LoggerDefault::writeMessageToFile("gameLogs", std::string("Были переданы невалидные индексы в getElem, файл") + __FILE__, LoggerDefault::LoggingType::Error);
-        throw -1;
+        LoggerPull::writeData("gameLogs",
+                              LoggerDataAdapter<std::string>("Были переданы невалидные индексы в getElem"),
+                              LoggerPull::LoggingType::Error);
+        throw std::invalid_argument("Были переданы невалидные индексы в getElem");
     }
 }
 

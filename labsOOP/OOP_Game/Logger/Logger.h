@@ -9,6 +9,7 @@ protected:
     virtual void writePreInfo(const std::string &info);
     virtual void writePostInfo(const std::string &info);
     virtual void writeStyle(const std::string &style);
+    Logger(){}
 public:
     template<typename T>
     void write(const LoggerDataAdapter<T> &data, const std::string &styleBegin = "", const std::string &styleEnd = "",

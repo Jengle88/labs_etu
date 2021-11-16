@@ -1,4 +1,5 @@
 #include "FieldScreen.h"
+#include "../Logger/LoggerPull.h"
 
 FieldScreen::FieldScreen() {
     field = nullptr;
@@ -54,9 +55,9 @@ void FieldScreen::showStartingParamsAndGenerateField(DataManager *dataManager) {
                        [](int val, int height, int width) {
                            return (double) val / (width * height) * 100 > PERCENT_WALLS;
                        });
-        LoggerDefault::writeDataToFile("gameLogs", LoggerDataAdapter<int>(height, "Высота поля"));
-        LoggerDefault::writeDataToFile("gameLogs", LoggerDataAdapter<int>(width, "Ширина поля"));
-        LoggerDefault::writeDataToFile("gameLogs", LoggerDataAdapter<int>(countWalls, "Количество непроходимых клеток поля"));
+        LoggerPull::writeData("gameLogs",LoggerDataAdapter<int>(height, "Высота поля"));
+        LoggerPull::writeData("gameLogs",LoggerDataAdapter<int>(width, "Ширина поля"));
+        LoggerPull::writeData("gameLogs",LoggerDataAdapter<int>(countWalls, "Количество непроходимых клеток поля"));
         std::cout << "Значения приняты. Сгенерировать поле? (y - сгенерировать / n - изменить параметры) ";
         char acceptSymbol = getchar(); // считываем лишний символ после ввода числа непроходимых клеток
         while (true) {
@@ -72,25 +73,25 @@ void FieldScreen::showStartingParamsAndGenerateField(DataManager *dataManager) {
     }
     srand(time(0));
     field = new Field(height, width, dataManager);
-    LoggerDefault::writeMessageToFile("gameLogs", "Поле было создано");
+    LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Поле было создано"));
     this->dataManager = dataManager;
     if (field->generateFullField(countWalls)) {
-        LoggerDefault::writeMessageToFile("gameLogs", "Поле было полностью сгенерировано");
+        LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Поле было полностью сгенерировано"));
         field->setHeroOnStart();
         field->createHero();
         thingsManager = ThingsManager(field);
-        LoggerDefault::writeMessageToFile("gameLogs", "Информация о герое получена");
+        LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Информация о герое получена"));
     } else {
         std::cout << "Не удалось сгенерировать поле!\n";
-        LoggerDefault::writeMessageToFile("gameLogs", std::string("Не удалось сгенерировать поле") + __FILE__, LoggerDefault::LoggingType::Error);
+        LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Не удалось сгенерировать поле"), LoggerPull::LoggingType::Error);
         throw -1;
     }
 }
 
 void FieldScreen::showUpdatedScreen() const {
     if (!this->field->getStatusStartFinish() || !this->field->getStatusWay()) {
-        LoggerDefault::writeMessageToFile("gameLogs", std::string("Попытка отобразить не до конца сгенерированное поле, файл") + __FILE__, LoggerDefault::LoggingType::Error);
-        throw -1;
+        LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Попытка отобразить не до конца сгенерированное поле"), LoggerPull::LoggingType::Error);
+        throw std::logic_error("Попытка отобразить не до конца сгенерированное поле, файл");
     }
     Printer::printFullField(field);
 }
@@ -106,25 +107,21 @@ bool FieldScreen::registerMovement(char &action, std::string &gameAction) {
     switch (tolower(action)) {
         case MoveSide::UP:
             requestMoveHero(heroPos, CellPoint(heroPos.getX(), heroPos.getY() - 1), gameAction);
-            LoggerDefault::writeDataToFile("gameLogs", LoggerDataAdapter<CellPoint>(heroPos, "Герой сменил позицию"));
             return true;
         case MoveSide::DOWN:
             requestMoveHero(heroPos, CellPoint(heroPos.getX(), heroPos.getY() + 1), gameAction);
-            LoggerDefault::writeDataToFile("gameLogs", LoggerDataAdapter<CellPoint>(heroPos, "Герой сменил позицию"));
             return true;
         case MoveSide::LEFT:
             requestMoveHero(heroPos, CellPoint(heroPos.getX() - 1, heroPos.getY()), gameAction);
-            LoggerDefault::writeDataToFile("gameLogs", LoggerDataAdapter<CellPoint>(heroPos, "Герой сменил позицию"));
             return true;
         case MoveSide::RIGHT:
             requestMoveHero(heroPos, CellPoint(heroPos.getX() + 1, heroPos.getY()), gameAction);
-            LoggerDefault::writeDataToFile("gameLogs", LoggerDataAdapter<CellPoint>(heroPos, "Герой сменил позицию"));
             return true;
         case MoveSide::FINISH_OUT:
             if (requestMoveOut()) {
                 sleep(3);
                 action = MoveSide::EXIT;
-                LoggerDefault::writeMessageToFile("gameLogs", "Игра окончена, игрок достиг финишной точки");
+                LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Игра окончена, игрок достиг финишной точки"));
                 return false;
             }
             else
@@ -138,14 +135,14 @@ bool FieldScreen::registerMovement(char &action, std::string &gameAction) {
                 std::cout << "Вы проиграли.\n";
                 Printer::printHeroAchievement(field->getHero().getCountKilledEnemy());
                 std::cout << "Нажмите любую кнопку, чтобы выйти...\n";
-                LoggerDefault::writeMessageToFile("gameLogs", "Игра окончена, игрок проиграл");
+                LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Игра окончена, игрок проиграл"));
                 getchar();
                 action = MoveSide::EXIT;
                 return false;
             }
             return true;
         case MoveSide::EXIT:
-            LoggerDefault::writeMessageToFile("gameLogs", "Игра окончена, игрок вышел из игры");
+            LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Игра окончена, игрок вышел из игры"));
             return false;
         default:
             std::cout << "Команда не распознана.\n";
@@ -161,6 +158,7 @@ void FieldScreen::requestMoveHero(CellPoint from, CellPoint to, std::string &gam
         moved = field->moveHero(to);
     }
     if (moved) {
+        LoggerPull::writeData("gameLogs",LoggerDataAdapter<CellPoint>(to, "Герой сменил позицию"));
         auto thingOnPos = thingsManager.checkCellHasSmth(to);
         if (thingOnPos.first) {
             gameAction = generateTitleForThingAction(thingOnPos.second.getNameThing(), thingOnPos.second.getProperties());
@@ -174,7 +172,7 @@ void FieldScreen::requestTakeObject(CellPoint point) {
     auto thingOnPos = thingsManager.checkCellHasSmth(point);
     if (thingOnPos.first) {
         field->getHero().takeThing(thingOnPos.second);
-        LoggerDefault::writeDataToFile("gameLogs", LoggerDataAdapter<Thing>(thingOnPos.second, "Герой подобрал предмет"));
+        LoggerPull::writeData("gameLogs",LoggerDataAdapter<Thing>(thingOnPos.second, "Герой подобрал предмет"));
         if (thingOnPos.second.isVisualThing()) {
             field->getHero().resetModel(
                     dataManager->getHero(
@@ -191,21 +189,18 @@ int FieldScreen::requestStartFight(CellPoint point) {
         for (int j = -MainHero::MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY; j <= MainHero::MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY; ++j) {
             if (field->enemies.count(CellPoint(point.getX() + i, point.getY() + j))) {
                 system("clear");
-
-                LoggerDefault::writeDataToFile("gameLogs", LoggerDataAdapter<Character&>(
+                LoggerPull::writeData("gameLogs",LoggerDataAdapter<Character&>(
                         dynamic_cast<Character&>(this->field->getEnemyFromPoint(CellPoint(point.getX() + i, point.getY() + j))),
-                        "Герой начал сражение с врагом"
-                        ));
+                        "Герой начал сражение с врагом"));
                 auto fightScreen = FightScreen(this->field->getHero(), this->field->getEnemyFromPoint(
                         CellPoint(point.getX() + i, point.getY() + j)), this->dataManager);
                 statusFight = fightScreen.fightObserver();
                 if (statusFight == FightStatus::KILLED_ENEMY) {
                     this->field->killEnemy(CellPoint(point.getX() + i, point.getY() + j));
                 } else if (statusFight == FightStatus::KILLED_HERO) {
-                    LoggerDefault::writeDataToFile("gameLogs", LoggerDataAdapter<Character&>(
+                    LoggerPull::writeData("gameLogs",LoggerDataAdapter<Character&>(
                             dynamic_cast<Character&>(this->field->getEnemyFromPoint(CellPoint(point.getX() + i, point.getY() + j))),
-                            "Герой побеждён врагом"
-                    ));
+                            "Герой побеждён врагом"));
                 }
                 return statusFight;
             }
@@ -245,18 +240,18 @@ void FieldScreen::showStartFieldScreen(DataManager *dataManager) {
 }
 
 void FieldScreen::gameStatusObserver() {
-    LoggerDefault::writeMessageToFile("gameLogs", "Начало процесса наблюдения за игрой");
+    LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Начало процесса наблюдения за игрой"));
     char action = getchar(); // считываем перенос строки
     std::cout << "Для выхода введите ` и нажмите enter.\n";
     showUpdatedScreen();
     Printer::printInventory(&(this->field->getHero()));
-    LoggerDefault::writeMessageToFile("gameLogs", "Поле и инвентарь персонажа отображены в консоли");
+    LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Поле и инвентарь персонажа отображены в консоли"));
     while (action != MoveSide::EXIT) {
         std::string gameAction = "";
         bool goodMovement = registerMovement(action, gameAction);
         field->moveEnemies();
         if (goodMovement) {
-            LoggerDefault::writeMessageToFile("gameLogs", "Смещение врагов");
+            LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Смещение врагов"));
             std::system("clear");
             field->createRandomEnemy();
             std::cout << "Для выхода введите ` и нажмите enter.\n";
