@@ -24,6 +24,8 @@ void LoggerPull::addFileLogger(const std::string &key, FileLogger *fileLogger) {
 }
 
 void LoggerPull::addConsoleLogger(const std::string &key, ConsoleLogger *consoleLogger) {
+    if (loggerPull == nullptr)
+        throw std::invalid_argument("Логгер является nullptr");
     LoggerPull::loggers[key] = consoleLogger;
 }
 
@@ -40,9 +42,6 @@ void LoggerPull::closeAllFileStreams() {
     }
     LoggerPull::loggers.clear();
 }
-
-
-
 
 
 LoggerPull::~LoggerPull() {

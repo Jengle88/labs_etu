@@ -1,7 +1,7 @@
 #pragma once
 
 #include <ostream>
-#include "LoggerDataAdapter.hpp"
+#include "LoggerDataAdapter.h"
 
 class Logger {
 protected:

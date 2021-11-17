@@ -1,5 +1,5 @@
 #include "Grid.h"
-#include "../Logger/LoggerDataAdapter.hpp"
+#include "../Logger/LoggerDataAdapter.h"
 #include "../Logger/LoggerPull.h"
 
 Grid::Grid() {

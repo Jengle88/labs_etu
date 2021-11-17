@@ -4,7 +4,6 @@ ConsoleLogger::ConsoleLogger(std::ostream *out) {
     output = out;
 }
 
-// TODO добавить вывод LoggerTypeData из LoggerPull
 void ConsoleLogger::writePreInfo(const std::string &info) {
     Logger::writePreInfo(info);
 }
