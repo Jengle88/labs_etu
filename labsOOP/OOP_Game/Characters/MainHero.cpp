@@ -24,31 +24,31 @@ void MainHero::recalcCharacteristics(std::map<std::string, double> thingProperti
 }
 
 void MainHero::takeThing(Thing thing) {
-    auto duplicateThing = std::find_if(things.begin(), things.end(),
+    auto duplicateThing = std::find_if(inventory.begin(), inventory.end(),
                                        [&thing](Thing& inventoryThing){return inventoryThing.getThingObject() == thing.getThingObject() && !inventoryThing.isActiveThing();});
-    if (duplicateThing != things.end()){
+    if (duplicateThing != inventory.end()){
         recalcCharacteristics(duplicateThing->getInverseValueProperties());
         *duplicateThing = thing;
         recalcCharacteristics(duplicateThing->getProperties());
         return;
     }
-    things.push_back(thing);
+    inventory.push_back(thing);
     if (!thing.isActiveThing())
         recalcCharacteristics(thing.getProperties());
 }
 
 void MainHero::ejectThing(int pos) {
-    auto prevThing = things[pos];
-    things.erase(things.begin() + pos);
+    auto prevThing = inventory[pos];
+    inventory.erase(inventory.begin() + pos);
     if (!prevThing.isActiveThing())
         recalcCharacteristics(prevThing.getInverseValueProperties());
 }
 
 bool MainHero::useThing(int pos) {
-    if (0 <= pos && pos < things.size()) {
-        if (things[pos].isActiveThing()) {
-            auto properties = things[pos].getProperties();
-            things.erase(things.begin() + pos);
+    if (0 <= pos && pos < inventory.size()) {
+        if (inventory[pos].isActiveThing()) {
+            auto properties = inventory[pos].getProperties();
+            inventory.erase(inventory.begin() + pos);
             recalcCharacteristics(properties);
             return true;
         }
@@ -57,8 +57,8 @@ bool MainHero::useThing(int pos) {
 }
 
 bool MainHero::hasThing(int thingObject) const {
-    return std::find_if(things.begin(),  things.end(),
-                        [&thingObject](const Thing& thing) {return thingObject == thing.getThingObject();}) != things.end();
+    return std::find_if(inventory.begin(), inventory.end(),
+                        [&thingObject](const Thing& thing) {return thingObject == thing.getThingObject();}) != inventory.end();
 }
 
 void MainHero::writeKill(std::string enemyName) {
@@ -66,7 +66,7 @@ void MainHero::writeKill(std::string enemyName) {
 }
 
 const std::vector<Thing> &MainHero::getInventory() const {
-    return things;
+    return inventory;
 }
 
 std::map<std::string, int> &MainHero::getCountKilledEnemy() {
@@ -83,7 +83,7 @@ bool MainHero::checkPositiveHealth() const {
 
 MainHero * MainHero::clone() const {
     auto res = new MainHero(model, name, health, attackPower, protection, luck);
-    res->things = things;
+    res->inventory = inventory;
     res->countKilledEnemy = countKilledEnemy;
     return res;
 }

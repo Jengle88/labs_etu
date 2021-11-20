@@ -14,8 +14,8 @@ class Character {
 protected:
     struct CharacterProperties{
         constexpr static char CHARACTER_NAME[] = "Character";
-        constexpr static double CHARACTER_CRITICAL_FACTOR = 1.75;
-        constexpr static double CHARACTER_DODGE_FACTOR = 0.6;
+        constexpr static double CHARACTER_CRITICAL_FACTOR = 1.75; // множитель увеличения урона при критической атаке
+        constexpr static double CHARACTER_DODGE_FACTOR = 0.6; // чем меньше, тем меньше будет урон после частичного уклонения
         constexpr static double CHARACTER_MAX_HEALTH = 100;
         constexpr static double CHARACTER_DAMAGE = 1;
         constexpr static double CHARACTER_PROTECTION = 1;

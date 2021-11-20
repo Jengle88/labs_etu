@@ -31,7 +31,6 @@ bool Monster::willFollowToHero() const {
 
 std::vector<CellPoint> Monster::makeMove(CellPoint from, CellPoint heroPos) const { // Паттерн: Strategy
     std::vector<CellPoint> res;
-    res.reserve(4);
     if (Monster::inRangeVisibility(from, heroPos) && willFollowToHero()) {
         int deltaX = -(from.getX() - heroPos.getX()) /
                      std::max(1, abs(from.getX() - heroPos.getX()));

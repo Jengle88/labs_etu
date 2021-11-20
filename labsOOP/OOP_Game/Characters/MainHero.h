@@ -8,7 +8,7 @@
 
 
 class MainHero : public Character {
-    std::vector<Thing> things;
+    std::vector<Thing> inventory;
     std::map<std::string, int> countKilledEnemy;
     bool requestProtect(double attackPower);
     bool requestDodge() const override;

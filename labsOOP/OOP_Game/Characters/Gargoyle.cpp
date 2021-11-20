@@ -31,7 +31,6 @@ bool Gargoyle::willFollowToHero() const {
 
 std::vector<CellPoint> Gargoyle::makeMove(CellPoint from, CellPoint heroPos) const { // Паттерн: Strategy
     std::vector<CellPoint> res;
-    res.reserve(8);
     if (Gargoyle::inRangeVisibility(from, heroPos) && willFollowToHero()) {
         int deltaX = -(from.getX() - heroPos.getX()) /
                      std::max(1, abs(from.getX() - heroPos.getX()));

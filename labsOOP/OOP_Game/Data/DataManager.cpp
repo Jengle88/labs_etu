@@ -3,12 +3,12 @@
 
 DataManager::DataManager() {
     levelToThings[1] = {
-            Thing("Железный нагрудник", {{"damage",0},{"protection", 1},{"luck", 0}, {"health", 0}}, ThingObject::ARMOR),
-            Thing("Железный меч", {{"damage", 1.2},{"protection", 0},{"luck", 0}, {"health", 0}}, ThingObject::SWORD)
+            Thing("Железный нагрудник", {{"damage",0},{"protection", 1},{"luck", 0}, {"health", 0}}, ThingObject::ARMOR, 1),
+            Thing("Железный меч", {{"damage", 1.2},{"protection", 0},{"luck", 0}, {"health", 0}}, ThingObject::SWORD, 1)
     };
     levelToThings[2] = {
-            Thing("Стальной нагрудник", {{"damage",0},{"protection", 1.3},{"luck", 0}, {"health", 0}}, ThingObject::ARMOR),
-            Thing("Стальной меч", {{"damage", 1.6},{"protection", 0},{"luck", 0}, {"health", 0}}, ThingObject::SWORD)
+            Thing("Стальной нагрудник", {{"damage",0},{"protection", 1.3},{"luck", 0}, {"health", 0}}, ThingObject::ARMOR, 2),
+            Thing("Стальной меч", {{"damage", 1.6},{"protection", 0},{"luck", 0}, {"health", 0}}, ThingObject::SWORD, 2)
     };
 }
 
@@ -17,7 +17,7 @@ Thing DataManager::getThing(int level, int typeThing) {
 }
 
 Thing DataManager::getHealthThing() const {
-    return Thing("Лечебный эликсир", {{"damage", 0},{"protection", 0},{"luck", 0}, {"health", 20}}, ThingObject::POTION_HEAL);
+    return Thing("Лечебный эликсир", {{"damage", 0},{"protection", 0},{"luck", 0}, {"health", 20}}, ThingObject::POTION_HEAL, 0);
 }
 
 std::vector<std::string> DataManager::getModelHeroHead() const {
