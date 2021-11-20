@@ -1,6 +1,8 @@
 #include "ThingsManager.h"
 #include "../Logger/LoggerPull.h"
+//#include "../Rules/Presets/MiddlePreset.h"
 #include "../Rules/Presets/EasyPreset.h"
+#include "../Rules/GlobalRules.h"
 
 ThingsManager::ThingsManager(Field *field, std::map<CellPoint, Thing> visualThingsPlaces,
                              std::map<CellPoint, Thing> healthThingsPlaces)

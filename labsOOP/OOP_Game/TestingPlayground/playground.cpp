@@ -123,14 +123,45 @@ using namespace std;
 //    std::cout << str.a;
 //}
 
+class A {
+public:
+    A(int i) {
+        a = i;
+    }
+
+    int a;
+};
+
+class B: public A {
+
+public:
+    B(int i) : A(i) {
+        a = i;
+    }
+};
+
+template<A & a>
+class C {
+public:
+    void f() {
+        std::cout << a.a;
+    }
+};
+
 int main() { //проверено
+    static B b(5);
+    static A a = dynamic_cast<A&>(b);
+    C<a> c;
+    c.f();
+
+
 //        A::a[4] = 3;
 //    func(A(5));
 
-    auto out = fstream("logs.txt", ios_base::out);
-    ostream* os = &out;
-    *os << "Hi32524525q";
-    out.close();
+//    auto out = fstream("logs.txt", ios_base::out);
+//    ostream* os = &out;
+//    *os << "Hi32524525q";
+//    out.close();
 
 
 //    ModelDataReader reader;
