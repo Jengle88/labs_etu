@@ -69,7 +69,7 @@ const std::vector<Thing> &MainHero::getInventory() const {
     return inventory;
 }
 
-const std::map<std::string, int> &MainHero::getCountKilledEnemy() const {
+std::map<std::string, int> &MainHero::getCountKilledEnemy() {
     return countKilledEnemy;
 }
 

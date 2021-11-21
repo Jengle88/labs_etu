@@ -16,7 +16,7 @@ class ThingsManager {
     std::map<CellPoint, Thing> nonVisualThingsPlaces;
     int levelThings = 1;
     void generateVisualThing(DataManager *dataManager);
-    void checkThingsLevel(const std::map<std::string, int> &achievements);
+    void checkThingsLevel(std::map<std::string, int> &achievements);
     void generateHealthThing(DataManager *dataManager);
 public:
 

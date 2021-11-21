@@ -3,7 +3,7 @@
 #include "CharacterRules.h"
 #include "ThingRules.h"
 
-class RulesPresets {
+class RulesPreset {
     std::vector<CharacterRules> charactersParams;
     std::vector<ThingRules> thingParams;
     std::map<std::string, int> cntGenerateEnemyOnField;
@@ -12,7 +12,7 @@ class RulesPresets {
     int timeBetweenGenerateVisualThing;
     int timeBetweenGenerateHealThing;
 public:
-    RulesPresets(const std::vector<CharacterRules> &charactersParams, const std::vector<ThingRules> &thingParams,
+    RulesPreset(const std::vector<CharacterRules> &charactersParams, const std::vector<ThingRules> &thingParams,
                  const std::map<std::string, int> &cntGenerateEnemyOnField,
                  const std::map<std::string, int> &cntKilledEnemy, int levelAllThings,
                  int timeBetweenGenerateVisualThing, int timeBetweenGenerateHealThing)

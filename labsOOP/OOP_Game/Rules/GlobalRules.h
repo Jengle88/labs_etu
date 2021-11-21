@@ -1,36 +1,36 @@
 #pragma once
 #include <vector>
 #include <map>
-#include "RulesPresets.h"
+#include "RulesPreset.h"
 #include "../Characters/MainHero.h"
 
-template<RulesPresets & rulesPreset>
+template<RulesPreset & rulesPreset>
 class GlobalRules {
 public:
     const std::vector<CharacterRules>& getCharacterRules() const;
     const std::vector<ThingRules>& getThingRules() const;
     const std::map<std::string, int>& getCntGenerateEnemyOnField() const;
-    bool checkFinishCondition(const MainHero& mainHero);
+    bool checkFinishCondition(MainHero& mainHero);
 
 };
 
-template<RulesPresets &rulesPreset>
+template<RulesPreset &rulesPreset>
 const std::vector<CharacterRules> &GlobalRules<rulesPreset>::getCharacterRules() const {
     return rulesPreset.getCharactersParams();
 }
 
-template<RulesPresets &rulesPreset>
+template<RulesPreset &rulesPreset>
 const std::vector<ThingRules> &GlobalRules<rulesPreset>::getThingRules() const {
     return rulesPreset.getThingParams();
 }
 
-template<RulesPresets &rulesPreset>
+template<RulesPreset &rulesPreset>
 const std::map<std::string, int> &GlobalRules<rulesPreset>::getCntGenerateEnemyOnField() const {
     return rulesPreset.getCntGenerateEnemyOnField();
 }
 
-template<RulesPresets &rulesPreset>
-bool GlobalRules<rulesPreset>::checkFinishCondition(const MainHero &mainHero) {
+template<RulesPreset &rulesPreset>
+bool GlobalRules<rulesPreset>::checkFinishCondition(MainHero &mainHero) {
     auto cntKilled = mainHero.getCountKilledEnemy();
     auto requiredCntKilled = rulesPreset.getCntKilledEnemy();
     for (const auto &killed: cntKilled) {

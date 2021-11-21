@@ -63,9 +63,14 @@ void Printer::printAttackInfo(std::string nameCharacter, double damage, bool was
               (wasCritical ? "нанёс критический урон.\n" : "не нанёс критический урон.\n");
 }
 
-void Printer::printHeroAchievement(const std::map<std::string, int> &achievement) {
-    std::cout << "Вы убили " << achievement.at("Monster") << " монстров.\n";
-    std::cout << "Вы убили " << achievement.at("Archer") << " скелетов-лучников.\n";
-    std::cout << "Вы убили " << achievement.at("Gargoyle") << " горгулий.\n";
+void Printer::printHeroAchievement(std::map<std::string, int> &achievement) {
+    std::cout << "Вы убили " << achievement["Monster"] << " монстров.\n";
+    std::cout << "Вы убили " << achievement["Archer"] << " скелетов-лучников.\n";
+    std::cout << "Вы убили " << achievement["Gargoyle"] << " горгулий.\n";
+}
+
+void Printer::printMessage(const std::string &message) {
+    std::cout << message;
+
 }
 

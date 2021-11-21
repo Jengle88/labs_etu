@@ -1,9 +1,9 @@
 #include "../CharacterRules.h"
-#include "../RulesPresets.h"
+#include "../RulesPreset.h"
 #include "../ThingRules.h"
 
 
-class MiddlePreset : public RulesPresets {
+class MiddlePreset : public RulesPreset {
 public:
     MiddlePreset(const std::vector<CharacterRules> &charactersParams = {
             CharacterRules("MainHero", 100, 1.3, 1.6, 1.3, 1, 1.75, 0.6, -1, 1, -1),
@@ -16,27 +16,27 @@ public:
                                  {"damage",     0},
                                  {"protection", 1.3},
                                  {"luck",       0},
-                                 {"health",     0}}, 1, true, ThingObject::ARMOR),
+                                 {"health",     0}}, 1, ThingObject::ARMOR),
                          ThingRules("Железный меч", {
                                  {"damage",     1.5},
                                  {"protection", 0},
                                  {"luck",       0},
-                                 {"health",     0}}, 1, true, ThingObject::SWORD),
+                                 {"health",     0}}, 1, ThingObject::SWORD),
                          ThingRules("Стальной нагрудник", {
                                  {"damage",     0},
                                  {"protection", 1.7},
                                  {"luck",       0},
-                                 {"health",     0}}, 2, true, ThingObject::ARMOR),
+                                 {"health",     0}}, 2, ThingObject::ARMOR),
                          ThingRules("Стальной меч", {
                                  {"damage",     1.9},
                                  {"protection", 0},
                                  {"luck",       0},
-                                 {"health",     0}}, 2, true, ThingObject::SWORD),
+                                 {"health",     0}}, 2, ThingObject::SWORD),
                          ThingRules("Лечебный эликсир", {
                                  {"damage",     0},
                                  {"protection", 0},
                                  {"luck",       0},
-                                 {"health",     30}}, 0, false, ThingObject::POTION_HEAL)
+                                 {"health",     30}}, 0, ThingObject::POTION_HEAL)
                  },
                  const std::map<std::string, int> &cntGenerateEnemyOnField = {
                          {"Monster",  3},
@@ -51,7 +51,7 @@ public:
                  int levelAllThings = 1,
                  int timeBetweenGenerateVisualThing = 13,
                  int timeBetweenGenerateHealThing = 10
-    ) : RulesPresets(
+    ) : RulesPreset(
             charactersParams, thingParams, cntGenerateEnemyOnField, cntKilledEnemy, levelAllThings,
             timeBetweenGenerateVisualThing, timeBetweenGenerateHealThing) {}
 };

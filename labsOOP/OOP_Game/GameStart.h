@@ -6,6 +6,7 @@
 #include "Rules/Presets/EasyPreset.h"
 #include "Rules/GlobalRules.h"
 #include "Rules/Presets/MiddlePreset.h"
+#include "GameHandler.h"
 
 
 class GameStart {
@@ -13,19 +14,22 @@ public:
     static void startGameMode(const std::string& modeName) {
         if (modeName == "game") {
             std::setlocale(LC_ALL, "");
-            // TODO убрать
-            static RulesPresets rules2 = static_cast<RulesPresets>(MiddlePreset());
-            auto rules = GlobalRules<rules2>();
-            //
             LoggerPull *loggerPull = LoggerPull::getInstance();
             LoggerPull::addFileLogger("gameLogs", new FileLogger("logs.txt"));
-            auto *dataManager = new DataManager();
-            dataManager->uploadModels();
-            LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Модели загружены"));
-            FieldScreen mainScreen;
-            mainScreen.showStartFieldScreen(dataManager);
-            mainScreen.gameStatusObserver();
-            delete dataManager;
+            static RulesPreset difficulty = static_cast<RulesPreset>(EasyPreset());
+            static auto gameRules = GlobalRules<difficulty>();
+            GameHandler<difficulty, gameRules> gameHandler;
+
+            gameHandler.start();
+            gameHandler.observe();
+//            auto *dataManager = new DataManager(gameRules.getThingRules());
+//            dataManager->uploadModels();
+//            LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Модели загружены"));
+//            FieldScreen mainScreen;
+//            mainScreen.showStartFieldScreen(dataManager);
+//            mainScreen.gameStatusObserver();
+//            delete dataManager;
+            // end
             delete loggerPull;
         }
         else if (modeName == "features") {

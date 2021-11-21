@@ -1,5 +1,6 @@
 #include "FightScreen.h"
 #include "../Logger/LoggerPull.h"
+#include "../GameHandler.h"
 
 FightScreen::FightScreen(MainHero &mainHero, Enemy &enemy, DataManager* dataManager) : mainHero(mainHero),
                                                              dataManager(dataManager),
@@ -69,7 +70,7 @@ bool FightScreen::requestAction(char action) {
                 std::cout << "Предмета нет или он не может быть использован\n";
             }
             break;
-        case MoveSide::EXIT:
+        case HeroKeyControl::EXIT:
             return false;
     }
     std::cin.ignore(32767, '\n');

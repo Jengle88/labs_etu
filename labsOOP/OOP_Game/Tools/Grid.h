@@ -9,10 +9,10 @@
 #define DOWN_LIMIT_WIDTH (int)5
 
 class Grid {
-	int height;
-	int width;
+	int height = 0;
+	int width = 0;
 	std::vector<std::vector<Cell>> grid;
-    bool isValidIndexes(int x, int y) const;
+
     bool isValidXPos(int x) const;
     bool isValidYPos(int y) const;
     bool isValidSizes(int height, int width) const;
@@ -37,4 +37,5 @@ public:
 	void setElem(CellPoint point, Cell cell);
 	Cell getElem(CellPoint point) const;
 
+    bool isValidIndexes(int x, int y) const;
 };

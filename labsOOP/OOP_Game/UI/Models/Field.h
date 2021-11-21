@@ -20,7 +20,11 @@
 
 class Field {
 	Grid field;
-	CellPoint start;
+public:
+    const Grid &getGrid() const;
+
+private:
+    CellPoint start;
 	CellPoint finish;
     CellPoint heroPos;
     MainHero hero;
@@ -75,6 +79,8 @@ public:
     void setHeroOnStart();
     MainHero& getHero();
     Enemy& getEnemyFromPoint(CellPoint point);
+    std::map<CellPoint, Enemy *> &getEnemies();
+
     void incCountSteps();
     long getCountSteps() const;
 

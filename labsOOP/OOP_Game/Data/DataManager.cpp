@@ -1,23 +1,25 @@
 #include "DataManager.h"
 #include "../Logger/LoggerPull.h"
+#include "../Rules/ThingRules.h"
 
-DataManager::DataManager() {
-    levelToThings[1] = {
-            Thing("Железный нагрудник", {{"damage",0},{"protection", 1},{"luck", 0}, {"health", 0}}, ThingObject::ARMOR, 1),
-            Thing("Железный меч", {{"damage", 1.2},{"protection", 0},{"luck", 0}, {"health", 0}}, ThingObject::SWORD, 1)
-    };
-    levelToThings[2] = {
-            Thing("Стальной нагрудник", {{"damage",0},{"protection", 1.3},{"luck", 0}, {"health", 0}}, ThingObject::ARMOR, 2),
-            Thing("Стальной меч", {{"damage", 1.6},{"protection", 0},{"luck", 0}, {"health", 0}}, ThingObject::SWORD, 2)
-    };
+DataManager::DataManager(const std::vector<ThingRules>& things) {
+    std::vector<Thing> thingsArray(things.size());
+    for (int i = 0; i < thingsArray.size(); ++i) {
+        thingsArray[i] = things[i].toThing();
+    }
+    uploadParamsThing(thingsArray);
 }
 
 Thing DataManager::getThing(int level, int typeThing) {
+    if (levelToThings.empty())
+        throw std::logic_error("Не загружены параметры предметов.");
     return levelToThings[level][typeThing];
 }
 
 Thing DataManager::getHealthThing() const {
-    return Thing("Лечебный эликсир", {{"damage", 0},{"protection", 0},{"luck", 0}, {"health", 20}}, ThingObject::POTION_HEAL, 0);
+    if (healThings.empty())
+        throw std::logic_error("Не загружены параметры лечебных предметов.");
+    return *healThings.begin();
 }
 
 std::vector<std::string> DataManager::getModelHeroHead() const {
@@ -51,7 +53,6 @@ std::vector<std::string> DataManager::getHero(bool withSword, bool withArmor) co
     std::move(heroLegs.begin(),  heroLegs.end(), std::back_inserter(mainHeroModel));
     LoggerPull::writeData("gameLogs",
                           LoggerDataAdapter<std::string>("Данные о модели героя получены"));
-
     return mainHeroModel;
 }
 
@@ -67,4 +68,14 @@ std::vector<std::string> DataManager::getModelCharacter(const std::string &chara
     if (modelsCharacter.count(character))
         return modelsCharacter[character];
     return {};
+}
+
+void DataManager::uploadParamsThing(const std::vector<Thing> &things) {
+    for (const auto & thing : things) {
+        if (thing.isHealThing()) {
+            healThings.push_back(thing);
+        } else {
+            levelToThings[thing.getLevelThing()].push_back(thing);
+        }
+    }
 }

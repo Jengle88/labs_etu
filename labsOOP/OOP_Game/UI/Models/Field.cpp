@@ -404,4 +404,12 @@ long Field::getCountSteps() const {
     return counterSteps;
 }
 
+std::map<CellPoint, Enemy *> &Field::getEnemies() {
+    return enemies;
+}
+
+const Grid &Field::getGrid() const {
+    return field;
+}
+
 
