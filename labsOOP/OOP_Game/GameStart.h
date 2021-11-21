@@ -16,20 +16,14 @@ public:
             std::setlocale(LC_ALL, "");
             LoggerPull *loggerPull = LoggerPull::getInstance();
             LoggerPull::addFileLogger("gameLogs", new FileLogger("logs.txt"));
+
             static RulesPreset difficulty = static_cast<RulesPreset>(EasyPreset());
             static auto gameRules = GlobalRules<difficulty>();
             GameHandler<difficulty, gameRules> gameHandler;
 
-            gameHandler.start();
+            gameHandler.generate();
             gameHandler.observe();
-//            auto *dataManager = new DataManager(gameRules.getThingRules());
-//            dataManager->uploadModels();
-//            LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Модели загружены"));
-//            FieldScreen mainScreen;
-//            mainScreen.showStartFieldScreen(dataManager);
-//            mainScreen.gameStatusObserver();
-//            delete dataManager;
-            // end
+
             delete loggerPull;
         }
         else if (modeName == "features") {

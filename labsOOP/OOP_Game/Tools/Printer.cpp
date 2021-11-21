@@ -74,3 +74,9 @@ void Printer::printMessage(const std::string &message) {
 
 }
 
+void Printer::printModels(const std::vector<std::string> &models) {
+    for (const auto &model: models) {
+        std::cout << model << '\n';
+    }
+}
+

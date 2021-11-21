@@ -18,16 +18,35 @@ enum HeroKeyControl{
     EXIT = '`'
 };
 
+enum FightStatus {
+    LEAVE_FIGHT = -1,
+    KILLED_ENEMY = 1,
+    KILLED_HERO = 0
+};
+
+enum FightHeroKeyAction {
+    ATTACK = 'a',
+    USE = 'e'
+};
+
 template<RulesPreset & preset, GlobalRules<preset> & rules>
 class GameHandler {
     DataManager* dataManager = nullptr;
     ThingsManager* thingsManager = nullptr;
     Field* field = nullptr;
     FieldScreen* mainScreen = nullptr;
+    FightScreen* fightScreen = nullptr;
     bool isReady = false;
     bool finishEnable = false;
 
 
+    char getKey() const {
+        char action = getchar();
+        std::cin.ignore(32767, '\n');
+        return action;
+    }
+
+    // для FieldScreen: start
     void generateField(int height, int width, int countWalls) {
         field = new Field(height, width, dataManager);
         if (field->generateFullField(countWalls)) {
@@ -43,12 +62,6 @@ class GameHandler {
         }
     }
 
-    char getKey() const {
-        char action = getchar();
-        std::cin.ignore(32767, '\n');
-        return action;
-    }
-
     void requestMoveHero(CellPoint from, CellPoint to, std::string &gameAction) {
         if (!field->getGrid().isValidIndexes(to.getX(), to.getY()))
             return;
@@ -60,8 +73,9 @@ class GameHandler {
             LoggerPull::writeData("gameLogs",LoggerDataAdapter<CellPoint>(to, "Герой сменил позицию"));
             auto thingOnPos = thingsManager->checkCellHasSmth(to);
             if (thingOnPos.first) {
-                gameAction = mainScreen->generateTitleForThingAction(thingOnPos.second.getNameThing(),
-                                                                     thingOnPos.second.getProperties(), HeroKeyControl::TAKE);
+                gameAction = mainScreen->createTitleForThingAction(thingOnPos.second.getNameThing(),
+                                                                   thingOnPos.second.getProperties(),
+                                                                   HeroKeyControl::TAKE);
             }
             if (field->getElem(to).getValue().getTypeCell() == TypeCell::FINISH)
                 gameAction = "Вы на финишной клетке. Закончить игру? Нажмите q, чтобы выйти.\n";
@@ -100,9 +114,18 @@ class GameHandler {
                     LoggerPull::writeData("gameLogs",LoggerDataAdapter<Character&>(
                             dynamic_cast<Character&>(this->field->getEnemyFromPoint(CellPoint(point.getX() + i, point.getY() + j))),
                             "Герой начал сражение с врагом"));
-                    auto fightScreen = FightScreen(this->field->getHero(), this->field->getEnemyFromPoint(
-                            CellPoint(point.getX() + i, point.getY() + j)), this->dataManager);
-                    statusFight = fightScreen.fightObserver();
+
+
+
+                    fightScreen = new FightScreen(this->field->getHero().getModel(), this->field->getEnemyFromPoint(
+                            CellPoint(point.getX() + i, point.getY() + j)).getModel()/*, this->dataManager*/);
+                    statusFight = fightStatusObserver(this->field->getHero(), this->field->getEnemyFromPoint(
+                            CellPoint(point.getX() + i, point.getY() + j))); // fightScreen->fightObserver();
+                    delete fightScreen;
+                    fightScreen = nullptr;
+
+
+
                     if (statusFight == FightStatus::KILLED_ENEMY) {
                         this->field->killEnemy(CellPoint(point.getX() + i, point.getY() + j));
                     } else if (statusFight == FightStatus::KILLED_HERO) {
@@ -169,19 +192,20 @@ class GameHandler {
         return false;
     }
 
-    void gameStatusObserver() {
-        LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Начало процесса наблюдения за игрой"));
+    void fieldStatusObserver() {
+        LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Начало процесса наблюдения за игрой"));
         char action = getchar(); // считываем перенос строки
         mainScreen->showMessage("Для выхода введите ` и нажмите enter.\n");
         mainScreen->showUpdatedScreen(field);
         mainScreen->showInventory(&(field->getHero()));
-        LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Поле и инвентарь персонажа отображены в консоли"));
+        LoggerPull::writeData("gameLogs",
+                              LoggerDataAdapter<std::string>("Поле и инвентарь персонажа отображены в консоли"));
         while (action != HeroKeyControl::EXIT) {
             std::string gameAction = "";
             bool goodMovement = registerMovement(action, gameAction);
             field->moveEnemies();
             if (goodMovement) {
-                LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Смещение врагов"));
+                LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Смещение врагов"));
                 std::system("clear");
                 field->createRandomEnemy();
                 mainScreen->showMessage("Для выхода введите ` и нажмите enter.\n");
@@ -193,20 +217,64 @@ class GameHandler {
         }
         mainScreen->clearScreen();
     }
+    // end
+
+// для FightScreen: start
+    int fightStatusObserver(MainHero& mainHero, Enemy & enemy) {
+        fightScreen->showUpdatedScreen(mainHero);
+        LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Отображён экран боя"));
+        fightScreen->showHealthInfo(mainHero, enemy);
+        while (mainHero.checkPositiveHealth() && enemy.checkPositiveHealth()) {
+            char action = getchar();
+            fightScreen->clearScreen();
+            if (!requestFightAction(action, mainHero, enemy)) {
+                getchar(); // считываем перенос строки
+                return FightStatus::LEAVE_FIGHT;
+            }
+            fightScreen->showUpdatedScreen(mainHero);
+            fightScreen->showHealthInfo(mainHero, enemy);
+        }
+        if (mainHero.checkPositiveHealth()) {
+            mainHero.writeKill(enemy.getName());
+            LoggerPull::writeData("gameLogs",LoggerDataAdapter<Character>(dynamic_cast<Character&>(enemy), "Герой победил данного врага"));
+            fightScreen->showMessage("Вы победили!\nНажмите любую кнопку, чтобы продолжить.");
+            getchar();
+        }
+        return mainHero.checkPositiveHealth();
+    }
+
+    bool requestFightAction(char action, MainHero& mainHero, Enemy& enemy) {
+        int numberThing = -1;
+        std::vector<double> heroAttackInfo;
+        std::vector<double> enemyAttackInfo;
+        switch (tolower(action)) {
+            case FightHeroKeyAction::ATTACK:
+                LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Герой произвёл атаку"));
+                heroAttackInfo = mainHero.requestAttack(dynamic_cast<Character&>(enemy));
+                fightScreen->showAttackInfo("Hero", heroAttackInfo[0], heroAttackInfo[1] > 0, heroAttackInfo[2] > 0);
+                LoggerPull::writeData("gameLogs",LoggerDataAdapter<MainHero&>(mainHero, "Статус героя"));
+                enemyAttackInfo = enemy.requestAttack(dynamic_cast<Character &>(mainHero));
+                fightScreen->showAttackInfo(enemy.getName(), enemyAttackInfo[0], enemyAttackInfo[1] > 0, enemyAttackInfo[2] > 0);
+                LoggerPull::writeData("gameLogs",LoggerDataAdapter<Character&>(dynamic_cast<Character&>(enemy), "Статус врага"));
+                break;
+            case FightHeroKeyAction::USE:
+                std::cin >> numberThing;
+                if (!mainHero.useThing(numberThing - 1)) {
+                    fightScreen->showMessage("Предмета нет или он не может быть использован\n");
+//                std::cout << "Предмета нет или он не может быть использован\n";
+                }
+                break;
+            case HeroKeyControl::EXIT:
+                return false;
+        }
+        std::cin.ignore(32767, '\n');
+        return true;
+    }
+    // end
 
 public:
     GameHandler() {
         dataManager = new DataManager(rules.getThingRules());
-    }
-
-    void start() {
-        srand(time(0));
-        dataManager->uploadModels();
-        LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Модели загружены"));
-        mainScreen = new FieldScreen();
-        auto [height, width, countWalls] = mainScreen->showStartFieldScreen(dataManager);
-        generateField(height, width, countWalls);
-        isReady = true;
     }
 
     virtual ~GameHandler() {
@@ -216,9 +284,19 @@ public:
         delete thingsManager;
     }
 
+    void generate() {
+        srand(time(0));
+        dataManager->uploadModels();
+        LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Модели загружены"));
+        mainScreen = new FieldScreen();
+        auto [height, width, countWalls] = mainScreen->showStartFieldScreen(dataManager);
+        generateField(height, width, countWalls);
+        isReady = true;
+    }
+
     void observe() {
         if (isReady) {
-            gameStatusObserver();
+            fieldStatusObserver();
             LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Начался процесс наблюдения за игрой"));
         } else {
             LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Попытка начать наблюдение при незавершённом поле"), LoggerPull::LoggingType::Error);

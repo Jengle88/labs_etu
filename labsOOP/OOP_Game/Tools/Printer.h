@@ -11,4 +11,5 @@ public:
     static void printAttackInfo(std::string nameCharacter, double damage, bool wasDodge, bool wasCritical);
     static void printHeroAchievement(std::map<std::string, int>& achievement);
     static void printMessage(const std::string& message);
+    static void printModels(const std::vector<std::string> &models);
 };
