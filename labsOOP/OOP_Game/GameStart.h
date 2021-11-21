@@ -3,12 +3,20 @@
 #include "UI/FieldScreen.h"
 #include "Logger/ConsoleLogger.h"
 #include "Logger/LoggerPull.h"
+#include "Rules/Presets/EasyPreset.h"
+#include "Rules/GlobalRules.h"
+#include "Rules/Presets/MiddlePreset.h"
+
 
 class GameStart {
 public:
     static void startGameMode(const std::string& modeName) {
         if (modeName == "game") {
             std::setlocale(LC_ALL, "");
+            // TODO убрать
+            static RulesPresets rules2 = static_cast<RulesPresets>(MiddlePreset());
+            auto rules = GlobalRules<rules2>();
+            //
             LoggerPull *loggerPull = LoggerPull::getInstance();
             LoggerPull::addFileLogger("gameLogs", new FileLogger("logs.txt"));
             auto *dataManager = new DataManager();

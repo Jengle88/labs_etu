@@ -1,8 +1,5 @@
 #include "ThingsManager.h"
 #include "../Logger/LoggerPull.h"
-//#include "../Rules/Presets/MiddlePreset.h"
-#include "../Rules/Presets/EasyPreset.h"
-#include "../Rules/GlobalRules.h"
 
 ThingsManager::ThingsManager(Field *field, std::map<CellPoint, Thing> visualThingsPlaces,
                              std::map<CellPoint, Thing> healthThingsPlaces)
@@ -28,9 +25,9 @@ void ThingsManager::generateVisualThing(DataManager *dataManager) {
     }
 }
 
-void ThingsManager::checkThingsLevel(std::map<std::string, int> &achievements) {
-    if (levelThings == 1 && achievements["Monster"] >= 3 && achievements["Archer"] >= 1 &&
-        achievements["Gargoyle"] >= 1) {
+void ThingsManager::checkThingsLevel(const std::map<std::string, int> &achievements) {
+    if (levelThings == 1 && achievements.at("Monster") >= 3 && achievements.at("Archer") >= 1 &&
+        achievements.at("Gargoyle") >= 1) {
         levelThings = 2;
     }
 }

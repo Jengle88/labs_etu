@@ -56,3 +56,7 @@ bool Thing::isVisualThing() const {
     return this->thingObject == ThingObject::ARMOR || this->thingObject == ThingObject::SWORD;
 }
 
+int Thing::getLevelThing() const {
+    return levelThing;
+}
+

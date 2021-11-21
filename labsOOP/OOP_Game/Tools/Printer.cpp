@@ -37,7 +37,7 @@ void Printer::printInventory(MainHero *hero, bool withSerialNumber) {
 }
 
 void Printer::printEnemyInfo(std::map<CellPoint, Enemy *> *enemies) {
-    int cntMonster = 0, cntArcher = 0, cntGargoyle = 0; // Не очень оптимизировано
+    int cntMonster = 0, cntArcher = 0, cntGargoyle = 0;
     for (const auto &enemy: *enemies) {
         if (enemy.second->getName() == "Monster") {
             cntMonster++;
@@ -63,9 +63,9 @@ void Printer::printAttackInfo(std::string nameCharacter, double damage, bool was
               (wasCritical ? "нанёс критический урон.\n" : "не нанёс критический урон.\n");
 }
 
-void Printer::printHeroAchievement(std::map<std::string, int> &achievement) {
-    std::cout << "Вы убили " << achievement["Monster"] << " монстров.\n";
-    std::cout << "Вы убили " << achievement["Archer"] << " скелетов-лучников.\n";
-    std::cout << "Вы убили " << achievement["Gargoyle"] << " горгулий.\n";
+void Printer::printHeroAchievement(const std::map<std::string, int> &achievement) {
+    std::cout << "Вы убили " << achievement.at("Monster") << " монстров.\n";
+    std::cout << "Вы убили " << achievement.at("Archer") << " скелетов-лучников.\n";
+    std::cout << "Вы убили " << achievement.at("Gargoyle") << " горгулий.\n";
 }
 

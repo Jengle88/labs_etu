@@ -27,6 +27,7 @@ public:
     bool isHealThing() const;
     bool isVisualThing() const;
     int getThingObject() const;
+    int getLevelThing() const;
     std::map<std::string, double> getInverseValueProperties() const;
     friend std::ostream &operator<<(std::ostream &os, const Thing &thing);
 };

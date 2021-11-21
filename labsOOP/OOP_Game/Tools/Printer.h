@@ -9,5 +9,5 @@ public:
     static void printEnemyInfo(std::map<CellPoint, Enemy*> *enemies);
     static void printHealthInfo(double heroHealth, double enemyHealth);
     static void printAttackInfo(std::string nameCharacter, double damage, bool wasDodge, bool wasCritical);
-    static void printHeroAchievement(std::map<std::string, int>& achievement);
+    static void printHeroAchievement(const std::map<std::string, int>& achievement);
 };
