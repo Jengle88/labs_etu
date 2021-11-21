@@ -1,4 +1,16 @@
 #include "Gargoyle.h"
+std::string Gargoyle::GargoyleProperties::GARGOYLE_NAME;
+double Gargoyle::GargoyleProperties::GARGOYLE_CRITICAL_FACTOR;
+double Gargoyle::GargoyleProperties::GARGOYLE_DODGE_FACTOR;
+int Gargoyle::GargoyleProperties::GARGOYLE_RANGE_VISIBILITY;
+double Gargoyle::GargoyleProperties::GARGOYLE_PERCENT_FOR_FOLLOW_TO_HERO;
+int Gargoyle::GargoyleProperties::GARGOYLE_MOVE;
+double Gargoyle::GargoyleProperties::GARGOYLE_MAX_HEALTH;
+double Gargoyle::GargoyleProperties::GARGOYLE_DAMAGE;
+double Gargoyle::GargoyleProperties::GARGOYLE_PROTECTION;
+double Gargoyle::GargoyleProperties::GARGOYLE_LUCK;
+int Gargoyle::GargoyleProperties::GARGOYLE_CHANCE_TO_BE_GENERATE;
+
 
 Gargoyle::Gargoyle(std::vector<std::string> model, std::string name, double health, double attackPower, double protection, double luck)
             : Character(model, name, health, attackPower, protection, luck) {}
@@ -78,5 +90,21 @@ std::vector<std::string> Gargoyle::getModel() const {
 
 std::string Gargoyle::getName() const {
     return Character::getName();
+}
+
+void Gargoyle::setDefaultProperties(const std::string &name, double health, double attackPower, double protection,
+                                    double luck, int visibility, double criticalFactor, double dodgeFactor,
+                                    int percentForFollowToHero, int lengthMove, int chanceToBeGenerate) {
+    GargoyleProperties::GARGOYLE_NAME = name;
+    GargoyleProperties::GARGOYLE_MAX_HEALTH = health;
+    GargoyleProperties::GARGOYLE_PROTECTION = protection;
+    GargoyleProperties::GARGOYLE_DAMAGE = attackPower;
+    GargoyleProperties::GARGOYLE_LUCK = luck;
+    GargoyleProperties::GARGOYLE_RANGE_VISIBILITY = visibility;
+    GargoyleProperties::GARGOYLE_CRITICAL_FACTOR = criticalFactor;
+    GargoyleProperties::GARGOYLE_DODGE_FACTOR = dodgeFactor;
+    GargoyleProperties::GARGOYLE_PERCENT_FOR_FOLLOW_TO_HERO = percentForFollowToHero;
+    GargoyleProperties::GARGOYLE_MOVE = lengthMove;
+    GargoyleProperties::GARGOYLE_CHANCE_TO_BE_GENERATE = chanceToBeGenerate;
 }
 

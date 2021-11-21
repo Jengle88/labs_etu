@@ -4,25 +4,24 @@
 
 class Gargoyle: public Character, public Enemy {
     struct GargoyleProperties{
-        constexpr static char GARGOYLE_NAME[] = "Gargoyle";
-        constexpr static double GARGOYLE_CRITICAL_FACTOR = 2;
-        constexpr static double GARGOYLE_DODGE_FACTOR = 0.6;
-        constexpr static double GARGOYLE_RANGE_VISIBILITY = 5;
-        constexpr static double GARGOYLE_PERCENT_FOR_FOLLOW_TO_HERO = 70;
-        constexpr static double GARGOYLE_MOVE = 1;
-        constexpr static double GARGOYLE_MAX_HEALTH = 95;
-        constexpr static double GARGOYLE_DAMAGE = 2;
-        constexpr static double GARGOYLE_PROTECTION = 2;
-        constexpr static double GARGOYLE_LUCK = 0.75;
+        static std::string GARGOYLE_NAME;
+        static double GARGOYLE_CRITICAL_FACTOR;
+        static double GARGOYLE_DODGE_FACTOR;
+        static int GARGOYLE_RANGE_VISIBILITY;
+        static double GARGOYLE_PERCENT_FOR_FOLLOW_TO_HERO;
+        static int GARGOYLE_MOVE;
+        static double GARGOYLE_MAX_HEALTH;
+        static double GARGOYLE_DAMAGE;
+        static double GARGOYLE_PROTECTION;
+        static double GARGOYLE_LUCK;
+        static int GARGOYLE_CHANCE_TO_BE_GENERATE;
     };
-
     bool requestProtect(double attackPower) override;
     bool requestDodge() const override;
     bool isCriticalCase() const override;
     double calcReflectionArmor() const override;
     bool willFollowToHero() const override;
 public:
-
     Gargoyle(std::vector<std::string> model,
                 std::string name = GargoyleProperties::GARGOYLE_NAME,
                 double health = GargoyleProperties::GARGOYLE_MAX_HEALTH,
@@ -39,4 +38,9 @@ public:
     std::vector<std::string> getModel() const override;
     Gargoyle* clone() const override;
     bool checkPositiveHealth() const override;
+
+    static void
+    setDefaultProperties(const std::string &name, double health, double attackPower, double protection, double luck,
+                         int visibility, double criticalFactor, double dodgeFactor, int percentForFollowToHero,
+                         int lengthMove, int chanceToBeGenerate);
 };

@@ -4,17 +4,17 @@
 #include "ThingRules.h"
 
 class RulesPreset {
-    std::vector<CharacterRules> charactersParams;
-    std::vector<ThingRules> thingParams;
-    std::map<std::string, int> cntGenerateEnemyOnField;
-    std::map<std::string, int> cntKilledEnemy;
+    std::unordered_map<std::string, CharacterRules> charactersParams;
+    std::unordered_map<std::string, ThingRules> thingParams;
+    std::unordered_map<std::string, int> cntGenerateEnemyOnField;
+    std::unordered_map<std::string, int> cntKilledEnemy;
     int levelAllThings;
     int timeBetweenGenerateVisualThing;
     int timeBetweenGenerateHealThing;
 public:
-    RulesPreset(const std::vector<CharacterRules> &charactersParams, const std::vector<ThingRules> &thingParams,
-                 const std::map<std::string, int> &cntGenerateEnemyOnField,
-                 const std::map<std::string, int> &cntKilledEnemy, int levelAllThings,
+    RulesPreset(const std::unordered_map<std::string,CharacterRules> &charactersParams, const std::unordered_map<std::string,ThingRules> &thingParams,
+                 const std::unordered_map<std::string, int> &cntGenerateEnemyOnField,
+                 const std::unordered_map<std::string, int> &cntKilledEnemy, int levelAllThings,
                  int timeBetweenGenerateVisualThing, int timeBetweenGenerateHealThing)
             : charactersParams(charactersParams),
               thingParams(thingParams),
@@ -24,19 +24,19 @@ public:
               timeBetweenGenerateVisualThing(timeBetweenGenerateVisualThing),
               timeBetweenGenerateHealThing(timeBetweenGenerateHealThing) {}
 
-    const std::vector<CharacterRules> &getCharactersParams() const {
+    const std::unordered_map<std::string, CharacterRules> &getCharactersParams() const {
         return charactersParams;
     }
 
-    const std::vector<ThingRules> &getThingParams() const {
+    const std::unordered_map<std::string, ThingRules> &getThingParams() const {
         return thingParams;
     }
 
-    const std::map<std::string, int> &getCntGenerateEnemyOnField() const {
+    const std::unordered_map<std::string, int> &getCntGenerateEnemyOnField() const {
         return cntGenerateEnemyOnField;
     }
 
-    const std::map<std::string, int> &getCntKilledEnemy() const {
+    const std::unordered_map<std::string, int> &getCntKilledEnemy() const {
         return cntKilledEnemy;
     }
 

@@ -44,7 +44,7 @@ double Character::calcReflectionArmor() const {
 }
 
 Character* Character::clone() const {
-    return new Character(model, name, health, attackPower, protection);
+    return new Character(model, name, health, attackPower, protection, 1);
 }
 
 double Character::getDodgeFactor() const {

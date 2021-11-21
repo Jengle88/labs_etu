@@ -1,5 +1,17 @@
 #include "Archer.h"
 
+std::string Archer::ArcherProperties::ARCHER_NAME;
+double Archer::ArcherProperties::ARCHER_CRITICAL_FACTOR;
+double Archer::ArcherProperties::ARCHER_DODGE_FACTOR;
+int Archer::ArcherProperties::ARCHER_RANGE_VISIBILITY;
+double Archer::ArcherProperties::ARCHER_PERCENT_FOR_FOLLOW_TO_HERO;
+int Archer::ArcherProperties::ARCHER_MOVE;
+double Archer::ArcherProperties::ARCHER_MAX_HEALTH;
+double Archer::ArcherProperties::ARCHER_DAMAGE;
+double Archer::ArcherProperties::ARCHER_PROTECTION;
+double Archer::ArcherProperties::ARCHER_LUCK;
+int Archer::ArcherProperties::ARCHER_CHANCE_TO_BE_GENERATE;
+
 Archer::Archer(std::vector<std::string> model, std::string name, double health, double attackPower, double protection, double luck)
         : Character(model, name, health, attackPower, protection, luck) {}
 
@@ -79,5 +91,22 @@ std::vector<std::string> Archer::getModel() const {
 
 std::string Archer::getName() const {
     return Character::getName();
+}
+
+void
+Archer::setDefaultProperties(const std::string &name, double health, double attackPower, double protection, double luck,
+                             int visibility, double criticalFactor, double dodgeFactor, int percentForFollowToHero,
+                             int lengthMove, int chanceToBeGenerate) {
+    ArcherProperties::ARCHER_NAME = name;
+    ArcherProperties::ARCHER_MAX_HEALTH = health;
+    ArcherProperties::ARCHER_PROTECTION = protection;
+    ArcherProperties::ARCHER_DAMAGE = attackPower;
+    ArcherProperties::ARCHER_LUCK = luck;
+    ArcherProperties::ARCHER_RANGE_VISIBILITY = visibility;
+    ArcherProperties::ARCHER_CRITICAL_FACTOR = criticalFactor;
+    ArcherProperties::ARCHER_DODGE_FACTOR = dodgeFactor;
+    ArcherProperties::ARCHER_PERCENT_FOR_FOLLOW_TO_HERO = percentForFollowToHero;
+    ArcherProperties::ARCHER_MOVE = lengthMove;
+    ArcherProperties::ARCHER_CHANCE_TO_BE_GENERATE = chanceToBeGenerate;
 }
 

@@ -7,16 +7,17 @@
 
 class Monster : public Character, public Enemy {
     struct MonsterProperties{
-        constexpr static char   MONSTER_NAME[] = "Monster";
-        constexpr static double MONSTER_CRITICAL_FACTOR = 1.25;
-        constexpr static double MONSTER_DODGE_FACTOR = 0.8;
-        constexpr static double MONSTER_RANGE_VISIBILITY = 3;
-        constexpr static double MONSTER_PERCENT_FOR_FOLLOW_TO_HERO = 70;
-        constexpr static double MONSTER_MOVE = 1;
-        constexpr static double MONSTER_MAX_HEALTH = 60;
-        constexpr static double MONSTER_DAMAGE = 1;
-        constexpr static double MONSTER_PROTECTION = 2;
-        constexpr static double MONSTER_LUCK = 0.6;
+        static std::string MONSTER_NAME;
+        static double MONSTER_CRITICAL_FACTOR;
+        static double MONSTER_DODGE_FACTOR;
+        static int MONSTER_RANGE_VISIBILITY;
+        static double MONSTER_PERCENT_FOR_FOLLOW_TO_HERO;
+        static int MONSTER_MOVE;
+        static double MONSTER_MAX_HEALTH;
+        static double MONSTER_DAMAGE;
+        static double MONSTER_PROTECTION;
+        static double MONSTER_LUCK;
+        static int MONSTER_CHANCE_TO_BE_GENERATE;
     };
     bool requestProtect(double attackPower) override;
     bool requestDodge() const override;
@@ -40,4 +41,9 @@ public:
     std::vector<std::string> getModel() const override;
     Monster *clone() const override;
     bool checkPositiveHealth() const override;
+
+    static void
+    setDefaultProperties(const std::string &name, double health, double attackPower, double protection, double luck,
+                         int visibility, double criticalFactor, double dodgeFactor, int percentForFollowToHero,
+                         int lengthMove, int chanceToBeGenerate);
 };

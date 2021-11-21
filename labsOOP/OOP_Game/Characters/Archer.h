@@ -4,24 +4,23 @@
 
 class Archer: public Character, public Enemy {
     struct ArcherProperties{
-        constexpr static char ARCHER_NAME[] = "Archer";
-        constexpr static double ARCHER_CRITICAL_FACTOR = 2;
-        constexpr static double ARCHER_DODGE_FACTOR = 0.6;
-        constexpr static double ARCHER_RANGE_VISIBILITY = 4;
-        constexpr static double ARCHER_PERCENT_FOR_FOLLOW_TO_HERO = 70;
-        constexpr static double ARCHER_MOVE = 1;
-        constexpr static double ARCHER_MAX_HEALTH = 80;
-        constexpr static double ARCHER_DAMAGE = 2;
-        constexpr static double ARCHER_PROTECTION = 1;
-        constexpr static double ARCHER_LUCK = 0.65;
+        static std::string ARCHER_NAME;
+        static double ARCHER_CRITICAL_FACTOR;
+        static double ARCHER_DODGE_FACTOR;
+        static int ARCHER_RANGE_VISIBILITY;
+        static double ARCHER_PERCENT_FOR_FOLLOW_TO_HERO;
+        static int ARCHER_MOVE;
+        static double ARCHER_MAX_HEALTH;
+        static double ARCHER_DAMAGE;
+        static double ARCHER_PROTECTION;
+        static double ARCHER_LUCK;
+        static int ARCHER_CHANCE_TO_BE_GENERATE;
     };
-
     bool requestProtect(double attackPower) override;
     bool requestDodge() const override;
     bool isCriticalCase() const override;
     double calcReflectionArmor() const override;
     bool willFollowToHero() const override;
-
 public:
     Archer(std::vector<std::string> model,
            std::string name = ArcherProperties::ARCHER_NAME,
@@ -38,6 +37,10 @@ public:
     std::string getName() const override;
     std::vector<std::string> getModel() const override;
     Archer* clone() const override;
-
     bool checkPositiveHealth() const override;
+
+    static void
+    setDefaultProperties(const std::string &name, double health, double attackPower, double protection, double luck,
+                         int visibility, double criticalFactor, double dodgeFactor, int percentForFollowToHero,
+                         int lengthMove, int chanceToBeGenerate);
 };

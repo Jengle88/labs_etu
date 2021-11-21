@@ -1,11 +1,20 @@
 #include "MainHero.h"
 
+std::string MainHero::MainHeroProperties::MAIN_HERO_NAME;
+double MainHero::MainHeroProperties::MAIN_HERO_CRITICAL_FACTOR;
+double MainHero::MainHeroProperties::MAIN_HERO_DODGE_FACTOR;
+int MainHero::MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY;
+double MainHero::MainHeroProperties::MAIN_HERO_MAX_HEALTH;
+double MainHero::MainHeroProperties::MAIN_HERO_DAMAGE;
+double MainHero::MainHeroProperties::MAIN_HERO_PROTECTION;
+double MainHero::MainHeroProperties::MAIN_HERO_LUCK;
+
 MainHero::MainHero(std::vector<std::string> model, std::string name, double health, double attackPower, double protection, double luck) : Character(
         model, name, health, attackPower, protection, luck) {
 }
 
 std::vector<double> MainHero::requestAttack(Character &enemy) {
-    return Character::requestAttack(enemy, CharacterProperties::CHARACTER_CRITICAL_FACTOR);
+    return Character::requestAttack(enemy, MainHeroProperties::MAIN_HERO_CRITICAL_FACTOR);
 }
 
 bool MainHero::requestProtect(double attackPower) {
@@ -74,7 +83,7 @@ std::map<std::string, int> &MainHero::getCountKilledEnemy() {
 }
 
 double MainHero::getDodgeFactor() const {
-    return CharacterProperties::CHARACTER_DODGE_FACTOR;
+    return MainHeroProperties::MAIN_HERO_DODGE_FACTOR;
 }
 
 bool MainHero::checkPositiveHealth() const {
@@ -98,6 +107,22 @@ std::vector<std::string> MainHero::getModel() const {
 
 void MainHero::resetModel(std::vector<std::string> newModel) {
     model = newModel;
+}
+
+void MainHero::setDefaultProperties(const std::string &name, double health, double attackPower, double protection,
+                                    double luck, int visibility, double criticalFactor, double dodgeFactor) {
+    MainHeroProperties::MAIN_HERO_NAME = name;
+    MainHeroProperties::MAIN_HERO_MAX_HEALTH = health;
+    MainHeroProperties::MAIN_HERO_PROTECTION = protection;
+    MainHeroProperties::MAIN_HERO_DAMAGE = attackPower;
+    MainHeroProperties::MAIN_HERO_LUCK = luck;
+    MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY = visibility;
+    MainHeroProperties::MAIN_HERO_CRITICAL_FACTOR = criticalFactor;
+    MainHeroProperties::MAIN_HERO_DODGE_FACTOR = dodgeFactor;
+}
+
+int MainHero::getRangeVisibility() {
+    return MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY;
 }
 
 

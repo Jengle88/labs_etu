@@ -7,25 +7,25 @@
 template<RulesPreset & rulesPreset>
 class GlobalRules {
 public:
-    const std::vector<CharacterRules>& getCharacterRules() const;
-    const std::vector<ThingRules>& getThingRules() const;
-    const std::map<std::string, int>& getCntGenerateEnemyOnField() const;
+    const std::unordered_map<std::string, CharacterRules>& getCharacterRules() const;
+    const std::unordered_map<std::string, ThingRules>& getThingRules() const;
+    const std::unordered_map<std::string, int>& getCntGenerateEnemyOnField() const;
     bool checkFinishCondition(MainHero& mainHero);
 
 };
 
 template<RulesPreset &rulesPreset>
-const std::vector<CharacterRules> &GlobalRules<rulesPreset>::getCharacterRules() const {
+const std::unordered_map<std::string, CharacterRules> &GlobalRules<rulesPreset>::getCharacterRules() const {
     return rulesPreset.getCharactersParams();
 }
 
 template<RulesPreset &rulesPreset>
-const std::vector<ThingRules> &GlobalRules<rulesPreset>::getThingRules() const {
+const std::unordered_map<std::string, ThingRules> &GlobalRules<rulesPreset>::getThingRules() const {
     return rulesPreset.getThingParams();
 }
 
 template<RulesPreset &rulesPreset>
-const std::map<std::string, int> &GlobalRules<rulesPreset>::getCntGenerateEnemyOnField() const {
+const std::unordered_map<std::string, int> &GlobalRules<rulesPreset>::getCntGenerateEnemyOnField() const {
     return rulesPreset.getCntGenerateEnemyOnField();
 }
 

@@ -107,8 +107,8 @@ class GameHandler {
 
     bool requestStartFight(CellPoint point) {
         int statusFight = 1;
-        for (int i = -MainHero::MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY; i <= MainHero::MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY; ++i) {
-            for (int j = -MainHero::MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY; j <= MainHero::MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY; ++j) {
+        for (int i = -MainHero::getRangeVisibility(); i <= MainHero::getRangeVisibility(); ++i) {
+            for (int j = -MainHero::getRangeVisibility(); j <= MainHero::getRangeVisibility(); ++j) {
                 if (field->getEnemies().count(CellPoint(point.getX() + i, point.getY() + j))) {
                     system("clear");
                     LoggerPull::writeData("gameLogs",LoggerDataAdapter<Character&>(
@@ -219,7 +219,7 @@ class GameHandler {
     }
     // end
 
-// для FightScreen: start
+    // для FightScreen: start
     int fightStatusObserver(MainHero& mainHero, Enemy & enemy) {
         fightScreen->showUpdatedScreen(mainHero);
         LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Отображён экран боя"));
@@ -288,9 +288,28 @@ public:
         srand(time(0));
         dataManager->uploadModels();
         LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Модели загружены"));
+
+        CharacterRules properties = rules.getCharacterRules().at("MainHero");
+        MainHero::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
+                                       properties.luck, properties.visibility, properties.criticalFactor, properties.dodgeFactor);
+        properties = rules.getCharacterRules().at("Monster");
+        Monster::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
+                                      properties.luck, properties.visibility, properties.criticalFactor, properties.dodgeFactor,
+                                      properties.percentForFollowToHero, properties.lengthMove, properties.chanceToBeGenerate);
+        properties = rules.getCharacterRules().at("Archer");
+        Archer::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
+                                     properties.luck, properties.visibility, properties.criticalFactor, properties.dodgeFactor,
+                                     properties.percentForFollowToHero, properties.lengthMove, properties.chanceToBeGenerate);
+        properties = rules.getCharacterRules().at("Gargoyle");
+        Gargoyle::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
+                                       properties.luck, properties.visibility, properties.criticalFactor, properties.dodgeFactor,
+                                       properties.percentForFollowToHero, properties.lengthMove, properties.chanceToBeGenerate);
+        LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Характеристики персонажей загружены"));
+
         mainScreen = new FieldScreen();
         auto [height, width, countWalls] = mainScreen->showStartFieldScreen(dataManager);
         generateField(height, width, countWalls);
+
         isReady = true;
     }
 

@@ -2,10 +2,11 @@
 #include "../Logger/LoggerPull.h"
 #include "../Rules/ThingRules.h"
 
-DataManager::DataManager(const std::vector<ThingRules>& things) {
-    std::vector<Thing> thingsArray(things.size());
-    for (int i = 0; i < thingsArray.size(); ++i) {
-        thingsArray[i] = things[i].toThing();
+DataManager::DataManager(const std::unordered_map<std::string, ThingRules>& things) {
+    std::vector<Thing> thingsArray;
+    thingsArray.reserve(things.size());
+    for (const auto &thing: things) {
+        thingsArray.push_back(thing.second.toThing());
     }
     uploadParamsThing(thingsArray);
 }

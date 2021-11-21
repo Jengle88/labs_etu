@@ -8,23 +8,25 @@
 
 
 class MainHero : public Character {
+    struct MainHeroProperties{
+        static std::string MAIN_HERO_NAME;
+        static double MAIN_HERO_CRITICAL_FACTOR; // множитель увеличения урона при критической атаке
+        static double MAIN_HERO_DODGE_FACTOR; // чем меньше, тем меньше будет урон после частичного уклонения
+        static int MAIN_HERO_RANGE_VISIBILITY;
+        static double MAIN_HERO_MAX_HEALTH;
+        static double MAIN_HERO_DAMAGE;
+        static double MAIN_HERO_PROTECTION;
+        static double MAIN_HERO_LUCK;
+    };
     std::vector<Thing> inventory;
     std::map<std::string, int> countKilledEnemy;
     bool requestProtect(double attackPower);
     bool requestDodge() const override;
     void recalcCharacteristics(std::map<std::string, double> thingProperties);
 public:
-    struct MainHeroProperties{
-        constexpr static char MAIN_HERO_NAME[] = "Hero";
-        constexpr static double MAIN_HERO_RANGE_VISIBILITY = 1;
-        constexpr static double MAIN_HERO_MAX_HEALTH = CharacterProperties::CHARACTER_MAX_HEALTH;
-        constexpr static double MAIN_HERO_DAMAGE = 1;
-        constexpr static double MAIN_HERO_PROTECTION = 1;
-        constexpr static double MAIN_HERO_LUCK = 0.65;
-    };
     MainHero(std::vector<std::string> model,
                 std::string name = MainHeroProperties::MAIN_HERO_NAME,
-                double health = CharacterProperties::CHARACTER_MAX_HEALTH,
+                double health = MainHeroProperties::MAIN_HERO_MAX_HEALTH,
                 double attackPower = MainHeroProperties::MAIN_HERO_DAMAGE,
                 double protection = MainHeroProperties::MAIN_HERO_PROTECTION,
                 double luck = MainHeroProperties::MAIN_HERO_LUCK);
@@ -42,6 +44,12 @@ public:
     std::vector<std::string> getModel() const override;
     MainHero * clone() const override;
     double getDodgeFactor() const override;
+    static int getRangeVisibility();
     bool checkPositiveHealth() const;
     void resetModel(std::vector<std::string> newModel);
+    static void
+    setDefaultProperties(const std::string &name, double health, double attackPower, double protection, double luck,
+                         int visibility, double criticalFactor, double dodgeFactor);
+
+    friend class ThingsManager;
 };

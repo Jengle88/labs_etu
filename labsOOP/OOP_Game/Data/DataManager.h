@@ -1,5 +1,6 @@
 #pragma once
 #include <map>
+#include <unordered_map>
 #include "../Objects/Thing.h"
 #include "../Characters/Monster.h"
 #include "../Tools/ModelDataReader.h"
@@ -17,7 +18,7 @@ class DataManager {
     std::vector<std::string> getModelHeroBodyWait(bool withSword = false, bool withArmor = false) const;
     std::vector<std::string> getModelHeroLegs() const;
 public:
-    DataManager(const std::vector<ThingRules>& things);
+    DataManager(const std::unordered_map<std::string, ThingRules>& things);
     Thing getThing(int level, int typeThing);
     Thing getHealthThing() const;
     void uploadModels();
