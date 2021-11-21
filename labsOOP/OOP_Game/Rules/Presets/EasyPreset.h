@@ -1,55 +1,53 @@
 #include "../RulesPreset.h"
-#include "../ThingRules.h"
+#include "../ThingProperties.h"
 
 class EasyPreset : public RulesPreset {
 public:
-    explicit EasyPreset(const std::unordered_map<std::string, CharacterRules> &charactersParams = {
-            {"MainHero", CharacterRules("MainHero", 100, 1.25, 1.5, 1.25, 1, 2, 0.5, -1, 1, -1)},
-            {"Monster",  CharacterRules("Monster", 60, 0.7, 0.8, 0.7, 1, 1.1, 0.9, 60, 1, 33)},
-            {"Archer",   CharacterRules("Archer", 55, 0.85, 0.7, 0.7, 1, 1.15, 0.85, 60, 1, 33)},
-            {"Gargoyle", CharacterRules("Gargoyle", 65, 0.85, 0.75, 0.73, 1, 1.15, 0.8, 65, 1, 33)},
+    explicit EasyPreset(const std::unordered_map<std::string, CharacterProperties> &charactersParams = {
+            {"MainHero", CharacterProperties("MainHero", 100, 1.2, 1.2, 1.2, 1, 2, 0.5, -1, 1, -1)},
+            {"Monster",  CharacterProperties("Monster", 60, 0.7, 0.8, 0.7, 1, 1.1, 0.9, 60, 1, 33)},
+            {"Archer",   CharacterProperties("Archer", 55, 0.85, 0.7, 0.7, 1, 1.15, 0.85, 60, 1, 33)},
+            {"Gargoyle", CharacterProperties("Gargoyle", 65, 0.85, 0.75, 0.73, 1, 1.15, 0.8, 65, 1, 33)},
     },
-                        const std::unordered_map<std::string, ThingRules> &thingParams = {
-                                {"Железный нагрудник", ThingRules("Железный нагрудник", {
+                        const std::unordered_map<std::string, ThingProperties> &thingParams = {
+                                {"Железный нагрудник", ThingProperties("Железный нагрудник", {
                                         {"damage",     0},
                                         {"protection", 1.5},
                                         {"luck",       0},
                                         {"health",     0}}, 1, ThingObject::ARMOR)},
-                                {"Железный меч",       ThingRules("Железный меч", {
+                                {"Железный меч",       ThingProperties("Железный меч", {
                                         {"damage",     1.8},
                                         {"protection", 0},
                                         {"luck",       0},
                                         {"health",     0}}, 1, ThingObject::SWORD)},
-                                {"Стальной нагрудник", ThingRules("Стальной нагрудник", {
+                                {"Стальной нагрудник", ThingProperties("Стальной нагрудник", {
                                         {"damage",     0},
                                         {"protection", 2},
                                         {"luck",       0},
                                         {"health",     0}}, 2, ThingObject::ARMOR)},
-                                {"Стальной меч",       ThingRules("Стальной меч", {
+                                {"Стальной меч",       ThingProperties("Стальной меч", {
                                         {"damage",     2.1},
                                         {"protection", 0},
                                         {"luck",       0},
                                         {"health",     0}}, 2, ThingObject::SWORD)},
-                                {"Лечебный эликсир",   ThingRules("Лечебный эликсир", {
+                                {"Лечебный эликсир",   ThingProperties("Лечебный эликсир", {
                                         {"damage",     0},
                                         {"protection", 0},
                                         {"luck",       0},
                                         {"health",     40}}, 0, ThingObject::POTION_HEAL)}
                         },
-                        const std::unordered_map<std::string, int> &cntGenerateEnemyOnField = {
-                                {"Monster",  2},
-                                {"Archer",   1},
-                                {"Gargoyle", 0}
-                        },
+                        int cntEnemyOnField = 3,
                         const std::unordered_map<std::string, int> &cntKilledEnemy = {
-                                {"Monster",  3},
-                                {"Archer",   2},
+                                {"Monster",  1},
+                                {"Archer",   1},
                                 {"Gargoyle", 1}
                         },
-                        int levelAllThings = 0,
-                        int timeBetweenGenerateVisualThing = 10,
+                        int levelAllThings = 1,
+                        int cntHealThing = 4,
+                        int timeBetweenGenerateEnemy = 13,
+                        int timeBetweenGenerateVisualThing = 11,
                         int timeBetweenGenerateHealThing = 8
     ) : RulesPreset(
-            charactersParams, thingParams, cntGenerateEnemyOnField, cntKilledEnemy, levelAllThings,
+            charactersParams, thingParams, cntEnemyOnField, cntKilledEnemy, levelAllThings, cntHealThing, timeBetweenGenerateEnemy,
             timeBetweenGenerateVisualThing, timeBetweenGenerateHealThing) {}
 };

@@ -26,6 +26,8 @@ class Field {
     MainHero hero;
     DataManager *dataManager;
     std::map<CellPoint, Enemy*> enemies;
+    int maxCntEnemy;
+    int timeBetweenGenerateEnemy;
     bool wayGenerated = false;
     bool wallsGenerated = false;
     bool chosenStartFinish = false;
@@ -77,6 +79,7 @@ public:
     Enemy& getEnemyFromPoint(CellPoint point);
     std::map<CellPoint, Enemy *> &getEnemies();
     const Grid &getGrid() const;
+    void setRules(int maxCntEnemy, int timeBetweenGenerateEnemy);
 
     void incCountSteps();
     long getCountSteps() const;

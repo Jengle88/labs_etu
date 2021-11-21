@@ -77,14 +77,14 @@ class GameHandler {
                                                                    thingOnPos.second.getProperties(),
                                                                    HeroKeyControl::TAKE);
             }
-            if (field->getElem(to).getValue().getTypeCell() == TypeCell::FINISH)
+            if (field->getElem(to).getValue().getTypeCell() == TypeCell::FINISH && finishEnable)
                 gameAction = "Вы на финишной клетке. Закончить игру? Нажмите q, чтобы выйти.\n";
         }
     }
 
     bool requestMoveOut() {
         if (field->getElem(field->getHeroPos()).getValue().getTypeCell() == TypeCell::FINISH) {
-            Printer::printHeroAchievement(field->getHero().getCountKilledEnemy());
+            mainScreen->showHeroAchievement(field->getHero().getCountKilledEnemy());
             return true;
         }
         return false;
@@ -160,7 +160,7 @@ class GameHandler {
                 requestMoveHero(heroPos, CellPoint(heroPos.getX() + 1, heroPos.getY()), gameAction);
                 return true;
             case HeroKeyControl::FINISH_OUT:
-                if (requestMoveOut()) {
+                if (finishEnable && requestMoveOut()) {
                     sleep(3);
                     action = HeroKeyControl::EXIT;
                     LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Игра окончена, игрок достиг финишной точки"));
@@ -170,6 +170,7 @@ class GameHandler {
                 }
             case HeroKeyControl::TAKE:
                 requestTakeObject(heroPos);
+                finishEnable = rules.checkFinishCondition(field->getHero());
                 return true;
             case HeroKeyControl::FIGHT:
                 status = requestStartFight(heroPos);
@@ -182,6 +183,7 @@ class GameHandler {
                     action = HeroKeyControl::EXIT;
                     return false;
                 }
+                finishEnable = rules.checkFinishCondition(field->getHero());
                 return true;
             case HeroKeyControl::EXIT:
                 LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Игра окончена, игрок вышел из игры"));
@@ -202,6 +204,7 @@ class GameHandler {
                               LoggerDataAdapter<std::string>("Поле и инвентарь персонажа отображены в консоли"));
         while (action != HeroKeyControl::EXIT) {
             std::string gameAction = "";
+            field->incCountSteps();
             bool goodMovement = registerMovement(action, gameAction);
             field->moveEnemies();
             if (goodMovement) {
@@ -274,7 +277,7 @@ class GameHandler {
 
 public:
     GameHandler() {
-        dataManager = new DataManager(rules.getThingRules());
+        dataManager = new DataManager(preset.getThingParams());
     }
 
     virtual ~GameHandler() {
@@ -289,18 +292,18 @@ public:
         dataManager->uploadModels();
         LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Модели загружены"));
 
-        CharacterRules properties = rules.getCharacterRules().at("MainHero");
+        CharacterProperties properties = preset.getCharactersParams().at("MainHero");
         MainHero::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
                                        properties.luck, properties.visibility, properties.criticalFactor, properties.dodgeFactor);
-        properties = rules.getCharacterRules().at("Monster");
+        properties = preset.getCharactersParams().at("Monster");
         Monster::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
                                       properties.luck, properties.visibility, properties.criticalFactor, properties.dodgeFactor,
                                       properties.percentForFollowToHero, properties.lengthMove, properties.chanceToBeGenerate);
-        properties = rules.getCharacterRules().at("Archer");
+        properties = preset.getCharactersParams().at("Archer");
         Archer::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
                                      properties.luck, properties.visibility, properties.criticalFactor, properties.dodgeFactor,
                                      properties.percentForFollowToHero, properties.lengthMove, properties.chanceToBeGenerate);
-        properties = rules.getCharacterRules().at("Gargoyle");
+        properties = preset.getCharactersParams().at("Gargoyle");
         Gargoyle::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
                                        properties.luck, properties.visibility, properties.criticalFactor, properties.dodgeFactor,
                                        properties.percentForFollowToHero, properties.lengthMove, properties.chanceToBeGenerate);
@@ -309,7 +312,8 @@ public:
         mainScreen = new FieldScreen();
         auto [height, width, countWalls] = mainScreen->showStartFieldScreen(dataManager);
         generateField(height, width, countWalls);
-
+        field->setRules(preset.getCntEnemyOnField(), preset.getTimeBetweenGenerateEnemy());
+        thingsManager->setRules(preset.getCntHealThing(), preset.getTimeBetweenGenerateVisualThing(), preset.getTimeBetweenGenerateHealThing());
         isReady = true;
     }
 

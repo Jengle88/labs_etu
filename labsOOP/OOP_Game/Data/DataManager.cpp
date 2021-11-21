@@ -1,8 +1,8 @@
 #include "DataManager.h"
 #include "../Logger/LoggerPull.h"
-#include "../Rules/ThingRules.h"
+#include "../Rules/ThingProperties.h"
 
-DataManager::DataManager(const std::unordered_map<std::string, ThingRules>& things) {
+DataManager::DataManager(const std::unordered_map<std::string, ThingProperties>& things) {
     std::vector<Thing> thingsArray;
     thingsArray.reserve(things.size());
     for (const auto &thing: things) {
@@ -72,11 +72,19 @@ std::vector<std::string> DataManager::getModelCharacter(const std::string &chara
 }
 
 void DataManager::uploadParamsThing(const std::vector<Thing> &things) {
+    int maxCntTypeVisualThing = 0;
+    for (const auto & thing : things) {
+        if (!thing.isVisualThing()) {
+            maxCntTypeVisualThing = std::max(maxCntTypeVisualThing, thing.getThingObject() + 1);
+        }
+    }
     for (const auto & thing : things) {
         if (thing.isHealThing()) {
             healThings.push_back(thing);
         } else {
-            levelToThings[thing.getLevelThing()].push_back(thing);
+            if (levelToThings[thing.getLevelThing()].size() < maxCntTypeVisualThing)
+                levelToThings[thing.getLevelThing()].resize(maxCntTypeVisualThing);
+            levelToThings[thing.getLevelThing()][thing.getThingObject()] = thing;
         }
     }
 }

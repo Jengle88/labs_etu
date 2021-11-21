@@ -7,13 +7,13 @@
 #include "../UI/Models/Field.h"
 #include "../Data/DataManager.h"
 
-#define TIME_BETWEEN_GENERATE_THING 15
-#define MAX_COUNT_HEALTH_THINGS 3
-
 class ThingsManager {
     Field *field;
     std::map<CellPoint, Thing> visualThingsPlaces;
     std::map<CellPoint, Thing> nonVisualThingsPlaces;
+    int cntHealThing;
+    int timeBetweenGenerateVisualThing;
+    int timeBetweenGenerateHealThing;
     int levelThings = 1;
     void generateVisualThing(DataManager *dataManager);
     void checkThingsLevel(std::map<std::string, int> &achievements);
@@ -26,4 +26,5 @@ public:
     void tryGenerateThing(MainHero &hero, DataManager *dataManager);
     std::pair<bool, Thing> checkCellHasSmth(CellPoint point);
     void deleteThingFromField(CellPoint point);
+    void setRules(int cntHealThing, int timeBetweenGenerateVisualThing, int timeBetweenGenerateHealThing);
 };

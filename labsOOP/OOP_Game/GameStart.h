@@ -17,7 +17,7 @@ public:
             LoggerPull *loggerPull = LoggerPull::getInstance();
             LoggerPull::addFileLogger("gameLogs", new FileLogger("logs.txt"));
 
-            static RulesPreset difficulty = static_cast<RulesPreset>(MiddlePreset());
+            static RulesPreset difficulty = static_cast<RulesPreset>(EasyPreset());
             static auto gameRules = GlobalRules<difficulty>();
             GameHandler<difficulty, gameRules> gameHandler;
 

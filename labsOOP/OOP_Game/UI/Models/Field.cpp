@@ -1,5 +1,6 @@
 #include "Field.h"
 #include "../../Logger/LoggerPull.h"
+;
 
 Field::Field(int height, int width, DataManager *dataManager, CellPoint start, CellPoint finish, Grid grid) {
     if (!grid.grid.empty())
@@ -245,6 +246,9 @@ void Field::createMonster() {
         monsterStartPoint = generateRandomFreePoint();
     } while (enemies.count(monsterStartPoint));
     enemies[monsterStartPoint] = new Monster(dataManager->getModelCharacter("Monster"));
+    field.setElem(monsterStartPoint, Cell(CellObject(getElem(monsterStartPoint).getValue().getTypeCell(), TypeObject::ENEMY, getElem(monsterStartPoint).getValue().isThing())));
+
+//    this->moveEnemy(monsterStartPoint, monsterStartPoint);
     LoggerPull::writeData("gameLogs",LoggerDataAdapter<CellPoint>(monsterStartPoint, "Сгенерирован монстр"));
 }
 
@@ -254,6 +258,8 @@ void Field::createArcher() {
         archerStartPoint = generateRandomFreePoint();
     } while (enemies.count(archerStartPoint));
     enemies[archerStartPoint] = new Archer(dataManager->getModelCharacter("Archer"));
+//    this->moveEnemy(archerStartPoint, archerStartPoint);
+    field.setElem(archerStartPoint, Cell(CellObject(getElem(archerStartPoint).getValue().getTypeCell(), TypeObject::ENEMY, getElem(archerStartPoint).getValue().isThing())));
     LoggerPull::writeData("gameLogs",LoggerDataAdapter<CellPoint>(archerStartPoint, "Сгенерирован скелет-лучник"));
 }
 
@@ -263,12 +269,14 @@ void Field::createGargoyle() {
         gargoyleStartPoint = generateRandomFreePoint();
     } while (enemies.count(gargoyleStartPoint));
     enemies[gargoyleStartPoint] = new Gargoyle(dataManager->getModelCharacter("Gargoyle"));
+//    this->moveEnemy(gargoyleStartPoint, gargoyleStartPoint);
+    field.setElem(gargoyleStartPoint, Cell(CellObject(getElem(gargoyleStartPoint).getValue().getTypeCell(), TypeObject::ENEMY, getElem(gargoyleStartPoint).getValue().isThing())));
     LoggerPull::writeData("gameLogs",LoggerDataAdapter<CellPoint>(gargoyleStartPoint, "Сгенерирована горгулья"));
 
 }
 
 void Field::createRandomEnemy() {
-    if (counterSteps % TIME_BETWEEN_GENERATE_ENEMY == 0 && enemies.size() < MAX_COUNT_ENEMIES) {
+    if (counterSteps % timeBetweenGenerateEnemy == 0 && enemies.size() + 1 <= maxCntEnemy) {
         switch (rand() % 3) {
             case 0:
                 createMonster();
@@ -410,6 +418,13 @@ std::map<CellPoint, Enemy *> &Field::getEnemies() {
 
 const Grid &Field::getGrid() const {
     return field;
+}
+
+
+void Field::setRules(int maxCntEnemy, int timeBetweenGenerateEnemy) {
+    this->maxCntEnemy = maxCntEnemy;
+    this->timeBetweenGenerateEnemy = timeBetweenGenerateEnemy;
+
 }
 
 

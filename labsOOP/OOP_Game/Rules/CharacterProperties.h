@@ -1,6 +1,6 @@
 #pragma once
-struct CharacterRules {
-    CharacterRules(const std::string &name, double health, double attackPower, double protection, double luck,
+struct CharacterProperties {
+    CharacterProperties(const std::string &name, double health, double attackPower, double protection, double luck,
                    int visibility, double criticalFactor, double dodgeFactor, int percentForFollowToHero,
                    int lengthMove, int chanceToBeGenerate) : name(name), health(health), attackPower(attackPower),
                                                              protection(protection), luck(luck), visibility(visibility),

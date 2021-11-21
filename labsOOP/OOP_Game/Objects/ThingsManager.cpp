@@ -40,20 +40,20 @@ void ThingsManager::generateHealthThing(DataManager *dataManager) {
 }
 
 void ThingsManager::tryGenerateThing(MainHero &hero, DataManager *dataManager) {
-    field->incCountSteps();
     auto &achievements = hero.getCountKilledEnemy();
     const auto &heroInventory = hero.getInventory();
 
-    if (hero.getHealth() * 100 / MainHero::MainHeroProperties::MAIN_HERO_MAX_HEALTH <= LOW_HEALTH_PERCENT &&
+    if (field->getCountSteps() % timeBetweenGenerateHealThing == 0 &&
+    hero.getHealth() * 100 / MainHero::MainHeroProperties::MAIN_HERO_MAX_HEALTH <= LOW_HEALTH_PERCENT &&
         std::count_if(nonVisualThingsPlaces.begin(), nonVisualThingsPlaces.end(),
-                      [](const std::pair<CellPoint,Thing> &place) { return place.second.isHealThing(); })
-        + std::count_if(heroInventory.begin(), heroInventory.end(),
-                        [](const Thing &thing) { return thing.isHealThing(); }) <= MAX_COUNT_HEALTH_THINGS) {
+                      [](const std::pair<CellPoint,Thing> &place) { return place.second.isHealThing(); }) +
+        std::count_if(heroInventory.begin(), heroInventory.end(),
+                        [](const Thing &thing) { return thing.isHealThing(); }) <= cntHealThing) {
         generateHealthThing(dataManager);
         return;
     }
     checkThingsLevel(achievements);
-    if (field->getCountSteps() % TIME_BETWEEN_GENERATE_THING == 0 &&
+    if (field->getCountSteps() % timeBetweenGenerateVisualThing == 0 &&
         visualThingsPlaces.size() <= ThingObject::THING_OBJECT_SIZE - 2) {
         generateVisualThing(dataManager);
     }
@@ -76,4 +76,11 @@ void ThingsManager::deleteThingFromField(CellPoint point) {
     else if (nonVisualThingsPlaces.count(point))
         nonVisualThingsPlaces.erase(point);
     LoggerPull::writeData("gameLogs", LoggerDataAdapter<CellPoint>(point, "Предмет на данной позиции был взят героем"));
+}
+
+void ThingsManager::setRules(int cntHealThing, int timeBetweenGenerateVisualThing, int timeBetweenGenerateHealThing) {
+    this->cntHealThing = cntHealThing;
+    this->timeBetweenGenerateVisualThing = timeBetweenGenerateVisualThing;
+    this->timeBetweenGenerateHealThing = timeBetweenGenerateHealThing;
+
 }
