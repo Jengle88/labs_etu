@@ -5,7 +5,7 @@
 
 class RulesPreset {
     std::unordered_map<std::string, CharacterProperties> charactersParams;
-    std::unordered_map<std::string, ThingProperties> thingParams;
+    std::unordered_map<std::string, ThingProperties> thingsParams;
     std::unordered_map<std::string, int> cntKilledEnemy;
     int cntEnemyOnField;
     int levelAllThings;
@@ -15,12 +15,12 @@ class RulesPreset {
     int timeBetweenGenerateHealThing;
 public:
     RulesPreset(const std::unordered_map<std::string, CharacterProperties> &charactersParams,
-                const std::unordered_map<std::string, ThingProperties> &thingParams,
+                const std::unordered_map<std::string, ThingProperties> &thingsParams,
                 int cntEnemyOnField, const std::unordered_map<std::string, int> &cntKilledEnemy, int levelAllThings,
                 int cntHealThing, int timeBetweenGenerateEnemy, int timeBetweenGenerateVisualThing,
                 int timeBetweenGenerateHealThing)
             : charactersParams(charactersParams),
-              thingParams(thingParams),
+              thingsParams(thingsParams),
               cntEnemyOnField(cntEnemyOnField),
               cntKilledEnemy(cntKilledEnemy),
               levelAllThings(levelAllThings),
@@ -33,8 +33,8 @@ public:
         return charactersParams;
     }
 
-    const std::unordered_map<std::string, ThingProperties> &getThingParams() const {
-        return thingParams;
+    const std::unordered_map<std::string, ThingProperties> &getThingsParams() const {
+        return thingsParams;
     }
 
     const std::unordered_map<std::string, int> &getCntKilledEnemy() const {

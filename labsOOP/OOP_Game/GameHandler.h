@@ -275,7 +275,7 @@ class GameHandler {
 
 public:
     GameHandler() {
-        dataManager = new DataManager(preset.getThingParams());
+        dataManager = new DataManager(preset.getThingsParams());
     }
 
     virtual ~GameHandler() {
