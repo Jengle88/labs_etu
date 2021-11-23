@@ -143,8 +143,6 @@ class GameHandler {
     bool registerMovement(char &action, std::string &gameAction) {
         action = getKey();
         CellPoint heroPos = field->getHeroPos();
-        thingsManager->tryGenerateThing(field->getHero(), dataManager);
-        std::pair<bool, Thing> thingOnPos;
         bool status = true;
         switch (tolower(action)) {
             case HeroKeyControl::UP:
@@ -205,6 +203,7 @@ class GameHandler {
         while (action != HeroKeyControl::EXIT) {
             std::string gameAction = "";
             field->incCountSteps();
+            thingsManager->tryGenerateThing(field->getHero(), dataManager);
             bool goodMovement = registerMovement(action, gameAction);
             field->moveEnemies();
             if (goodMovement) {
@@ -264,7 +263,6 @@ class GameHandler {
                 std::cin >> numberThing;
                 if (!mainHero.useThing(numberThing - 1)) {
                     fightScreen->showMessage("Предмета нет или он не может быть использован\n");
-//                std::cout << "Предмета нет или он не может быть использован\n";
                 }
                 break;
             case HeroKeyControl::EXIT:
@@ -297,16 +295,20 @@ public:
                                        properties.luck, properties.visibility, properties.criticalFactor, properties.dodgeFactor);
         properties = preset.getCharactersParams().at("Monster");
         Monster::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
-                                      properties.luck, properties.visibility, properties.criticalFactor, properties.dodgeFactor,
-                                      properties.percentForFollowToHero, properties.lengthMove, properties.chanceToBeGenerate);
+                                      properties.luck, properties.visibility, properties.criticalFactor,
+                                      properties.dodgeFactor,
+                                      properties.percentForFollowToHero, properties.lengthMove);
         properties = preset.getCharactersParams().at("Archer");
         Archer::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
-                                     properties.luck, properties.visibility, properties.criticalFactor, properties.dodgeFactor,
-                                     properties.percentForFollowToHero, properties.lengthMove, properties.chanceToBeGenerate);
+                                     properties.luck, properties.visibility, properties.criticalFactor,
+                                     properties.dodgeFactor,
+                                     properties.percentForFollowToHero, properties.lengthMove);
         properties = preset.getCharactersParams().at("Gargoyle");
-        Gargoyle::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
-                                       properties.luck, properties.visibility, properties.criticalFactor, properties.dodgeFactor,
-                                       properties.percentForFollowToHero, properties.lengthMove, properties.chanceToBeGenerate);
+        Gargoyle::setDefaultProperties(properties.name, properties.health, properties.attackPower,
+                                       properties.protection,
+                                       properties.luck, properties.visibility, properties.criticalFactor,
+                                       properties.dodgeFactor,
+                                       properties.percentForFollowToHero, properties.lengthMove);
         LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Характеристики персонажей загружены"));
 
         mainScreen = new FieldScreen();

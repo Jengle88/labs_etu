@@ -9,7 +9,6 @@ double Gargoyle::GargoyleProperties::GARGOYLE_MAX_HEALTH;
 double Gargoyle::GargoyleProperties::GARGOYLE_DAMAGE;
 double Gargoyle::GargoyleProperties::GARGOYLE_PROTECTION;
 double Gargoyle::GargoyleProperties::GARGOYLE_LUCK;
-int Gargoyle::GargoyleProperties::GARGOYLE_CHANCE_TO_BE_GENERATE;
 
 
 Gargoyle::Gargoyle(std::vector<std::string> model, std::string name, double health, double attackPower, double protection, double luck)
@@ -94,7 +93,7 @@ std::string Gargoyle::getName() const {
 
 void Gargoyle::setDefaultProperties(const std::string &name, double health, double attackPower, double protection,
                                     double luck, int visibility, double criticalFactor, double dodgeFactor,
-                                    int percentForFollowToHero, int lengthMove, int chanceToBeGenerate) {
+                                    int percentForFollowToHero, int lengthMove) {
     GargoyleProperties::GARGOYLE_NAME = name;
     GargoyleProperties::GARGOYLE_MAX_HEALTH = health;
     GargoyleProperties::GARGOYLE_PROTECTION = protection;
@@ -105,6 +104,5 @@ void Gargoyle::setDefaultProperties(const std::string &name, double health, doub
     GargoyleProperties::GARGOYLE_DODGE_FACTOR = dodgeFactor;
     GargoyleProperties::GARGOYLE_PERCENT_FOR_FOLLOW_TO_HERO = percentForFollowToHero;
     GargoyleProperties::GARGOYLE_MOVE = lengthMove;
-    GargoyleProperties::GARGOYLE_CHANCE_TO_BE_GENERATE = chanceToBeGenerate;
 }
 

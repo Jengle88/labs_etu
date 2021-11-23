@@ -10,7 +10,6 @@ double Monster::MonsterProperties::MONSTER_MAX_HEALTH;
 double Monster::MonsterProperties::MONSTER_DAMAGE;
 double Monster::MonsterProperties::MONSTER_PROTECTION;
 double Monster::MonsterProperties::MONSTER_LUCK;
-int Monster::MonsterProperties::MONSTER_CHANCE_TO_BE_GENERATE;
 
 Monster::Monster(std::vector<std::string> model, std::string name, double health, double attackPower, double protection, double luck)
         : Character(model, name, health, attackPower, protection, luck) {}
@@ -93,7 +92,7 @@ std::string Monster::getName() const {
 
 void Monster::setDefaultProperties(const std::string &name, double health, double attackPower, double protection,
                                    double luck, int visibility, double criticalFactor, double dodgeFactor,
-                                   int percentForFollowToHero, int lengthMove, int chanceToBeGenerate) {
+                                   int percentForFollowToHero, int lengthMove) {
     MonsterProperties::MONSTER_NAME = name;
     MonsterProperties::MONSTER_MAX_HEALTH = health;
     MonsterProperties::MONSTER_PROTECTION = protection;
@@ -104,7 +103,6 @@ void Monster::setDefaultProperties(const std::string &name, double health, doubl
     MonsterProperties::MONSTER_DODGE_FACTOR = dodgeFactor;
     MonsterProperties::MONSTER_PERCENT_FOR_FOLLOW_TO_HERO = percentForFollowToHero;
     MonsterProperties::MONSTER_MOVE = lengthMove;
-    MonsterProperties::MONSTER_CHANCE_TO_BE_GENERATE = chanceToBeGenerate;
 
 }
 

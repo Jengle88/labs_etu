@@ -17,7 +17,6 @@ class Monster : public Character, public Enemy {
         static double MONSTER_DAMAGE;
         static double MONSTER_PROTECTION;
         static double MONSTER_LUCK;
-        static int MONSTER_CHANCE_TO_BE_GENERATE;
     };
     bool requestProtect(double attackPower) override;
     bool requestDodge() const override;
@@ -43,7 +42,7 @@ public:
     bool checkPositiveHealth() const override;
 
     static void
-    setDefaultProperties(const std::string &name, double health, double attackPower, double protection, double luck,
-                         int visibility, double criticalFactor, double dodgeFactor, int percentForFollowToHero,
-                         int lengthMove, int chanceToBeGenerate);
+    setDefaultProperties(const std::string &name, double health, double attackPower, double protection,
+                         double luck, int visibility, double criticalFactor, double dodgeFactor,
+                         int percentForFollowToHero, int lengthMove);
 };

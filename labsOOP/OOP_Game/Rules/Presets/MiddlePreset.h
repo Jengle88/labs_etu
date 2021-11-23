@@ -6,10 +6,10 @@
 class MiddlePreset : public RulesPreset {
 public:
     MiddlePreset(const std::unordered_map<std::string, CharacterProperties> &charactersParams = {
-            {"MainHero", CharacterProperties("MainHero", 100, 1.1, 1, 1.1, 1, 1.2, 0.69, -1, -1, -1) },
-             {"Monster", CharacterProperties("Monster", 65, 0.9, 0.8, 0.75, 1, 1.2, 0.85, 70, 1, 33) },
-              {"Archer", CharacterProperties("Archer", 62, 0.9, 0.77, 0.8, 1, 1.25, 0.8, 70, 1, 33) },
-               {"Gargoyle", CharacterProperties("Gargoyle", 75, 1, 0.95, 0.73, 1, 1.3, 0.7, 75, 1, 33) },
+            {"MainHero", CharacterProperties("MainHero", 100, 1.1, 1, 1.1, 1, 1.2, 0.69, -1, -1) },
+             {"Monster", CharacterProperties("Monster", 65, 0.9, 0.8, 0.75, 1, 1.2, 0.85, 70, 1) },
+              {"Archer", CharacterProperties("Archer", 62, 0.9, 0.77, 0.8, 1, 1.25, 0.8, 70, 1) },
+               {"Gargoyle", CharacterProperties("Gargoyle", 75, 1, 0.95, 0.73, 1, 1.3, 0.7, 75, 1) },
     },
                  const std::unordered_map<std::string, ThingProperties> &thingParams = {
                          { "Железный нагрудник",  ThingProperties("Железный нагрудник", {

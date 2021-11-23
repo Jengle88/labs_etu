@@ -4,10 +4,10 @@
 class EasyPreset : public RulesPreset {
 public:
     explicit EasyPreset(const std::unordered_map<std::string, CharacterProperties> &charactersParams = {
-            {"MainHero", CharacterProperties("MainHero", 100, 1.2, 1.2, 1.2, 1, 2, 0.5, -1, 1, -1)},
-            {"Monster",  CharacterProperties("Monster", 60, 0.7, 0.8, 0.7, 1, 1.1, 0.9, 60, 1, 33)},
-            {"Archer",   CharacterProperties("Archer", 55, 0.85, 0.7, 0.7, 1, 1.15, 0.85, 60, 1, 33)},
-            {"Gargoyle", CharacterProperties("Gargoyle", 65, 0.85, 0.75, 0.73, 1, 1.15, 0.8, 65, 1, 33)},
+            {"MainHero", CharacterProperties("MainHero", 100, 1.2, 1.2, 1.2, 1, 2, 0.5, -1, 1)},
+            {"Monster",  CharacterProperties("Monster", 60, 0.7, 0.8, 0.7, 1, 1.1, 0.9, 60, 1)},
+            {"Archer",   CharacterProperties("Archer", 55, 0.85, 0.7, 0.7, 1, 1.15, 0.85, 60, 1)},
+            {"Gargoyle", CharacterProperties("Gargoyle", 65, 0.85, 0.75, 0.73, 1, 1.15, 0.8, 65, 1)},
     },
                         const std::unordered_map<std::string, ThingProperties> &thingParams = {
                                 {"Железный нагрудник", ThingProperties("Железный нагрудник", {

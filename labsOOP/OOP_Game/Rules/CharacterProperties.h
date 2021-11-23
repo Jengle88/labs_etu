@@ -2,12 +2,11 @@
 struct CharacterProperties {
     CharacterProperties(const std::string &name, double health, double attackPower, double protection, double luck,
                    int visibility, double criticalFactor, double dodgeFactor, int percentForFollowToHero,
-                   int lengthMove, int chanceToBeGenerate) : name(name), health(health), attackPower(attackPower),
+                   int lengthMove) : name(name), health(health), attackPower(attackPower),
                                                              protection(protection), luck(luck), visibility(visibility),
                                                              criticalFactor(criticalFactor), dodgeFactor(dodgeFactor),
                                                              percentForFollowToHero(percentForFollowToHero),
-                                                             lengthMove(lengthMove),
-                                                             chanceToBeGenerate(chanceToBeGenerate) {}
+                                                             lengthMove(lengthMove) {}
 
     // -1 - параметр не используется
     std::string name = "";
@@ -20,5 +19,4 @@ struct CharacterProperties {
     double dodgeFactor = 0;
     int percentForFollowToHero = 0;
     int lengthMove = 0;
-    int chanceToBeGenerate = 0; // -1 - генерируется единожды
 };

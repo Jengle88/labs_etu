@@ -14,7 +14,6 @@ class Archer: public Character, public Enemy {
         static double ARCHER_DAMAGE;
         static double ARCHER_PROTECTION;
         static double ARCHER_LUCK;
-        static int ARCHER_CHANCE_TO_BE_GENERATE;
     };
     bool requestProtect(double attackPower) override;
     bool requestDodge() const override;
@@ -42,5 +41,5 @@ public:
     static void
     setDefaultProperties(const std::string &name, double health, double attackPower, double protection, double luck,
                          int visibility, double criticalFactor, double dodgeFactor, int percentForFollowToHero,
-                         int lengthMove, int chanceToBeGenerate);
+                         int lengthMove);
 };
