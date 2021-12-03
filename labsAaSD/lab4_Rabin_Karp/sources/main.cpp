@@ -19,17 +19,17 @@ void solve() {
     const int xValue = 7;
     const long long pModule = 1e8 + 7;
     std::vector<int> xPowValues(pattern.size());
-    std::vector<int> hashTextValue(text.size(), 0);
+    std::vector<int> hashTextValues(text.size(), 0);
     xPowValues[0] = 1;
     for (int i = 1; i < xPowValues.size(); ++i) {
         xPowValues[i] = ((long long)xPowValues[i-1] * xValue) % pModule;
     }
 
     for (int i = text.size()- pattern.size(); i < text.size(); i++) {
-        hashTextValue[text.size() - pattern.size()] = (((long long)text[i] * xPowValues[i - (text.size() - pattern.size())]) % pModule + hashTextValue[text.size() - pattern.size()]) % pModule;
+        hashTextValues[text.size() - pattern.size()] = (((long long)text[i] * xPowValues[i - (text.size() - pattern.size())]) % pModule + hashTextValues[text.size() - pattern.size()]) % pModule;
     }
     for (int i = text.size() - 1 - pattern.size(); i >= 0; i--) {
-        hashTextValue[i] = ((((hashTextValue[i + 1] - ((long long)text[i + pattern.size()] * xPowValues[pattern.size() - 1]) % pModule + pModule) % pModule) * xValue) % pModule + ((long long)text[i] * xPowValues[0]) % pModule) % pModule;
+        hashTextValues[i] = ((((hashTextValues[i + 1] - ((long long)text[i + pattern.size()] * xPowValues[pattern.size() - 1]) % pModule + pModule) % pModule) * xValue) % pModule + ((long long)text[i] * xPowValues[0]) % pModule) % pModule;
     }
     int hashPattern = 0;
     for (int i = 0 ; i < pattern.size(); ++i) {
@@ -38,7 +38,7 @@ void solve() {
 
     std::vector<int> resultPos;
     for (int i = 0; i < text.size() - pattern.size() + 1; ++i) {
-        if (hashTextValue[i] == hashPattern && checkSubstr(text, pattern, i))
+        if (hashTextValues[i] == hashPattern && checkSubstr(text, pattern, i))
             resultPos.push_back(i);
     }
     for (int pos : resultPos) {

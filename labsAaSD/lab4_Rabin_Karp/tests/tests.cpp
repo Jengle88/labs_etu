@@ -23,7 +23,7 @@ TEST_CASE("mainTests", "[test]")
     REQUIRE(testCase("aa", "aaaaaaaab", {0, 1, 2, 3, 4, 5, 6}));
     REQUIRE(testCase("aa", "baaaaaaaa", {1, 2, 3, 4, 5, 6, 7}));
     REQUIRE(testCase("qwezxc", "jashqwezxckasjkqwezxaqwezxc", {4, 21}));
-    REQUIRE(testCase("zb", "JFApzbGPLMdkozbAGKaijgozbpaszzbAkgqAD", {4, 13, 23, 29}));
-    REQUIRE(testCase("Zb", "JFApZbGPLMdkoZbAGKaijgoZbpaszZbAkgqAD", {4, 13, 23, 29}));
+    REQUIRE(testCase("zb", "JFApzbGPLMdkozbAGKaijgozbpaszzbAkgqA", {4, 13, 23, 29}));
+    REQUIRE(testCase("Zb", "JFApZbGPLMdkoZbAGKaijgoZbpaszZbAkgqA", {4, 13, 23, 29}));
 }
 
