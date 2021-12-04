@@ -23,7 +23,7 @@ bool GlobalRules<rulesPreset>::checkFinishCondition(MainHero &mainHero) {
     }
     auto heroThing = mainHero.getInventory();
     for (const auto &thing: heroThing) {
-        if (thing.getLevelThing() < rulesPreset.getLevelAllThings() && thing.getLevelThing() != 0)
+        if (thing->getLevelThing() < rulesPreset.getLevelAllThings() && thing->getLevelThing() != 0)
             return false;
     }
     return true;

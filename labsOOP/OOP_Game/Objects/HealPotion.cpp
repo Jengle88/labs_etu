@@ -1,17 +1,16 @@
 #include "HealPotion.h"
 
-HealPotion::HealPotion(const ThingProperties &thingProperties) {
-    this->nameThing = thingProperties.nameThing;
-    this->levelThing = thingProperties.level;
-    this->properties = thingProperties.properties;
-}
 
-std::string HealPotion::getNameThing() {
+std::string HealPotion::getNameThing() const {
     return nameThing;
 }
 
 int HealPotion::getLevelThing() const {
     return levelThing;
+}
+
+int HealPotion::getTypeObject() const {
+    return ThingObject::POTION_HEAL;
 }
 
 std::map<std::string, double> HealPotion::getProperties() const {
@@ -36,4 +35,16 @@ bool HealPotion::isHealThing() const {
 
 bool HealPotion::isVisualThing() const {
     return false;
+}
+
+HealPotion *HealPotion::clone() const {
+    return new HealPotion(
+            getNameThing(), getProperties(), getLevelThing()
+            );
+}
+
+HealPotion::HealPotion(const std::string &nameThing, const std::map<std::string, double> &properties, int levelThing) {
+    this->nameThing = nameThing;
+    this->properties = properties;
+    this->levelThing = levelThing;
 }

@@ -1,17 +1,15 @@
 #include "Armor.h"
 
-Armor::Armor(const ThingProperties &thingProperties) {
-    this->nameThing = thingProperties.nameThing;
-    this->levelThing = thingProperties.level;
-    this->properties = thingProperties.properties;
-}
-
-std::string Armor::getNameThing() {
+std::string Armor::getNameThing() const {
     return nameThing;
 }
 
 int Armor::getLevelThing() const {
     return levelThing;
+}
+
+int Armor::getTypeObject() const {
+    return ThingObject::ARMOR;
 }
 
 std::map<std::string, double> Armor::getProperties() const {
@@ -36,4 +34,16 @@ bool Armor::isHealThing() const {
 
 bool Armor::isVisualThing() const {
     return true;
+}
+
+Armor *Armor::clone() const {
+    return new Armor(
+            getNameThing(), getProperties(), getLevelThing()
+    );
+}
+
+Armor::Armor(const std::string &nameThing, const std::map<std::string, double> &properties, int levelThing) {
+    this->nameThing = nameThing;
+    this->properties = properties;
+    this->levelThing = levelThing;
 }

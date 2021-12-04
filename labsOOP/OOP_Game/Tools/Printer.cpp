@@ -31,7 +31,7 @@ void Printer::printInventory(MainHero *hero, bool withSerialNumber) {
     for (int i = 0; i < inventory.size(); ++i) {
         if (withSerialNumber)
             std::cout << i + 1 << ") ";
-        std::cout << inventory[i].getNameThing() << '\n';
+        std::cout << inventory[i]->getNameThing() << '\n';
     }
     std::cout << '\n';
 }

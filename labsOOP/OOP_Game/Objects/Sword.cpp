@@ -1,17 +1,16 @@
 #include "Sword.h"
 
-Sword::Sword(const ThingProperties &thingProperties) {
-    this->nameThing = thingProperties.nameThing;
-    this->levelThing = thingProperties.level;
-    this->properties = thingProperties.properties;
-}
 
-std::string Sword::getNameThing() {
+std::string Sword::getNameThing() const {
     return nameThing;
 }
 
 int Sword::getLevelThing() const {
     return levelThing;
+}
+
+int Sword::getTypeObject() const {
+    return ThingObject::SWORD;
 }
 
 std::map<std::string, double> Sword::getProperties() const {
@@ -36,4 +35,16 @@ bool Sword::isHealThing() const {
 
 bool Sword::isVisualThing() const {
     return true;
+}
+
+Sword *Sword::clone() const {
+    return new Sword(
+            getNameThing(), getProperties(), getLevelThing()
+            );
+}
+
+Sword::Sword(const std::string &nameThing, const std::map<std::string, double> &properties, int levelThing) {
+    this->nameThing = nameThing;
+    this->properties = properties;
+    this->levelThing = levelThing;
 }

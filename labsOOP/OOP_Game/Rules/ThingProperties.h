@@ -1,5 +1,8 @@
 #pragma once
-#include "../Objects/Thing.h"
+#include "../Objects/Sword.h"
+#include "../Objects/HealPotion.h"
+#include "../Objects/Armor.h"
+
 
 struct ThingProperties {
     std::string nameThing;
@@ -7,9 +10,7 @@ struct ThingProperties {
     int level = 0;
     int typeObject;
 public:
-    ThingProperties(const std::string &nameThing, const std::map<std::string, double> &properties, int level,int typeObject)
-            : properties(properties), nameThing(nameThing), level(level), typeObject(typeObject) {}
-    Thing toThing() const {
-        return {nameThing, properties,typeObject, level};
-    }
+    ThingProperties(const std::string &nameThing, const std::map<std::string, double> &properties, int level,int typeObject);
+    ThingInterface* toThing() const;
 };
+

@@ -73,8 +73,8 @@ class GameHandler {
             LoggerPull::writeData("gameLogs",LoggerDataAdapter<CellPoint>(to, "Герой сменил позицию"));
             auto thingOnPos = thingsManager->checkCellHasSmth(to);
             if (thingOnPos.first) {
-                gameAction = mainScreen->createTitleForThingAction(thingOnPos.second.getNameThing(),
-                                                                   thingOnPos.second.getProperties(),
+                gameAction = mainScreen->createTitleForThingAction(thingOnPos.second->getNameThing(),
+                                                                   thingOnPos.second->getProperties(),
                                                                    HeroKeyControl::TAKE);
             }
             if (field->getElem(to).getValue().getTypeCell() == TypeCell::FINISH && finishEnable)
@@ -94,8 +94,8 @@ class GameHandler {
         auto thingOnPos = thingsManager->checkCellHasSmth(point);
         if (thingOnPos.first) {
             field->getHero().takeThing(thingOnPos.second);
-            LoggerPull::writeData("gameLogs",LoggerDataAdapter<Thing>(thingOnPos.second, "Герой подобрал предмет"));
-            if (thingOnPos.second.isVisualThing()) {
+            LoggerPull::writeData("gameLogs",LoggerDataAdapter<ThingInterface*>(thingOnPos.second, "Герой подобрал предмет"));
+            if (thingOnPos.second->isVisualThing()) {
                 field->getHero().resetModel(
                         dataManager->getHero(
                                 field->getHero().hasThing(ThingObject::SWORD),

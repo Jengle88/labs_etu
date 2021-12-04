@@ -3,7 +3,7 @@
 #include <cmath>
 #include <map>
 #include "Character.h"
-#include "../Objects/Thing.h"
+#include "../Objects/ThingInterface.h"
 #include <algorithm>
 
 
@@ -18,7 +18,7 @@ class MainHero : public Character {
         static double MAIN_HERO_PROTECTION;
         static double MAIN_HERO_LUCK;
     };
-    std::vector<Thing> inventory;
+    std::vector<ThingInterface*> inventory;
     std::map<std::string, int> countKilledEnemy;
     bool requestProtect(double attackPower);
     bool requestDodge() const override;
@@ -31,14 +31,15 @@ public:
                 double protection = MainHeroProperties::MAIN_HERO_PROTECTION,
                 double luck = MainHeroProperties::MAIN_HERO_LUCK);
     MainHero() = default;
+
     // урон, уклонение и крит
     std::vector<double> requestAttack(Character &enemy);
-    void takeThing(Thing thing);
+    void takeThing(ThingInterface *thing);
     void ejectThing(int pos);
     bool useThing(int pos);
     bool hasThing(int thingObject) const;
     void writeKill(std::string enemyName);
-    const std::vector<Thing> & getInventory() const;
+    const std::vector<ThingInterface*> & getInventory() const;
     std::map<std::string, int> &getCountKilledEnemy();
     std::string getName() const override;
     std::vector<std::string> getModel() const override;

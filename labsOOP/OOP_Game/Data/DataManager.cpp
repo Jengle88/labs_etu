@@ -3,7 +3,7 @@
 #include "../Rules/ThingProperties.h"
 
 DataManager::DataManager(const std::unordered_map<std::string, ThingProperties>& things) {
-    std::vector<Thing> thingsArray;
+    std::vector<ThingInterface*> thingsArray;
     thingsArray.reserve(things.size());
     for (const auto &thing: things) {
         thingsArray.push_back(thing.second.toThing());
@@ -11,13 +11,13 @@ DataManager::DataManager(const std::unordered_map<std::string, ThingProperties>&
     uploadParamsThing(thingsArray);
 }
 
-Thing DataManager::getThing(int level, int typeThing) {
+ThingInterface* DataManager::getThing(int level, int typeThing) {
     if (levelToThings.empty())
         throw std::logic_error("Не загружены параметры предметов.");
     return levelToThings[level][typeThing];
 }
 
-Thing DataManager::getHealthThing() const {
+ThingInterface* DataManager::getHealthThing() const {
     if (healThings.empty())
         throw std::logic_error("Не загружены параметры лечебных предметов.");
     return *healThings.begin();
@@ -71,20 +71,31 @@ std::vector<std::string> DataManager::getModelCharacter(const std::string &chara
     return {};
 }
 
-void DataManager::uploadParamsThing(const std::vector<Thing> &things) {
+void DataManager::uploadParamsThing(const std::vector<ThingInterface*> &things) {
     int maxCntTypeVisualThing = 0;
     for (const auto & thing : things) {
-        if (!thing.isVisualThing()) {
-            maxCntTypeVisualThing = std::max(maxCntTypeVisualThing, thing.getThingObject() + 1);
+        if (thing->isVisualThing()) {
+            maxCntTypeVisualThing = std::max(maxCntTypeVisualThing, thing->getTypeObject() + 1);
         }
     }
     for (const auto & thing : things) {
-        if (thing.isHealThing()) {
+        if (thing->isHealThing()) {
             healThings.push_back(thing);
         } else {
-            if (levelToThings[thing.getLevelThing()].size() < maxCntTypeVisualThing)
-                levelToThings[thing.getLevelThing()].resize(maxCntTypeVisualThing);
-            levelToThings[thing.getLevelThing()][thing.getThingObject()] = thing;
+            if (levelToThings[thing->getLevelThing()].size() < maxCntTypeVisualThing)
+                levelToThings[thing->getLevelThing()].resize(maxCntTypeVisualThing);
+            levelToThings[thing->getLevelThing()][thing->getTypeObject()] = thing;
+        }
+    }
+}
+
+DataManager::~DataManager() {
+    for (int i = 0; i < healThings.size(); ++i) {
+        delete healThings[i];
+    }
+    for (auto &item: levelToThings) {
+        for (auto &thing: item.second) {
+            delete thing;
         }
     }
 }

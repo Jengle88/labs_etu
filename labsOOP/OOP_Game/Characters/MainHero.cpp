@@ -9,7 +9,8 @@ double MainHero::MainHeroProperties::MAIN_HERO_DAMAGE;
 double MainHero::MainHeroProperties::MAIN_HERO_PROTECTION;
 double MainHero::MainHeroProperties::MAIN_HERO_LUCK;
 
-MainHero::MainHero(std::vector<std::string> model, std::string name, double health, double attackPower, double protection, double luck) : Character(
+MainHero::MainHero(std::vector<std::string> model, std::string name, double health, double attackPower,
+                   double protection, double luck) : Character(
         model, name, health, attackPower, protection, luck) {
 }
 
@@ -32,31 +33,37 @@ void MainHero::recalcCharacteristics(std::map<std::string, double> thingProperti
     this->luck += thingProperties.at("luck");
 }
 
-void MainHero::takeThing(Thing thing) {
-    auto duplicateThing = std::find_if(inventory.begin(), inventory.end(),
-                                       [&thing](Thing& inventoryThing){return inventoryThing.getThingObject() == thing.getThingObject() && !inventoryThing.isActiveThing();});
-    if (duplicateThing != inventory.end()){
-        recalcCharacteristics(duplicateThing->getInverseValueProperties());
+void MainHero::takeThing(ThingInterface *thing) {
+    auto duplicateThing = std::find_if(
+            inventory.begin(), inventory.end(),
+            [&thing](const ThingInterface* inventoryThing) {
+                return inventoryThing->getTypeObject() ==
+                       thing->getTypeObject() && !inventoryThing->isActiveThing();
+            }
+    );
+    if (duplicateThing != inventory.end()) {
+        recalcCharacteristics((*duplicateThing)->getInverseValueProperties());
         *duplicateThing = thing;
-        recalcCharacteristics(duplicateThing->getProperties());
+        recalcCharacteristics((*duplicateThing)->getProperties());
         return;
     }
     inventory.push_back(thing);
-    if (!thing.isActiveThing())
-        recalcCharacteristics(thing.getProperties());
+    if (!thing->isActiveThing())
+        recalcCharacteristics(thing->getProperties());
 }
 
 void MainHero::ejectThing(int pos) {
     auto prevThing = inventory[pos];
     inventory.erase(inventory.begin() + pos);
-    if (!prevThing.isActiveThing())
-        recalcCharacteristics(prevThing.getInverseValueProperties());
+    if (!prevThing->isActiveThing())
+        recalcCharacteristics(prevThing->getInverseValueProperties());
+    delete prevThing;
 }
 
 bool MainHero::useThing(int pos) {
     if (0 <= pos && pos < inventory.size()) {
-        if (inventory[pos].isActiveThing()) {
-            auto properties = inventory[pos].getProperties();
+        if (inventory[pos]->isActiveThing()) {
+            auto properties = inventory[pos]->getProperties();
             inventory.erase(inventory.begin() + pos);
             recalcCharacteristics(properties);
             return true;
@@ -67,14 +74,16 @@ bool MainHero::useThing(int pos) {
 
 bool MainHero::hasThing(int thingObject) const {
     return std::find_if(inventory.begin(), inventory.end(),
-                        [&thingObject](const Thing& thing) {return thingObject == thing.getThingObject();}) != inventory.end();
+                        [&thingObject](const ThingInterface *thing) {
+                            return thingObject == thing->getTypeObject();
+                        }) != inventory.end();
 }
 
 void MainHero::writeKill(std::string enemyName) {
     countKilledEnemy[enemyName]++;
 }
 
-const std::vector<Thing> &MainHero::getInventory() const {
+const std::vector<ThingInterface *> &MainHero::getInventory() const {
     return inventory;
 }
 
@@ -90,9 +99,13 @@ bool MainHero::checkPositiveHealth() const {
     return health > 0;
 }
 
-MainHero * MainHero::clone() const {
+MainHero *MainHero::clone() const {
     auto res = new MainHero(model, name, health, attackPower, protection, luck);
-    res->inventory = inventory;
+    res->inventory.resize(inventory.size());
+    for (int i = 0; i < inventory.size(); ++i) {
+        res->inventory[i] = inventory[i]->clone();
+    }
+//    res->inventory = inventory;
     res->countKilledEnemy = countKilledEnemy;
     return res;
 }
