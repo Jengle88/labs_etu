@@ -1,8 +1,8 @@
 #pragma once
-#include "ThingInterface.h"
+#include "Thing.h"
 #include "../Rules/ThingProperties.h"
 
-class Sword : public ThingInterface {
+class Sword : public Thing {
     std::map<std::string, double> properties; // дельта свойств, максимум 4 элемента
     std::string nameThing;
     int levelThing;

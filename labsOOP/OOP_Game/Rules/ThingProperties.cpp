@@ -1,7 +1,7 @@
 #include "ThingProperties.h"
 
 
-ThingInterface *ThingProperties::toThing() const {
+Thing *ThingProperties::toThing() const {
     switch (typeObject) {
         case ThingObject::SWORD:
             return new Sword(nameThing, properties, level);

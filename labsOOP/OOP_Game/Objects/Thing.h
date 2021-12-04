@@ -10,7 +10,7 @@ enum ThingObject {
     THING_OBJECT_SIZE
 };
 
-class ThingInterface {
+class Thing {
 public:
     virtual std::string getNameThing() const = 0;
     virtual int getTypeObject() const = 0;
@@ -20,6 +20,6 @@ public:
     virtual bool isActiveThing() const = 0;
     virtual bool isHealThing() const = 0;
     virtual bool isVisualThing() const = 0;
-    virtual ThingInterface* clone() const = 0;
-    virtual ~ThingInterface() = default;
+    virtual Thing* clone() const = 0;
+    virtual ~Thing() = default;
 };

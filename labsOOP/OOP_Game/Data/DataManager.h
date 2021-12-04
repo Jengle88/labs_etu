@@ -4,13 +4,13 @@
 #include "../Characters/Monster.h"
 #include "../Tools/ModelDataReader.h"
 #include "../Rules/ThingProperties.h"
-#include "../Objects/ThingInterface.h"
+#include "../Objects/Thing.h"
 
 #
 
 class DataManager {
-    std::map<int, std::vector<ThingInterface*>> levelToThings;
-    std::vector<ThingInterface*> healThings;
+    std::map<int, std::vector<Thing*>> levelToThings;
+    std::vector<Thing*> healThings;
     std::map<std::string, std::vector<std::string>> modelsCharacter;
     std::string dataModelsPathFile = "../Data/ObjectModel.xml";
     // Герой
@@ -19,10 +19,10 @@ class DataManager {
     std::vector<std::string> getModelHeroLegs() const;
 public:
     DataManager(const std::unordered_map<std::string, ThingProperties>& things);
-    ThingInterface* getThing(int level, int typeThing);
-    ThingInterface* getHealthThing() const;
+    Thing* getThing(int level, int typeThing);
+    Thing* getHealthThing() const;
     void uploadModels();
-    void uploadParamsThing(const std::vector<ThingInterface*> & things);
+    void uploadParamsThing(const std::vector<Thing*> & things);
     std::vector<std::string> getModelCharacter(const std::string &character);
     std::vector<std::string> getHero(bool withSword = false, bool withArmor = false) const;
     virtual ~DataManager();

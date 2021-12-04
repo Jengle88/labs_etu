@@ -1,13 +1,13 @@
 #include "ThingsManager.h"
 #include "../Logger/LoggerPull.h"
 
-ThingsManager::ThingsManager(Field *field, std::map<CellPoint, ThingInterface*> visualThingsPlaces,
-                             std::map<CellPoint, ThingInterface*> healthThingsPlaces)
+ThingsManager::ThingsManager(Field *field, std::map<CellPoint, Thing*> visualThingsPlaces,
+                             std::map<CellPoint, Thing*> healthThingsPlaces)
         : field(field), visualThingsPlaces(visualThingsPlaces), nonVisualThingsPlaces(healthThingsPlaces) {}
 
 void ThingsManager::generateVisualThing(DataManager *dataManager) {
-    constexpr auto getVectorFromMapPointThings = [](const std::map<CellPoint, ThingInterface*> &table) {
-        std::vector<ThingInterface*> res(THING_OBJECT_SIZE - 1);
+    constexpr auto getVectorFromMapPointThings = [](const std::map<CellPoint, Thing*> &table) {
+        std::vector<Thing*> res(THING_OBJECT_SIZE - 1);
         for (auto &item: table)
             res[item.second->getTypeObject()] = item.second;
         return res;
@@ -18,7 +18,7 @@ void ThingsManager::generateVisualThing(DataManager *dataManager) {
         if (things[i] == nullptr &&
             std::find(field->getHero().getInventory().begin(), field->getHero().getInventory().end(),
                       dataManager->getThing(levelThings, i)) == field->getHero().getInventory().end()) {
-            this->visualThingsPlaces[point] = dataManager->getThing(levelThings, i); // FIXME исправить на ThingInterface*
+            this->visualThingsPlaces[point] = dataManager->getThing(levelThings, i);
             field->setElem(point, CellObject(TypeCell::EMPTY, TypeObject::NOTHING, true));
             break;
         }
@@ -35,7 +35,7 @@ void ThingsManager::checkThingsLevel(std::map<std::string, int> &achievements) {
 
 void ThingsManager::generateHealthThing(DataManager *dataManager) {
     CellPoint point = field->generateRandomFreePoint();
-    this->nonVisualThingsPlaces[point] = dataManager->getHealthThing(); // FIXME исправить на ThingInterface*
+    this->nonVisualThingsPlaces[point] = dataManager->getHealthThing();
     field->setElem(point, CellObject(TypeCell::EMPTY, TypeObject::NOTHING, true));
 }
 
@@ -46,9 +46,9 @@ void ThingsManager::tryGenerateThing(MainHero &hero, DataManager *dataManager) {
     if (field->getCountSteps() % timeBetweenGenerateHealThing == 0 &&
     hero.getHealth() * 100 / MainHero::MainHeroProperties::MAIN_HERO_MAX_HEALTH <= LOW_HEALTH_PERCENT &&
         std::count_if(nonVisualThingsPlaces.begin(), nonVisualThingsPlaces.end(),
-                      [](const std::pair<CellPoint,ThingInterface*> &place) { return place.second->isHealThing(); }) +
+                      [](const std::pair<CellPoint,Thing*> &place) { return place.second->isHealThing(); }) +
         std::count_if(heroInventory.begin(), heroInventory.end(),
-                        [](const ThingInterface* thing) { return thing->isHealThing(); }) <= cntHealThing) {
+                        [](const Thing* thing) { return thing->isHealThing(); }) <= cntHealThing) {
         generateHealthThing(dataManager);
         return;
     }
@@ -59,7 +59,7 @@ void ThingsManager::tryGenerateThing(MainHero &hero, DataManager *dataManager) {
     }
 }
 
-std::pair<bool, ThingInterface*> ThingsManager::checkCellHasSmth(CellPoint point) {
+std::pair<bool, Thing*> ThingsManager::checkCellHasSmth(CellPoint point) {
     if (visualThingsPlaces.count(point) > 0) {
         return {true, visualThingsPlaces[point]};
     } else if (nonVisualThingsPlaces.count(point) > 0) {

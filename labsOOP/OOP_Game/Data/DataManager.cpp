@@ -3,7 +3,7 @@
 #include "../Rules/ThingProperties.h"
 
 DataManager::DataManager(const std::unordered_map<std::string, ThingProperties>& things) {
-    std::vector<ThingInterface*> thingsArray;
+    std::vector<Thing*> thingsArray;
     thingsArray.reserve(things.size());
     for (const auto &thing: things) {
         thingsArray.push_back(thing.second.toThing());
@@ -11,13 +11,13 @@ DataManager::DataManager(const std::unordered_map<std::string, ThingProperties>&
     uploadParamsThing(thingsArray);
 }
 
-ThingInterface* DataManager::getThing(int level, int typeThing) {
+Thing* DataManager::getThing(int level, int typeThing) {
     if (levelToThings.empty())
         throw std::logic_error("Не загружены параметры предметов.");
     return levelToThings[level][typeThing];
 }
 
-ThingInterface* DataManager::getHealthThing() const {
+Thing* DataManager::getHealthThing() const {
     if (healThings.empty())
         throw std::logic_error("Не загружены параметры лечебных предметов.");
     return *healThings.begin();
@@ -71,7 +71,7 @@ std::vector<std::string> DataManager::getModelCharacter(const std::string &chara
     return {};
 }
 
-void DataManager::uploadParamsThing(const std::vector<ThingInterface*> &things) {
+void DataManager::uploadParamsThing(const std::vector<Thing*> &things) {
     int maxCntTypeVisualThing = 0;
     for (const auto & thing : things) {
         if (thing->isVisualThing()) {

@@ -11,6 +11,6 @@ struct ThingProperties {
     int typeObject;
 public:
     ThingProperties(const std::string &nameThing, const std::map<std::string, double> &properties, int level,int typeObject);
-    ThingInterface* toThing() const;
+    Thing* toThing() const;
 };
 

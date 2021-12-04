@@ -1,12 +1,11 @@
 #pragma once
-#include "ThingInterface.h"
+#include "Thing.h"
 #include "../Rules/ThingProperties.h"
 
-class HealPotion : public ThingInterface {
+class HealPotion : public Thing {
     std::map<std::string, double> properties; // дельта свойств, максимум 4 элемента
     std::string nameThing;
     int levelThing;
-
 public:
     HealPotion(const std::string& nameThing, const std::map<std::string, double>& properties, int levelThing);
     ~HealPotion() override = default;
@@ -18,6 +17,5 @@ public:
     bool isActiveThing() const override;
     bool isHealThing() const override;
     bool isVisualThing() const override;
-
     HealPotion *clone() const override;
 };

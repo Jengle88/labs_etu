@@ -94,7 +94,7 @@ class GameHandler {
         auto thingOnPos = thingsManager->checkCellHasSmth(point);
         if (thingOnPos.first) {
             field->getHero().takeThing(thingOnPos.second);
-            LoggerPull::writeData("gameLogs",LoggerDataAdapter<ThingInterface*>(thingOnPos.second, "Герой подобрал предмет"));
+            LoggerPull::writeData("gameLogs",LoggerDataAdapter<Thing*>(thingOnPos.second, "Герой подобрал предмет"));
             if (thingOnPos.second->isVisualThing()) {
                 field->getHero().resetModel(
                         dataManager->getHero(

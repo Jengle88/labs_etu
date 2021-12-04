@@ -33,10 +33,10 @@ void MainHero::recalcCharacteristics(std::map<std::string, double> thingProperti
     this->luck += thingProperties.at("luck");
 }
 
-void MainHero::takeThing(ThingInterface *thing) {
+void MainHero::takeThing(Thing *thing) {
     auto duplicateThing = std::find_if(
             inventory.begin(), inventory.end(),
-            [&thing](const ThingInterface* inventoryThing) {
+            [&thing](const Thing* inventoryThing) {
                 return inventoryThing->getTypeObject() ==
                        thing->getTypeObject() && !inventoryThing->isActiveThing();
             }
@@ -74,7 +74,7 @@ bool MainHero::useThing(int pos) {
 
 bool MainHero::hasThing(int thingObject) const {
     return std::find_if(inventory.begin(), inventory.end(),
-                        [&thingObject](const ThingInterface *thing) {
+                        [&thingObject](const Thing *thing) {
                             return thingObject == thing->getTypeObject();
                         }) != inventory.end();
 }
@@ -83,7 +83,7 @@ void MainHero::writeKill(std::string enemyName) {
     countKilledEnemy[enemyName]++;
 }
 
-const std::vector<ThingInterface *> &MainHero::getInventory() const {
+const std::vector<Thing *> &MainHero::getInventory() const {
     return inventory;
 }
 
@@ -103,9 +103,8 @@ MainHero *MainHero::clone() const {
     auto res = new MainHero(model, name, health, attackPower, protection, luck);
     res->inventory.resize(inventory.size());
     for (int i = 0; i < inventory.size(); ++i) {
-        res->inventory[i] = inventory[i]->clone();
+        res->inventory[i] = inventory[i];
     }
-//    res->inventory = inventory;
     res->countKilledEnemy = countKilledEnemy;
     return res;
 }
