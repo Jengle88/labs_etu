@@ -1,0 +1,52 @@
+2
+Easy
+Characters; 4
+name; health; attackPower; protection; luck; visibility; criticalFactor; dodgeFactor; percentForFollowToHero; lengthMove
+MainHero; 100; 1,2; 1,2; 1,2; 1; 2; 0,5; -1; 1
+Monster; 60; 0,7; 0,8; 0,7; 1; 1,1; 0,9; 60; 1
+Archer; 55; 0,85; 0,7; 0,7; 1; 1,15; 0,85; 60; 1
+Gargoyle; 65; 0,85; 0,75; 0,73; 1; 1,15; 0,8; 65; 1
+Things; 5
+name; damage; protection; luck; health; level; typeObject
+Железный нагрудник; 0; 1,5; 0; 0; 1; armor
+Железный меч; 1,8; 0; 0; 0; 1; sword
+Стальной нагрудник; 0; 2; 0; 0; 2; armor
+Стальной меч; 2,1; 0; 0; 0; 2; sword
+Лечебный эликсир; 0; 0; 0; 40; 0; healPotion
+cntEnemyOnField; 3
+cntKilledEnemy; 3
+name; cnt
+Monster; 1
+Archer; 1
+Gargoyle; 1
+levelAllThings; 1
+cntHealThing; 4
+timeBetweenGenerateEnemy; 13
+timeBetweenGenerateVisualThing; 11
+timeBetweenGenerateHealThing; 8
+-------------------------------
+Middle
+Characters; 4
+name; health; attackPower; protection; luck; visibility; criticalFactor; dodgeFactor; percentForFollowToHero; lengthMove
+MainHero; 100; 1,1; 1; 1,1; 1; 1,2; 0,69; -1; -1
+Monster; 65; 0,9; 0,8; 0,75; 1; 1,2; 0,85; 70; 1
+Archer; 62; 0,9; 0,77; 0,8; 1; 1,25; 0,8; 70; 1
+Gargoyle; 75; 1; 0,95; 0,73; 1; 1,3; 0,7; 75; 1
+Things; 5
+name; damage; protection; luck; health; level; typeObject
+Железный нагрудник; 0; 1,3; 0; 0; 1; armor
+Железный меч; 1,5; 0; 0; 0; 1; sword
+Стальной нагрудник; 0; 1,7; 0; 0; 2; armor
+Стальной меч; 1,9; 0; 0; 0; 2; sword
+Лечебный эликсир; 0; 0; 0; 30; 0; healPotion
+cntEnemyOnField; 5
+cntKilledEnemy; 3
+name; cnt
+Monster; 3
+Archer; 2
+Gargoyle; 1
+levelAllThings; 2
+cntHealThing; 3
+timeBetweenGenerateEnemy; 11
+timeBetweenGenerateVisualThing; 13
+timeBetweenGenerateHealThing; 10

@@ -7,6 +7,7 @@
 #include "Rules/GlobalRules.h"
 #include "Rules/Presets/MiddlePreset.h"
 #include "GameHandler.h"
+#include "Tools/DifficultDataReader.h"
 
 
 class GameStart {
@@ -17,12 +18,14 @@ public:
             LoggerPull *loggerPull = LoggerPull::getInstance();
             LoggerPull::addFileLogger("gameLogs", new FileLogger("logs.txt"));
 
-            static RulesPreset difficulty = static_cast<RulesPreset>(EasyPreset());
-            static auto gameRules = GlobalRules<difficulty>();
-            GameHandler<difficulty, gameRules> gameHandler;
-
-            gameHandler.generate();
-            gameHandler.observe();
+            auto data = DifficultDataReader::readRulesPresets("../Data/GameEntityProperties.txt");
+            int z = 2;
+//            static RulesPreset difficulty = static_cast<RulesPreset>(EasyPreset());
+//            static auto gameRules = GlobalRules<difficulty>();
+//            GameHandler<difficulty, gameRules> gameHandler;
+//
+//            gameHandler.generate();
+//            gameHandler.observe();
 
             delete loggerPull;
         }
