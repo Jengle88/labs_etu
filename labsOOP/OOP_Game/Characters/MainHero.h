@@ -4,6 +4,7 @@
 #include <map>
 #include "Character.h"
 #include "../Objects/Thing.h"
+#include "../Rules/CharacterProperties.h"
 #include <algorithm>
 
 
@@ -48,9 +49,8 @@ public:
     static int getRangeVisibility();
     bool checkPositiveHealth() const;
     void resetModel(std::vector<std::string> newModel);
-    static void
-    setDefaultProperties(const std::string &name, double health, double attackPower, double protection, double luck,
-                         int visibility, double criticalFactor, double dodgeFactor);
+    static void setDefaultProperties(const CharacterProperties &characterProperties);
+
 
     friend class ThingsManager;
 };

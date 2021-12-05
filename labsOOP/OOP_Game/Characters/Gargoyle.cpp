@@ -91,18 +91,16 @@ std::string Gargoyle::getName() const {
     return Character::getName();
 }
 
-void Gargoyle::setDefaultProperties(const std::string &name, double health, double attackPower, double protection,
-                                    double luck, int visibility, double criticalFactor, double dodgeFactor,
-                                    int percentForFollowToHero, int lengthMove) {
-    GargoyleProperties::GARGOYLE_NAME = name;
-    GargoyleProperties::GARGOYLE_MAX_HEALTH = health;
-    GargoyleProperties::GARGOYLE_PROTECTION = protection;
-    GargoyleProperties::GARGOYLE_DAMAGE = attackPower;
-    GargoyleProperties::GARGOYLE_LUCK = luck;
-    GargoyleProperties::GARGOYLE_RANGE_VISIBILITY = visibility;
-    GargoyleProperties::GARGOYLE_CRITICAL_FACTOR = criticalFactor;
-    GargoyleProperties::GARGOYLE_DODGE_FACTOR = dodgeFactor;
-    GargoyleProperties::GARGOYLE_PERCENT_FOR_FOLLOW_TO_HERO = percentForFollowToHero;
-    GargoyleProperties::GARGOYLE_MOVE = lengthMove;
+void Gargoyle::setDefaultProperties(const CharacterProperties &characterProperties) {
+    GargoyleProperties::GARGOYLE_NAME = characterProperties.getName();
+    GargoyleProperties::GARGOYLE_MAX_HEALTH = characterProperties.getHealth();
+    GargoyleProperties::GARGOYLE_PROTECTION = characterProperties.getProtection();
+    GargoyleProperties::GARGOYLE_DAMAGE = characterProperties.getAttackPower();
+    GargoyleProperties::GARGOYLE_LUCK = characterProperties.getLuck();
+    GargoyleProperties::GARGOYLE_RANGE_VISIBILITY = characterProperties.getVisibility();
+    GargoyleProperties::GARGOYLE_CRITICAL_FACTOR = characterProperties.getCriticalFactor();
+    GargoyleProperties::GARGOYLE_DODGE_FACTOR = characterProperties.getDodgeFactor();
+    GargoyleProperties::GARGOYLE_PERCENT_FOR_FOLLOW_TO_HERO = characterProperties.getPercentForFollowToHero();
+    GargoyleProperties::GARGOYLE_MOVE = characterProperties.getLengthMove();
 }
 

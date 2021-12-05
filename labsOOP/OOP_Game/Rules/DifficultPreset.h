@@ -16,12 +16,6 @@ class DifficultPreset : public RulesChecker {
     int timeBetweenGenerateVisualThing;
     int timeBetweenGenerateHealThing;
 public:
-    void recalcCntThingsRightLevel() {
-        cntThingsRightLevel = std::count_if(thingsParams.begin(), thingsParams.end(),
-                                            [this](std::pair<std::string, ThingProperties> thing){
-            return thing.second.level == levelAllThings;
-        });
-    }
     bool checkHero(MainHero& hero) const override {
         auto cntKilled = hero.getCountKilledEnemy();
         auto requiredCntKilled = cntKilledEnemy;
@@ -45,6 +39,13 @@ public:
     bool checkField(Field &field) const override {
         return true;
     }
+    void recalcCntThingsRightLevel() {
+        cntThingsRightLevel = std::count_if(thingsParams.begin(), thingsParams.end(),
+                                            [this](std::pair<std::string, ThingProperties> thing){
+                                                return thing.second.getLevel() == levelAllThings;
+                                            });
+    }
+
     const std::unordered_map<std::string, CharacterProperties> &getCharactersParams() const {
         return charactersParams;
     }

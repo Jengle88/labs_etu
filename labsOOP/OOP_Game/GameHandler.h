@@ -306,26 +306,13 @@ public:
         LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Модели загружены"));
 
         CharacterProperties properties = preset.getCharactersParams().at("MainHero");
-        MainHero::setDefaultProperties(properties.name, properties.health, properties.attackPower,
-                                       properties.protection,
-                                       properties.luck, properties.visibility, properties.criticalFactor,
-                                       properties.dodgeFactor);
+        MainHero::setDefaultProperties(properties);
         properties = preset.getCharactersParams().at("Monster");
-        Monster::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
-                                      properties.luck, properties.visibility, properties.criticalFactor,
-                                      properties.dodgeFactor,
-                                      properties.percentForFollowToHero, properties.lengthMove);
+        Monster::setDefaultProperties(properties);
         properties = preset.getCharactersParams().at("Archer");
-        Archer::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
-                                     properties.luck, properties.visibility, properties.criticalFactor,
-                                     properties.dodgeFactor,
-                                     properties.percentForFollowToHero, properties.lengthMove);
+        Archer::setDefaultProperties(properties);
         properties = preset.getCharactersParams().at("Gargoyle");
-        Gargoyle::setDefaultProperties(properties.name, properties.health, properties.attackPower,
-                                       properties.protection,
-                                       properties.luck, properties.visibility, properties.criticalFactor,
-                                       properties.dodgeFactor,
-                                       properties.percentForFollowToHero, properties.lengthMove);
+        Gargoyle::setDefaultProperties(properties);
         LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Характеристики персонажей загружены"));
 
         mainScreen = new FieldScreen();

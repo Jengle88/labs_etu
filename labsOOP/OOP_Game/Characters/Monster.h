@@ -1,6 +1,7 @@
 #pragma once
 #include "Character.h"
 #include "Enemy.h"
+#include "../Rules/CharacterProperties.h"
 #include <cstdlib>
 #include <cmath>
 #include <ctime>
@@ -40,9 +41,5 @@ public:
     std::vector<std::string> getModel() const override;
     Monster *clone() const override;
     bool checkPositiveHealth() const override;
-
-    static void
-    setDefaultProperties(const std::string &name, double health, double attackPower, double protection,
-                         double luck, int visibility, double criticalFactor, double dodgeFactor,
-                         int percentForFollowToHero, int lengthMove);
+    static void setDefaultProperties(const CharacterProperties &characterProperties);
 };

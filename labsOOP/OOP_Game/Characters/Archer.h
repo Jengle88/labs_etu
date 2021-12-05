@@ -1,6 +1,7 @@
 #pragma once
 #include "Enemy.h"
 #include "Character.h"
+#include "../Rules/CharacterProperties.h"
 
 class Archer: public Character, public Enemy {
     struct ArcherProperties{
@@ -38,8 +39,6 @@ public:
     Archer* clone() const override;
     bool checkPositiveHealth() const override;
 
-    static void
-    setDefaultProperties(const std::string &name, double health, double attackPower, double protection, double luck,
-                         int visibility, double criticalFactor, double dodgeFactor, int percentForFollowToHero,
-                         int lengthMove);
+    static void setDefaultProperties(const CharacterProperties &characterProperties);
+
 };

@@ -48,7 +48,7 @@ Character* Character::clone() const {
 }
 
 double Character::getDodgeFactor() const {
-    return CharacterProperties::CHARACTER_DODGE_FACTOR;
+    return DefaultCharacterProperties::CHARACTER_DODGE_FACTOR;
 }
 
 double Character::getHealth() const {

@@ -92,19 +92,16 @@ std::string Archer::getName() const {
     return Character::getName();
 }
 
-void
-Archer::setDefaultProperties(const std::string &name, double health, double attackPower, double protection, double luck,
-                             int visibility, double criticalFactor, double dodgeFactor, int percentForFollowToHero,
-                             int lengthMove) {
-    ArcherProperties::ARCHER_NAME = name;
-    ArcherProperties::ARCHER_MAX_HEALTH = health;
-    ArcherProperties::ARCHER_PROTECTION = protection;
-    ArcherProperties::ARCHER_DAMAGE = attackPower;
-    ArcherProperties::ARCHER_LUCK = luck;
-    ArcherProperties::ARCHER_RANGE_VISIBILITY = visibility;
-    ArcherProperties::ARCHER_CRITICAL_FACTOR = criticalFactor;
-    ArcherProperties::ARCHER_DODGE_FACTOR = dodgeFactor;
-    ArcherProperties::ARCHER_PERCENT_FOR_FOLLOW_TO_HERO = percentForFollowToHero;
-    ArcherProperties::ARCHER_MOVE = lengthMove;
+void Archer::setDefaultProperties(const CharacterProperties &characterProperties) {
+    ArcherProperties::ARCHER_NAME = characterProperties.getName();
+    ArcherProperties::ARCHER_MAX_HEALTH = characterProperties.getHealth();
+    ArcherProperties::ARCHER_PROTECTION = characterProperties.getProtection();
+    ArcherProperties::ARCHER_DAMAGE = characterProperties.getAttackPower();
+    ArcherProperties::ARCHER_LUCK = characterProperties.getLuck();
+    ArcherProperties::ARCHER_RANGE_VISIBILITY = characterProperties.getVisibility();
+    ArcherProperties::ARCHER_CRITICAL_FACTOR = characterProperties.getCriticalFactor();
+    ArcherProperties::ARCHER_DODGE_FACTOR = characterProperties.getDodgeFactor();
+    ArcherProperties::ARCHER_PERCENT_FOR_FOLLOW_TO_HERO = characterProperties.getPercentForFollowToHero();
+    ArcherProperties::ARCHER_MOVE = characterProperties.getLengthMove();
 }
 

@@ -4,7 +4,7 @@
 #include "../Objects/Armor.h"
 
 
-struct ThingProperties {
+class ThingProperties {
     std::string nameThing;
     std::map<std::string, double> properties; // берём только нужные свойства
     int level = 0;
@@ -12,5 +12,9 @@ struct ThingProperties {
 public:
     ThingProperties(const std::string &nameThing, const std::map<std::string, double> &properties, int level,int typeObject);
     Thing* toThing() const;
+    const std::string &getNameThing() const;
+    const std::map<std::string, double> &getProperties() const;
+    int getLevel() const;
+    int getTypeObject() const;
 };
 

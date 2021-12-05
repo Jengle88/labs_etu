@@ -121,16 +121,15 @@ void MainHero::resetModel(std::vector<std::string> newModel) {
     model = newModel;
 }
 
-void MainHero::setDefaultProperties(const std::string &name, double health, double attackPower, double protection,
-                                    double luck, int visibility, double criticalFactor, double dodgeFactor) {
-    MainHeroProperties::MAIN_HERO_NAME = name;
-    MainHeroProperties::MAIN_HERO_MAX_HEALTH = health;
-    MainHeroProperties::MAIN_HERO_PROTECTION = protection;
-    MainHeroProperties::MAIN_HERO_DAMAGE = attackPower;
-    MainHeroProperties::MAIN_HERO_LUCK = luck;
-    MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY = visibility;
-    MainHeroProperties::MAIN_HERO_CRITICAL_FACTOR = criticalFactor;
-    MainHeroProperties::MAIN_HERO_DODGE_FACTOR = dodgeFactor;
+void MainHero::setDefaultProperties(const CharacterProperties &characterProperties) {
+    MainHeroProperties::MAIN_HERO_NAME = characterProperties.getName();
+    MainHeroProperties::MAIN_HERO_MAX_HEALTH = characterProperties.getHealth();
+    MainHeroProperties::MAIN_HERO_PROTECTION = characterProperties.getProtection();
+    MainHeroProperties::MAIN_HERO_DAMAGE = characterProperties.getAttackPower();
+    MainHeroProperties::MAIN_HERO_LUCK = characterProperties.getLuck();
+    MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY = characterProperties.getVisibility();
+    MainHeroProperties::MAIN_HERO_CRITICAL_FACTOR = characterProperties.getCriticalFactor();
+    MainHeroProperties::MAIN_HERO_DODGE_FACTOR = characterProperties.getDodgeFactor();
 }
 
 int MainHero::getRangeVisibility() {

@@ -90,19 +90,16 @@ std::string Monster::getName() const {
     return Character::getName();
 }
 
-void Monster::setDefaultProperties(const std::string &name, double health, double attackPower, double protection,
-                                   double luck, int visibility, double criticalFactor, double dodgeFactor,
-                                   int percentForFollowToHero, int lengthMove) {
-    MonsterProperties::MONSTER_NAME = name;
-    MonsterProperties::MONSTER_MAX_HEALTH = health;
-    MonsterProperties::MONSTER_PROTECTION = protection;
-    MonsterProperties::MONSTER_DAMAGE = attackPower;
-    MonsterProperties::MONSTER_LUCK = luck;
-    MonsterProperties::MONSTER_RANGE_VISIBILITY = visibility;
-    MonsterProperties::MONSTER_CRITICAL_FACTOR = criticalFactor;
-    MonsterProperties::MONSTER_DODGE_FACTOR = dodgeFactor;
-    MonsterProperties::MONSTER_PERCENT_FOR_FOLLOW_TO_HERO = percentForFollowToHero;
-    MonsterProperties::MONSTER_MOVE = lengthMove;
-
+void Monster::setDefaultProperties(const CharacterProperties &characterProperties) {
+    MonsterProperties::MONSTER_NAME = characterProperties.getName();
+    MonsterProperties::MONSTER_MAX_HEALTH = characterProperties.getHealth();
+    MonsterProperties::MONSTER_PROTECTION = characterProperties.getProtection();
+    MonsterProperties::MONSTER_DAMAGE = characterProperties.getAttackPower();
+    MonsterProperties::MONSTER_LUCK = characterProperties.getLuck();
+    MonsterProperties::MONSTER_RANGE_VISIBILITY = characterProperties.getVisibility();
+    MonsterProperties::MONSTER_CRITICAL_FACTOR = characterProperties.getCriticalFactor();
+    MonsterProperties::MONSTER_DODGE_FACTOR = characterProperties.getDodgeFactor();
+    MonsterProperties::MONSTER_PERCENT_FOR_FOLLOW_TO_HERO = characterProperties.getPercentForFollowToHero();
+    MonsterProperties::MONSTER_MOVE = characterProperties.getLengthMove();
 }
 

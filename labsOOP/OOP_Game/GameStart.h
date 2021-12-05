@@ -17,7 +17,7 @@ public:
             static auto dataDifficult = DifficultDataReader::readRulesPresets("../Data/GameEntityProperties.txt");
             static DifficultPreset difficultPreset = dataDifficult["Easy"];
             static RulesChecker* checker = &dataDifficult["Easy"];
-            GameHandler<difficultPreset, &checker, &checker, &checker> gameHandler;
+            GameHandler<difficultPreset, &checker/*, &checker, &checker*/> gameHandler;
 
             gameHandler.generate();
             gameHandler.observe();
