@@ -71,7 +71,6 @@ void Printer::printHeroAchievement(std::map<std::string, int> &achievement) {
 
 void Printer::printMessage(const std::string &message) {
     std::cout << message;
-
 }
 
 void Printer::printModels(const std::vector<std::string> &models) {
@@ -80,3 +79,20 @@ void Printer::printModels(const std::vector<std::string> &models) {
     }
 }
 
+void Printer::printDivider(int length) {
+    for (int i = 0; i < length; ++i) {
+        std::cout << "-";
+    }
+    std::cout << '\n';
+}
+
+void Printer::printMenuWithChoice(const std::vector<std::string> &menuItem, int selectedItem) {
+    for (int i = 0; i < menuItem.size(); ++i) {
+        if (i == selectedItem)
+            std::cout << "-> ";
+        else
+            std::cout << "   ";
+        std::cout << menuItem[i] << '\n';
+    }
+    std::cout << '\n';
+}

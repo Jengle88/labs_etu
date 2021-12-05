@@ -27,6 +27,8 @@ enum FightStatus {
 
 enum FightHeroKeyAction {
     ATTACK = 'a',
+    SELECT_THING_UP = 'w',
+    SELECT_THING_DOWN = 's',
     USE = 'e'
 };
 
@@ -235,17 +237,18 @@ class GameHandler {
 
     // для FightScreen: start
     int fightStatusObserver(MainHero &mainHero, Enemy &enemy) {
-        fightScreen->showUpdatedScreen(mainHero);
+        int selectedThing = 0;
+        fightScreen->showUpdatedScreen(mainHero, selectedThing);
         LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Отображён экран боя"));
         fightScreen->showHealthInfo(mainHero, enemy);
         while (mainHero.checkPositiveHealth() && enemy.checkPositiveHealth()) {
             char action = getchar();
             fightScreen->clearScreen();
-            if (!requestFightAction(action, mainHero, enemy)) {
+            if (!requestFightAction(action, mainHero, enemy, selectedThing)) {
                 getchar(); // считываем перенос строки
                 return FightStatus::LEAVE_FIGHT;
             }
-            fightScreen->showUpdatedScreen(mainHero);
+            fightScreen->showUpdatedScreen(mainHero, selectedThing);
             fightScreen->showHealthInfo(mainHero, enemy);
         }
         if (mainHero.checkPositiveHealth()) {
@@ -258,8 +261,7 @@ class GameHandler {
         return mainHero.checkPositiveHealth();
     }
 
-    bool requestFightAction(char action, MainHero &mainHero, Enemy &enemy) {
-        int numberThing = -1;
+    bool requestFightAction(char action, MainHero &mainHero, Enemy &enemy, int &selectedThing) {
         std::vector<double> heroAttackInfo;
         std::vector<double> enemyAttackInfo;
         switch (tolower(action)) {
@@ -274,10 +276,20 @@ class GameHandler {
                 LoggerPull::writeData("gameLogs",
                                       LoggerDataAdapter<Character &>(dynamic_cast<Character &>(enemy), "Статус врага"));
                 break;
+            case FightHeroKeyAction::SELECT_THING_UP:
+                if (0 <= selectedThing - 1)
+                    selectedThing--;
+                break;
+            case FightHeroKeyAction::SELECT_THING_DOWN:
+                if (selectedThing + 1 < mainHero.getInventory().size())
+                    selectedThing++;
+                break;
             case FightHeroKeyAction::USE:
-                std::cin >> numberThing;
-                if (!mainHero.useThing(numberThing - 1)) {
+                if (!mainHero.useThing(selectedThing)) {
                     fightScreen->showMessage("Предмета нет или он не может быть использован\n");
+                } else {
+                    if (selectedThing >= mainHero.getInventory().size())
+                        selectedThing = std::max((int)mainHero.getInventory().size() - 1, 0);
                 }
                 break;
             case HeroKeyControl::EXIT:

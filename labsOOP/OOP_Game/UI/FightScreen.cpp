@@ -4,7 +4,7 @@
 FightScreen::FightScreen(const std::vector<std::string>& heroModel, const std::vector<std::string>& enemyModel)
                                                             : heroModel(heroModel), enemyModel(enemyModel) {}
 
-void FightScreen::showUpdatedScreen(MainHero &mainHero) {
+void FightScreen::showUpdatedScreen(MainHero &mainHero, int selectedThing) {
     auto fightModel = heroModel;
     int distBetweenCharacters = 7; // пространство между героем и врагом на экране
     std::for_each(fightModel.begin(), fightModel.end(),
@@ -13,7 +13,7 @@ void FightScreen::showUpdatedScreen(MainHero &mainHero) {
         fightModel[i] += enemyModel[i];
     }
     showFighterModels(fightModel);
-    showInventory(&mainHero, true);
+    showInventory(&mainHero, selectedThing);
 }
 
 void FightScreen::showHealthInfo(MainHero &mainHero, Enemy &enemy) const {
@@ -28,9 +28,16 @@ void FightScreen::clearScreen() const {
     std::system("clear");
 }
 
-void FightScreen::showInventory(MainHero *hero, bool withSerialNumber) const {
-    Printer::printInventory(hero, withSerialNumber);
+void FightScreen::showInventory(MainHero *hero, int selectedThing) const {
+    auto inventory = hero->getInventory();
+    std::vector<std::string> thingsName(inventory.size());
+    for (int i = 0; i < inventory.size(); ++i) {
+        thingsName[i] = inventory[i]->getNameThing();
+    }
+    Printer::printMenuWithChoice(thingsName, selectedThing);
 }
+
+
 
 void FightScreen::showFighterModels(const std::vector<std::string> &models) const {
     Printer::printModels(models);

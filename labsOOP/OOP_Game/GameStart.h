@@ -15,10 +15,12 @@ public:
             LoggerPull *loggerPull = LoggerPull::getInstance();
             LoggerPull::addFileLogger("gameLogs", new FileLogger("logs.txt"));
             static auto dataDifficult = DifficultDataReader::readRulesPresets("../Data/GameEntityProperties.txt");
-            static DifficultPreset difficultPreset = dataDifficult["Easy"];
-            static RulesChecker* checker = &dataDifficult["Easy"];
+            static DifficultPreset difficultPreset = dataDifficult["Middle"];
+            static RulesChecker* checker = &dataDifficult["Middle"];
             GameHandler<difficultPreset, &checker/*, &checker, &checker*/> gameHandler;
-
+//            Printer::printDivider();
+//            Printer::printMenuWithChoice({"Start game", "Settings", "Exit"}, 1);
+//            Printer::printDivider();
             gameHandler.generate();
             gameHandler.observe();
 

@@ -4,6 +4,8 @@
 
 class Printer {
 public:
+    static void printDivider(int length = 50);
+    static void printMenuWithChoice(const std::vector<std::string>& menuItem, int selectedItem = -1);
     static void printFullField(Field *field) ;
     static void printInventory(MainHero *hero, bool withSerialNumber = false);
     static void printEnemyInfo(std::map<CellPoint, Enemy*> *enemies);
