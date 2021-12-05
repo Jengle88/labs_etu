@@ -1,0 +1,18 @@
+2
+fieldScreen 10
+moveUp w
+moveLeft a
+moveRight d
+moveDown s
+takeThing e
+startFight f
+finishOut q
+exitField `
+accept y
+cancel n
+fightScreen 5
+attackEnemy a
+selectThingUp w
+selectThingDown s
+useThing e
+exitFight `

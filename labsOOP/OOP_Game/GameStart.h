@@ -5,6 +5,8 @@
 #include "Logger/LoggerPull.h"
 #include "GameHandler.h"
 #include "Tools/DifficultDataReader.h"
+#include "KeyControl/KeyboardControl.h"
+#include "KeyControl/KeyboardDataReader.h"
 
 
 class GameStart {
@@ -14,10 +16,22 @@ public:
             std::setlocale(LC_ALL, "");
             LoggerPull *loggerPull = LoggerPull::getInstance();
             LoggerPull::addFileLogger("gameLogs", new FileLogger("logs.txt"));
+
             static auto dataDifficult = DifficultDataReader::readRulesPresets("../Data/GameEntityProperties.txt");
             static DifficultPreset difficultPreset = dataDifficult["Middle"];
             static RulesChecker* checker = &dataDifficult["Middle"];
-            GameHandler<difficultPreset, &checker/*, &checker, &checker*/> gameHandler;
+
+            auto keyboardSetting = KeyboardDataReader::readKeyboardSetting("../Data/KeyboardSettings.txt");
+            static KeyboardControl keyboardControl(keyboardSetting);
+            static auto keyControl = static_cast<KeyControl*>(&keyboardControl);
+            GameHandler<&keyControl, difficultPreset, &checker/*, &checker, &checker*/> gameHandler;
+//            KeyboardControl keyboardController;
+//            keyboardController.resetBindChar('w', HeroKeysControl::MOVE_UP);
+//            keyboardController.resetBindChar('s', HeroKeysControl::MOVE_DOWN);
+//            keyboardController.resetBindChar('d', HeroKeysControl::MOVE_RIGHT);
+//            keyboardController.resetBindChar('a', HeroKeysControl::MOVE_LEFT);
+//            int z = 2;
+
 //            Printer::printDivider();
 //            Printer::printMenuWithChoice({"Start game", "Settings", "Exit"}, 1);
 //            Printer::printDivider();

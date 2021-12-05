@@ -3,12 +3,15 @@
 #include "../Objects/ThingsManager.h"
 #include "../Tools/Printer.h"
 #include "FightScreen.h"
+#include "../KeyControl/KeyControl.h"
 
 class FieldScreen {
-    std::tuple<int, int, int> showStartingParamsAndGenerateField(DataManager *dataManager);
+    std::tuple<int, int, int>
+    showStartingParamsAndGenerateField(DataManager *dataManager, const KeyControl *keyController);
 
 public:
-    std::tuple<int, int, int> showStartFieldScreen(DataManager *dataManager);
+    std::tuple<int, int, int> showStartFieldScreen(DataManager *dataManager, const KeyControl *keyController);
+    std::string getScreenName() const;
     void showMessage(const std::string& message) const;
     void showUpdatedScreen(Field *field) const;
     void showEnemyInfo(std::map<CellPoint, Enemy *> *enemies) const;

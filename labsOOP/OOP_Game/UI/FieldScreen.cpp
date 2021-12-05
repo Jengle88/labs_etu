@@ -1,11 +1,13 @@
 #include "FieldScreen.h"
 #include "../Logger/LoggerPull.h"
+#include "../KeyControl/KeyControl.h"
 
 
-std::tuple<int, int, int> FieldScreen::showStartingParamsAndGenerateField(DataManager *dataManager) { // паттерн Builder
+std::tuple<int, int, int>
+FieldScreen::showStartingParamsAndGenerateField(DataManager *dataManager, const KeyControl *keyController) { // паттерн Builder
     std::cout << "Введите значения параметров:\n";
     bool acceptedParams = false;
-    auto enterSizeValue = [](
+    auto enterSizeValue = [this, keyController](
             int &val,
             int height,
             int width,
@@ -14,21 +16,19 @@ std::tuple<int, int, int> FieldScreen::showStartingParamsAndGenerateField(DataMa
     ) {
         while (val < 0) {
             try {
-                std::cout << title;
-                std::cin >> val;
-                if (std::cin.fail())
-                    throw -1;
-            } catch (int) {
-                std::cin.clear(); // убирает флаг fail с cin
-                std::cin.ignore(32767, '\n');
-                std::cout << "Введённое значение неверно.\n";
+                showMessage(std::string(title));
+                val = keyController->requestKeyInt();
+            } catch (std::invalid_argument) {
+                showMessage("Введённое значение неверно.\n");
+                keyController->clearInputState();
+                keyController->requestTrashIgnore();
                 val = -1;
                 continue;
             }
             if (compare_bad(val, height, width)) {
-                std::cout << "Введённое значение неверно.\n";
-                std::cin.clear();
-                std::cin.ignore(32767, '\n');
+                showMessage("Введённое значение неверно.\n");
+                keyController->clearInputState();
+                keyController->requestTrashIgnore();
                 val = -1;
             }
         }
@@ -51,17 +51,28 @@ std::tuple<int, int, int> FieldScreen::showStartingParamsAndGenerateField(DataMa
         LoggerPull::writeData("gameLogs",LoggerDataAdapter<int>(height, "Высота поля"));
         LoggerPull::writeData("gameLogs",LoggerDataAdapter<int>(width, "Ширина поля"));
         LoggerPull::writeData("gameLogs",LoggerDataAdapter<int>(countWalls, "Количество непроходимых клеток поля"));
-        std::cout << "Значения приняты. Сгенерировать поле? (y - сгенерировать / n - изменить параметры) ";
-        char acceptSymbol = getchar(); // считываем лишний символ после ввода числа непроходимых клеток
+
+        std::string message = "Значения приняты. Сгенерировать поле? (";
+        message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::ACCEPT));
+        message += " - сгенерировать / ";
+        message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::CANCEL));
+        message += " - изменить параметры) ";
+        showMessage(message);
+        int willGenerate = '#';
+        keyController->requestTrashIgnore(); // считываем лишний символ после ввода числа непроходимых клеток
         while (true) {
-            acceptSymbol = getchar();
-            if (acceptSymbol != 'y' && acceptSymbol != 'n') {
-                std::cout
-                        << "Неверное значение, попробуйте снова. Сгенерировать поле? (y - сгенерировать/n - изменить параметры) ";
-                std::cin.ignore(32767, '\n');
+            willGenerate = keyController->requestKeyAction(getScreenName());
+            if (willGenerate != HeroKeysControl::ACCEPT && willGenerate != HeroKeysControl::CANCEL) {
+                std::string message = "Неверное значение, попробуйте снова. Сгенерировать поле? (";
+                message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::ACCEPT));
+                message += " - сгенерировать / ";
+                message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::CANCEL));
+                message += " - изменить параметры) ";
+                showMessage(message);
+                keyController->requestTrashIgnore();
             } else break;
         }
-        if (acceptSymbol == 'y')
+        if (willGenerate == HeroKeysControl::ACCEPT)
             acceptedParams = true;
     }
     return { height, width, countWalls };
@@ -93,8 +104,8 @@ FieldScreen::createTitleForThingAction(const std::string &nameThing, const std::
     return res;
 }
 
-std::tuple<int, int, int> FieldScreen::showStartFieldScreen(DataManager *dataManager) {
-    auto res = showStartingParamsAndGenerateField(dataManager);
+std::tuple<int, int, int> FieldScreen::showStartFieldScreen(DataManager *dataManager, const KeyControl *keyController) {
+    auto res = showStartingParamsAndGenerateField(dataManager, keyController);
     clearScreen();
     return res;
 }
@@ -117,4 +128,8 @@ void FieldScreen::clearScreen() const {
 
 void FieldScreen::showHeroAchievement(std::map<std::basic_string<char>, int> &achievement) const {
     Printer::printHeroAchievement(achievement);
+}
+
+std::string FieldScreen::getScreenName() const {
+    return "fieldScreen";
 }

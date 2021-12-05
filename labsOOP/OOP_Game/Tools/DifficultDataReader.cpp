@@ -19,15 +19,21 @@ std::vector<std::string> DifficultDataReader::readLine(std::fstream &input) {
     }
     int separateArrIndex = 0;
     res.emplace_back("");
+    if (separateArrIndex + 1 < separatePos.size()) {
+        res.back().reserve(separatePos[separateArrIndex + 1] - separatePos[separateArrIndex]);
+    }
     for (int i = 0; i < str.size(); ++i) {
         if (separateArrIndex != separatePos.size() && separatePos[separateArrIndex] == i) {
             i++;
-            separateArrIndex++;
             res.emplace_back("");
+            if (separateArrIndex + 1 < separatePos.size()) {
+                res.back().reserve(separatePos[separateArrIndex + 1] - separatePos[separateArrIndex]);
+            }
+            separateArrIndex++;
         } else
             res.back().push_back(str[i]);
     }
-    if (res.back() == "")
+    if (res.back().empty())
         return {};
     else
         return res;

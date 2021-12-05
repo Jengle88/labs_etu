@@ -46,3 +46,7 @@ void FightScreen::showFighterModels(const std::vector<std::string> &models) cons
 void FightScreen::showAttackInfo(const std::string &nameCharacter, double damage, bool wasDodge, bool wasCritical) const {
     Printer::printAttackInfo(nameCharacter, damage, wasDodge, wasCritical);
 }
+
+std::string FightScreen::getScreenName() const {
+    return "fightScreen";
+}

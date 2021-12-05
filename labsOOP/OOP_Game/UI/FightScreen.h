@@ -11,6 +11,7 @@ class FightScreen {
     std::vector<std::string> enemyModel;
 public:
     FightScreen(const std::vector<std::string>& heroModel, const std::vector<std::string>& enemyModel);
+    std::string getScreenName() const;
     void showUpdatedScreen(MainHero &mainHero, int selectedThing);
     void showHealthInfo(MainHero &mainHero, Enemy &enemy) const;
     void showMessage(const std::string& message) const;
