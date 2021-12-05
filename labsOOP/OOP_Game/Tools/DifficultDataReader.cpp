@@ -101,8 +101,8 @@ std::unordered_map<std::string, int> DifficultDataReader::readCntKilledEnemies(s
     return countersKilledEnemy;
 }
 
-std::pair<std::string, RulesPreset> DifficultDataReader::readRule(std::fstream &input) {
-    std::pair<std::string, RulesPreset> data;
+std::pair<std::string, DifficultPreset> DifficultDataReader::readRule(std::fstream &input) {
+    std::pair<std::string, DifficultPreset> data;
     input >> data.first;
     input.get();
     if (std::count(data.first.begin(), data.first.end(), '-') == data.first.size()) // если стоит разделитель
@@ -136,14 +136,15 @@ std::pair<std::string, RulesPreset> DifficultDataReader::readRule(std::fstream &
     return data;
 }
 
-std::vector<std::pair<std::string, RulesPreset>> DifficultDataReader::readRulesPresets(const std::string &nameFile) {
+std::unordered_map<std::string, DifficultPreset> DifficultDataReader::readRulesPresets(const std::string &nameFile) {
     std::fstream input(nameFile, std::ios_base::in);
     int cntDifficult;
     input >> cntDifficult;
     input.get();
-    std::vector<std::pair<std::string, RulesPreset>> presets(cntDifficult);
+    std::unordered_map<std::string, DifficultPreset> presets(cntDifficult);
     for (int i = 0; i < cntDifficult; ++i) {
-        presets[i] = readRule(input);
+        auto data = readRule(input);
+        presets[data.first] = data.second;
     }
     return presets;
 }

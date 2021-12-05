@@ -125,34 +125,36 @@ using namespace std;
 
 class A {
 public:
-    A(int i) {
-        a = i;
-    }
-
-    int a;
+    int a = 8;
 };
 
-class B: public A {
-
+template<A* ... Nums>
+class NumsClass {
+//    static_assert(std::is_same<A*, T>::value);
 public:
-    B(int i) : A(i) {
-        a = i;
-    }
+    void f();
 };
 
-template<A & a>
-class C {
-public:
-    void f() {
-        std::cout << a.a;
-    }
-};
+template<A* ... Nums>
+void NumsClass<Nums...>::f() {
+    (cout << ... << Nums->a);
+}
+
+
+
 
 int main() { //проверено
-    static B b(5);
-    static A a = dynamic_cast<A&>(b);
-    C<a> c;
-    c.f();
+    static A a;
+    static const float* ab = new float(2.4);
+//    *ab = 2.4;
+//    static float z = 2.4;
+    NumsClass<&a, &a, &a> n;
+    delete ab;
+    n.f();
+//    static B b(5);
+//    static A a = dynamic_cast<A&>(b);
+//    C<a> c;
+//    c.f();
 
 
 //        A::a[4] = 3;

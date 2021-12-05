@@ -1,13 +1,14 @@
 #pragma once
-#include "Rules/GlobalRules.h"
-#include "Rules/RulesPreset.h"
+
+#include "Rules/DifficultPreset.h"
 #include "Data/DataManager.h"
 #include "UI/FieldScreen.h"
 #include "Logger/LoggerDataAdapter.h"
 #include "Logger/LoggerPull.h"
+#include "Rules/RulesChecker.h"
 
 
-enum HeroKeyControl{
+enum HeroKeyControl {
     UP = 'w',
     LEFT = 'a',
     RIGHT = 'd',
@@ -29,16 +30,21 @@ enum FightHeroKeyAction {
     USE = 'e'
 };
 
-template<RulesPreset & preset, GlobalRules<preset> & rules>
+template<DifficultPreset &preset, RulesChecker **... checkers>
 class GameHandler {
-    DataManager* dataManager = nullptr;
-    ThingsManager* thingsManager = nullptr;
-    Field* field = nullptr;
-    FieldScreen* mainScreen = nullptr;
-    FightScreen* fightScreen = nullptr;
+    DataManager *dataManager = nullptr;
+    ThingsManager *thingsManager = nullptr;
+    Field *field = nullptr;
+    FieldScreen *mainScreen = nullptr;
+    FightScreen *fightScreen = nullptr;
     bool isReady = false;
     bool finishEnable = false;
 
+
+    bool checkFinishCondition() {
+        return (... && (*checkers)->checkHero(field->getHero())) &&
+               (... && (*checkers)->checkField(*field));
+    }
 
     char getKey() const {
         char action = getchar();
@@ -50,14 +56,15 @@ class GameHandler {
     void generateField(int height, int width, int countWalls) {
         field = new Field(height, width, dataManager);
         if (field->generateFullField(countWalls)) {
-            LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Поле было полностью сгенерировано"));
+            LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Поле было полностью сгенерировано"));
             field->setHeroOnStart();
             field->createHero();
             thingsManager = new ThingsManager(field);
-            LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Информация о герое получена"));
+            LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Информация о герое получена"));
         } else {
             std::cout << "Не удалось сгенерировать поле!\n";
-            LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Не удалось сгенерировать поле"), LoggerPull::LoggingType::Error);
+            LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Не удалось сгенерировать поле"),
+                                  LoggerPull::LoggingType::Error);
             throw -1;
         }
     }
@@ -70,15 +77,18 @@ class GameHandler {
             moved = field->moveHero(to);
         }
         if (moved) {
-            LoggerPull::writeData("gameLogs",LoggerDataAdapter<CellPoint>(to, "Герой сменил позицию"));
+            LoggerPull::writeData("gameLogs", LoggerDataAdapter<CellPoint>(to, "Герой сменил позицию"));
             auto thingOnPos = thingsManager->checkCellHasSmth(to);
             if (thingOnPos.first) {
                 gameAction = mainScreen->createTitleForThingAction(thingOnPos.second->getNameThing(),
                                                                    thingOnPos.second->getProperties(),
                                                                    HeroKeyControl::TAKE);
             }
-            if (field->getElem(to).getValue().getTypeCell() == TypeCell::FINISH && finishEnable)
-                gameAction = "Вы на финишной клетке. Закончить игру? Нажмите q, чтобы выйти.\n";
+            if (field->getElem(to).getValue().getTypeCell() == TypeCell::FINISH) {
+                finishEnable = checkFinishCondition();
+                if (finishEnable)
+                    gameAction = "Вы на финишной клетке. Закончить игру? Нажмите q, чтобы выйти.\n";
+            }
         }
     }
 
@@ -94,7 +104,7 @@ class GameHandler {
         auto thingOnPos = thingsManager->checkCellHasSmth(point);
         if (thingOnPos.first) {
             field->getHero().takeThing(thingOnPos.second);
-            LoggerPull::writeData("gameLogs",LoggerDataAdapter<Thing*>(thingOnPos.second, "Герой подобрал предмет"));
+            LoggerPull::writeData("gameLogs", LoggerDataAdapter<Thing *>(thingOnPos.second, "Герой подобрал предмет"));
             if (thingOnPos.second->isVisualThing()) {
                 field->getHero().resetModel(
                         dataManager->getHero(
@@ -111,10 +121,10 @@ class GameHandler {
             for (int j = -MainHero::getRangeVisibility(); j <= MainHero::getRangeVisibility(); ++j) {
                 if (field->getEnemies().count(CellPoint(point.getX() + i, point.getY() + j))) {
                     system("clear");
-                    LoggerPull::writeData("gameLogs",LoggerDataAdapter<Character&>(
-                            dynamic_cast<Character&>(this->field->getEnemyFromPoint(CellPoint(point.getX() + i, point.getY() + j))),
+                    LoggerPull::writeData("gameLogs", LoggerDataAdapter<Character &>(
+                            dynamic_cast<Character &>(this->field->getEnemyFromPoint(
+                                    CellPoint(point.getX() + i, point.getY() + j))),
                             "Герой начал сражение с врагом"));
-
 
 
                     fightScreen = new FightScreen(this->field->getHero().getModel(), this->field->getEnemyFromPoint(
@@ -125,12 +135,12 @@ class GameHandler {
                     fightScreen = nullptr;
 
 
-
                     if (statusFight == FightStatus::KILLED_ENEMY) {
                         this->field->killEnemy(CellPoint(point.getX() + i, point.getY() + j));
                     } else if (statusFight == FightStatus::KILLED_HERO) {
-                        LoggerPull::writeData("gameLogs",LoggerDataAdapter<Character&>(
-                                dynamic_cast<Character&>(this->field->getEnemyFromPoint(CellPoint(point.getX() + i, point.getY() + j))),
+                        LoggerPull::writeData("gameLogs", LoggerDataAdapter<Character &>(
+                                dynamic_cast<Character &>(this->field->getEnemyFromPoint(
+                                        CellPoint(point.getX() + i, point.getY() + j))),
                                 "Герой побеждён врагом"));
                     }
                     return statusFight;
@@ -158,17 +168,19 @@ class GameHandler {
                 requestMoveHero(heroPos, CellPoint(heroPos.getX() + 1, heroPos.getY()), gameAction);
                 return true;
             case HeroKeyControl::FINISH_OUT:
+                finishEnable = checkFinishCondition();
                 if (finishEnable && requestMoveOut()) {
                     sleep(3);
                     action = HeroKeyControl::EXIT;
-                    LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Игра окончена, игрок достиг финишной точки"));
+                    LoggerPull::writeData("gameLogs",
+                                          LoggerDataAdapter<std::string>("Игра окончена, игрок достиг финишной точки"));
                     return false;
                 } else {
                     return true;
                 }
             case HeroKeyControl::TAKE:
                 requestTakeObject(heroPos);
-                finishEnable = rules.checkFinishCondition(field->getHero());
+                finishEnable = checkFinishCondition();
                 return true;
             case HeroKeyControl::FIGHT:
                 status = requestStartFight(heroPos);
@@ -176,15 +188,15 @@ class GameHandler {
                     mainScreen->showMessage("Вы проиграли.\n");
                     mainScreen->showHeroAchievement(field->getHero().getCountKilledEnemy());
                     mainScreen->showMessage("Нажмите любую кнопку, чтобы выйти...\n");
-                    LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Игра окончена, игрок проиграл"));
+                    LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Игра окончена, игрок проиграл"));
                     getchar();
                     action = HeroKeyControl::EXIT;
                     return false;
                 }
-                finishEnable = rules.checkFinishCondition(field->getHero());
+                finishEnable = checkFinishCondition();
                 return true;
             case HeroKeyControl::EXIT:
-                LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Игра окончена, игрок вышел из игры"));
+                LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Игра окончена, игрок вышел из игры"));
                 return false;
             default:
                 mainScreen->showMessage("Команда не распознана.\n");
@@ -222,9 +234,9 @@ class GameHandler {
     // end
 
     // для FightScreen: start
-    int fightStatusObserver(MainHero& mainHero, Enemy & enemy) {
+    int fightStatusObserver(MainHero &mainHero, Enemy &enemy) {
         fightScreen->showUpdatedScreen(mainHero);
-        LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Отображён экран боя"));
+        LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Отображён экран боя"));
         fightScreen->showHealthInfo(mainHero, enemy);
         while (mainHero.checkPositiveHealth() && enemy.checkPositiveHealth()) {
             char action = getchar();
@@ -238,26 +250,29 @@ class GameHandler {
         }
         if (mainHero.checkPositiveHealth()) {
             mainHero.writeKill(enemy.getName());
-            LoggerPull::writeData("gameLogs",LoggerDataAdapter<Character>(dynamic_cast<Character&>(enemy), "Герой победил данного врага"));
+            LoggerPull::writeData("gameLogs", LoggerDataAdapter<Character>(dynamic_cast<Character &>(enemy),
+                                                                           "Герой победил данного врага"));
             fightScreen->showMessage("Вы победили!\nНажмите любую кнопку, чтобы продолжить.");
             getchar();
         }
         return mainHero.checkPositiveHealth();
     }
 
-    bool requestFightAction(char action, MainHero& mainHero, Enemy& enemy) {
+    bool requestFightAction(char action, MainHero &mainHero, Enemy &enemy) {
         int numberThing = -1;
         std::vector<double> heroAttackInfo;
         std::vector<double> enemyAttackInfo;
         switch (tolower(action)) {
             case FightHeroKeyAction::ATTACK:
-                LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Герой произвёл атаку"));
-                heroAttackInfo = mainHero.requestAttack(dynamic_cast<Character&>(enemy));
+                LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Герой произвёл атаку"));
+                heroAttackInfo = mainHero.requestAttack(dynamic_cast<Character &>(enemy));
                 fightScreen->showAttackInfo("Hero", heroAttackInfo[0], heroAttackInfo[1] > 0, heroAttackInfo[2] > 0);
-                LoggerPull::writeData("gameLogs",LoggerDataAdapter<MainHero&>(mainHero, "Статус героя"));
+                LoggerPull::writeData("gameLogs", LoggerDataAdapter<MainHero &>(mainHero, "Статус героя"));
                 enemyAttackInfo = enemy.requestAttack(dynamic_cast<Character &>(mainHero));
-                fightScreen->showAttackInfo(enemy.getName(), enemyAttackInfo[0], enemyAttackInfo[1] > 0, enemyAttackInfo[2] > 0);
-                LoggerPull::writeData("gameLogs",LoggerDataAdapter<Character&>(dynamic_cast<Character&>(enemy), "Статус врага"));
+                fightScreen->showAttackInfo(enemy.getName(), enemyAttackInfo[0], enemyAttackInfo[1] > 0,
+                                            enemyAttackInfo[2] > 0);
+                LoggerPull::writeData("gameLogs",
+                                      LoggerDataAdapter<Character &>(dynamic_cast<Character &>(enemy), "Статус врага"));
                 break;
             case FightHeroKeyAction::USE:
                 std::cin >> numberThing;
@@ -291,8 +306,10 @@ public:
         LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Модели загружены"));
 
         CharacterProperties properties = preset.getCharactersParams().at("MainHero");
-        MainHero::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
-                                       properties.luck, properties.visibility, properties.criticalFactor, properties.dodgeFactor);
+        MainHero::setDefaultProperties(properties.name, properties.health, properties.attackPower,
+                                       properties.protection,
+                                       properties.luck, properties.visibility, properties.criticalFactor,
+                                       properties.dodgeFactor);
         properties = preset.getCharactersParams().at("Monster");
         Monster::setDefaultProperties(properties.name, properties.health, properties.attackPower, properties.protection,
                                       properties.luck, properties.visibility, properties.criticalFactor,
@@ -312,10 +329,11 @@ public:
         LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Характеристики персонажей загружены"));
 
         mainScreen = new FieldScreen();
-        auto [height, width, countWalls] = mainScreen->showStartFieldScreen(dataManager);
+        auto[height, width, countWalls] = mainScreen->showStartFieldScreen(dataManager);
         generateField(height, width, countWalls);
         field->setRules(preset.getCntEnemyOnField(), preset.getTimeBetweenGenerateEnemy());
-        thingsManager->setRules(preset.getCntHealThing(), preset.getTimeBetweenGenerateVisualThing(), preset.getTimeBetweenGenerateHealThing());
+        thingsManager->setRules(preset.getCntHealThing(), preset.getTimeBetweenGenerateVisualThing(),
+                                preset.getTimeBetweenGenerateHealThing());
         isReady = true;
     }
 
@@ -324,7 +342,9 @@ public:
             fieldStatusObserver();
             LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Начался процесс наблюдения за игрой"));
         } else {
-            LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Попытка начать наблюдение при незавершённом поле"), LoggerPull::LoggingType::Error);
+            LoggerPull::writeData("gameLogs",
+                                  LoggerDataAdapter<std::string>("Попытка начать наблюдение при незавершённом поле"),
+                                  LoggerPull::LoggingType::Error);
         }
 
     }

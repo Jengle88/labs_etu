@@ -2,7 +2,6 @@
 
 #include <string>
 #include <map>
-
 enum ThingObject {
     ARMOR,
     SWORD,

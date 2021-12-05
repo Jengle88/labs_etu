@@ -50,3 +50,4 @@ cntHealThing; 3
 timeBetweenGenerateEnemy; 11
 timeBetweenGenerateVisualThing; 13
 timeBetweenGenerateHealThing; 10
+-----------------------------

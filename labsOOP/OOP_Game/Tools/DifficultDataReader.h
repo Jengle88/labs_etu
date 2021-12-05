@@ -3,7 +3,7 @@
 #include <unordered_map>
 #include "../Rules/CharacterProperties.h"
 #include "../Rules/ThingProperties.h"
-#include "../Rules/RulesPreset.h"
+#include "../Rules/DifficultPreset.h"
 
 class DifficultDataReader {
     static const std::unordered_map<std::string, int> strToTypeObject;
@@ -12,9 +12,9 @@ class DifficultDataReader {
     static std::unordered_map<std::string, CharacterProperties> readCharactersParams(std::fstream& input, int n);
     static std::unordered_map<std::string, ThingProperties> readThingsProperties(std::fstream& input, int n);
     static std::unordered_map<std::string, int> readCntKilledEnemies(std::fstream& input, int n);
-    static std::pair<std::string, RulesPreset> readRule(std::fstream& input);
+    static std::pair<std::string, DifficultPreset> readRule(std::fstream& input);
 public:
-    static std::vector<std::pair<std::string, RulesPreset>> readRulesPresets(const std::string& nameFile);
+    static std::unordered_map<std::string, DifficultPreset> readRulesPresets(const std::string& nameFile);
 
 };
 
