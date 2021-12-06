@@ -4,25 +4,30 @@
 #include "KeyboardControl.h"
 
 const std::unordered_map<std::string, std::unordered_map<std::string, int>> KeyboardControl::actionBind = {
+        {"startScreen", {
+                {"selectMenuUp", START_SELECT_MENU_UP},
+                {"selectMenuDown", START_SELECT_MENU_DOWN},
+                {"goToMenu", START_GO_TO_MENU}
+        }},
         {"fieldScreen", {
-                                {"moveUp", MOVE_UP},
-                                {"moveLeft", MOVE_LEFT},
-                                {"moveRight", MOVE_RIGHT},
-                                {"moveDown", MOVE_DOWN},
-                                {"takeThing", TAKE_THING},
-                                {"startFight", START_FIGHT},
-                                {"finishOut", FINISH_OUT},
-                                {"exitField", EXIT_FIELD},
-                                {"accept", ACCEPT},
-                                {"cancel", CANCEL}
-                        }},
+                {"moveUp", FIELD_MOVE_UP},
+                {"moveLeft", FIELD_MOVE_LEFT},
+                {"moveRight", FIELD_MOVE_RIGHT},
+                {"moveDown", FIELD_MOVE_DOWN},
+                {"takeThing", FIELD_TAKE_THING},
+                {"startFight", FIELD_START_FIGHT},
+                {"finishOut", FIELD_FINISH_OUT},
+                {"exitField", FIELD_EXIT_FIELD},
+                {"acceptGenerate", FIELD_ACCEPT_GENERATE},
+                {"cancelGenerate", FIELD_CANCEL_GENERATE}
+        }},
         {"fightScreen", {
-                                {"attackEnemy", ATTACK_ENEMY},
-                                {"selectThingUp", SELECT_THING_UP},
-                                {"selectThingDown", SELECT_THING_DOWN},
-                                {"useThing", USE_THING},
-                                {"exitFight", EXIT_FIGHT},
-                        }}
+                {"attackEnemy", FIGHT_ATTACK_ENEMY},
+                {"selectThingUp", FIGHT_SELECT_THING_UP},
+                {"selectThingDown", FIGHT_SELECT_THING_DOWN},
+                {"useThing", FIGHT_USE_THING},
+                {"exitFight", FIGHT_EXIT_FIGHT},
+        }}
 };
 
 int KeyboardControl::requestKeyAction(const std::string &screen) const {
@@ -88,7 +93,8 @@ KeyboardControl::KeyboardControl(
         const std::unordered_map<std::string, std::unordered_map<std::string, char>> &keyboardSettings) {
     for (const auto &keyboardSetting: keyboardSettings) {
         for (const auto &setting: keyboardSetting.second) {
-            heroKeysControl[keyboardSetting.first][setting.second] = actionBind.at(keyboardSetting.first).at(setting.first);
+            heroKeysControl[keyboardSetting.first][setting.second] = actionBind.at(keyboardSetting.first).at(
+                    setting.first);
         }
     }
 }

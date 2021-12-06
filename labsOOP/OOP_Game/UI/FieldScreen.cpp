@@ -53,26 +53,26 @@ FieldScreen::showStartingParamsAndGenerateField(DataManager *dataManager, const 
         LoggerPull::writeData("gameLogs",LoggerDataAdapter<int>(countWalls, "Количество непроходимых клеток поля"));
 
         std::string message = "Значения приняты. Сгенерировать поле? (";
-        message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::ACCEPT));
+        message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::FIELD_ACCEPT_GENERATE));
         message += " - сгенерировать / ";
-        message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::CANCEL));
+        message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::FIELD_CANCEL_GENERATE));
         message += " - изменить параметры) ";
         showMessage(message);
         int willGenerate = '#';
         keyController->requestTrashIgnore(); // считываем лишний символ после ввода числа непроходимых клеток
         while (true) {
             willGenerate = keyController->requestKeyAction(getScreenName());
-            if (willGenerate != HeroKeysControl::ACCEPT && willGenerate != HeroKeysControl::CANCEL) {
+            if (willGenerate != HeroKeysControl::FIELD_ACCEPT_GENERATE && willGenerate != HeroKeysControl::FIELD_CANCEL_GENERATE) {
                 std::string message = "Неверное значение, попробуйте снова. Сгенерировать поле? (";
-                message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::ACCEPT));
+                message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::FIELD_ACCEPT_GENERATE));
                 message += " - сгенерировать / ";
-                message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::CANCEL));
+                message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::FIELD_CANCEL_GENERATE));
                 message += " - изменить параметры) ";
                 showMessage(message);
                 keyController->requestTrashIgnore();
             } else break;
         }
-        if (willGenerate == HeroKeysControl::ACCEPT)
+        if (willGenerate == HeroKeysControl::FIELD_ACCEPT_GENERATE)
             acceptedParams = true;
     }
     return { height, width, countWalls };

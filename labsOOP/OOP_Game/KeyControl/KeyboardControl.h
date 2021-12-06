@@ -17,9 +17,7 @@ public:
     bool checkAllKeyBound() const override;
     bool resetBindChar(const std::string &screen, char key, int action) override;
     char getKey(const std::string &screen, int action) const override;
-
     void requestTrashIgnore() const override;
-
     void clearInputState() const override;
 };
 

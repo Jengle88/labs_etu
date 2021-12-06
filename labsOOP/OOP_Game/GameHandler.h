@@ -9,16 +9,11 @@
 #include "UI/StartScreen.h"
 #include "KeyControl/KeyControl.h"
 
-
-
-
 enum FightStatus {
     LEAVE_FIGHT = -1,
     KILLED_ENEMY = 1,
     KILLED_HERO = 0
 };
-
-
 
 template<KeyControl** control, DifficultPreset &preset, RulesChecker **... checkers>
 class GameHandler {
@@ -37,14 +32,6 @@ class GameHandler {
                (... && (*checkers)->checkField(*field));
     }
 
-    // для StartScreen: start
-    void showStartScreen() {
-        StartScreen startScreen;
-        int selectedItem = 0;
-        startScreen.showUpdatedScreen(selectedItem);
-
-    }
-    // end
 
 
     // для FieldScreen: start
@@ -78,14 +65,14 @@ class GameHandler {
                 gameAction = mainScreen->createTitleForThingAction(thingOnPos.second->getNameThing(),
                                                                    thingOnPos.second->getProperties(),
                                                                    keyControl->getKey(
-                                                                           mainScreen->getScreenName(), HeroKeysControl::TAKE_THING)
+                                                                           mainScreen->getScreenName(), HeroKeysControl::FIELD_TAKE_THING)
                                                                    );
             }
             if (field->getElem(to).getValue().getTypeCell() == TypeCell::FINISH) {
                 finishEnable = checkFinishCondition();
                 if (finishEnable) {
                     gameAction = "Вы на финишной клетке. Закончить игру? Нажмите";
-                    gameAction.push_back(keyControl->getKey(mainScreen->getScreenName(), HeroKeysControl::EXIT_FIELD));
+                    gameAction.push_back(keyControl->getKey(mainScreen->getScreenName(), HeroKeysControl::FIELD_EXIT_FIELD));
                     gameAction += ", чтобы выйти.\n";
                 }
             }
@@ -156,34 +143,34 @@ class GameHandler {
         CellPoint heroPos = field->getHeroPos();
         bool status = true;
         switch (action) {
-            case HeroKeysControl::MOVE_UP:
+            case HeroKeysControl::FIELD_MOVE_UP:
                 requestMoveHero(heroPos, CellPoint(heroPos.getX(), heroPos.getY() - 1), gameAction);
                 return true;
-            case HeroKeysControl::MOVE_DOWN:
+            case HeroKeysControl::FIELD_MOVE_DOWN:
                 requestMoveHero(heroPos, CellPoint(heroPos.getX(), heroPos.getY() + 1), gameAction);
                 return true;
-            case HeroKeysControl::MOVE_LEFT:
+            case HeroKeysControl::FIELD_MOVE_LEFT:
                 requestMoveHero(heroPos, CellPoint(heroPos.getX() - 1, heroPos.getY()), gameAction);
                 return true;
-            case HeroKeysControl::MOVE_RIGHT:
+            case HeroKeysControl::FIELD_MOVE_RIGHT:
                 requestMoveHero(heroPos, CellPoint(heroPos.getX() + 1, heroPos.getY()), gameAction);
                 return true;
-            case HeroKeysControl::FINISH_OUT:
+            case HeroKeysControl::FIELD_FINISH_OUT:
                 finishEnable = checkFinishCondition();
                 if (finishEnable && requestMoveOut()) {
                     sleep(3);
-                    action = HeroKeysControl::EXIT_FIELD;
+                    action = HeroKeysControl::FIELD_EXIT_FIELD;
                     LoggerPull::writeData("gameLogs",
                                           LoggerDataAdapter<std::string>("Игра окончена, игрок достиг финишной точки"));
                     return false;
                 } else {
                     return true;
                 }
-            case HeroKeysControl::TAKE_THING:
+            case HeroKeysControl::FIELD_TAKE_THING:
                 requestTakeObject(heroPos);
                 finishEnable = checkFinishCondition();
                 return true;
-            case HeroKeysControl::START_FIGHT:
+            case HeroKeysControl::FIELD_START_FIGHT:
                 status = requestStartFight(heroPos);
                 if (status == FightStatus::KILLED_HERO) {
                     mainScreen->showMessage("Вы проиграли.\n");
@@ -191,12 +178,12 @@ class GameHandler {
                     mainScreen->showMessage("Нажмите любую кнопку, чтобы выйти...\n");
                     LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Игра окончена, игрок проиграл"));
                     keyControl->requestKeyIgnore();
-                    action = HeroKeysControl::EXIT_FIELD;
+                    action = HeroKeysControl::FIELD_EXIT_FIELD;
                     return false;
                 }
                 finishEnable = checkFinishCondition();
                 return true;
-            case HeroKeysControl::EXIT_FIELD:
+            case HeroKeysControl::FIELD_EXIT_FIELD:
                 LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Игра окончена, игрок вышел из игры"));
                 return false;
             default:
@@ -210,14 +197,14 @@ class GameHandler {
         int action = -1;
         keyControl->requestKeyIgnore(); // считываем перенос строки
         std::string message = "Для выхода введите";
-        message.push_back(keyControl->getKey(mainScreen->getScreenName(), HeroKeysControl::EXIT_FIELD));
+        message.push_back(keyControl->getKey(mainScreen->getScreenName(), HeroKeysControl::FIELD_EXIT_FIELD));
         message += " и нажмите enter.\n";
         mainScreen->showMessage(message);
         mainScreen->showUpdatedScreen(field);
         mainScreen->showInventory(&(field->getHero()));
         LoggerPull::writeData("gameLogs",
                               LoggerDataAdapter<std::string>("Поле и инвентарь персонажа отображены в консоли"));
-        while (action != HeroKeysControl::EXIT_FIELD) {
+        while (action != HeroKeysControl::FIELD_EXIT_FIELD) {
             std::string gameAction = "";
             field->incCountSteps();
             thingsManager->tryGenerateThing(field->getHero(), dataManager);
@@ -228,7 +215,7 @@ class GameHandler {
                 mainScreen->clearScreen();
                 field->createRandomEnemy();
                 std::string message = "Для выхода введите ";
-                message.push_back(keyControl->getKey(mainScreen->getScreenName(), HeroKeysControl::EXIT_FIELD));
+                message.push_back(keyControl->getKey(mainScreen->getScreenName(), HeroKeysControl::FIELD_EXIT_FIELD));
                 message += " и нажмите enter.\n";
                 mainScreen->showMessage(message);
                 mainScreen->showUpdatedScreen(field);
@@ -271,7 +258,7 @@ class GameHandler {
         std::vector<double> heroAttackInfo;
         std::vector<double> enemyAttackInfo;
         switch (action) {
-            case HeroKeysControl::ATTACK_ENEMY:
+            case HeroKeysControl::FIGHT_ATTACK_ENEMY:
                 LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Герой произвёл атаку"));
                 heroAttackInfo = mainHero.requestAttack(dynamic_cast<Character &>(enemy));
                 fightScreen->showAttackInfo("Hero", heroAttackInfo[0], heroAttackInfo[1] > 0, heroAttackInfo[2] > 0);
@@ -282,15 +269,15 @@ class GameHandler {
                 LoggerPull::writeData("gameLogs",
                                       LoggerDataAdapter<Character &>(dynamic_cast<Character &>(enemy), "Статус врага"));
                 break;
-            case HeroKeysControl::SELECT_THING_UP:
+            case HeroKeysControl::FIGHT_SELECT_THING_UP:
                 if (0 <= selectedThing - 1)
                     selectedThing--;
                 break;
-            case HeroKeysControl::SELECT_THING_DOWN:
+            case HeroKeysControl::FIGHT_SELECT_THING_DOWN:
                 if (selectedThing + 1 < mainHero.getInventory().size())
                     selectedThing++;
                 break;
-            case HeroKeysControl::USE_THING:
+            case HeroKeysControl::FIGHT_USE_THING:
                 if (!mainHero.useThing(selectedThing)) {
                     fightScreen->showMessage("Предмета нет или он не может быть использован\n");
                 } else {
@@ -298,7 +285,7 @@ class GameHandler {
                         selectedThing = std::max((int)mainHero.getInventory().size() - 1, 0);
                 }
                 break;
-            case HeroKeysControl::EXIT_FIGHT:
+            case HeroKeysControl::FIGHT_EXIT_FIGHT:
                 return false;
         }
         return true;
@@ -309,6 +296,9 @@ public:
     GameHandler() {
         keyControl = *control;
         dataManager = new DataManager(preset.getThingsParams());
+        dataManager->uploadModels();
+        LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Модели загружены"));
+        mainScreen = new FieldScreen();
     }
 
     virtual ~GameHandler() {
@@ -318,10 +308,53 @@ public:
         delete thingsManager;
     }
 
-    void generate() {
+    // для StartScreen: start
+    void showStartScreen() {
+        StartScreen startScreen;
+        int selectedItem = 0;
+        startScreen.showUpdatedScreen(selectedItem);
+        while (true) {
+            int action = keyControl->requestKeyAction(startScreen.getScreenName());
+            keyControl->requestTrashIgnore();
+            switch (action) {
+                case START_SELECT_MENU_UP:
+                    if (0 <= selectedItem - 1)
+                        selectedItem--;
+                    break;
+                case START_SELECT_MENU_DOWN:
+                    if (selectedItem + 1 < startScreen.getMenuSize())
+                        selectedItem++;
+                    break;
+                case START_GO_TO_MENU:
+                    switch (selectedItem) {
+                        case MenuItemID::START_NEW_GAME:
+                            generateField();
+                            observeField();
+                            delete field;
+//                            delete mainScreen;
+                            delete thingsManager; // так как статистика вещей зависит от героя, а герой - от поля
+                            field = nullptr;
+//                            mainScreen = nullptr;
+                            thingsManager = nullptr;
+                            break;
+                        case MenuItemID::LOAD_GAME:
+                            break;
+                        case MenuItemID::SETTINGS:
+                            // TODO добавить меню настроек
+                            break;
+                        case MenuItemID::EXIT:
+                            return;
+                    }
+                    break;
+            }
+            startScreen.showUpdatedScreen(selectedItem);
+        }
+    }
+    // end
+
+
+    void generateField() {
         srand(time(0));
-        dataManager->uploadModels();
-        LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Модели загружены"));
 
         CharacterProperties properties = preset.getCharactersParams().at("MainHero");
         MainHero::setDefaultProperties(properties);
@@ -333,7 +366,6 @@ public:
         Gargoyle::setDefaultProperties(properties);
         LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Характеристики персонажей загружены"));
 
-        mainScreen = new FieldScreen();
         auto[height, width, countWalls] = mainScreen->showStartFieldScreen(dataManager, keyControl);
         generateField(height, width, countWalls);
         field->setRules(preset.getCntEnemyOnField(), preset.getTimeBetweenGenerateEnemy());
@@ -342,9 +374,10 @@ public:
         isReady = true;
     }
 
-    void observe() {
+    void observeField() {
         if (isReady) {
             fieldStatusObserver();
+            mainScreen->clearScreen();
             LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Начался процесс наблюдения за игрой"));
         } else {
             LoggerPull::writeData("gameLogs",

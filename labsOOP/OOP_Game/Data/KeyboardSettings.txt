@@ -1,4 +1,8 @@
-2
+3
+startScreen 3
+selectMenuUp w
+selectMenuDown s
+goToMenu d
 fieldScreen 10
 moveUp w
 moveLeft a
@@ -8,8 +12,8 @@ takeThing e
 startFight f
 finishOut q
 exitField `
-accept y
-cancel n
+acceptGenerate y
+cancelGenerate n
 fightScreen 5
 attackEnemy a
 selectThingUp w

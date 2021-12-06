@@ -24,19 +24,24 @@ public:
             auto keyboardSetting = KeyboardDataReader::readKeyboardSetting("../Data/KeyboardSettings.txt");
             static KeyboardControl keyboardControl(keyboardSetting);
             static auto keyControl = static_cast<KeyControl*>(&keyboardControl);
+
+            if (!keyControl->checkAllKeyBound()) // TODO заменить
+                throw std::logic_error("Не все кнопки указаны");
+
             GameHandler<&keyControl, difficultPreset, &checker/*, &checker, &checker*/> gameHandler;
 //            KeyboardControl keyboardController;
-//            keyboardController.resetBindChar('w', HeroKeysControl::MOVE_UP);
-//            keyboardController.resetBindChar('s', HeroKeysControl::MOVE_DOWN);
-//            keyboardController.resetBindChar('d', HeroKeysControl::MOVE_RIGHT);
-//            keyboardController.resetBindChar('a', HeroKeysControl::MOVE_LEFT);
+//            keyboardController.resetBindChar('w', HeroKeysControl::FIELD_MOVE_UP);
+//            keyboardController.resetBindChar('s', HeroKeysControl::FIELD_MOVE_DOWN);
+//            keyboardController.resetBindChar('d', HeroKeysControl::FIELD_MOVE_RIGHT);
+//            keyboardController.resetBindChar('a', HeroKeysControl::FIELD_MOVE_LEFT);
 //            int z = 2;
 
 //            Printer::printDivider();
 //            Printer::printMenuWithChoice({"Start game", "Settings", "Exit"}, 1);
 //            Printer::printDivider();
-            gameHandler.generate();
-            gameHandler.observe();
+            gameHandler.showStartScreen();
+//            gameHandler.generateField();
+//            gameHandler.observeField();
 
             delete loggerPull;
         }

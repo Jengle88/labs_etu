@@ -12,10 +12,24 @@ StartScreen::StartScreen() {
     }
 }
 
-void StartScreen::showUpdatedScreen(int selectedThing) {
+void StartScreen::showUpdatedScreen(int selectedThing) const {
     Printer::printMenuWithChoice(menuItemNames, selectedThing);
 }
 
-void StartScreen::clearScreen() {
+std::string StartScreen::getScreenName() const {
+    return "startScreen";
+}
+
+std::string StartScreen::getMenuItemName(int item) const {
+    if (0 <= item && item < menuItemNames.size())
+        return menuItemNames[item];
+    return "";
+}
+
+int StartScreen::getMenuSize() const {
+    return menuItemNames.size();
+}
+
+void StartScreen::clearScreen() const {
     system("clear");
 }
