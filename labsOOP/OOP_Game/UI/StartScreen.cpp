@@ -12,8 +12,8 @@ StartScreen::StartScreen() {
     }
 }
 
-void StartScreen::showUpdatedScreen(int selectedThing) const {
-    Printer::printMenuWithChoice(menuItemNames, selectedThing);
+void StartScreen::showUpdatedScreen(int selectedMenuItem) const {
+    Printer::printMenuWithChoice(menuItemNames, selectedMenuItem);
 }
 
 std::string StartScreen::getScreenName() const {

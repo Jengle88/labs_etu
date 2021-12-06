@@ -1,4 +1,4 @@
-3
+4
 startScreen 3
 selectMenuUp w
 selectMenuDown s
@@ -20,3 +20,8 @@ selectThingUp w
 selectThingDown s
 useThing e
 exitFight `
+keySettingsScreen 4
+selectMenuUp w
+selectMenuDown s
+changeBind c
+exitSettings `

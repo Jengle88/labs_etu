@@ -23,6 +23,11 @@ enum HeroKeysControl {
     FIGHT_SELECT_THING_DOWN,
     FIGHT_USE_THING,
     FIGHT_EXIT_FIGHT,
+    // keySettingsScreen
+    KEYSETTINGS_SELECT_MENU_UP,
+    KEYSETTINGS_SELECT_MENU_DOWN,
+    KEYSETTINGS_CHANGE_BIND,
+    KEYSETTINGS_EXIT_SETTINGS,
     SIZE_HERO_KEYS_CONTROL
 };
 
@@ -30,11 +35,12 @@ enum HeroKeysControl {
 class KeyControl {
 public:
     virtual int requestKeyAction(const std::string &screen) const = 0;
+    virtual char requestKeyChar() const = 0;
     virtual std::string requestKeyLine() const = 0;
     virtual void requestKeyIgnore() const = 0;
     virtual void requestTrashIgnore() const = 0;
     virtual int requestKeyInt() const= 0;
-    virtual bool resetBindChar(const std::string &screen, char key, int action) = 0;
+    virtual bool resetBindChar(const std::string &screen, char newKey, int action) = 0;
     virtual bool checkAllKeyBound() const = 0;
     virtual bool checkRightAction(int action) const = 0;
     virtual char getKey(const std::string& screen, int action) const = 0;

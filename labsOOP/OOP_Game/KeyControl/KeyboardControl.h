@@ -10,18 +10,17 @@ class KeyboardControl : public KeyControl {
 public:
     explicit KeyboardControl(const std::unordered_map<std::string, std::unordered_map<std::string, char>>& keyboardSettings);
     int requestKeyAction(const std::string &screen) const override;
+    char requestKeyChar() const override;
     std::string requestKeyLine() const override;
     void requestKeyIgnore() const override;
     int requestKeyInt() const override;
     bool checkRightAction(int action) const override;
     bool checkAllKeyBound() const override;
-    bool resetBindChar(const std::string &screen, char key, int action) override;
+    bool resetBindChar(const std::string &screen, char newKey, int action) override;
     char getKey(const std::string &screen, int action) const override;
     void requestTrashIgnore() const override;
     std::unordered_map<std::string, std::unordered_map<std::string, int>> getAllActionKeys() const override;
     std::unordered_map<std::string, std::unordered_map<char, int>> getAllKeysBound() const override;
-//    std::unordered_map<std::string, std::unordered_map<std::string, char>> getAllActionKeys() const override;
-//    std::unordered_map<std::string, std::unordered_map<int, char>> getAllKeysBound() const override;
     void clearInputState() const override;
 };
 

@@ -8,6 +8,7 @@
 #include "Rules/RulesChecker.h"
 #include "UI/StartScreen.h"
 #include "KeyControl/KeyControl.h"
+#include "UI/KeySettingsScreen.h"
 
 enum FightStatus {
     LEAVE_FIGHT = -1,
@@ -71,8 +72,8 @@ class GameHandler {
             if (field->getElem(to).getValue().getTypeCell() == TypeCell::FINISH) {
                 finishEnable = checkFinishCondition();
                 if (finishEnable) {
-                    gameAction = "Вы на финишной клетке. Закончить игру? Нажмите";
-                    gameAction.push_back(keyControl->getKey(mainScreen->getScreenName(), HeroKeysControl::FIELD_EXIT_FIELD));
+                    gameAction = "Вы на финишной клетке. Закончить игру? Нажмите ";
+                    gameAction.push_back(keyControl->getKey(mainScreen->getScreenName(), HeroKeysControl::FIELD_FINISH_OUT));
                     gameAction += ", чтобы выйти.\n";
                 }
             }
@@ -292,6 +293,61 @@ class GameHandler {
     }
     // end
 
+    // для KeySettingsScreen: старт
+
+    void keySettingsObserver() {
+        int selectedMenuItem = 0;
+        std::unordered_map<std::string, std::unordered_map<int, char>> keysActionControl;
+        std::unordered_map<std::string, std::unordered_map<std::string, int>> actionBind;
+        {
+            auto actions = keyControl->getAllActionKeys();
+            auto keyActionsBound = keyControl->getAllKeysBound();
+
+            for (const auto &action: keyActionsBound) {
+                for (const auto &key: action.second) {
+                    keysActionControl[action.first][key.second] = key.first;
+                }
+            }
+            for (const auto &action: actions) {
+                for (const auto &key: action.second) {
+                    actionBind[action.first][key.first] = key.second;
+                }
+            }
+        }
+        KeySettingsScreen keySettingsScreen(&keysActionControl, actionBind);
+        keySettingsScreen.showUpdatedScreen(selectedMenuItem);
+        int action = -1;
+        char newKey;
+        bool goodReplace = false;
+        while (true) {
+            action = keyControl->requestKeyAction(keySettingsScreen.getScreenName());
+            keyControl->requestKeyIgnore(); // считываем пробел
+            switch (action) {
+                case KEYSETTINGS_SELECT_MENU_UP:
+                    if (0 <= selectedMenuItem - 1)
+                        selectedMenuItem--;
+                    break;
+                case KEYSETTINGS_SELECT_MENU_DOWN:
+                    if (selectedMenuItem + 1 < keySettingsScreen.getMenuSize())
+                        selectedMenuItem++;
+                    break;
+                case KEYSETTINGS_CHANGE_BIND:
+                    newKey = keyControl->requestKeyChar();
+                    keyControl->requestTrashIgnore();
+                    goodReplace = keyControl->resetBindChar(keySettingsScreen.findNameScreenByAction(selectedMenuItem), newKey, selectedMenuItem);
+                    if (goodReplace)
+                        keysActionControl[keySettingsScreen.findNameScreenByAction(selectedMenuItem)][selectedMenuItem] = newKey;
+                    break;
+                case KEYSETTINGS_EXIT_SETTINGS:
+                    if (keyControl->checkAllKeyBound())
+                        return;
+            }
+            keySettingsScreen.clearScreen();
+            keySettingsScreen.showUpdatedScreen(selectedMenuItem);
+        }
+    }
+    // end
+
 public:
     GameHandler() {
         keyControl = *control;
@@ -311,6 +367,7 @@ public:
     // для StartScreen: start
     void showStartScreen() {
         StartScreen startScreen;
+        startScreen.clearScreen();
         int selectedItem = 0;
         startScreen.showUpdatedScreen(selectedItem);
         while (true) {
@@ -328,6 +385,7 @@ public:
                 case START_GO_TO_MENU:
                     switch (selectedItem) {
                         case MenuItemID::START_NEW_GAME:
+                            startScreen.clearScreen();
                             generateField();
                             observeField();
                             delete field;
@@ -338,9 +396,11 @@ public:
                         case MenuItemID::LOAD_GAME:
                             break;
                         case MenuItemID::KEY_SETTINGS:
-                            // TODO добавить меню настроек
+                            startScreen.clearScreen();
+                            keySettingsObserver();
                             break;
                         case MenuItemID::EXIT:
+                            startScreen.clearScreen();
                             return;
                     }
                     break;

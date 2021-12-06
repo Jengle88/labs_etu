@@ -26,7 +26,13 @@ const std::unordered_map<std::string, std::unordered_map<std::string, int>> Keyb
                 {"selectThingUp", FIGHT_SELECT_THING_UP},
                 {"selectThingDown", FIGHT_SELECT_THING_DOWN},
                 {"useThing", FIGHT_USE_THING},
-                {"exitFight", FIGHT_EXIT_FIGHT},
+                {"exitFight", FIGHT_EXIT_FIGHT}
+        }},
+        {"keySettingsScreen", {
+                {"selectMenuUp", KEYSETTINGS_SELECT_MENU_UP},
+                {"selectMenuDown", KEYSETTINGS_SELECT_MENU_DOWN},
+                {"changeBind", KEYSETTINGS_CHANGE_BIND},
+                {"exitSettings", KEYSETTINGS_EXIT_SETTINGS}
         }}
 };
 
@@ -38,6 +44,10 @@ int KeyboardControl::requestKeyAction(const std::string &screen) const {
         return heroKeysControl.at(screen).at(key);
     }
     return -1;
+}
+
+char KeyboardControl::requestKeyChar() const {
+    return getchar();
 }
 
 int KeyboardControl::requestKeyInt() const {
@@ -61,14 +71,17 @@ bool KeyboardControl::checkRightAction(int action) const {
     return 0 <= action && action < SIZE_HERO_KEYS_CONTROL;
 }
 
-bool KeyboardControl::resetBindChar(const std::string &screen, char key, int action) {
-    if (heroKeysControl.count(screen) == 0 || heroKeysControl[screen].count(key) == 0)
+bool KeyboardControl::resetBindChar(const std::string &screen, char newKey, int action) {
+    if (heroKeysControl.count(screen) == 0 || heroKeysControl[screen].count(newKey))
         return false;
-    if (checkRightAction(action)) {
-        heroKeysControl[screen][key] = action;
-        return true;
+    char prevKey = 0;
+    for (const auto &item: heroKeysControl[screen]) {
+        if (item.second == action)
+            prevKey = item.first;
     }
-    return false;
+    heroKeysControl[screen].erase(prevKey);
+    heroKeysControl[screen][newKey] = action;
+    return true;
 }
 
 bool KeyboardControl::checkAllKeyBound() const {
@@ -119,32 +132,6 @@ void KeyboardControl::clearInputState() const {
 void KeyboardControl::requestTrashIgnore() const {
     std::cin.ignore(32767, '\n');
 }
-
-//std::unordered_map<std::string, std::unordered_map<std::string, char>> KeyboardControl::getAllActionKeys() const {
-//    std::unordered_map<std::string, std::unordered_map<std::string, char>> keymap;
-//    std::vector<char> keysBound(HeroKeysControl::SIZE_HERO_KEYS_CONTROL);
-//    for (const auto &actionKeys: heroKeysControl) {
-//        for (const auto &key: actionKeys.second) {
-//            keysBound[key.second] = key.first;
-//        }
-//    }
-//    for (const auto &actionKeys: actionBind) {
-//        for (const auto &key: actionKeys.second) {
-//            keymap[actionKeys.first][key.first] = keysBound[key.second];
-//        }
-//    }
-//    return keymap;
-//}
-//
-//std::unordered_map<std::string, std::unordered_map<int, char>> KeyboardControl::getAllKeysBound() const {
-//    std::unordered_map<std::string, std::unordered_map<int, char>> keysBound;
-//    for (const auto &keyControl: heroKeysControl) {
-//        for (const auto &item: keyControl.second) {
-//            keysBound[keyControl.first][item.second] = item.first;
-//        }
-//    }
-//    return keysBound;
-//}
 
 std::unordered_map<std::string, std::unordered_map<std::string, int>> KeyboardControl::getAllActionKeys() const {
     return actionBind;

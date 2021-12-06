@@ -20,8 +20,8 @@ public:
         auto cntKilled = hero.getCountKilledEnemy();
         auto requiredCntKilled = cntKilledEnemy;
         for (const auto &killed: cntKilled) {
-//        if (killed.second > 0) // Для демонстрации
-//            return true;
+        if (killed.second > 0) // Для демонстрации
+            return true;
             if (requiredCntKilled[killed.first] > killed.second)
                 return false;
         }

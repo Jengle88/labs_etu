@@ -20,7 +20,7 @@ class StartScreen {
     std::vector<std::string> menuItemNames; // удобно для вывода
 public:
     StartScreen();
-    void showUpdatedScreen(int selectedThing) const;
+    void showUpdatedScreen(int selectedMenuItem) const;
     std::string getScreenName() const;
     int getMenuSize() const;
     void clearScreen() const;
