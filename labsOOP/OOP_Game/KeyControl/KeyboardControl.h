@@ -18,6 +18,10 @@ public:
     bool resetBindChar(const std::string &screen, char key, int action) override;
     char getKey(const std::string &screen, int action) const override;
     void requestTrashIgnore() const override;
+    std::unordered_map<std::string, std::unordered_map<std::string, int>> getAllActionKeys() const override;
+    std::unordered_map<std::string, std::unordered_map<char, int>> getAllKeysBound() const override;
+//    std::unordered_map<std::string, std::unordered_map<std::string, char>> getAllActionKeys() const override;
+//    std::unordered_map<std::string, std::unordered_map<int, char>> getAllKeysBound() const override;
     void clearInputState() const override;
 };
 

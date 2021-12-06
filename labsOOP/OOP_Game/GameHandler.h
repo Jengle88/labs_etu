@@ -331,15 +331,13 @@ public:
                             generateField();
                             observeField();
                             delete field;
-//                            delete mainScreen;
                             delete thingsManager; // так как статистика вещей зависит от героя, а герой - от поля
                             field = nullptr;
-//                            mainScreen = nullptr;
                             thingsManager = nullptr;
                             break;
                         case MenuItemID::LOAD_GAME:
                             break;
-                        case MenuItemID::SETTINGS:
+                        case MenuItemID::KEY_SETTINGS:
                             // TODO добавить меню настроек
                             break;
                         case MenuItemID::EXIT:
@@ -347,6 +345,7 @@ public:
                     }
                     break;
             }
+            startScreen.clearScreen();
             startScreen.showUpdatedScreen(selectedItem);
         }
     }

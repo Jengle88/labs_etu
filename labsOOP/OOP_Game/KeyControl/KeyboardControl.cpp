@@ -119,3 +119,37 @@ void KeyboardControl::clearInputState() const {
 void KeyboardControl::requestTrashIgnore() const {
     std::cin.ignore(32767, '\n');
 }
+
+//std::unordered_map<std::string, std::unordered_map<std::string, char>> KeyboardControl::getAllActionKeys() const {
+//    std::unordered_map<std::string, std::unordered_map<std::string, char>> keymap;
+//    std::vector<char> keysBound(HeroKeysControl::SIZE_HERO_KEYS_CONTROL);
+//    for (const auto &actionKeys: heroKeysControl) {
+//        for (const auto &key: actionKeys.second) {
+//            keysBound[key.second] = key.first;
+//        }
+//    }
+//    for (const auto &actionKeys: actionBind) {
+//        for (const auto &key: actionKeys.second) {
+//            keymap[actionKeys.first][key.first] = keysBound[key.second];
+//        }
+//    }
+//    return keymap;
+//}
+//
+//std::unordered_map<std::string, std::unordered_map<int, char>> KeyboardControl::getAllKeysBound() const {
+//    std::unordered_map<std::string, std::unordered_map<int, char>> keysBound;
+//    for (const auto &keyControl: heroKeysControl) {
+//        for (const auto &item: keyControl.second) {
+//            keysBound[keyControl.first][item.second] = item.first;
+//        }
+//    }
+//    return keysBound;
+//}
+
+std::unordered_map<std::string, std::unordered_map<std::string, int>> KeyboardControl::getAllActionKeys() const {
+    return actionBind;
+}
+
+std::unordered_map<std::string, std::unordered_map<char, int>> KeyboardControl::getAllKeysBound() const {
+    return heroKeysControl;
+}

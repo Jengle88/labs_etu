@@ -7,6 +7,7 @@
 #include "Tools/DifficultDataReader.h"
 #include "KeyControl/KeyboardControl.h"
 #include "KeyControl/KeyboardDataReader.h"
+#include "UI/KeySettingsScreen.h"
 
 
 class GameStart {
@@ -25,21 +26,42 @@ public:
             static KeyboardControl keyboardControl(keyboardSetting);
             static auto keyControl = static_cast<KeyControl*>(&keyboardControl);
 
-            if (!keyControl->checkAllKeyBound()) // TODO заменить
-                throw std::logic_error("Не все кнопки указаны");
+            std::unordered_map<std::string, std::unordered_map<int, char>> keysActionControl;
+            std::unordered_map<std::string, std::unordered_map<std::string, int>> actionBind;
+            {
+                auto actions = keyControl->getAllActionKeys();
+                auto keyActionsBound = keyControl->getAllKeysBound();
 
-            GameHandler<&keyControl, difficultPreset, &checker/*, &checker, &checker*/> gameHandler;
+                for (const auto &action: keyActionsBound) {
+                    for (const auto &key: action.second) {
+                        keysActionControl[action.first][key.second] = key.first;
+                    }
+                }
+                for (const auto &action: actions) {
+                    for (const auto &key: action.second) {
+                        actionBind[action.first][key.first] = key.second;
+                    }
+                }
+            }
+
+            KeySettingsScreen keySettingsScreen(keysActionControl, actionBind);
+            keySettingsScreen.showUpdatedScreen(2);
+            int z = 2;
+//            if (!keyControl->checkAllKeyBound()) // TODO заменить
+//                throw std::logic_error("Не все кнопки указаны");
+//
+//            GameHandler<&keyControl, difficultPreset, &checker/*, &checker, &checker*/> gameHandler;
 //            KeyboardControl keyboardController;
 //            keyboardController.resetBindChar('w', HeroKeysControl::FIELD_MOVE_UP);
 //            keyboardController.resetBindChar('s', HeroKeysControl::FIELD_MOVE_DOWN);
 //            keyboardController.resetBindChar('d', HeroKeysControl::FIELD_MOVE_RIGHT);
-//            keyboardController.resetBindChar('a', HeroKeysControl::FIELD_MOVE_LEFT);
+//            keyboardController.resetBindChar('actions', HeroKeysControl::FIELD_MOVE_LEFT);
 //            int z = 2;
 
 //            Printer::printDivider();
 //            Printer::printMenuWithChoice({"Start game", "Settings", "Exit"}, 1);
 //            Printer::printDivider();
-            gameHandler.showStartScreen();
+//            gameHandler.showStartScreen();
 //            gameHandler.generateField();
 //            gameHandler.observeField();
 

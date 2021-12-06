@@ -20,12 +20,6 @@ std::string StartScreen::getScreenName() const {
     return "startScreen";
 }
 
-std::string StartScreen::getMenuItemName(int item) const {
-    if (0 <= item && item < menuItemNames.size())
-        return menuItemNames[item];
-    return "";
-}
-
 int StartScreen::getMenuSize() const {
     return menuItemNames.size();
 }

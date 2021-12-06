@@ -39,5 +39,7 @@ public:
     virtual bool checkRightAction(int action) const = 0;
     virtual char getKey(const std::string& screen, int action) const = 0;
     virtual void clearInputState() const = 0;
+    virtual std::unordered_map<std::string, std::unordered_map<std::string, int>> getAllActionKeys() const  = 0;
+    virtual std::unordered_map<std::string, std::unordered_map<char, int>> getAllKeysBound() const = 0;
     virtual ~KeyControl() = default;
 };
