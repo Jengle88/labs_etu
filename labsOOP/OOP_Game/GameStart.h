@@ -26,10 +26,9 @@ public:
             auto keyboardSetting = KeyboardDataReader::readKeyboardSetting("../Data/KeyboardSettings.txt");
             static KeyboardControl keyboardControl(keyboardSetting);
             static auto keyControl = static_cast<KeyControl*>(&keyboardControl);
-
             if (!keyControl->checkAllKeyBound())
                 throw std::logic_error("Не все кнопки указаны");
-//
+
             GameHandler<&keyControl, difficultPreset, &checker/*, &checker, &checker*/> gameHandler;
             gameHandler.showStartScreen();
 

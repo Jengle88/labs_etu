@@ -1,9 +1,12 @@
-4
-startScreen 3
+<start>
+startScreen
+<start>
 selectMenuUp w
 selectMenuDown s
 goToMenu d
-fieldScreen 10
+<end>
+fieldScreen
+<start>
 moveUp w
 moveLeft a
 moveRight d
@@ -14,14 +17,20 @@ finishOut q
 exitField `
 acceptGenerate y
 cancelGenerate n
-fightScreen 5
+<end>
+fightScreen
+<start>
 attackEnemy a
 selectThingUp w
 selectThingDown s
 useThing e
 exitFight `
-keySettingsScreen 4
+<end>
+keySettingsScreen
+<start>
 selectMenuUp w
 selectMenuDown s
 changeBind c
 exitSettings `
+<end>
+<end>

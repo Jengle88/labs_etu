@@ -2,6 +2,9 @@
 #include <algorithm>
 #include "DifficultDataReader.h"
 
+std::string DifficultDataReader::startTag = "<start>";
+std::string DifficultDataReader::endTag = "<end>";
+
 const std::unordered_map<std::string, int> DifficultDataReader::strToTypeObject = {
         {"armor",      ThingObject::ARMOR},
         {"sword",      ThingObject::SWORD},
@@ -39,25 +42,29 @@ std::vector<std::string> DifficultDataReader::readLine(std::fstream &input) {
         return res;
 }
 
-std::vector<std::unordered_map<std::string, std::string>> DifficultDataReader::readSetData(std::fstream &input, int n) {
+std::vector<std::unordered_map<std::string, std::string>> DifficultDataReader::readSetData(std::fstream &input) {
     auto paramsName = readLine(input);
     std::vector<std::unordered_map<std::string, std::string>> arraySetData;
-    for (int i = 0; i < n; ++i) {
-        auto paramsValue = readLine(input);
-        if (paramsName.size() != paramsValue.size())
-            throw std::invalid_argument("В файле несоответствие количества параметров и их значений");
-        std::unordered_map<std::string, std::string> tempMap;
-        for (int j = 0; j < paramsName.size(); ++j) {
-            tempMap[paramsName[j]] = paramsValue[j];
+    if (readLine(input)[0] == startTag) {
+        while (true) {
+            auto lineValues = readLine(input);
+            if (lineValues[0] == endTag)
+                break;
+            if (paramsName.size() != lineValues.size())
+                throw std::invalid_argument("В файле несоответствие количества параметров и их значений");
+            std::unordered_map<std::string, std::string> tempMap;
+            for (int j = 0; j < paramsName.size(); ++j) {
+                tempMap[paramsName[j]] = lineValues[j];
+            }
+            arraySetData.push_back(tempMap);
         }
-        arraySetData.push_back(tempMap);
     }
     return arraySetData;
 }
 
 std::unordered_map<std::string, CharacterProperties>
-DifficultDataReader::readCharactersParams(std::fstream &input, int n) {
-    auto charactersData = readSetData(input, n);
+DifficultDataReader::readCharactersParams(std::fstream &input) {
+    auto charactersData = readSetData(input);
     std::unordered_map<std::string, CharacterProperties> charactersProperties;
     for (auto &item: charactersData) {
         CharacterProperties properties(
@@ -77,8 +84,8 @@ DifficultDataReader::readCharactersParams(std::fstream &input, int n) {
     return charactersProperties;
 }
 
-std::unordered_map<std::string, ThingProperties> DifficultDataReader::readThingsProperties(std::fstream &input, int n) {
-    auto thingsData = readSetData(input, n);
+std::unordered_map<std::string, ThingProperties> DifficultDataReader::readThingsProperties(std::fstream &input) {
+    auto thingsData = readSetData(input);
     std::unordered_map<std::string, ThingProperties> thingsProperties;
     for (auto &item: thingsData) {
         ThingProperties properties(
@@ -98,8 +105,8 @@ std::unordered_map<std::string, ThingProperties> DifficultDataReader::readThings
     return thingsProperties;
 }
 
-std::unordered_map<std::string, int> DifficultDataReader::readCntKilledEnemies(std::fstream &input, int n) {
-    auto cntKilledEnemyData = readSetData(input, n);
+std::unordered_map<std::string, int> DifficultDataReader::readCntKilledEnemies(std::fstream &input) {
+    auto cntKilledEnemyData = readSetData(input);
     std::unordered_map<std::string, int> countersKilledEnemy;
     for (const auto &item: cntKilledEnemyData) {
         countersKilledEnemy[item.at("name")] = stoi(item.at("cnt"));
@@ -107,36 +114,33 @@ std::unordered_map<std::string, int> DifficultDataReader::readCntKilledEnemies(s
     return countersKilledEnemy;
 }
 
-std::pair<std::string, DifficultPreset> DifficultDataReader::readRule(std::fstream &input) {
-    std::pair<std::string, DifficultPreset> data;
-    input >> data.first;
-    input.get();
-    if (std::count(data.first.begin(), data.first.end(), '-') == data.first.size()) // если стоит разделитель
-        input >> data.first;
+DifficultPreset DifficultDataReader::readRule(std::fstream &input) {
+    DifficultPreset data;
+
     std::string str;
     while (true) {
         auto preview = readLine(input);
         if(preview.size() == 0 || std::count(preview[0].begin(), preview[0].end(), '-') == preview[0].size())
             break; // если разделитель или пустая строка, то выходим
         if (preview[0] == "Characters") {
-            data.second.setCharactersParams(readCharactersParams(input, stoi(preview[1])));
+            data.setCharactersParams(readCharactersParams(input));
         } else if (preview[0] == "Things") {
-            data.second.setThingsParams(readThingsProperties(input, stoi(preview[1])));
+            data.setThingsParams(readThingsProperties(input));
         } else if (preview[0] == "cntKilledEnemy") {
-            data.second.setCntKilledEnemy(readCntKilledEnemies(input, stoi(preview[1])));
+            data.setCntKilledEnemy(readCntKilledEnemies(input));
         } else {
             if (preview[0] == "cntEnemyOnField")
-                data.second.setCntEnemyOnField(stoi(preview[1]));
+                data.setCntEnemyOnField(stoi(preview[1]));
             else if (preview[0] == "levelAllThings")
-                data.second.setLevelAllThings(stoi(preview[1]));
+                data.setLevelAllThings(stoi(preview[1]));
             else if (preview[0] == "cntHealThing")
-                data.second.setCntHealThing(stoi(preview[1]));
+                data.setCntHealThing(stoi(preview[1]));
             else if (preview[0] == "timeBetweenGenerateEnemy")
-                data.second.setTimeBetweenGenerateEnemy(stoi(preview[1]));
+                data.setTimeBetweenGenerateEnemy(stoi(preview[1]));
             else if (preview[0] == "timeBetweenGenerateVisualThing")
-                data.second.setTimeBetweenGenerateVisualThing(stoi(preview[1]));
+                data.setTimeBetweenGenerateVisualThing(stoi(preview[1]));
             else if (preview[0] == "timeBetweenGenerateHealThing")
-                data.second.setTimeBetweenGenerateHealThing(stoi(preview[1]));
+                data.setTimeBetweenGenerateHealThing(stoi(preview[1]));
         }
     }
     return data;
@@ -144,13 +148,19 @@ std::pair<std::string, DifficultPreset> DifficultDataReader::readRule(std::fstre
 
 std::unordered_map<std::string, DifficultPreset> DifficultDataReader::readRulesPresets(const std::string &nameFile) {
     std::fstream input(nameFile, std::ios_base::in);
-    int cntDifficult;
-    input >> cntDifficult;
-    input.get();
-    std::unordered_map<std::string, DifficultPreset> presets(cntDifficult);
-    for (int i = 0; i < cntDifficult; ++i) {
-        auto data = readRule(input);
-        presets[data.first] = data.second;
+    auto line = readLine(input);
+    if (line[0] != startTag)
+        return {};
+    std::unordered_map<std::string, DifficultPreset> presets;
+    std::string namePreset;
+    while (namePreset != endTag) {
+         namePreset = readLine(input)[0];
+        if (namePreset != endTag) {
+            auto data = readRule(input);
+            presets[namePreset] = data;
+        } else
+            break;
     }
+    input.close();
     return presets;
 }

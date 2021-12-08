@@ -197,7 +197,7 @@ class GameHandler {
         LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Начало процесса наблюдения за игрой"));
         int action = -1;
         keyControl->requestKeyIgnore(); // считываем перенос строки
-        std::string message = "Для выхода введите";
+        std::string message = "Для выхода введите ";
         message.push_back(keyControl->getKey(mainScreen->getScreenName(), HeroKeysControl::FIELD_EXIT_FIELD));
         message += " и нажмите enter.\n";
         mainScreen->showMessage(message);
