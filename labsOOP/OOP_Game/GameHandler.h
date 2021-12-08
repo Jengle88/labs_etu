@@ -295,7 +295,7 @@ class GameHandler {
 
     // для KeySettingsScreen: старт
 
-    void keySettingsObserver() {
+    void showKeySettingsScreen() {
         int selectedMenuItem = 0;
         std::unordered_map<std::string, std::unordered_map<int, char>> keysActionControl;
         std::unordered_map<std::string, std::unordered_map<std::string, int>> actionBind;
@@ -397,7 +397,7 @@ public:
                             break;
                         case MenuItemID::KEY_SETTINGS:
                             startScreen.clearScreen();
-                            keySettingsObserver();
+                            showKeySettingsScreen();
                             break;
                         case MenuItemID::EXIT:
                             startScreen.clearScreen();

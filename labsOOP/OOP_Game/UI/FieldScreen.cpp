@@ -4,7 +4,7 @@
 
 
 std::tuple<int, int, int>
-FieldScreen::showStartingParamsAndGenerateField(DataManager *dataManager, const KeyControl *keyController) { // паттерн Builder
+FieldScreen::showStartingParamsAndGenerateField(DataManager *dataManager, KeyControl *keyController) { // паттерн Builder
     std::cout << "Введите значения параметров:\n";
     bool acceptedParams = false;
     auto enterSizeValue = [this, keyController](
@@ -104,7 +104,7 @@ FieldScreen::createTitleForThingAction(const std::string &nameThing, const std::
     return res;
 }
 
-std::tuple<int, int, int> FieldScreen::showStartFieldScreen(DataManager *dataManager, const KeyControl *keyController) {
+std::tuple<int, int, int> FieldScreen::showStartFieldScreen(DataManager *dataManager, KeyControl *keyController) {
     auto res = showStartingParamsAndGenerateField(dataManager, keyController);
     clearScreen();
     return res;

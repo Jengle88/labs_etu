@@ -7,10 +7,10 @@
 
 class FieldScreen {
     std::tuple<int, int, int>
-    showStartingParamsAndGenerateField(DataManager *dataManager, const KeyControl *keyController);
+    showStartingParamsAndGenerateField(DataManager *dataManager, KeyControl *keyController);
 
 public:
-    std::tuple<int, int, int> showStartFieldScreen(DataManager *dataManager, const KeyControl *keyController);
+    std::tuple<int, int, int> showStartFieldScreen(DataManager *dataManager, KeyControl *keyController);
     std::string getScreenName() const;
     void showMessage(const std::string& message) const;
     void showUpdatedScreen(Field *field) const;

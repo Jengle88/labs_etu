@@ -36,7 +36,7 @@ const std::unordered_map<std::string, std::unordered_map<std::string, int>> Keyb
         }}
 };
 
-int KeyboardControl::requestKeyAction(const std::string &screen) const {
+int KeyboardControl::requestKeyAction(const std::string &screen) {
     char key = getchar();
     if (heroKeysControl.count(screen) == 0)
         return -1;
@@ -46,11 +46,11 @@ int KeyboardControl::requestKeyAction(const std::string &screen) const {
     return -1;
 }
 
-char KeyboardControl::requestKeyChar() const {
+char KeyboardControl::requestKeyChar() {
     return getchar();
 }
 
-int KeyboardControl::requestKeyInt() const {
+int KeyboardControl::requestKeyInt() {
     int num;
     std::cin >> num;
     if (std::cin.fail()) {
@@ -61,7 +61,7 @@ int KeyboardControl::requestKeyInt() const {
     return num;
 }
 
-std::string KeyboardControl::requestKeyLine() const {
+std::string KeyboardControl::requestKeyLine() {
     std::string str;
     getline(std::cin, str);
     return str;
@@ -98,7 +98,7 @@ bool KeyboardControl::checkAllKeyBound() const {
     return ok;
 }
 
-void KeyboardControl::requestKeyIgnore() const {
+void KeyboardControl::requestKeyIgnore() {
     char z = getchar();
 }
 
@@ -112,7 +112,7 @@ KeyboardControl::KeyboardControl(
     }
 }
 
-char KeyboardControl::getKey(const std::string &screen, int action) const {
+char KeyboardControl::getKey(const std::string &screen, int action) {
     if (heroKeysControl.count(screen) == 0 || !checkRightAction(action)) {
         return '?';
     }
@@ -125,11 +125,11 @@ char KeyboardControl::getKey(const std::string &screen, int action) const {
     return '?';
 }
 
-void KeyboardControl::clearInputState() const {
+void KeyboardControl::clearInputState() {
     std::cin.clear();
 }
 
-void KeyboardControl::requestTrashIgnore() const {
+void KeyboardControl::requestTrashIgnore() {
     std::cin.ignore(32767, '\n');
 }
 

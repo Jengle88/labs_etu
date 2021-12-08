@@ -34,17 +34,17 @@ enum HeroKeysControl {
 
 class KeyControl {
 public:
-    virtual int requestKeyAction(const std::string &screen) const = 0;
-    virtual char requestKeyChar() const = 0;
-    virtual std::string requestKeyLine() const = 0;
-    virtual void requestKeyIgnore() const = 0;
-    virtual void requestTrashIgnore() const = 0;
-    virtual int requestKeyInt() const= 0;
+    virtual int requestKeyAction(const std::string &screen) = 0;
+    virtual char requestKeyChar() = 0;
+    virtual std::string requestKeyLine() = 0;
+    virtual void requestKeyIgnore() = 0;
+    virtual void requestTrashIgnore() = 0;
+    virtual int requestKeyInt() = 0;
     virtual bool resetBindChar(const std::string &screen, char newKey, int action) = 0;
     virtual bool checkAllKeyBound() const = 0;
     virtual bool checkRightAction(int action) const = 0;
-    virtual char getKey(const std::string& screen, int action) const = 0;
-    virtual void clearInputState() const = 0;
+    virtual char getKey(const std::string& screen, int action) = 0;
+    virtual void clearInputState() = 0;
     virtual std::unordered_map<std::string, std::unordered_map<std::string, int>> getAllActionKeys() const  = 0;
     virtual std::unordered_map<std::string, std::unordered_map<char, int>> getAllKeysBound() const = 0;
     virtual ~KeyControl() = default;
