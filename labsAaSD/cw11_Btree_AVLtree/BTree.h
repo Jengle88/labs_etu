@@ -7,20 +7,11 @@
 
 
 class BTreeNode {
-public:
     bool leaf;
     int deg;
     int size;
     std::vector<int> keys;
     std::vector<std::shared_ptr<BTreeNode>> children;
-
-    BTreeNode(int deg, bool leaf) {
-        this->deg = deg;
-        this->leaf = leaf;
-        this->keys.resize(2 * this->deg - 1); // Узел имеет не более 2 * deg - 1 ключей
-        this->children.resize(2 * this->deg);
-        this->size = 0;
-    }
 
     void fillNode() {
         for (auto &child: this->children) {
@@ -43,7 +34,7 @@ public:
 
     void remove(int key) {
         int index = findEqualGreaterKey(key);
-        if (index < size && keys[index] == key) {// Найди ключ
+        if (index < size && keys[index] == key) {// Если ключ найден в этом узле
             if (leaf) // ключ находится в листовом узле
                 removeFromLeaf(index);
             else // ключ отсутствует в листовом узле
@@ -84,7 +75,7 @@ public:
 
         // Если поддерево перед ключом (children [index]) имеет не менее deg ключей
         // Затем находим предшественника key 'pred' в поддереве с корнем в children [index]
-        // Заменить ключ на 'pred', рекурсивно удалить пред в дочерних [index]
+        // Заменить ключ на 'pred', рекурсивно удалить 'pred' в дочерних [index]
         if (children[index]->size >= deg) {
             int predecessor = getPredecessor(index);
             keys[index] = predecessor;
@@ -98,8 +89,8 @@ public:
             keys[index] = successor;
             children[index + 1]->remove(successor);
         }
-            // Если ключи children [index] и children [index + 1] меньше deg
-            // затем объединяем ключ и дочерние элементы [index + 1] в дочерние элементы [index]
+            // Если размеры children [index] и children [index + 1] меньше deg
+            // то объединяем ключ и дочерние элементы [index + 1] в дочерние элементы [index]
             // Теперь children [index] содержит ключ 2t-1
             // Освобождаем дочерние элементы [index + 1], рекурсивно удаляем ключ в children [index]
         else {
@@ -246,32 +237,31 @@ public:
                 if (keys[i + 1] < key)
                     i++;
             }
-            children[i + 1]->insertNotFull(key);
+            children[i + 1]->insertNotFull(key); // теперь есть пространство для добавления
         }
     }
 
-    void splitChildNode(int index, std::shared_ptr<BTreeNode> &node) { // FIXME потеря памяти
+    void splitChildNode(int index, std::shared_ptr<BTreeNode> node) {
+        // Сначала создаем узел, содержащий ключи от deg-1 до конца
+        auto tempNode = std::make_shared<BTreeNode>(node->deg, node->leaf);
+        tempNode->size = deg - 1;
 
-        // Сначала создаем узел, содержащий ключи deg-1
-        auto tempNode = BTreeNode(node->deg, node->leaf);
-        tempNode.size = deg - 1;
-
-        // Передаем все атрибуты y в tempNode
+        // Передаем все атрибуты node в tempNode
         for (int i = 0; i < deg - 1; ++i)
-            tempNode.keys[i] = node->keys[i + deg];
+            tempNode->keys[i] = node->keys[i + deg];
         if (!node->leaf) {
             for (int i = 0; i < deg; ++i)
-                tempNode.children[i] = node->children[i + deg]; // TODO проверить
+                tempNode->children[i] = node->children[i + deg];
         }
-        tempNode.fillNode();
+        tempNode->fillNode();
         node->size = deg - 1;
 
         // Вставляем новый дочерний узел в дочерний узел
         for (int i = size; i >= index + 1; --i)
-            *children[i + 1] = *children[i];
+            children[i + 1] = children[i];
 
-        *children[index + 1] = tempNode;
-        // Перемещаем ключ по y к этому узлу
+        children[index + 1] = tempNode;
+        // Перемещаем ключ по node к этому узлу
         for (int i = size - 1; i >= index; --i) {
             keys[i + 1] = keys[i];
         }
@@ -279,19 +269,20 @@ public:
         size++;
     }
 
-    void traverse() const {
+    void traverse(std::vector<int> &arr) const {
         int i;
         for (i = 0; i < size; ++i) {
             if (!leaf)
-                children[i]->traverse();
-            std::cout << ' ' << keys[i];
+                children[i]->traverse(arr);
+            arr.push_back(keys[i]);
+//            std::clog << ' ' << keys[i];
         }
 
         if (!leaf) // нужно, чтобы пойти в самого правого ребёнка вершины
-            children[i]->traverse();
+            children[i]->traverse(arr);
     }
 
-    std::pair<const BTreeNode* const, int> search(int key) {
+    std::pair<const BTreeNode*, int> search(int key) {
         int i = findEqualGreaterKey(key);
         if (keys[i] == key)
             return {this, i};
@@ -299,7 +290,17 @@ public:
             return {nullptr, -1};
         return children[i]->search(key);
     }
+public:
+    BTreeNode(int deg, bool leaf) {
+        this->deg = deg;
+        this->leaf = leaf;
+        this->keys.resize(2 * this->deg - 1); // Узел имеет не более 2 * deg - 1 ключей
+        this->children.resize(2 * this->deg);
+        this->size = 0;
+    }
 
+    friend class std::shared_ptr<BTreeNode>;
+    friend class BTree;
 };
 
 class BTree {
@@ -311,13 +312,13 @@ public:
         this->deg = deg;
     }
 
-    void traverse() const {
+    void traverse(std::vector<int> &arr) const {
         if (root != nullptr)
-            root->traverse();
+            root->traverse(arr);
     }
 
     // Функция для поиска ключа
-    std::pair<const BTreeNode* const, int> search(int key) {
+    std::pair<const BTreeNode*, int> search(int key) {
         return root == nullptr ? std::make_pair(nullptr, -1) : root->search(key);
     }
 
@@ -325,11 +326,11 @@ public:
         if (root == nullptr) { // корень не создавался
             (root = std::make_shared<BTreeNode>(deg, true))->fillNode();
             root->keys[0] = key;
-            root->size++;
+            root->size = 1;
         } else {
             // Когда корневой узел заполнится, дерево станет выше
             if (root->size == 2 * deg - 1) {
-                auto newNode = std::make_shared<BTreeNode>(deg, false); // FIXME утечка памяти
+                auto newNode = std::make_shared<BTreeNode>(deg, false);
                 newNode->children[0] = root;
                 newNode->fillNode();
                 newNode->splitChildNode(0, root);
@@ -351,14 +352,9 @@ public:
         root->remove(key);
         if (root->size == 0) {
             if (root->leaf) {
-//                delete root;
-//                root = nullptr;
+                root = nullptr;
             }
             else {
-//                for (int i = 1; i < root->children.size(); ++i) {
-//                    delete root->children[i];
-//                    root->children[i] = nullptr;
-//                }
                 root = std::move(root->children[0]);
             }
         }
