@@ -18,7 +18,7 @@ class DataManager {
     std::vector<std::string> getModelHeroBodyWait(bool withSword = false, bool withArmor = false) const;
     std::vector<std::string> getModelHeroLegs() const;
 public:
-    DataManager(const std::unordered_map<std::string, ThingProperties>& things);
+    explicit DataManager(const std::unordered_map<std::string, ThingProperties>& things);
     Thing* getThing(int level, int typeThing);
     Thing* getHealthThing() const;
     void uploadModels();

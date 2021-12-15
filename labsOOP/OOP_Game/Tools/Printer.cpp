@@ -57,7 +57,7 @@ void Printer::printHealthInfo(double heroHealth, double enemyHealth) {
     std::cout << "HP: " << heroHealth << "\t\t\t" << "HP: " << enemyHealth << '\n';
 }
 
-void Printer::printAttackInfo(std::string nameCharacter, double damage, bool wasDodge, bool wasCritical) {
+void Printer::printAttackInfo(const std::string &nameCharacter, double damage, bool wasDodge, bool wasCritical) {
     std::cout << "Персонаж " << nameCharacter << " нанёс " << damage << " урона, " <<
               (wasDodge ? "совершил уклонение, " : "не совершил уклонение, ") <<
               (wasCritical ? "нанёс критический урон.\n" : "не нанёс критический урон.\n");

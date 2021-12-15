@@ -1,7 +1,3 @@
-//
-// Created by evgeny on 05.12.2021.
-//
-
 #include "StartScreen.h"
 #include "../Tools/Printer.h"
 

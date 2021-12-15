@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-enum HeroKeysControl {
+enum PlayerKeysControl {
     // startScreen
     START_SELECT_MENU_UP,
     START_SELECT_MENU_DOWN,
@@ -28,7 +28,8 @@ enum HeroKeysControl {
     KEYSETTINGS_SELECT_MENU_DOWN,
     KEYSETTINGS_CHANGE_BIND,
     KEYSETTINGS_EXIT_SETTINGS,
-    SIZE_HERO_KEYS_CONTROL
+    // sizeEnum
+    SIZE_PLAYER_KEYS_CONTROL
 };
 
 
@@ -40,12 +41,12 @@ public:
     virtual void requestKeyIgnore() = 0;
     virtual void requestTrashIgnore() = 0;
     virtual int requestKeyInt() = 0;
-    virtual bool resetBindChar(const std::string &screen, char newKey, int action) = 0;
+    virtual bool resetBindChar(const std::string &screen, int action, char newKey) = 0;
     virtual bool checkAllKeyBound() const = 0;
     virtual bool checkRightAction(int action) const = 0;
-    virtual char getKey(const std::string& screen, int action) = 0;
+    virtual char getKeyByAction(const std::string& screen, int action) = 0;
     virtual void clearInputState() = 0;
-    virtual std::unordered_map<std::string, std::unordered_map<std::string, int>> getAllActionKeys() const  = 0;
-    virtual std::unordered_map<std::string, std::unordered_map<char, int>> getAllKeysBound() const = 0;
+    virtual std::unordered_map<std::string, std::unordered_map<std::string, int>> getAllActionsNameId() const  = 0;
+    virtual std::unordered_map<std::string, std::unordered_map<char, int>> getAllBindKeysId() const = 0;
     virtual ~KeyControl() = default;
 };

@@ -22,7 +22,7 @@ class Gargoyle: public Character, public Enemy {
     double calcReflectionArmor() const override;
     bool willFollowToHero() const override;
 public:
-    Gargoyle(std::vector<std::string> model,
+    explicit Gargoyle(std::vector<std::string> model,
                 std::string name = GargoyleProperties::GARGOYLE_NAME,
                 double health = GargoyleProperties::GARGOYLE_MAX_HEALTH,
                 double attackPower = GargoyleProperties::GARGOYLE_DAMAGE,

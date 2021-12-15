@@ -10,7 +10,7 @@ public:
     static void printInventory(MainHero *hero, bool withSerialNumber = false);
     static void printEnemyInfo(std::map<CellPoint, Enemy*> *enemies);
     static void printHealthInfo(double heroHealth, double enemyHealth);
-    static void printAttackInfo(std::string nameCharacter, double damage, bool wasDodge, bool wasCritical);
+    static void printAttackInfo(const std::string &nameCharacter, double damage, bool wasDodge, bool wasCritical);
     static void printHeroAchievement(std::map<std::string, int>& achievement);
     static void printMessage(const std::string& message);
     static void printModels(const std::vector<std::string> &models);

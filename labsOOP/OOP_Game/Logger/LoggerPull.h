@@ -15,7 +15,7 @@ class LoggerPull {
     struct LoggerTypeData {
         const char* type = nullptr;
         const char* color = nullptr;
-        LoggerTypeData(){};
+        LoggerTypeData() = default;
         LoggerTypeData(const char* type, const char* color): type(type), color(color) {}
     };
 

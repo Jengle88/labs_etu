@@ -1,6 +1,5 @@
 #include "DataManager.h"
 #include "../Logger/LoggerPull.h"
-#include "../Rules/ThingProperties.h"
 
 DataManager::DataManager(const std::unordered_map<std::string, ThingProperties>& things) {
     std::vector<Thing*> thingsArray;
@@ -90,8 +89,8 @@ void DataManager::uploadParamsThing(const std::vector<Thing*> &things) {
 }
 
 DataManager::~DataManager() {
-    for (int i = 0; i < healThings.size(); ++i) {
-        delete healThings[i];
+    for (auto & healThing : healThings) {
+        delete healThing;
     }
     for (auto &item: levelToThings) {
         for (auto &thing: item.second) {

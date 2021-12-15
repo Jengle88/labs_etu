@@ -22,7 +22,7 @@ class Archer: public Character, public Enemy {
     double calcReflectionArmor() const override;
     bool willFollowToHero() const override;
 public:
-    Archer(std::vector<std::string> model,
+    explicit Archer(std::vector<std::string> model,
            std::string name = ArcherProperties::ARCHER_NAME,
            double health = ArcherProperties::ARCHER_MAX_HEALTH,
            double attackPower = ArcherProperties::ARCHER_DAMAGE,

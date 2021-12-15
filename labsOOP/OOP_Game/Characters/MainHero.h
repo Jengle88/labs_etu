@@ -21,7 +21,7 @@ class MainHero : public Character {
     };
     std::vector<Thing*> inventory;
     std::map<std::string, int> countKilledEnemy;
-    bool requestProtect(double attackPower);
+    bool requestProtect(double attackPower) override;
     bool requestDodge() const override;
     void recalcCharacteristics(std::map<std::string, double> thingProperties);
 public:

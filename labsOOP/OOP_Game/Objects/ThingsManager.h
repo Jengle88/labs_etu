@@ -19,7 +19,7 @@ class ThingsManager {
     void generateHealthThing(DataManager *dataManager);
 public:
 
-    ThingsManager(Field *field, std::map<CellPoint, Thing*> visualThingsPlaces = std::map<CellPoint, Thing*>(),
+    explicit ThingsManager(Field *field, std::map<CellPoint, Thing*> visualThingsPlaces = std::map<CellPoint, Thing*>(),
                   std::map<CellPoint, Thing*> healthThingsPlaces = std::map<CellPoint, Thing*>());
     ThingsManager() = default;
     void tryGenerateThing(MainHero &hero, DataManager *dataManager);

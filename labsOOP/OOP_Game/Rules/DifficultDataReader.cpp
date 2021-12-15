@@ -63,7 +63,7 @@ std::vector<std::unordered_map<std::string, std::string>> DifficultDataReader::r
 }
 
 std::unordered_map<std::string, CharacterProperties>
-DifficultDataReader::readCharactersParams(std::fstream &input) {
+DifficultDataReader::readCharactersProperties(std::fstream &input) {
     auto charactersData = readSetData(input);
     std::unordered_map<std::string, CharacterProperties> charactersProperties;
     for (auto &item: charactersData) {
@@ -114,16 +114,16 @@ std::unordered_map<std::string, int> DifficultDataReader::readCntKilledEnemies(s
     return countersKilledEnemy;
 }
 
-DifficultPreset DifficultDataReader::readRule(std::fstream &input) {
+DifficultPreset DifficultDataReader::readDifficult(std::fstream &input) {
     DifficultPreset data;
 
     std::string str;
     while (true) {
         auto preview = readLine(input);
-        if(preview.size() == 0 || std::count(preview[0].begin(), preview[0].end(), '-') == preview[0].size())
+        if(preview.empty() || std::count(preview[0].begin(), preview[0].end(), '-') == preview[0].size())
             break; // если разделитель или пустая строка, то выходим
         if (preview[0] == "Characters") {
-            data.setCharactersParams(readCharactersParams(input));
+            data.setCharactersParams(readCharactersProperties(input));
         } else if (preview[0] == "Things") {
             data.setThingsParams(readThingsProperties(input));
         } else if (preview[0] == "cntKilledEnemy") {
@@ -146,7 +146,7 @@ DifficultPreset DifficultDataReader::readRule(std::fstream &input) {
     return data;
 }
 
-std::unordered_map<std::string, DifficultPreset> DifficultDataReader::readRulesPresets(const std::string &nameFile) {
+std::unordered_map<std::string, DifficultPreset> DifficultDataReader::readDifficultPresets(const std::string &nameFile) {
     std::fstream input(nameFile, std::ios_base::in);
     auto line = readLine(input);
     if (line[0] != startTag)
@@ -156,7 +156,7 @@ std::unordered_map<std::string, DifficultPreset> DifficultDataReader::readRulesP
     while (namePreset != endTag) {
          namePreset = readLine(input)[0];
         if (namePreset != endTag) {
-            auto data = readRule(input);
+            auto data = readDifficult(input);
             presets[namePreset] = data;
         } else
             break;

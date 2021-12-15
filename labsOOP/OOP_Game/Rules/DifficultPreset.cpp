@@ -1,6 +1,3 @@
-//
-// Created by evgeny on 08.12.2021.
-//
 #include "DifficultPreset.h"
 
 bool DifficultPreset::checkHero(MainHero &hero) const {
@@ -30,7 +27,7 @@ bool DifficultPreset::checkField(Field &field) const {
 
 void DifficultPreset::recalcCntThingsRightLevel() {
     cntThingsRightLevel = std::count_if(thingsParams.begin(), thingsParams.end(),
-                                        [this](std::pair<std::string, ThingProperties> thing){
+                                        [this](const std::pair<std::string, ThingProperties> &thing){
                                             return thing.second.getLevel() == levelAllThings;
                                         });
 }

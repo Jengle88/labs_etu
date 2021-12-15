@@ -1,39 +1,39 @@
-#include "KeyboardDataReader.h"
+#include "KeyDataReader.h"
 
-std::string KeyboardDataReader::startTag = "<start>";
-std::string KeyboardDataReader::endTag = "<end>";
+const std::string KeyDataReader::START_TAG = "<start>";
+const std::string KeyDataReader::END_TAG = "<end>";
 
 std::unordered_map<std::string, std::unordered_map<std::string, char>>
-KeyboardDataReader::readKeyboardSetting(const std::string &nameFile) {
-    std::unordered_map<std::string, std::unordered_map<std::string, char>> keyboardSettings;
+KeyDataReader::readKeysSettings(const std::string &nameFile) {
+    std::unordered_map<std::string, std::unordered_map<std::string, char>> keySettings;
     std::fstream in(nameFile, std::ios_base::in);
     int cntLayer = 0;
     std::string screenName;
-    if (readLine(in)[0] == startTag) {
+    if (readLine(in)[0] == START_TAG) {
         cntLayer++;
         while (cntLayer >= 1) {
             auto line = readLine(in);
-            if (line[0] == startTag) {
+            if (line[0] == START_TAG) {
                 cntLayer++;
                 continue;
             }
-            else if (line[0] == endTag) {
+            else if (line[0] == END_TAG) {
                 cntLayer--;
                 continue;
             }
             if (cntLayer == 1) {
                 screenName = line[0];
             } else if (cntLayer == 2) {
-                keyboardSettings[screenName][line[0]] = line[1][0];
+                keySettings[screenName][line[0]] = line[1][0];
             }
         }
 
     }
     in.close();
-    return keyboardSettings;
+    return keySettings;
 }
 
-std::vector<std::string> KeyboardDataReader::readLine(std::fstream &input) {
+std::vector<std::string> KeyDataReader::readLine(std::fstream &input) {
     std::vector<std::string> res;
     std::string str;
     getline(input, str);

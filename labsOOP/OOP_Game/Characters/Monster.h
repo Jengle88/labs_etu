@@ -25,7 +25,7 @@ class Monster : public Character, public Enemy {
     double calcReflectionArmor() const override;
     bool willFollowToHero() const override;
 public:
-    Monster(std::vector<std::string> model,
+    explicit Monster(std::vector<std::string> model,
             std::string name = MonsterProperties::MONSTER_NAME,
             double health = MonsterProperties::MONSTER_MAX_HEALTH,
             double attackPower = MonsterProperties::MONSTER_DAMAGE,

@@ -16,11 +16,11 @@ public:
     int requestKeyInt() override;
     bool checkRightAction(int action) const override;
     bool checkAllKeyBound() const override;
-    bool resetBindChar(const std::string &screen, char newKey, int action) override;
-    char getKey(const std::string &screen, int action) override;
+    bool resetBindChar(const std::string &screen, int action, char newKey) override;
+    char getKeyByAction(const std::string &screen, int action) override;
     void requestTrashIgnore() override;
-    std::unordered_map<std::string, std::unordered_map<std::string, int>> getAllActionKeys() const override;
-    std::unordered_map<std::string, std::unordered_map<char, int>> getAllKeysBound() const override;
+    std::unordered_map<std::string, std::unordered_map<std::string, int>> getAllActionsNameId() const override;
+    std::unordered_map<std::string, std::unordered_map<char, int>> getAllBindKeysId() const override;
     void clearInputState() override;
 };
 

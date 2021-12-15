@@ -1,10 +1,9 @@
 #include "FieldScreen.h"
 #include "../Logger/LoggerPull.h"
-#include "../KeyControl/KeyControl.h"
 
 
 std::tuple<int, int, int>
-FieldScreen::showStartingParamsAndGenerateField(DataManager *dataManager, KeyControl *keyController) { // паттерн Builder
+FieldScreen::showStartingParamsAndGenerateField(KeyControl *keyController) { // паттерн Builder
     std::cout << "Введите значения параметров:\n";
     bool acceptedParams = false;
     auto enterSizeValue = [this, keyController](
@@ -18,17 +17,13 @@ FieldScreen::showStartingParamsAndGenerateField(DataManager *dataManager, KeyCon
             try {
                 showMessage(std::string(title));
                 val = keyController->requestKeyInt();
-            } catch (std::invalid_argument) {
+            } catch (std::invalid_argument&) {
                 showMessage("Введённое значение неверно.\n");
-                keyController->clearInputState();
-                keyController->requestTrashIgnore();
                 val = -1;
                 continue;
             }
             if (compare_bad(val, height, width)) {
                 showMessage("Введённое значение неверно.\n");
-                keyController->clearInputState();
-                keyController->requestTrashIgnore();
                 val = -1;
             }
         }
@@ -53,26 +48,28 @@ FieldScreen::showStartingParamsAndGenerateField(DataManager *dataManager, KeyCon
         LoggerPull::writeData("gameLogs",LoggerDataAdapter<int>(countWalls, "Количество непроходимых клеток поля"));
 
         std::string message = "Значения приняты. Сгенерировать поле? (";
-        message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::FIELD_ACCEPT_GENERATE));
+        message.push_back(keyController->getKeyByAction(getScreenName(), PlayerKeysControl::FIELD_ACCEPT_GENERATE));
         message += " - сгенерировать / ";
-        message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::FIELD_CANCEL_GENERATE));
+        message.push_back(keyController->getKeyByAction(getScreenName(), PlayerKeysControl::FIELD_CANCEL_GENERATE));
         message += " - изменить параметры) ";
         showMessage(message);
         int willGenerate = '#';
         keyController->requestTrashIgnore(); // считываем лишний символ после ввода числа непроходимых клеток
         while (true) {
             willGenerate = keyController->requestKeyAction(getScreenName());
-            if (willGenerate != HeroKeysControl::FIELD_ACCEPT_GENERATE && willGenerate != HeroKeysControl::FIELD_CANCEL_GENERATE) {
+            if (willGenerate != PlayerKeysControl::FIELD_ACCEPT_GENERATE && willGenerate != PlayerKeysControl::FIELD_CANCEL_GENERATE) {
                 std::string message = "Неверное значение, попробуйте снова. Сгенерировать поле? (";
-                message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::FIELD_ACCEPT_GENERATE));
+                message.push_back(
+                        keyController->getKeyByAction(getScreenName(), PlayerKeysControl::FIELD_ACCEPT_GENERATE));
                 message += " - сгенерировать / ";
-                message.push_back(keyController->getKey(getScreenName(), HeroKeysControl::FIELD_CANCEL_GENERATE));
+                message.push_back(
+                        keyController->getKeyByAction(getScreenName(), PlayerKeysControl::FIELD_CANCEL_GENERATE));
                 message += " - изменить параметры) ";
                 showMessage(message);
                 keyController->requestTrashIgnore();
             } else break;
         }
-        if (willGenerate == HeroKeysControl::FIELD_ACCEPT_GENERATE)
+        if (willGenerate == PlayerKeysControl::FIELD_ACCEPT_GENERATE)
             acceptedParams = true;
     }
     return { height, width, countWalls };
@@ -104,8 +101,8 @@ FieldScreen::createTitleForThingAction(const std::string &nameThing, const std::
     return res;
 }
 
-std::tuple<int, int, int> FieldScreen::showStartFieldScreen(DataManager *dataManager, KeyControl *keyController) {
-    auto res = showStartingParamsAndGenerateField(dataManager, keyController);
+std::tuple<int, int, int> FieldScreen::showStartFieldScreen(KeyControl *keyController) {
+    auto res = showStartingParamsAndGenerateField(keyController);
     clearScreen();
     return res;
 }

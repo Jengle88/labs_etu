@@ -36,8 +36,18 @@ const std::unordered_map<std::string, std::unordered_map<std::string, int>> Keyb
         }}
 };
 
+KeyboardControl::KeyboardControl(
+        const std::unordered_map<std::string, std::unordered_map<std::string, char>> &keyboardSettings) {
+    for (const auto &keyboardSetting: keyboardSettings) {
+        for (const auto &setting: keyboardSetting.second) {
+            heroKeysControl[keyboardSetting.first][setting.second] = actionBind.at(keyboardSetting.first).at(
+                    setting.first);
+        }
+    }
+}
+
 int KeyboardControl::requestKeyAction(const std::string &screen) {
-    char key = getchar();
+    char key = std::cin.get();
     if (heroKeysControl.count(screen) == 0)
         return -1;
     if (heroKeysControl.at(screen).count(key)) {
@@ -47,15 +57,15 @@ int KeyboardControl::requestKeyAction(const std::string &screen) {
 }
 
 char KeyboardControl::requestKeyChar() {
-    return getchar();
+    return std::cin.get();
 }
 
 int KeyboardControl::requestKeyInt() {
     int num;
     std::cin >> num;
     if (std::cin.fail()) {
-        requestTrashIgnore();
         clearInputState();
+        requestTrashIgnore();
         throw std::invalid_argument("Не получилось считать число!");
     }
     return num;
@@ -68,24 +78,22 @@ std::string KeyboardControl::requestKeyLine() {
 }
 
 bool KeyboardControl::checkRightAction(int action) const {
-    return 0 <= action && action < SIZE_HERO_KEYS_CONTROL;
+    return 0 <= action && action < SIZE_PLAYER_KEYS_CONTROL;
 }
 
-bool KeyboardControl::resetBindChar(const std::string &screen, char newKey, int action) {
+bool KeyboardControl::resetBindChar(const std::string &screen, int action, char newKey) {
     if (heroKeysControl.count(screen) == 0 || heroKeysControl[screen].count(newKey))
         return false;
-    char prevKey = 0;
-    for (const auto &item: heroKeysControl[screen]) {
-        if (item.second == action)
-            prevKey = item.first;
-    }
-    heroKeysControl[screen].erase(prevKey);
+    auto prevKeyPosition = std::find_if(heroKeysControl[screen].begin(), heroKeysControl[screen].end(), [action](const auto& item){
+        return item.second == action;
+    });
+    heroKeysControl[screen].erase(prevKeyPosition);
     heroKeysControl[screen][newKey] = action;
     return true;
 }
 
 bool KeyboardControl::checkAllKeyBound() const {
-    std::vector<bool> actions(SIZE_HERO_KEYS_CONTROL);
+    std::vector<bool> actions(SIZE_PLAYER_KEYS_CONTROL);
     for (const auto &screen: heroKeysControl) {
         for (const auto &key: screen.second) {
             actions[key.second] = true;
@@ -99,20 +107,10 @@ bool KeyboardControl::checkAllKeyBound() const {
 }
 
 void KeyboardControl::requestKeyIgnore() {
-    char z = getchar();
+    char z = std::cin.get(); // char z удобно для отладки, чтобы посмотреть считанный символ
 }
 
-KeyboardControl::KeyboardControl(
-        const std::unordered_map<std::string, std::unordered_map<std::string, char>> &keyboardSettings) {
-    for (const auto &keyboardSetting: keyboardSettings) {
-        for (const auto &setting: keyboardSetting.second) {
-            heroKeysControl[keyboardSetting.first][setting.second] = actionBind.at(keyboardSetting.first).at(
-                    setting.first);
-        }
-    }
-}
-
-char KeyboardControl::getKey(const std::string &screen, int action) {
+char KeyboardControl::getKeyByAction(const std::string &screen, int action) {
     if (heroKeysControl.count(screen) == 0 || !checkRightAction(action)) {
         return '?';
     }
@@ -133,10 +131,10 @@ void KeyboardControl::requestTrashIgnore() {
     std::cin.ignore(32767, '\n');
 }
 
-std::unordered_map<std::string, std::unordered_map<std::string, int>> KeyboardControl::getAllActionKeys() const {
+std::unordered_map<std::string, std::unordered_map<std::string, int>> KeyboardControl::getAllActionsNameId() const {
     return actionBind;
 }
 
-std::unordered_map<std::string, std::unordered_map<char, int>> KeyboardControl::getAllKeysBound() const {
+std::unordered_map<std::string, std::unordered_map<char, int>> KeyboardControl::getAllBindKeysId() const {
     return heroKeysControl;
 }
