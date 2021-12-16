@@ -24,8 +24,6 @@ public:
     std::string getScreenName() const;
     int getMenuSize() const;
     void clearScreen() const;
-
-
 };
 
 

@@ -303,17 +303,12 @@ class GameHandler {
         std::unordered_map<std::string, std::unordered_map<int, char>> keysActionControl;
         std::unordered_map<std::string, std::unordered_map<std::string, int>> actionBind;
         {
-            auto actions = keyControl->getAllActionsNameId();
+            actionBind = keyControl->getAllActionsNameId();
             auto keyActionsBound = keyControl->getAllBindKeysId();
 
             for (const auto &action: keyActionsBound) {
                 for (const auto &key: action.second) {
                     keysActionControl[action.first][key.second] = key.first;
-                }
-            }
-            for (const auto &action: actions) {
-                for (const auto &key: action.second) {
-                    actionBind[action.first][key.first] = key.second;
                 }
             }
         }

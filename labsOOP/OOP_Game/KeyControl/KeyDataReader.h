@@ -12,5 +12,3 @@ class KeyDataReader {
 public:
     static std::unordered_map<std::string, std::unordered_map<std::string, char>> readKeysSettings(const std::string& nameFile);
 };
-
-
