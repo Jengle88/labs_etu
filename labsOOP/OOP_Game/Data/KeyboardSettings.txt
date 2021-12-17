@@ -33,4 +33,13 @@ selectMenuDown s
 changeBind c
 exitSettings `
 <end>
+loadScreen
+<start>
+selectMenuUp w
+selectMenuDown s
+acceptFile e
+deleteFile x
+resetFileList r
+exitLoad `
+<end>
 <end>

@@ -9,6 +9,8 @@
 #include "UI/StartScreen.h"
 #include "KeyControl/KeyControl.h"
 #include "UI/KeySettingsScreen.h"
+#include "UI/LoadScreen.h"
+#include <filesystem>
 
 enum FightStatus {
     LEAVE_FIGHT = -1,
@@ -26,6 +28,7 @@ class GameHandler {
     FightScreen *fightScreen = nullptr;
     bool isReady = false;
     bool finishEnable = false;
+    std::string saveDataPath = "../SaveData/";
 
 
     bool checkFinishCondition() {
@@ -349,6 +352,69 @@ class GameHandler {
     }
     // end
 
+    // для LoadScreen: старт
+
+
+    std::vector<std::string> loadPathsToFiles() const {
+        namespace fs = std::filesystem;
+        std::vector<std::string> pathToFiles;
+        for(auto pathToFile : fs::directory_iterator(saveDataPath)) {
+            pathToFiles.push_back(pathToFile.path());
+        }
+        return pathToFiles;
+    }
+
+    std::vector<std::string> extractNamesOfFiles(std::vector<std::string> &pathsToFiles) const {
+        std::vector<std::string> nameFiles;
+        nameFiles.reserve(pathsToFiles.size());
+        for (auto pathToFile: pathsToFiles) {
+            nameFiles.push_back(pathToFile.erase(0, saveDataPath.size()));
+        }
+        return nameFiles;
+    }
+
+    void showLoadScreen() {
+        int selectedMenuItem = 0;
+        std::vector<std::string> pathsToFiles = loadPathsToFiles();
+        std::vector<std::string> namesOfFiles = extractNamesOfFiles(pathsToFiles);
+        LoadScreen loadScreen(namesOfFiles);
+        int removeFlag = -1;
+        int action = -1;
+        loadScreen.showUpdatedScreen(selectedMenuItem);
+        while (true) {
+            action = keyControl->requestKeyAction(loadScreen.getScreenName());
+            switch (action) {
+                case LOADSCREEN_SELECT_MENU_UP:
+                    if (0 <= selectedMenuItem - 1)
+                        selectedMenuItem--;
+                    break;
+                case LOADSCREEN_SELECT_MENU_DOWN:
+                    if (selectedMenuItem + 1 < loadScreen.getMenuSize())
+                        selectedMenuItem++;
+                    break;
+                case LOADSCREEN_ACCEPT_FILE:
+                    // TODO загрузка файла
+                    break;
+                case LOADSCREEN_DELETE_FILE:
+                    // TODO удаление файла
+                    break;
+                case LOADSCREEN_RESET_FILE_LIST:
+                    pathsToFiles = loadPathsToFiles();
+                    namesOfFiles = extractNamesOfFiles(pathsToFiles);
+                    loadScreen.reloadNameFiles(namesOfFiles);
+                    selectedMenuItem = 0;
+                    break;
+                case LOADSCREEN_EXIT_LOADSCREEN:
+                    keyControl->requestTrashIgnore();
+                    return;
+            }
+            keyControl->requestTrashIgnore();
+            loadScreen.clearScreen();
+            loadScreen.showUpdatedScreen(selectedMenuItem);
+        }
+    }
+    // end
+
 public:
     GameHandler() {
         keyControl = *control;
@@ -395,6 +461,7 @@ public:
                             thingsManager = nullptr;
                             break;
                         case MenuItemID::LOAD_GAME:
+                            showLoadScreen();
                             break;
                         case MenuItemID::KEY_SETTINGS:
                             startScreen.clearScreen();

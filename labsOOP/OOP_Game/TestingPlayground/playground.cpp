@@ -140,17 +140,24 @@ void NumsClass<Nums...>::f() {
     (cout << ... << Nums->a);
 }
 
-
-
+#include <filesystem>
+namespace fs = std::filesystem;
 
 int main() { //проверено
-    static A a;
-    static const float* ab = new float(2.4);
+    std::string path = "../SaveData/";
+    std::vector<std::string> nameFiles;
+    for (const auto & entry : fs::directory_iterator(path))
+        nameFiles.push_back(entry.path());
+    for (int i = 0; i < nameFiles.size(); ++i) {
+        std::cout << nameFiles[i].erase(0, 12) << '\n';
+    }
+//    static A a;
+//    static const float* ab = new float(2.4);
 //    *ab = 2.4;
 //    static float z = 2.4;
-    NumsClass<&a, &a, &a> n;
-    delete ab;
-    n.f();
+//    NumsClass<&a, &a, &a> n;
+//    delete ab;
+//    n.f();
 //    static B b(5);
 //    static A a = dynamic_cast<A&>(b);
 //    C<a> c;

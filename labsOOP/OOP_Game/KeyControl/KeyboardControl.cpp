@@ -33,6 +33,14 @@ const std::unordered_map<std::string, std::unordered_map<std::string, int>> Keyb
                 {"selectMenuDown", KEYSETTINGS_SELECT_MENU_DOWN},
                 {"changeBind", KEYSETTINGS_CHANGE_BIND},
                 {"exitSettings", KEYSETTINGS_EXIT_SETTINGS}
+        }},
+        {"loadScreen", {
+                {"selectMenuUp", LOADSCREEN_SELECT_MENU_UP},
+                {"selectMenuDown", LOADSCREEN_SELECT_MENU_DOWN},
+                {"acceptFile", LOADSCREEN_ACCEPT_FILE},
+                {"deleteFile", LOADSCREEN_DELETE_FILE},
+                {"resetFileList", LOADSCREEN_RESET_FILE_LIST},
+                {"exitLoad", LOADSCREEN_EXIT_LOADSCREEN}
         }}
 };
 
@@ -48,6 +56,7 @@ KeyboardControl::KeyboardControl(
 
 int KeyboardControl::requestKeyAction(const std::string &screen) {
     char key = std::cin.get();
+    key = tolower(key);
     if (heroKeysControl.count(screen) == 0)
         return -1;
     if (heroKeysControl.at(screen).count(key)) {
