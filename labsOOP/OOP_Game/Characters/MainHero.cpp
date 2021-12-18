@@ -91,6 +91,10 @@ std::map<std::string, int> &MainHero::getCountKilledEnemy() {
     return countKilledEnemy;
 }
 
+const std::map<std::string, int> &MainHero::getCountKilledEnemy() const {
+    return countKilledEnemy;
+}
+
 double MainHero::getDodgeFactor() const {
     return MainHeroProperties::MAIN_HERO_DODGE_FACTOR;
 }

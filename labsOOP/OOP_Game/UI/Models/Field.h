@@ -50,6 +50,9 @@ public:
     Field& operator=(Field&& field);
     ~Field();
 
+    std::vector<std::string>
+    prepareDataToSave(bool sizeOfField, bool startFinishPos, bool posOfWalls, bool posOfCharacters, bool heroInfo) const;
+
     // Генераторы
     bool generateFullField(int countWalls);
     void createHero();

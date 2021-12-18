@@ -13,6 +13,7 @@ class Thing {
 public:
     virtual std::string getNameThing() const = 0;
     virtual int getTypeObject() const = 0;
+    virtual std::string getStrType() const = 0;
     virtual int getLevelThing() const = 0;
     virtual std::map<std::string, double> getProperties() const = 0;
     virtual std::map<std::string, double> getInverseValueProperties() const = 0;

@@ -10,6 +10,7 @@ public:
     Armor(const std::string& nameThing, const std::map<std::string, double>& properties, int levelThing);
     ~Armor() override = default;
     std::string getNameThing() const override;
+    std::string getStrType() const override;
     int getLevelThing() const override;
     int getTypeObject() const override;
     std::map<std::string, double> getProperties() const override;

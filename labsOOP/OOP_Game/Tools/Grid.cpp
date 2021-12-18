@@ -22,7 +22,7 @@ Grid::Grid(int height, int width, std::vector<std::vector<Cell>> grid) {
 	}
 }
 
-Grid::Grid(const Grid &grid): height(grid.height), width(grid.width) {
+Grid::Grid(const Grid &grid): height(grid.height), width(grid.width), pointsOfWalls(grid.pointsOfWalls) {
     this->grid.resize(grid.height);
     for (int i = 0; i < grid.height; ++i) {
         this->grid[i].resize(grid.width);
@@ -42,12 +42,13 @@ Grid &Grid::operator=(const Grid &grid) {
             this->grid[i][j] = grid.grid[i][j];
         }
     }
+    pointsOfWalls = grid.pointsOfWalls;
     height = grid.height;
     width = grid.width;
     return *this;
 }
 
-Grid::Grid(Grid &&grid): grid(std::move(grid.grid)), height(grid.height), width(grid.width)  {
+Grid::Grid(Grid &&grid): grid(std::move(grid.grid)), height(grid.height), width(grid.width), pointsOfWalls(std::move(grid.pointsOfWalls))  {
     grid.grid.clear();
     grid.height = 0;
     grid.width = 0;
@@ -57,9 +58,11 @@ Grid& Grid::operator=(Grid &&grid) {
     if (&grid == this)
         return *this;
     this->grid = std::move(grid.grid);
+    this->pointsOfWalls = std::move(grid.pointsOfWalls);
     this->height = grid.height;
     this->width = grid.width;
     grid.grid.clear();
+    grid.pointsOfWalls.clear();
     grid.height = 0;
     grid.width = 0;
     return *this;
@@ -117,5 +120,9 @@ Cell Grid::getElem(CellPoint point) const {
                               LoggerPull::LoggingType::Error);
         throw std::invalid_argument("Были переданы невалидные индексы в getElem");
     }
+}
+
+const std::vector<CellPoint> &Grid::getPointsOfWalls() const {
+    return pointsOfWalls;
 }
 

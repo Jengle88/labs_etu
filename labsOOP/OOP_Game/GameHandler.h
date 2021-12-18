@@ -10,6 +10,7 @@
 #include "KeyControl/KeyControl.h"
 #include "UI/KeySettingsScreen.h"
 #include "UI/LoadScreen.h"
+#include "Tools/SaveManager.h"
 #include <filesystem>
 
 enum FightStatus {
@@ -172,6 +173,10 @@ class GameHandler {
                 } else {
                     return true;
                 }
+            case PlayerKeysControl::FIELD_SAVE_DATA:
+                if(!saveData())
+                    gameAction = "Не удалось сохранить игру!\n";
+                return true;
             case PlayerKeysControl::FIELD_TAKE_THING:
                 requestTakeObject(heroPos);
                 finishEnable = checkFinishCondition();
@@ -284,6 +289,10 @@ class GameHandler {
                 if (selectedThing + 1 < mainHero.getInventory().size())
                     selectedThing++;
                 break;
+            case PlayerKeysControl::FIGHT_SAVE_DATA:
+                if(!saveData())
+                    fightScreen->showMessage("Не удалось сохранить игру!\n");
+                break;
             case PlayerKeysControl::FIGHT_USE_THING:
                 if (!mainHero.useThing(selectedThing)) {
                     fightScreen->showMessage("Предмета нет или он не может быть использован\n");
@@ -355,29 +364,11 @@ class GameHandler {
     // для LoadScreen: старт
 
 
-    std::vector<std::string> loadPathsToFiles() const {
-        namespace fs = std::filesystem;
-        std::vector<std::string> pathToFiles;
-        for(auto pathToFile : fs::directory_iterator(saveDataPath)) {
-            pathToFiles.push_back(pathToFile.path());
-        }
-        return pathToFiles;
-    }
-
-    std::vector<std::string> extractNamesOfFiles(std::vector<std::string> &pathsToFiles) const {
-        std::vector<std::string> nameFiles;
-        nameFiles.reserve(pathsToFiles.size());
-        for (auto pathToFile: pathsToFiles) {
-            nameFiles.push_back(pathToFile.erase(0, saveDataPath.size()));
-        }
-        return nameFiles;
-    }
 
     void showLoadScreen() {
         int selectedMenuItem = 0;
-        std::vector<std::string> pathsToFiles = loadPathsToFiles();
-        std::vector<std::string> namesOfFiles = extractNamesOfFiles(pathsToFiles);
-        LoadScreen loadScreen(namesOfFiles);
+        auto saveManager = SaveManager::getInstance(saveDataPath);
+        LoadScreen loadScreen(&saveManager->get()->getNamesOfFiles());
         int removeFlag = -1;
         int action = -1;
         loadScreen.showUpdatedScreen(selectedMenuItem);
@@ -396,12 +387,14 @@ class GameHandler {
                     // TODO загрузка файла
                     break;
                 case LOADSCREEN_DELETE_FILE:
-                    // TODO удаление файла
+                    removeFlag = saveManager->get()->deleteFile(selectedMenuItem);
+                    if (selectedMenuItem >= saveManager->get()->getNamesOfFiles().size())
+                        selectedMenuItem = std::max((int)saveManager->get()->getNamesOfFiles().size() - 1, 0);
+
                     break;
                 case LOADSCREEN_RESET_FILE_LIST:
-                    pathsToFiles = loadPathsToFiles();
-                    namesOfFiles = extractNamesOfFiles(pathsToFiles);
-                    loadScreen.reloadNameFiles(namesOfFiles);
+                    saveManager->get()->reloadPathsToFiles(saveDataPath);
+                    loadScreen.reloadNameFiles(&saveManager->get()->getNamesOfFiles());
                     selectedMenuItem = 0;
                     break;
                 case LOADSCREEN_EXIT_LOADSCREEN:
@@ -410,7 +403,8 @@ class GameHandler {
             }
             keyControl->requestTrashIgnore();
             loadScreen.clearScreen();
-            loadScreen.showUpdatedScreen(selectedMenuItem);
+            loadScreen.showUpdatedScreen(selectedMenuItem, removeFlag);
+            removeFlag = -1;
         }
     }
     // end
@@ -455,6 +449,7 @@ public:
                             startScreen.clearScreen();
                             generateField();
                             observeField();
+//                            saveData();
                             delete field;
                             delete thingsManager; // так как статистика вещей зависит от героя, а герой - от поля
                             field = nullptr;
@@ -479,10 +474,22 @@ public:
     }
     // end
 
+    bool saveData() const {
+        auto saveManager = SaveManager::getInstance(saveDataPath);
+        auto data1 = field->prepareDataToSave(true, true, true, true, false);
+        auto data2 = thingsManager->prepareDataToSave();
+        auto data3 = field->prepareDataToSave(false, false, false, false, true);
+        data1.reserve(data1.size() + data2.size() + data3.size());
+        for (const auto &item: data2) {
+            data1.emplace_back(item);
+        }
+        for (const auto &item: data3) {
+            data1.emplace_back(item);
+        }
+        return saveManager->get()->saveData(data1);
+    }
 
-    void generateField() {
-        srand(time(0));
-
+    void loadParamsToCharacters() const {
         CharacterProperties properties = preset.getCharactersParams().at("MainHero");
         MainHero::setDefaultProperties(properties);
         properties = preset.getCharactersParams().at("Monster");
@@ -492,7 +499,11 @@ public:
         properties = preset.getCharactersParams().at("Gargoyle");
         Gargoyle::setDefaultProperties(properties);
         LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Характеристики персонажей загружены"));
+    }
 
+    void generateField() {
+        srand(time(0));
+        loadParamsToCharacters();
         auto[height, width, countWalls] = mainScreen->showStartFieldScreen(keyControl);
         generateField(height, width, countWalls);
         field->setRules(preset.getCntEnemyOnField(), preset.getTimeBetweenGenerateEnemy());

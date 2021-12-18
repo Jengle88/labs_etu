@@ -1,5 +1,6 @@
 #include "ThingsManager.h"
 #include "../Logger/LoggerPull.h"
+#include "../Tools/SaveDataReader.h"
 
 ThingsManager::ThingsManager(Field *field, std::map<CellPoint, Thing*> visualThingsPlaces,
                              std::map<CellPoint, Thing*> healthThingsPlaces)
@@ -83,4 +84,22 @@ void ThingsManager::setRules(int cntHealThing, int timeBetweenGenerateVisualThin
     this->timeBetweenGenerateVisualThing = timeBetweenGenerateVisualThing;
     this->timeBetweenGenerateHealThing = timeBetweenGenerateHealThing;
 
+}
+
+std::vector<std::string> ThingsManager::prepareDataToSave() const {
+    std::vector<std::string> data;
+    data.emplace_back("// расположение вещей (уровень, позиция xy)\n");
+    data.push_back(SaveDataReader::START_TAG + "\n");
+    for (const auto &thingPlace: visualThingsPlaces) {
+        data.push_back(thingPlace.second->getStrType() + " " + std::to_string(thingPlace.second->getLevelThing()) +
+            " " + std::to_string(thingPlace.first.getX()) + " " + std::to_string(thingPlace.first.getY()) + "\n");
+    }
+    for (const auto &thingPlace: nonVisualThingsPlaces) {
+        data.push_back(thingPlace.second->getStrType() + " " + std::to_string(thingPlace.second->getLevelThing()) +
+            " " + std::to_string(thingPlace.first.getX()) + " " + std::to_string(thingPlace.first.getY()) + "\n");
+    }
+    data.push_back(SaveDataReader::END_TAG + "\n");
+    data.emplace_back("// уровень вещей\n");
+    data.push_back("heroLevel " + std::to_string(levelThings) + "\n");
+    return data;
 }

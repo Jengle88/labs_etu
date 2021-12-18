@@ -12,6 +12,7 @@ class Grid {
 	int height = 0;
 	int width = 0;
 	std::vector<std::vector<Cell>> grid;
+    std::vector<CellPoint> pointsOfWalls;
 
     bool isValidXPos(int x) const;
     bool isValidYPos(int y) const;
@@ -36,6 +37,6 @@ public:
 	int getWidth() const;
 	void setElem(CellPoint point, Cell cell);
 	Cell getElem(CellPoint point) const;
-
+    const std::vector<CellPoint>& getPointsOfWalls() const;
     bool isValidIndexes(int x, int y) const;
 };

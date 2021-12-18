@@ -48,3 +48,7 @@ HealPotion::HealPotion(const std::string &nameThing, const std::map<std::string,
     this->properties = properties;
     this->levelThing = levelThing;
 }
+
+std::string HealPotion::getStrType() const {
+    return "healPotion";
+}

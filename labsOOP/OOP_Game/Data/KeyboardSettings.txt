@@ -14,6 +14,7 @@ moveDown s
 takeThing e
 startFight f
 finishOut q
+saveData r
 exitField `
 acceptGenerate y
 cancelGenerate n
@@ -23,6 +24,7 @@ fightScreen
 attackEnemy a
 selectThingUp w
 selectThingDown s
+saveData r
 useThing e
 exitFight `
 <end>

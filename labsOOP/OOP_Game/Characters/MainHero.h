@@ -42,6 +42,7 @@ public:
     void writeKill(std::string enemyName);
     const std::vector<Thing*> & getInventory() const;
     std::map<std::string, int> &getCountKilledEnemy();
+    const std::map<std::string, int> &getCountKilledEnemy() const;
     std::string getName() const override;
     std::vector<std::string> getModel() const override;
     MainHero * clone() const override;

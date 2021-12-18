@@ -48,3 +48,7 @@ Sword::Sword(const std::string &nameThing, const std::map<std::string, double> &
     this->properties = properties;
     this->levelThing = levelThing;
 }
+
+std::string Sword::getStrType() const {
+    return "sword";
+}

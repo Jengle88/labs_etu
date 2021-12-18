@@ -1,5 +1,6 @@
 #include "Field.h"
 #include "../../Logger/LoggerPull.h"
+#include "../../Tools/SaveDataReader.h"
 ;
 
 Field::Field(int height, int width, DataManager *dataManager, CellPoint start, CellPoint finish, Grid grid) {
@@ -113,6 +114,60 @@ Field::~Field() {
     }
 }
 
+std::vector<std::string>
+Field::prepareDataToSave(bool sizeOfField, bool startFinishPos, bool posOfWalls, bool posOfCharacters, bool heroInfo) const {
+    std::vector<std::string> data;
+    if (sizeOfField) {
+        data.emplace_back("// размеры поля\n");
+        data.push_back("height " + std::to_string(field.getHeight()) + "\n");
+        data.push_back("width " + std::to_string(field.getWidth()) + "\n");
+    }
+    if (startFinishPos) {
+        data.emplace_back("// позиции старта/финиша xy\n");
+        data.push_back("start " + std::to_string(start.getX()) + " " + std::to_string(start.getY()) + "\n");
+        data.push_back("finish " + std::to_string(finish.getX()) + " " + std::to_string(finish.getY()) + "\n");
+    }
+    if (posOfWalls) {
+        data.emplace_back("// позиции непроходимых клеток xy\n");
+        data.push_back(SaveDataReader::START_TAG + "\n");
+        auto pointsOfWalls = field.getPointsOfWalls();
+        for (const auto &point: pointsOfWalls) {
+            data.push_back(std::to_string(point.getX()) + " " + std::to_string(point.getY()) + "\n");
+        }
+        data.push_back(SaveDataReader::END_TAG + "\n");
+    }
+    if (posOfCharacters) {
+        data.emplace_back("// позиция героя (здоровье, позиция xy)\n");
+        data.push_back(hero.getName() + " " + std::to_string(hero.getHealth()) +
+                       " " + std::to_string(heroPos.getX()) + " " + std::to_string(heroPos.getY()) + "\n");
+        data.emplace_back("// позиции врагов (здоровье, позиция xy)\n");
+        data.push_back(SaveDataReader::START_TAG + "\n");
+        for (const auto &enemy: enemies) {
+            data.push_back(enemy.second->getName() + " " + std::to_string(enemy.second->getHealth()) +
+                           " " + std::to_string(enemy.first.getX()) + " " + std::to_string(enemy.first.getY()) + "\n");
+        }
+        data.push_back(SaveDataReader::END_TAG + "\n");
+    }
+    if (heroInfo) {
+        data.emplace_back("// вещи игрока (уровень)\n");
+        data.push_back(SaveDataReader::START_TAG + "\n");
+        auto heroInventory = hero.getInventory();
+        for (const auto &thing : heroInventory) {
+            data.push_back(thing->getStrType() + " " + std::to_string(thing->getLevelThing()) + "\n");
+        }
+        data.push_back(SaveDataReader::END_TAG + "\n");
+        data.emplace_back("// достижения игрока (количество)\n");
+        data.push_back(SaveDataReader::START_TAG + "\n");
+        auto heroAchievements = hero.getCountKilledEnemy();
+        for (const auto &achievement : heroAchievements) {
+            data.push_back(achievement.first + " " + std::to_string(achievement.second) + "\n");
+        }
+        data.push_back(SaveDataReader::END_TAG + "\n");
+    }
+
+    return data;
+}
+
 bool Field::isCorrectStartFinish(CellPoint start, CellPoint finish) const {
     return this->field.isValidIndexes(start.getX(), start.getY()) &&
            this->field.isValidIndexes(finish.getX(), finish.getY()) &&
@@ -221,6 +276,7 @@ void Field::generateWalls(int countWalls) {
         CellPoint point = CellPoint(rand() % field.getWidth(), rand() % field.getHeight());
         if (field.getElem(point).getValue().getTypeCell() == TypeCell::EMPTY) {
             field.setElem(point, Cell(CellObject(TypeCell::WALL, TypeObject::NOTHING, false)));
+            field.pointsOfWalls.push_back(point);
             cntPlacedWalls++;
         }
     }
@@ -426,5 +482,7 @@ void Field::setRules(int maxCntEnemy, int timeBetweenGenerateEnemy) {
     this->timeBetweenGenerateEnemy = timeBetweenGenerateEnemy;
 
 }
+
+
 
 

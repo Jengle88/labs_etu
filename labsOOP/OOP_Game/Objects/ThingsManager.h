@@ -26,4 +26,5 @@ public:
     std::pair<bool, Thing*> checkCellHasSmth(CellPoint point);
     void deleteThingFromField(CellPoint point);
     void setRules(int cntHealThing, int timeBetweenGenerateVisualThing, int timeBetweenGenerateHealThing);
+    std::vector<std::string> prepareDataToSave() const;
 };
