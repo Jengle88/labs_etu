@@ -72,15 +72,27 @@ bool Grid::isValidIndexes(int x, int y) const {
     return isValidXPos(x) && isValidYPos(y);
 }
 
+bool Grid::isValidIndexes(int x, int y, int height, int width) {
+    return isValidXPos(x, width) && isValidYPos(y, height);
+}
+
 bool Grid::isValidXPos(int x) const {
     return 0 <= x && x < this->width;
+}
+
+bool Grid::isValidXPos(int x, int width) {
+    return 0 <= x && x < width;
 }
 
 bool Grid::isValidYPos(int y) const {
     return 0 <= y && y < this->height;
 }
 
-bool Grid::isValidSizes(int height, int width) const {
+bool Grid::isValidYPos(int y, int height) {
+    return 0 <= y && y < height;
+}
+
+bool Grid::isValidSizes(int height, int width) {
     return isValidHeight(height) && isValidWidth(width);
 }
 

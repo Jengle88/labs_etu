@@ -15,6 +15,7 @@ takeThing e
 startFight f
 finishOut q
 saveData r
+loadData l
 exitField `
 acceptGenerate y
 cancelGenerate n
@@ -25,6 +26,7 @@ attackEnemy a
 selectThingUp w
 selectThingDown s
 saveData r
+loadData l
 useThing e
 exitFight `
 <end>
@@ -39,7 +41,7 @@ loadScreen
 <start>
 selectMenuUp w
 selectMenuDown s
-acceptFile e
+acceptFile d
 deleteFile x
 resetFileList r
 exitLoad `

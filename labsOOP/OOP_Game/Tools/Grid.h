@@ -15,12 +15,15 @@ class Grid {
     std::vector<CellPoint> pointsOfWalls;
 
     bool isValidXPos(int x) const;
+    static bool isValidXPos(int x, int width);
     bool isValidYPos(int y) const;
-    bool isValidSizes(int height, int width) const;
+    static bool isValidYPos(int y, int height);
+    static bool isValidSizes(int height, int width);
     static bool isValidHeight(int height);
     static bool isValidWidth(int width);
 
     friend class FieldScreen; // для доступа к функциям проверки высоты и ширины
+    friend class SaveDataReader;
     friend class Field; // т.к Field работает с Grid
     friend class FieldIterator; // т.к FieldIterator работает с Grid
 
@@ -39,4 +42,5 @@ public:
 	Cell getElem(CellPoint point) const;
     const std::vector<CellPoint>& getPointsOfWalls() const;
     bool isValidIndexes(int x, int y) const;
+    static bool isValidIndexes(int x, int y, int height, int width);
 };

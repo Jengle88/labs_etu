@@ -114,8 +114,20 @@ Field::~Field() {
     }
 }
 
+bool Field::isCorrectStartFinish(CellPoint start, CellPoint finish) const {
+    return this->field.isValidIndexes(start.getX(), start.getY()) &&
+           this->field.isValidIndexes(finish.getX(), finish.getY()) &&
+           isCorrectDistStartFinish(start, finish);
+}
+
+bool Field::isCorrectDistStartFinish(CellPoint start, CellPoint finish) const {
+    return abs(start.getX() - finish.getX()) +
+           abs(start.getY() - finish.getY()) >= distStartFinish;
+}
+
 std::vector<std::string>
-Field::prepareDataToSave(bool sizeOfField, bool startFinishPos, bool posOfWalls, bool posOfCharacters, bool heroInfo) const {
+Field::prepareDataToSave(bool sizeOfField, bool startFinishPos, bool posOfWalls, bool posOfCharacters, bool cntSteps,
+                         bool heroInfo) const {
     std::vector<std::string> data;
     if (sizeOfField) {
         data.emplace_back("// размеры поля\n");
@@ -129,6 +141,7 @@ Field::prepareDataToSave(bool sizeOfField, bool startFinishPos, bool posOfWalls,
     }
     if (posOfWalls) {
         data.emplace_back("// позиции непроходимых клеток xy\n");
+        data.emplace_back("wallsPos\n");
         data.push_back(SaveDataReader::START_TAG + "\n");
         auto pointsOfWalls = field.getPointsOfWalls();
         for (const auto &point: pointsOfWalls) {
@@ -141,6 +154,7 @@ Field::prepareDataToSave(bool sizeOfField, bool startFinishPos, bool posOfWalls,
         data.push_back(hero.getName() + " " + std::to_string(hero.getHealth()) +
                        " " + std::to_string(heroPos.getX()) + " " + std::to_string(heroPos.getY()) + "\n");
         data.emplace_back("// позиции врагов (здоровье, позиция xy)\n");
+        data.emplace_back("enemiesPosHealth\n");
         data.push_back(SaveDataReader::START_TAG + "\n");
         for (const auto &enemy: enemies) {
             data.push_back(enemy.second->getName() + " " + std::to_string(enemy.second->getHealth()) +
@@ -148,8 +162,13 @@ Field::prepareDataToSave(bool sizeOfField, bool startFinishPos, bool posOfWalls,
         }
         data.push_back(SaveDataReader::END_TAG + "\n");
     }
+    if (cntSteps) {
+        data.emplace_back("// количество шагов\n");
+        data.push_back("cntSteps " + std::to_string(counterSteps) + "\n");
+    }
     if (heroInfo) {
         data.emplace_back("// вещи игрока (уровень)\n");
+        data.emplace_back("heroThings\n");
         data.push_back(SaveDataReader::START_TAG + "\n");
         auto heroInventory = hero.getInventory();
         for (const auto &thing : heroInventory) {
@@ -157,6 +176,7 @@ Field::prepareDataToSave(bool sizeOfField, bool startFinishPos, bool posOfWalls,
         }
         data.push_back(SaveDataReader::END_TAG + "\n");
         data.emplace_back("// достижения игрока (количество)\n");
+        data.emplace_back("heroAchievement\n");
         data.push_back(SaveDataReader::START_TAG + "\n");
         auto heroAchievements = hero.getCountKilledEnemy();
         for (const auto &achievement : heroAchievements) {
@@ -166,17 +186,6 @@ Field::prepareDataToSave(bool sizeOfField, bool startFinishPos, bool posOfWalls,
     }
 
     return data;
-}
-
-bool Field::isCorrectStartFinish(CellPoint start, CellPoint finish) const {
-    return this->field.isValidIndexes(start.getX(), start.getY()) &&
-           this->field.isValidIndexes(finish.getX(), finish.getY()) &&
-           isCorrectDistStartFinish(start, finish);
-}
-
-bool Field::isCorrectDistStartFinish(CellPoint start, CellPoint finish) const {
-    return abs(start.getX() - finish.getX()) +
-           abs(start.getY() - finish.getY()) >= distStartFinish;
 }
 
 CellPoint Field::generateBorderPoint() const {
@@ -468,6 +477,7 @@ long Field::getCountSteps() const {
     return counterSteps;
 }
 
+
 std::map<CellPoint, Enemy *> &Field::getEnemies() {
     return enemies;
 }
@@ -476,13 +486,11 @@ const Grid &Field::getGrid() const {
     return field;
 }
 
-
 void Field::setRules(int maxCntEnemy, int timeBetweenGenerateEnemy) {
     this->maxCntEnemy = maxCntEnemy;
     this->timeBetweenGenerateEnemy = timeBetweenGenerateEnemy;
 
 }
-
 
 
 

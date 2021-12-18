@@ -1,4 +1,6 @@
 #include "SaveManager.h"
+#include "SaveDataReader.h"
+#include "../Logger/LoggerPull.h"
 
 std::unique_ptr<SaveManager> SaveManager::instance = nullptr;
 
@@ -14,6 +16,7 @@ std::vector<std::string> SaveManager::loadPathsToFiles() const {
     for(const auto& pathToFile : fs::directory_iterator(pathToSaveDirectory)) {
         pathToFiles.push_back(pathToFile.path());
     }
+    std::sort(pathToFiles.rbegin(), pathToFiles.rend());
     return pathToFiles;
 }
 
@@ -46,7 +49,7 @@ const std::vector<std::string> &SaveManager::getNamesOfFiles() const {
 int SaveManager::deleteFile(int pos) {
     namespace fs = std::filesystem;
     if (0 <= pos && pos < pathsToFiles.size()) {
-        int answer = fs::remove(pathsToFiles[pos]); // возвращает true, если удалил, либо false, если нет
+        int answer = fs::remove(pathsToFiles[pos]); // возвращает true, если удалил, или false, если нет
         pathsToFiles.erase(pathsToFiles.begin() + pos);
         namesOfFiles.erase(namesOfFiles.begin() + pos);
         return answer;
@@ -66,8 +69,23 @@ bool SaveManager::saveData(const std::vector<std::string> &data) const {
     for (const auto &item: data) {
         out << item;
     }
+    LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Данные успешно сохранены в файл " + nameOfFile));
     out.close();
     return true;
+}
+
+SaveDataAdapter SaveManager::loadData(int selectedFile, bool &check) const {
+    SaveDataReader dataReader;
+    SaveDataAdapter adapter;
+    check = true;
+    LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Начато считывание файла загрузки " + pathsToFiles[selectedFile] ));
+    try {
+        dataReader.readSaveFile(pathsToFiles[selectedFile], adapter);
+    } catch (std::exception& e) {
+        check = false;
+        LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>(e.what()));
+    }
+    return adapter;
 }
 
 

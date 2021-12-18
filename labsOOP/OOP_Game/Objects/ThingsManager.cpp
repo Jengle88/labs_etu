@@ -89,6 +89,7 @@ void ThingsManager::setRules(int cntHealThing, int timeBetweenGenerateVisualThin
 std::vector<std::string> ThingsManager::prepareDataToSave() const {
     std::vector<std::string> data;
     data.emplace_back("// расположение вещей (уровень, позиция xy)\n");
+    data.emplace_back("thingsPosLevel\n");
     data.push_back(SaveDataReader::START_TAG + "\n");
     for (const auto &thingPlace: visualThingsPlaces) {
         data.push_back(thingPlace.second->getStrType() + " " + std::to_string(thingPlace.second->getLevelThing()) +

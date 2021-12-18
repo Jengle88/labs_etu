@@ -34,6 +34,7 @@ class Field {
     long int counterSteps = 0;
     bool isCorrectStartFinish(CellPoint start, CellPoint finish) const;
     bool isCorrectDistStartFinish(CellPoint start, CellPoint finish) const;
+
     CellPoint generateBorderPoint() const;
     void generateStartFinishWay();
     void generateWayWithoutWalls(CellPoint start, CellPoint finish);
@@ -51,7 +52,8 @@ public:
     ~Field();
 
     std::vector<std::string>
-    prepareDataToSave(bool sizeOfField, bool startFinishPos, bool posOfWalls, bool posOfCharacters, bool heroInfo) const;
+    prepareDataToSave(bool sizeOfField, bool startFinishPos, bool posOfWalls, bool posOfCharacters, bool cntSteps,
+                      bool heroInfo) const;
 
     // Генераторы
     bool generateFullField(int countWalls);

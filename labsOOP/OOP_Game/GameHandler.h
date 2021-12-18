@@ -11,6 +11,7 @@
 #include "UI/KeySettingsScreen.h"
 #include "UI/LoadScreen.h"
 #include "Tools/SaveManager.h"
+#include "Tools/SaveDataReader.h"
 #include <filesystem>
 
 enum FightStatus {
@@ -144,7 +145,7 @@ class GameHandler {
         return statusFight;
     }
 
-    bool registerMovement(int &action, std::string &gameAction) {
+    bool registerMovement(int &action, std::string &gameAction, bool &requestMoveEnemies) {
         action = keyControl->requestKeyAction(mainScreen->getScreenName());
         keyControl->requestTrashIgnore();
         CellPoint heroPos = field->getHeroPos();
@@ -176,6 +177,12 @@ class GameHandler {
             case PlayerKeysControl::FIELD_SAVE_DATA:
                 if(!saveData())
                     gameAction = "Не удалось сохранить игру!\n";
+                requestMoveEnemies = false;
+                return true;
+            case PlayerKeysControl::FIELD_LOAD_DATA:
+                mainScreen->clearScreen();
+                showLoadScreen();
+                requestMoveEnemies = false;
                 return true;
             case PlayerKeysControl::FIELD_TAKE_THING:
                 requestTakeObject(heroPos);
@@ -219,8 +226,10 @@ class GameHandler {
             std::string gameAction = "";
             field->incCountSteps();
             thingsManager->tryGenerateThing(field->getHero(), dataManager);
-            bool goodMovement = registerMovement(action, gameAction);
-            field->moveEnemies();
+            bool requestMoveEnemies = true;
+            bool goodMovement = registerMovement(action, gameAction, requestMoveEnemies); // TODO добавить экстренный выход из игры для перехода к сохранению
+            if (requestMoveEnemies)
+                field->moveEnemies();
             if (goodMovement) {
                 LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Смещение врагов"));
                 mainScreen->clearScreen();
@@ -251,7 +260,7 @@ class GameHandler {
             keyControl->requestTrashIgnore();
             fightScreen->clearScreen();
             if (!requestFightAction(action, mainHero, enemy, selectedThing)) {
-                return FightStatus::LEAVE_FIGHT;
+                return FightStatus::LEAVE_FIGHT; // TODO добавить экстренный выход из игры
             }
             fightScreen->showUpdatedScreen(mainHero, selectedThing);
             fightScreen->showHealthInfo(mainHero, enemy);
@@ -293,6 +302,11 @@ class GameHandler {
                 if(!saveData())
                     fightScreen->showMessage("Не удалось сохранить игру!\n");
                 break;
+            case PlayerKeysControl::FIGHT_LOAD_DATA:
+                fightScreen->clearScreen();
+                showLoadScreen();
+                throw -1;
+                return true; // FIXME исправить на нужный код возврата
             case PlayerKeysControl::FIGHT_USE_THING:
                 if (!mainHero.useThing(selectedThing)) {
                     fightScreen->showMessage("Предмета нет или он не может быть использован\n");
@@ -363,14 +377,14 @@ class GameHandler {
 
     // для LoadScreen: старт
 
-
-
     void showLoadScreen() {
         int selectedMenuItem = 0;
         auto saveManager = SaveManager::getInstance(saveDataPath);
         LoadScreen loadScreen(&saveManager->get()->getNamesOfFiles());
         int removeFlag = -1;
         int action = -1;
+        SaveDataAdapter saveDataAdapter;
+        bool goodUpload;
         loadScreen.showUpdatedScreen(selectedMenuItem);
         while (true) {
             action = keyControl->requestKeyAction(loadScreen.getScreenName());
@@ -384,7 +398,10 @@ class GameHandler {
                         selectedMenuItem++;
                     break;
                 case LOADSCREEN_ACCEPT_FILE:
-                    // TODO загрузка файла
+                    saveDataAdapter = saveManager->get()->loadData(selectedMenuItem, goodUpload);
+                    if (goodUpload) {
+                        // TODO: Отгрузка информации по классам
+                    }
                     break;
                 case LOADSCREEN_DELETE_FILE:
                     removeFlag = saveManager->get()->deleteFile(selectedMenuItem);
@@ -476,9 +493,9 @@ public:
 
     bool saveData() const {
         auto saveManager = SaveManager::getInstance(saveDataPath);
-        auto data1 = field->prepareDataToSave(true, true, true, true, false);
+        auto data1 = field->prepareDataToSave(true, true, true, true, true, false);
         auto data2 = thingsManager->prepareDataToSave();
-        auto data3 = field->prepareDataToSave(false, false, false, false, true);
+        auto data3 = field->prepareDataToSave(false, false, false, false, false, true);
         data1.reserve(data1.size() + data2.size() + data3.size());
         for (const auto &item: data2) {
             data1.emplace_back(item);
@@ -486,7 +503,10 @@ public:
         for (const auto &item: data3) {
             data1.emplace_back(item);
         }
-        return saveManager->get()->saveData(data1);
+        bool check = saveManager->get()->saveData(data1);
+        if (check)
+            saveManager->get()->reloadPathsToFiles(saveDataPath);
+        return check;
     }
 
     void loadParamsToCharacters() const {
@@ -514,9 +534,9 @@ public:
 
     void observeField() {
         if (isReady) {
+            LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Начался процесс наблюдения за игрой"));
             fieldStatusObserver();
             mainScreen->clearScreen();
-            LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Начался процесс наблюдения за игрой"));
         } else {
             LoggerPull::writeData("gameLogs",
                                   LoggerDataAdapter<std::string>("Попытка начать наблюдение при незавершённом поле"),

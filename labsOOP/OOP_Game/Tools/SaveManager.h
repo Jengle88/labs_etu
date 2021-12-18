@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <memory>
 #include "../UI/LoadScreen.h"
+#include "SaveDataAdapter.h"
 
 class SaveManager {
     static std::unique_ptr<SaveManager> instance;
@@ -19,6 +20,7 @@ public:
     const std::vector<std::string>& getNamesOfFiles() const;
     int deleteFile(int pos);
     bool saveData(const std::vector<std::string> &data) const;
+    SaveDataAdapter loadData(int selectedFile, bool &check) const;
 };
 
 

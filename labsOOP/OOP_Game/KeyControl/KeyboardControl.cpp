@@ -18,6 +18,7 @@ const std::unordered_map<std::string, std::unordered_map<std::string, int>> Keyb
                 {"startFight", FIELD_START_FIGHT},
                 {"finishOut", FIELD_FINISH_OUT},
                 {"saveData", FIELD_SAVE_DATA},
+                {"loadData", FIELD_LOAD_DATA},
                 {"exitField", FIELD_EXIT_FIELD},
                 {"acceptGenerate", FIELD_ACCEPT_GENERATE},
                 {"cancelGenerate", FIELD_CANCEL_GENERATE}
@@ -27,6 +28,7 @@ const std::unordered_map<std::string, std::unordered_map<std::string, int>> Keyb
                 {"selectThingUp", FIGHT_SELECT_THING_UP},
                 {"selectThingDown", FIGHT_SELECT_THING_DOWN},
                 {"saveData", FIGHT_SAVE_DATA},
+                {"loadData", FIGHT_LOAD_DATA},
                 {"useThing", FIGHT_USE_THING},
                 {"exitFight", FIGHT_EXIT_FIGHT}
         }},
