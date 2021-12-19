@@ -39,7 +39,7 @@ void Printer::printInventory(MainHero *hero, bool withSerialNumber) {
 void Printer::printEnemyInfo(std::map<CellPoint, Enemy *> *enemies) {
     int cntMonster = 0, cntArcher = 0, cntGargoyle = 0;
     for (const auto &enemy: *enemies) {
-        if (enemy.second->getName() == "Monster") {
+        if (enemy.second->getName() == "Monster") { // FIXME исправить баг, после загрузки возникает ошибка
             cntMonster++;
         } else if (enemy.second->getName() == "Archer") {
             cntArcher++;

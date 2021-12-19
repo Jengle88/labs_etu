@@ -15,9 +15,10 @@
 #include <filesystem>
 
 enum FightStatus {
-    LEAVE_FIGHT = -1,
+    LEAVE_FIGHT = 0,
     KILLED_ENEMY = 1,
-    KILLED_HERO = 0
+    CHANGE_SAVE = 2,
+    KILLED_HERO = 3
 };
 
 template<KeyControl** control, DifficultPreset &preset, RulesChecker **... checkers>
@@ -41,14 +42,13 @@ class GameHandler {
 
 
     // для FieldScreen: start
-    void generateField(int height, int width, int countWalls) {
+    void buildField(int height, int width, int countWalls) {
         field = new Field(height, width, dataManager);
         if (field->generateFullField(countWalls)) {
             LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Поле было полностью сгенерировано"));
             field->setHeroOnStart();
             field->createHero();
             thingsManager = new ThingsManager(field);
-            LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Информация о герое получена"));
         } else {
             std::cout << "Не удалось сгенерировать поле!\n";
             LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Не удалось сгенерировать поле"),
@@ -181,7 +181,7 @@ class GameHandler {
                 return true;
             case PlayerKeysControl::FIELD_LOAD_DATA:
                 mainScreen->clearScreen();
-                showLoadScreen();
+                showLoadScreen(true);
                 requestMoveEnemies = false;
                 return true;
             case PlayerKeysControl::FIELD_TAKE_THING:
@@ -255,13 +255,14 @@ class GameHandler {
         fightScreen->showUpdatedScreen(mainHero, selectedThing);
         LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Отображён экран боя"));
         fightScreen->showHealthInfo(mainHero, enemy);
+        int fightStatus = -2;
         while (mainHero.checkPositiveHealth() && enemy.checkPositiveHealth()) {
             int action = keyControl->requestKeyAction(fightScreen->getScreenName());
             keyControl->requestTrashIgnore();
             fightScreen->clearScreen();
-            if (!requestFightAction(action, mainHero, enemy, selectedThing)) {
-                return FightStatus::LEAVE_FIGHT; // TODO добавить экстренный выход из игры
-            }
+            fightStatus = requestFightAction(action, mainHero, enemy, selectedThing);
+            if (fightStatus == FightStatus::LEAVE_FIGHT || fightStatus == FightStatus::CHANGE_SAVE)
+                return fightStatus;
             fightScreen->showUpdatedScreen(mainHero, selectedThing);
             fightScreen->showHealthInfo(mainHero, enemy);
         }
@@ -272,10 +273,13 @@ class GameHandler {
             fightScreen->showMessage("Вы победили!\nНажмите любую кнопку, чтобы продолжить.");
             keyControl->requestKeyIgnore();
         }
-        return mainHero.checkPositiveHealth();
+        if (mainHero.checkPositiveHealth())
+            return FightStatus::KILLED_ENEMY;
+        else if (!mainHero.checkPositiveHealth())
+            return FightStatus::KILLED_HERO;
     }
 
-    bool requestFightAction(int action, MainHero &mainHero, Enemy &enemy, int &selectedThing) {
+    int requestFightAction(int action, MainHero &mainHero, Enemy &enemy, int &selectedThing) {
         std::vector<double> heroAttackInfo;
         std::vector<double> enemyAttackInfo;
         switch (action) {
@@ -304,9 +308,8 @@ class GameHandler {
                 break;
             case PlayerKeysControl::FIGHT_LOAD_DATA:
                 fightScreen->clearScreen();
-                showLoadScreen();
-                throw -1;
-                return true; // FIXME исправить на нужный код возврата
+                showLoadScreen(true);
+                return FightStatus::CHANGE_SAVE;
             case PlayerKeysControl::FIGHT_USE_THING:
                 if (!mainHero.useThing(selectedThing)) {
                     fightScreen->showMessage("Предмета нет или он не может быть использован\n");
@@ -316,7 +319,7 @@ class GameHandler {
                 }
                 break;
             case PlayerKeysControl::FIGHT_EXIT_FIGHT:
-                return false;
+                return FightStatus::LEAVE_FIGHT;
         }
         return true;
     }
@@ -377,7 +380,7 @@ class GameHandler {
 
     // для LoadScreen: старт
 
-    void showLoadScreen() {
+    void showLoadScreen(bool calledFromGame) {
         int selectedMenuItem = 0;
         auto saveManager = SaveManager::getInstance(saveDataPath);
         LoadScreen loadScreen(&saveManager->get()->getNamesOfFiles());
@@ -400,7 +403,22 @@ class GameHandler {
                 case LOADSCREEN_ACCEPT_FILE:
                     saveDataAdapter = saveManager->get()->loadData(selectedMenuItem, goodUpload);
                     if (goodUpload) {
-                        // TODO: Отгрузка информации по классам
+                        if (field == nullptr)
+                            generateField();
+                        field->rebuildField(saveDataAdapter);
+                        if (thingsManager == nullptr) {
+                            thingsManager = new ThingsManager(field);
+                        }
+                        thingsManager->reeditThingsManager(saveDataAdapter);
+                        loadRules();
+                        isReady = true;
+                        if (calledFromGame)
+                            return;
+                        else {
+                            observeField();
+                            return;
+                        }
+//                         TODO: Отгрузка информации по классам
                     }
                     break;
                 case LOADSCREEN_DELETE_FILE:
@@ -464,16 +482,17 @@ public:
                     switch (selectedItem) {
                         case MenuItemID::START_NEW_GAME:
                             startScreen.clearScreen();
-                            generateField();
+                            fieldBuilder();
+                            loadRules();
                             observeField();
-//                            saveData();
                             delete field;
                             delete thingsManager; // так как статистика вещей зависит от героя, а герой - от поля
                             field = nullptr;
                             thingsManager = nullptr;
                             break;
                         case MenuItemID::LOAD_GAME:
-                            showLoadScreen();
+
+                            showLoadScreen(false);
                             break;
                         case MenuItemID::KEY_SETTINGS:
                             startScreen.clearScreen();
@@ -521,15 +540,20 @@ public:
         LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Характеристики персонажей загружены"));
     }
 
-    void generateField() {
-        srand(time(0));
-        loadParamsToCharacters();
-        auto[height, width, countWalls] = mainScreen->showStartFieldScreen(keyControl);
-        generateField(height, width, countWalls);
-        field->setRules(preset.getCntEnemyOnField(), preset.getTimeBetweenGenerateEnemy());
+    void loadRules() {
         thingsManager->setRules(preset.getCntHealThing(), preset.getTimeBetweenGenerateVisualThing(),
                                 preset.getTimeBetweenGenerateHealThing());
+        field->setRules(preset.getCntEnemyOnField(), preset.getTimeBetweenGenerateEnemy());
+    }
+
+    void fieldBuilder() {
+        auto[height, width, countWalls] = mainScreen->showStartFieldScreen(keyControl);
+        buildField(height, width, countWalls);
         isReady = true;
+    }
+
+    void generateField() {
+        field = new Field(dataManager);
     }
 
     void observeField() {
@@ -542,6 +566,10 @@ public:
                                   LoggerDataAdapter<std::string>("Попытка начать наблюдение при незавершённом поле"),
                                   LoggerPull::LoggingType::Error);
         }
+    }
 
+    void gameStart() {
+        loadParamsToCharacters();
+        showStartScreen();
     }
 };

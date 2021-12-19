@@ -1,4 +1,5 @@
 #include "MainHero.h"
+#include "../Rules/DifficultDataReader.h"
 
 std::string MainHero::MainHeroProperties::MAIN_HERO_NAME;
 double MainHero::MainHeroProperties::MAIN_HERO_CRITICAL_FACTOR;
@@ -57,7 +58,7 @@ void MainHero::ejectThing(int pos) {
     inventory.erase(inventory.begin() + pos);
     if (!prevThing->isActiveThing())
         recalcCharacteristics(prevThing->getInverseValueProperties());
-    delete prevThing;
+//    delete prevThing;
 }
 
 bool MainHero::useThing(int pos) {
@@ -93,6 +94,12 @@ std::map<std::string, int> &MainHero::getCountKilledEnemy() {
 
 const std::map<std::string, int> &MainHero::getCountKilledEnemy() const {
     return countKilledEnemy;
+}
+
+void MainHero::setCountKilledEnemy(const std::vector<std::pair<std::string, int>> &heroAchievements) {
+    for (const auto &heroAchievement: heroAchievements) {
+        countKilledEnemy[heroAchievement.first] = heroAchievement.second;
+    }
 }
 
 double MainHero::getDodgeFactor() const {
@@ -138,6 +145,16 @@ void MainHero::setDefaultProperties(const CharacterProperties &characterProperti
 
 int MainHero::getRangeVisibility() {
     return MainHeroProperties::MAIN_HERO_RANGE_VISIBILITY;
+}
+
+void MainHero::setInventory(const std::vector<Thing *> &inventory) {
+    while (this->inventory.size() > 0) {
+        ejectThing(0);
+    }
+//    this->inventory.clear();
+    for (const auto &thing: inventory) {
+        takeThing(thing);
+    }
 }
 
 

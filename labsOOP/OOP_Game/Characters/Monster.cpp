@@ -70,6 +70,10 @@ double Monster::getHealth() const {
     return Character::getHealth();
 }
 
+void Monster::setHealth(double health) {
+    Character::setHealth(health);
+}
+
 double Monster::getDodgeFactor() const {
     return MonsterProperties::MONSTER_DODGE_FACTOR;
 }

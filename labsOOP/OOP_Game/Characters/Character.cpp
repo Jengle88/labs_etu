@@ -69,3 +69,7 @@ std::ostream &operator<<(std::ostream &os, const Character &character) {
     return os;
 }
 
+void Character::setHealth(double health) {
+    this->health = health;
+}
+

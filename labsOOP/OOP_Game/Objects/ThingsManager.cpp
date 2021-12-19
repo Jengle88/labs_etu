@@ -1,6 +1,7 @@
 #include "ThingsManager.h"
 #include "../Logger/LoggerPull.h"
 #include "../Tools/SaveDataReader.h"
+#include "../Rules/DifficultDataReader.h"
 
 ThingsManager::ThingsManager(Field *field, std::map<CellPoint, Thing*> visualThingsPlaces,
                              std::map<CellPoint, Thing*> healthThingsPlaces)
@@ -103,4 +104,23 @@ std::vector<std::string> ThingsManager::prepareDataToSave() const {
     data.emplace_back("// уровень вещей\n");
     data.push_back("heroLevel " + std::to_string(levelThings) + "\n");
     return data;
+}
+
+void ThingsManager::reeditThingsManager(const SaveDataAdapter &adapter) {
+    for (auto &thingsPlace: visualThingsPlaces) {
+        delete thingsPlace.second;
+    }
+    for (auto &thingsPlace: nonVisualThingsPlaces) {
+        delete thingsPlace.second;
+    }
+    nonVisualThingsPlaces.clear();
+    visualThingsPlaces.clear();
+    levelThings = adapter.getHeroLevel();
+    for (const auto &thingsPos: adapter.getThingsPos()) {
+        if(field->getDataManager()->getThing(thingsPos.second.first, DifficultDataReader::getTypeObjectFromStr(thingsPos.first))->isVisualThing())
+            visualThingsPlaces[thingsPos.second.second] = field->getDataManager()->getThing(thingsPos.second.first, DifficultDataReader::getTypeObjectFromStr(thingsPos.first));
+        else
+            nonVisualThingsPlaces[thingsPos.second.second] = field->getDataManager()->getThing(thingsPos.second.first, DifficultDataReader::getTypeObjectFromStr(thingsPos.first));
+        field->setElem(thingsPos.second.second, CellObject(field->getElem(thingsPos.second.second).getValue().getTypeCell(),field->getElem(thingsPos.second.second).getValue().getTypeObject(), true));
+    }
 }

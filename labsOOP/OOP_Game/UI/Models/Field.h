@@ -7,6 +7,7 @@
 #include "../../Characters/Archer.h"
 #include "../../Characters/Gargoyle.h"
 #include "../../Data/DataManager.h"
+#include "../../Tools/SaveDataAdapter.h"
 #include <random>
 #include <cstdlib>
 #include <ctime>
@@ -40,11 +41,15 @@ class Field {
     void generateWayWithoutWalls(CellPoint start, CellPoint finish);
     void generateWalls(int countWalls);
 
+    void createMonster(CellPoint monsterStartPoint);
     void createMonster();
+    void createArcher(CellPoint archerStartPoint);
     void createArcher();
+    void createGargoyle(CellPoint gargoyleStartPoint);
     void createGargoyle();
 public:
     Field(int height, int width, DataManager *dataManager, CellPoint start = CellPoint(0,0), CellPoint finish = CellPoint(0,0), Grid grid = Grid());
+    Field(DataManager *dataManager);
     Field(const Field& field);
     Field& operator=(const Field& field);
     Field(Field && field);
@@ -54,6 +59,7 @@ public:
     std::vector<std::string>
     prepareDataToSave(bool sizeOfField, bool startFinishPos, bool posOfWalls, bool posOfCharacters, bool cntSteps,
                       bool heroInfo) const;
+    void rebuildField(const SaveDataAdapter& adapter);
 
     // Генераторы
     bool generateFullField(int countWalls);
@@ -77,6 +83,7 @@ public:
     bool getStatusStartFinish() const;
     FieldIterator getFieldIterator();
     CellPoint getHeroPos() const;
+    const DataManager* getDataManager() const;
     void setHeroOnStart();
     MainHero& getHero();
     Enemy& getEnemyFromPoint(CellPoint point);

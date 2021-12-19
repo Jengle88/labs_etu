@@ -138,3 +138,14 @@ const std::vector<CellPoint> &Grid::getPointsOfWalls() const {
     return pointsOfWalls;
 }
 
+void Grid::rebuildGrid(const SaveDataAdapter& adapter) {
+    height = adapter.getHeightField();
+    width = adapter.getWidthField();
+    grid.clear();
+    grid.resize(adapter.getHeightField(), std::vector<Cell>(adapter.getWidthField()));
+    for (const auto &wallPos: adapter.getWalls()) {
+        setElem(wallPos, Cell(CellObject(TypeCell::WALL, TypeObject::NOTHING, false)));
+        pointsOfWalls.push_back(wallPos);
+    }
+}
+

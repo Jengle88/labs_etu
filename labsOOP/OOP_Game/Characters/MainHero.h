@@ -41,8 +41,10 @@ public:
     bool hasThing(int thingObject) const;
     void writeKill(std::string enemyName);
     const std::vector<Thing*> & getInventory() const;
+    void setInventory(const std::vector<Thing *> &inventory);
     std::map<std::string, int> &getCountKilledEnemy();
     const std::map<std::string, int> &getCountKilledEnemy() const;
+    void setCountKilledEnemy(const std::vector<std::pair<std::string, int>>& heroAchievements);
     std::string getName() const override;
     std::vector<std::string> getModel() const override;
     MainHero * clone() const override;

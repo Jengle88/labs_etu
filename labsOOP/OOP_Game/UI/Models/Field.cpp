@@ -1,6 +1,7 @@
 #include "Field.h"
 #include "../../Logger/LoggerPull.h"
 #include "../../Tools/SaveDataReader.h"
+#include "../../Rules/DifficultDataReader.h"
 ;
 
 Field::Field(int height, int width, DataManager *dataManager, CellPoint start, CellPoint finish, Grid grid) {
@@ -15,6 +16,8 @@ Field::Field(int height, int width, DataManager *dataManager, CellPoint start, C
         chosenStartFinish = true;
     }
 }
+
+Field::Field(DataManager* dataManager) : dataManager(dataManager) {}
 
 Field::Field(const Field &field) {
     this->field = field.field;
@@ -171,7 +174,7 @@ Field::prepareDataToSave(bool sizeOfField, bool startFinishPos, bool posOfWalls,
         data.emplace_back("heroThings\n");
         data.push_back(SaveDataReader::START_TAG + "\n");
         auto heroInventory = hero.getInventory();
-        for (const auto &thing : heroInventory) {
+        for (const auto &thing: heroInventory) {
             data.push_back(thing->getStrType() + " " + std::to_string(thing->getLevelThing()) + "\n");
         }
         data.push_back(SaveDataReader::END_TAG + "\n");
@@ -179,7 +182,7 @@ Field::prepareDataToSave(bool sizeOfField, bool startFinishPos, bool posOfWalls,
         data.emplace_back("heroAchievement\n");
         data.push_back(SaveDataReader::START_TAG + "\n");
         auto heroAchievements = hero.getCountKilledEnemy();
-        for (const auto &achievement : heroAchievements) {
+        for (const auto &achievement: heroAchievements) {
             data.push_back(achievement.first + " " + std::to_string(achievement.second) + "\n");
         }
         data.push_back(SaveDataReader::END_TAG + "\n");
@@ -220,11 +223,11 @@ void Field::generateStartFinishWay() {
     field.setElem(start,
                   Cell(CellObject(TypeCell::START, TypeObject::NOTHING, false)));
 
-    LoggerPull::writeData("gameLogs",LoggerDataAdapter<CellPoint>(this->start, "Точка старта"));
-    LoggerPull::writeData("gameLogs",LoggerDataAdapter<CellPoint>(this->finish, "Точка финиша"));
+    LoggerPull::writeData("gameLogs", LoggerDataAdapter<CellPoint>(this->start, "Точка старта"));
+    LoggerPull::writeData("gameLogs", LoggerDataAdapter<CellPoint>(this->finish, "Точка финиша"));
 
     generateWayWithoutWalls(this->start, this->finish);
-    LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Путь между стартом и финишем был сгенерирован"));
+    LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Путь между стартом и финишем был сгенерирован"));
     field.setElem(finish,
                   Cell(CellObject(TypeCell::FINISH, TypeObject::NOTHING, false)));
     wayGenerated = true;
@@ -272,9 +275,11 @@ void Field::generateWayWithoutWalls(CellPoint start, CellPoint finish) {
 void Field::generateWalls(int countWalls) {
     if (!wayGenerated) {
         LoggerPull::writeData("gameLogs",
-                              LoggerDataAdapter<std::string>("Попытка создать непроходимые клетки при не сгенерированном пути"),
+                              LoggerDataAdapter<std::string>(
+                                      "Попытка создать непроходимые клетки при не сгенерированном пути"),
                               LoggerPull::LoggingType::Error);
-        throw std::logic_error("Попытка создать непроходимые клетки при не сгенерированном пути"); // путь не сгенерирован
+        throw std::logic_error(
+                "Попытка создать непроходимые клетки при не сгенерированном пути"); // путь не сгенерирован
     }
     if ((double) countWalls / (field.getWidth() * field.getHeight()) * 100 > PERCENT_WALLS) {
         countWalls = double(PERCENT_WALLS) / 100 * (field.getWidth() * field.getHeight());
@@ -289,7 +294,7 @@ void Field::generateWalls(int countWalls) {
             cntPlacedWalls++;
         }
     }
-    LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Непроходимые клетки были сгенерированы"));
+    LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Непроходимые клетки были сгенерированы"));
     this->countWalls = countWalls;
     wallsGenerated = true;
 }
@@ -302,7 +307,15 @@ bool Field::generateFullField(int countWalls) {
 
 void Field::createHero() {
     hero = MainHero(dataManager->getHero());
-    LoggerPull::writeData("gameLogs",LoggerDataAdapter<MainHero>(hero, "Главный герой загружен"));
+    LoggerPull::writeData("gameLogs", LoggerDataAdapter<MainHero>(hero, "Главный герой загружен"));
+}
+
+void Field::createMonster(CellPoint monsterStartPoint) {
+    enemies[monsterStartPoint] = new Monster(dataManager->getModelCharacter("Monster"));
+    field.setElem(monsterStartPoint,
+                  Cell(CellObject(getElem(monsterStartPoint).getValue().getTypeCell(), TypeObject::ENEMY,
+                                  getElem(monsterStartPoint).getValue().isThing())));
+    LoggerPull::writeData("gameLogs", LoggerDataAdapter<CellPoint>(monsterStartPoint, "Сгенерирован монстр"));
 }
 
 void Field::createMonster() {
@@ -310,11 +323,16 @@ void Field::createMonster() {
     do {
         monsterStartPoint = generateRandomFreePoint();
     } while (enemies.count(monsterStartPoint));
-    enemies[monsterStartPoint] = new Monster(dataManager->getModelCharacter("Monster"));
-    field.setElem(monsterStartPoint, Cell(CellObject(getElem(monsterStartPoint).getValue().getTypeCell(), TypeObject::ENEMY, getElem(monsterStartPoint).getValue().isThing())));
+    createMonster(monsterStartPoint);
+}
 
-//    this->moveEnemy(monsterStartPoint, monsterStartPoint);
-    LoggerPull::writeData("gameLogs",LoggerDataAdapter<CellPoint>(monsterStartPoint, "Сгенерирован монстр"));
+void Field::createArcher(CellPoint archerStartPoint) {
+    enemies[archerStartPoint] = new Archer(dataManager->getModelCharacter("Archer"));
+    field.setElem(archerStartPoint,
+                  Cell(CellObject(getElem(archerStartPoint).getValue().getTypeCell(), TypeObject::ENEMY,
+                                  getElem(archerStartPoint).getValue().isThing())));
+    LoggerPull::writeData("gameLogs", LoggerDataAdapter<CellPoint>(archerStartPoint, "Сгенерирован скелет-лучник"));
+
 }
 
 void Field::createArcher() {
@@ -322,10 +340,15 @@ void Field::createArcher() {
     do {
         archerStartPoint = generateRandomFreePoint();
     } while (enemies.count(archerStartPoint));
-    enemies[archerStartPoint] = new Archer(dataManager->getModelCharacter("Archer"));
-//    this->moveEnemy(archerStartPoint, archerStartPoint);
-    field.setElem(archerStartPoint, Cell(CellObject(getElem(archerStartPoint).getValue().getTypeCell(), TypeObject::ENEMY, getElem(archerStartPoint).getValue().isThing())));
-    LoggerPull::writeData("gameLogs",LoggerDataAdapter<CellPoint>(archerStartPoint, "Сгенерирован скелет-лучник"));
+    createArcher(archerStartPoint);
+}
+
+void Field::createGargoyle(CellPoint gargoyleStartPoint) {
+    enemies[gargoyleStartPoint] = new Gargoyle(dataManager->getModelCharacter("Gargoyle"));
+    field.setElem(gargoyleStartPoint,
+                  Cell(CellObject(getElem(gargoyleStartPoint).getValue().getTypeCell(), TypeObject::ENEMY,
+                                  getElem(gargoyleStartPoint).getValue().isThing())));
+    LoggerPull::writeData("gameLogs", LoggerDataAdapter<CellPoint>(gargoyleStartPoint, "Сгенерирована горгулья"));
 }
 
 void Field::createGargoyle() {
@@ -333,11 +356,7 @@ void Field::createGargoyle() {
     do {
         gargoyleStartPoint = generateRandomFreePoint();
     } while (enemies.count(gargoyleStartPoint));
-    enemies[gargoyleStartPoint] = new Gargoyle(dataManager->getModelCharacter("Gargoyle"));
-//    this->moveEnemy(gargoyleStartPoint, gargoyleStartPoint);
-    field.setElem(gargoyleStartPoint, Cell(CellObject(getElem(gargoyleStartPoint).getValue().getTypeCell(), TypeObject::ENEMY, getElem(gargoyleStartPoint).getValue().isThing())));
-    LoggerPull::writeData("gameLogs",LoggerDataAdapter<CellPoint>(gargoyleStartPoint, "Сгенерирована горгулья"));
-
+    createGargoyle(gargoyleStartPoint);
 }
 
 void Field::createRandomEnemy() {
@@ -388,17 +407,19 @@ void Field::moveEnemy(const CellPoint from, const CellPoint to) {
     auto prevPointData = field.getElem(from);
     auto newPointData = field.getElem(to);
     field.setElem(from, Cell(CellObject(prevPointData.getValue().getTypeCell(),
-                                        prevPointData.getValue().getTypeObject() == TypeObject::HERO ? TypeObject::HERO : TypeObject::NOTHING,
+                                        prevPointData.getValue().getTypeObject() == TypeObject::HERO ? TypeObject::HERO
+                                                                                                     : TypeObject::NOTHING,
                                         prevPointData.getValue().isThing())));
-    field.setElem(to, Cell(CellObject(newPointData.getValue().getTypeCell(), TypeObject::ENEMY, newPointData.getValue().isThing())));
+    field.setElem(to, Cell(CellObject(newPointData.getValue().getTypeCell(), TypeObject::ENEMY,
+                                      newPointData.getValue().isThing())));
 }
 
 void Field::moveEnemies() {
     auto tempEnemies = enemies;
     for (const auto &enemy: tempEnemies) {
         auto possibleSteps = enemy.second->makeMove(enemy.first, heroPos);
-        std::shuffle(possibleSteps.begin(),  possibleSteps.end(), std::mt19937(std::random_device()()));
-        for (auto & possibleStep : possibleSteps) {
+        std::shuffle(possibleSteps.begin(), possibleSteps.end(), std::mt19937(std::random_device()()));
+        for (auto &possibleStep: possibleSteps) {
             if (!field.isValidIndexes(possibleStep.getX(), possibleStep.getY()))
                 continue;
             auto tempElem = getElem(possibleStep).getValue();
@@ -416,7 +437,8 @@ void Field::moveEnemies() {
 void Field::killEnemy(CellPoint from) {
     delete enemies[from];
     enemies.erase(from);
-    setElem(from, CellObject(getElem(from).getValue().getTypeCell(), TypeObject::NOTHING, getElem(from).getValue().isThing()));
+    setElem(from, CellObject(getElem(from).getValue().getTypeCell(), TypeObject::NOTHING,
+                             getElem(from).getValue().isThing()));
 }
 
 Cell Field::getElem(CellPoint point) const {
@@ -458,16 +480,17 @@ CellPoint Field::getHeroPos() const {
 void Field::setHeroOnStart() {
     field.setElem(start, Cell(CellObject(TypeCell::START, TypeObject::HERO, false)));
     heroPos = start;
-    LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Главный герой установлен на позицию старта"));
+    LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Главный герой установлен на позицию старта"));
 }
 
-MainHero& Field::getHero() {
+MainHero &Field::getHero() {
     return this->hero;
 }
 
-Enemy& Field::getEnemyFromPoint(CellPoint point) {
+Enemy &Field::getEnemyFromPoint(CellPoint point) {
     return static_cast<Enemy &>(*enemies[point]);
 }
+
 
 void Field::incCountSteps() {
     counterSteps++;
@@ -476,7 +499,6 @@ void Field::incCountSteps() {
 long Field::getCountSteps() const {
     return counterSteps;
 }
-
 
 std::map<CellPoint, Enemy *> &Field::getEnemies() {
     return enemies;
@@ -490,6 +512,56 @@ void Field::setRules(int maxCntEnemy, int timeBetweenGenerateEnemy) {
     this->maxCntEnemy = maxCntEnemy;
     this->timeBetweenGenerateEnemy = timeBetweenGenerateEnemy;
 
+}
+
+void Field::rebuildField(const SaveDataAdapter &adapter) {
+    if (!enemies.empty()) {
+        for (auto &item: enemies) {
+            delete item.second;
+        }
+        enemies.clear();
+    }
+
+    field.rebuildGrid(adapter);
+    countWalls = adapter.getWalls().size();
+    counterSteps = adapter.getCntSteps();
+    wallsGenerated = true;
+
+    start = adapter.getStart();
+    field.setElem(start, Cell(CellObject(TypeCell::START, TypeObject::NOTHING, false)));
+    finish = adapter.getFinish();
+    field.setElem(finish, Cell(CellObject(TypeCell::FINISH, TypeObject::NOTHING, false)));
+    chosenStartFinish = true;
+    wayGenerated = true;
+
+    heroPos = adapter.getHeroPos();
+    moveHero(adapter.getHeroPos());
+    hero.setHealth(adapter.getHeroHealth());
+    std::vector<Thing *> heroThings;
+    heroThings.reserve(adapter.getHeroThings().size());
+    for (const auto &thing: adapter.getHeroThings()) {
+        heroThings.push_back(dataManager->getThing(thing.second, DifficultDataReader::getTypeObjectFromStr(thing.first)));
+    }
+    hero.setInventory(heroThings);
+    hero.resetModel(dataManager->getHero(
+            hero.hasThing(ThingObject::SWORD),
+            hero.hasThing(ThingObject::ARMOR)));
+    field.setElem(heroPos, Cell(CellObject(TypeCell::EMPTY, TypeObject::HERO, false)));
+
+    for (const auto &enemiesPos: adapter.getEnemiesPos()) {
+        if (enemiesPos.first == "Monster") {
+            createMonster(enemiesPos.second.second);
+        } else if (enemiesPos.first == "Archer") {
+            createArcher(enemiesPos.second.second);
+        } else if (enemiesPos.first == "Gargoyle") {
+            createGargoyle(enemiesPos.second.second);
+        }
+        enemies[enemiesPos.second.second]->setHealth(enemiesPos.second.first);
+    }
+}
+
+const DataManager *Field::getDataManager() const {
+    return dataManager;
 }
 
 

@@ -14,6 +14,7 @@ class GameStart {
 public:
     static void startGameMode() {
         std::setlocale(LC_ALL, "");
+        srand(time(0));
         LoggerPull *loggerPull = LoggerPull::getInstance();
         LoggerPull::addFileLogger("gameLogs", new FileLogger("logs.txt"));
 
@@ -29,7 +30,7 @@ public:
             throw std::logic_error("Не все привязки указаны");
 
         GameHandler<&keyControl, difficultPreset, &checker> gameHandler;
-        gameHandler.showStartScreen();
+        gameHandler.gameStart();
 
         delete loggerPull;
     }

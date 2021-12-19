@@ -164,3 +164,7 @@ std::unordered_map<std::string, DifficultPreset> DifficultDataReader::readDiffic
     input.close();
     return presets;
 }
+
+int DifficultDataReader::getTypeObjectFromStr(const std::string& str) {
+    return strToTypeObject.at(str);
+}

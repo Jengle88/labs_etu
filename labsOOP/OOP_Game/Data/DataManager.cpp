@@ -10,10 +10,10 @@ DataManager::DataManager(const std::unordered_map<std::string, ThingProperties>&
     uploadParamsThing(thingsArray);
 }
 
-Thing* DataManager::getThing(int level, int typeThing) {
+Thing* DataManager::getThing(int level, int typeThing) const {
     if (levelToThings.empty())
         throw std::logic_error("Не загружены параметры предметов.");
-    return levelToThings[level][typeThing];
+    return levelToThings.at(level).at(typeThing);
 }
 
 Thing* DataManager::getHealthThing() const {

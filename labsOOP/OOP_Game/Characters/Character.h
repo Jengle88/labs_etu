@@ -36,6 +36,7 @@ public:
     virtual bool requestDodge() const; // возвращает информацию, уклонился ли
     virtual double getDodgeFactor() const;
     virtual double getHealth() const;
+    virtual void setHealth(double health);
     virtual std::string getName() const;
     virtual std::vector<std::string> getModel() const;
     virtual Character* clone() const; // Паттерн: Прототип

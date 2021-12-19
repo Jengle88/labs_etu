@@ -13,6 +13,7 @@ public:
     virtual std::vector<CellPoint> makeMove(CellPoint from, CellPoint heroPos) const = 0; // Паттерн: Strategy
     virtual bool willFollowToHero() const = 0;
     virtual double getHealth() const = 0;
+    virtual void setHealth(double health) = 0;
     virtual bool checkPositiveHealth() const = 0;
     virtual std::vector<std::string> getModel() const = 0;
     virtual std::string getName() const = 0;

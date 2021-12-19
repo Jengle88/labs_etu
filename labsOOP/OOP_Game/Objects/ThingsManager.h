@@ -18,7 +18,6 @@ class ThingsManager {
     void checkThingsLevel(std::map<std::string, int> &achievements);
     void generateHealthThing(DataManager *dataManager);
 public:
-
     explicit ThingsManager(Field *field, std::map<CellPoint, Thing*> visualThingsPlaces = std::map<CellPoint, Thing*>(),
                   std::map<CellPoint, Thing*> healthThingsPlaces = std::map<CellPoint, Thing*>());
     ThingsManager() = default;
@@ -27,4 +26,5 @@ public:
     void deleteThingFromField(CellPoint point);
     void setRules(int cntHealThing, int timeBetweenGenerateVisualThing, int timeBetweenGenerateHealThing);
     std::vector<std::string> prepareDataToSave() const;
+    void reeditThingsManager(const SaveDataAdapter& adapter);
 };

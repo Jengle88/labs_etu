@@ -71,6 +71,10 @@ double Gargoyle::getHealth() const {
     return Character::getHealth();
 }
 
+void Gargoyle::setHealth(double health) {
+    Character::setHealth(health);
+}
+
 double Gargoyle::getDodgeFactor() const {
     return GargoyleProperties::GARGOYLE_DODGE_FACTOR;
 }

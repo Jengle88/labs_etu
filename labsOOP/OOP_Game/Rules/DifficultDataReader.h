@@ -17,6 +17,6 @@ class DifficultDataReader {
     static DifficultPreset readDifficult(std::fstream& input);
 public:
     static std::unordered_map<std::string, DifficultPreset> readDifficultPresets(const std::string& nameFile);
-
+    static int getTypeObjectFromStr(const std::string& str);
 };
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "../UI/Models/Cell.h"
+#include "SaveDataAdapter.h"
 #include <algorithm>
 #include <iostream>
 
@@ -35,7 +36,7 @@ public:
     Grid& operator=(const Grid& grid);
     Grid(Grid&& grid);
     Grid& operator=(Grid&& grid);
-
+    void rebuildGrid(const SaveDataAdapter& adapter);
 	int getHeight() const;
 	int getWidth() const;
 	void setElem(CellPoint point, Cell cell);

@@ -72,6 +72,10 @@ double Archer::getHealth() const {
     return Character::getHealth();
 }
 
+void Archer::setHealth(double health) {
+    Character::setHealth(health);
+}
+
 double Archer::getDodgeFactor() const {
     return ArcherProperties::ARCHER_DODGE_FACTOR;
 }

@@ -19,7 +19,7 @@ class DataManager {
     std::vector<std::string> getModelHeroLegs() const;
 public:
     explicit DataManager(const std::unordered_map<std::string, ThingProperties>& things);
-    Thing* getThing(int level, int typeThing);
+    Thing* getThing(int level, int typeThing) const;
     Thing* getHealthThing() const;
     void uploadModels();
     void uploadParamsThing(const std::vector<Thing*> & things);

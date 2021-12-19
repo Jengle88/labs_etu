@@ -36,6 +36,7 @@ public:
     std::vector<CellPoint> makeMove(CellPoint from, CellPoint heroPos) const override;
     static bool inRangeVisibility(CellPoint monsterPos, CellPoint objectPos);
     double getHealth() const override;
+    void setHealth(double health) override;
     double getDodgeFactor() const override;
     std::string getName() const override;
     std::vector<std::string> getModel() const override;
