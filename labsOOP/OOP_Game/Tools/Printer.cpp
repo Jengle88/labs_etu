@@ -39,7 +39,7 @@ void Printer::printInventory(MainHero *hero, bool withSerialNumber) {
 void Printer::printEnemyInfo(std::map<CellPoint, Enemy *> *enemies) {
     int cntMonster = 0, cntArcher = 0, cntGargoyle = 0;
     for (const auto &enemy: *enemies) {
-        if (enemy.second->getName() == "Monster") { // FIXME исправить баг, после загрузки возникает ошибка
+        if (enemy.second->getName() == "Monster") {
             cntMonster++;
         } else if (enemy.second->getName() == "Archer") {
             cntArcher++;
@@ -87,6 +87,9 @@ void Printer::printDivider(int length) {
 }
 
 void Printer::printMenuWithChoice(const std::vector<std::string> &menuItem, int selectedItem) {
+    if (menuItem.empty()) {
+        std::cout << "(пусто)" ;
+    }
     for (int i = 0; i < menuItem.size(); ++i) {
         if (i == selectedItem)
             std::cout << "-> ";

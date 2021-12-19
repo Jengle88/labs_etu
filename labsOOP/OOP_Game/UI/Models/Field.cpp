@@ -305,6 +305,52 @@ bool Field::generateFullField(int countWalls) {
     return this->getStatusStartFinish() && this->getStatusWay() && this->getStatusWalls();
 }
 
+void Field::rebuildField(const SaveDataAdapter &adapter) {
+    if (!enemies.empty()) {
+        for (auto &item: enemies) {
+            delete item.second;
+        }
+        enemies.clear();
+    }
+
+    field.rebuildGrid(adapter);
+    countWalls = adapter.getWalls().size();
+    counterSteps = adapter.getCntSteps();
+    wallsGenerated = true;
+
+    start = adapter.getStart();
+    field.setElem(start, Cell(CellObject(TypeCell::START, TypeObject::NOTHING, false)));
+    finish = adapter.getFinish();
+    field.setElem(finish, Cell(CellObject(TypeCell::FINISH, TypeObject::NOTHING, false)));
+    chosenStartFinish = true;
+    wayGenerated = true;
+
+    heroPos = adapter.getHeroPos();
+    moveHero(adapter.getHeroPos());
+    hero.setHealth(adapter.getHeroHealth());
+    std::vector<Thing *> heroThings;
+    heroThings.reserve(adapter.getHeroThings().size());
+    for (const auto &thing: adapter.getHeroThings()) {
+        heroThings.push_back(dataManager->getThing(thing.second, DifficultDataReader::getTypeObjectFromStr(thing.first)));
+    }
+    hero.setInventory(heroThings);
+    hero.resetModel(dataManager->getHero(
+            hero.hasThing(ThingObject::SWORD),
+            hero.hasThing(ThingObject::ARMOR)));
+    field.setElem(heroPos, Cell(CellObject(TypeCell::EMPTY, TypeObject::HERO, false)));
+
+    for (const auto &enemiesPos: adapter.getEnemiesPos()) {
+        if (enemiesPos.first == "Monster") {
+            createMonster(enemiesPos.second.second);
+        } else if (enemiesPos.first == "Archer") {
+            createArcher(enemiesPos.second.second);
+        } else if (enemiesPos.first == "Gargoyle") {
+            createGargoyle(enemiesPos.second.second);
+        }
+        enemies[enemiesPos.second.second]->setHealth(enemiesPos.second.first);
+    }
+}
+
 void Field::createHero() {
     hero = MainHero(dataManager->getHero());
     LoggerPull::writeData("gameLogs", LoggerDataAdapter<MainHero>(hero, "Главный герой загружен"));
@@ -487,10 +533,10 @@ MainHero &Field::getHero() {
     return this->hero;
 }
 
+
 Enemy &Field::getEnemyFromPoint(CellPoint point) {
     return static_cast<Enemy &>(*enemies[point]);
 }
-
 
 void Field::incCountSteps() {
     counterSteps++;
@@ -512,52 +558,6 @@ void Field::setRules(int maxCntEnemy, int timeBetweenGenerateEnemy) {
     this->maxCntEnemy = maxCntEnemy;
     this->timeBetweenGenerateEnemy = timeBetweenGenerateEnemy;
 
-}
-
-void Field::rebuildField(const SaveDataAdapter &adapter) {
-    if (!enemies.empty()) {
-        for (auto &item: enemies) {
-            delete item.second;
-        }
-        enemies.clear();
-    }
-
-    field.rebuildGrid(adapter);
-    countWalls = adapter.getWalls().size();
-    counterSteps = adapter.getCntSteps();
-    wallsGenerated = true;
-
-    start = adapter.getStart();
-    field.setElem(start, Cell(CellObject(TypeCell::START, TypeObject::NOTHING, false)));
-    finish = adapter.getFinish();
-    field.setElem(finish, Cell(CellObject(TypeCell::FINISH, TypeObject::NOTHING, false)));
-    chosenStartFinish = true;
-    wayGenerated = true;
-
-    heroPos = adapter.getHeroPos();
-    moveHero(adapter.getHeroPos());
-    hero.setHealth(adapter.getHeroHealth());
-    std::vector<Thing *> heroThings;
-    heroThings.reserve(adapter.getHeroThings().size());
-    for (const auto &thing: adapter.getHeroThings()) {
-        heroThings.push_back(dataManager->getThing(thing.second, DifficultDataReader::getTypeObjectFromStr(thing.first)));
-    }
-    hero.setInventory(heroThings);
-    hero.resetModel(dataManager->getHero(
-            hero.hasThing(ThingObject::SWORD),
-            hero.hasThing(ThingObject::ARMOR)));
-    field.setElem(heroPos, Cell(CellObject(TypeCell::EMPTY, TypeObject::HERO, false)));
-
-    for (const auto &enemiesPos: adapter.getEnemiesPos()) {
-        if (enemiesPos.first == "Monster") {
-            createMonster(enemiesPos.second.second);
-        } else if (enemiesPos.first == "Archer") {
-            createArcher(enemiesPos.second.second);
-        } else if (enemiesPos.first == "Gargoyle") {
-            createGargoyle(enemiesPos.second.second);
-        }
-        enemies[enemiesPos.second.second]->setHealth(enemiesPos.second.first);
-    }
 }
 
 const DataManager *Field::getDataManager() const {

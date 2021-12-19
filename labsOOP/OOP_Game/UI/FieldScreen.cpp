@@ -97,7 +97,7 @@ FieldScreen::createTitleForThingAction(const std::string &nameThing, const std::
                               round(properties.at("health") * 100) / 100) + " " : "") +
                       ". Нажмите ";
     res.push_back(takeKey);
-    res += ", чтобы взять.";
+    res += ", чтобы взять.\n";
     return res;
 }
 

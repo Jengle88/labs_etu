@@ -59,11 +59,9 @@ class GameHandler {
 
     void requestMoveHero(CellPoint from, CellPoint to, std::string &gameAction) {
         if (!field->getGrid().isValidIndexes(to.getX(), to.getY()))
-            return;
+            to = from;
         bool moved = false;
-        if (field->getHeroPos() == from) {
-            moved = field->moveHero(to);
-        }
+        moved = field->moveHero(to);
         if (moved) {
             LoggerPull::writeData("gameLogs", LoggerDataAdapter<CellPoint>(to, "Герой сменил позицию"));
             auto thingOnPos = thingsManager->checkCellHasSmth(to);
@@ -99,7 +97,7 @@ class GameHandler {
         auto thingOnPos = thingsManager->checkCellHasSmth(point);
         if (thingOnPos.first) {
             field->getHero().takeThing(thingOnPos.second);
-            LoggerPull::writeData("gameLogs", LoggerDataAdapter<Thing *>(thingOnPos.second, "Герой подобрал предмет"));
+            LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>(thingOnPos.second->getNameThing(), "Герой подобрал предмет"));
             if (thingOnPos.second->isVisualThing()) {
                 field->getHero().resetModel(
                         dataManager->getHero(
@@ -182,6 +180,7 @@ class GameHandler {
             case PlayerKeysControl::FIELD_LOAD_DATA:
                 mainScreen->clearScreen();
                 showLoadScreen(true);
+//                keyControl->requestTrashIgnore();
                 requestMoveEnemies = false;
                 return true;
             case PlayerKeysControl::FIELD_TAKE_THING:
@@ -227,7 +226,7 @@ class GameHandler {
             field->incCountSteps();
             thingsManager->tryGenerateThing(field->getHero(), dataManager);
             bool requestMoveEnemies = true;
-            bool goodMovement = registerMovement(action, gameAction, requestMoveEnemies); // TODO добавить экстренный выход из игры для перехода к сохранению
+            bool goodMovement = registerMovement(action, gameAction, requestMoveEnemies);
             if (requestMoveEnemies)
                 field->moveEnemies();
             if (goodMovement) {
@@ -412,13 +411,14 @@ class GameHandler {
                         thingsManager->reeditThingsManager(saveDataAdapter);
                         loadRules();
                         isReady = true;
-                        if (calledFromGame)
+                        if (calledFromGame) {
+                            keyControl->requestTrashIgnore();
                             return;
+                        }
                         else {
                             observeField();
                             return;
                         }
-//                         TODO: Отгрузка информации по классам
                     }
                     break;
                 case LOADSCREEN_DELETE_FILE:
@@ -554,6 +554,7 @@ public:
 
     void generateField() {
         field = new Field(dataManager);
+        field->createHero();
     }
 
     void observeField() {
