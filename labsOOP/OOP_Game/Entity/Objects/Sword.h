@@ -1,6 +1,6 @@
 #pragma once
 #include "Thing.h"
-#include "../Rules/ThingProperties.h"
+#include "../../Rules/ThingProperties.h"
 
 class Sword : public Thing {
     std::map<std::string, double> properties; // дельта свойств, максимум 4 элемента

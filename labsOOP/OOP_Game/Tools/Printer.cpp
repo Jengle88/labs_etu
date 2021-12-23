@@ -1,6 +1,6 @@
 #include "Printer.h"
 
-void Printer::printFullField(Field *field) {
+void Printer::printFullField(const std::shared_ptr<Field> &field) {
     for (int i = 0; i < field->getWidth() + 2; ++i) {
         std::cout << '_';
     }

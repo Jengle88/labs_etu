@@ -1,7 +1,9 @@
 #pragma once
-#include "../Objects/Sword.h"
-#include "../Objects/HealPotion.h"
-#include "../Objects/Armor.h"
+
+#include <memory>
+#include "../Entity/Objects/Sword.h"
+#include "../Entity/Objects/HealPotion.h"
+#include "../Entity/Objects/Armor.h"
 
 
 class ThingProperties {

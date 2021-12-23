@@ -13,11 +13,11 @@ public:
     Cell getElem() const;
     CellPoint getCurrentPosition() const;
 
-    void moveDelta(int deltaX, int deltaY);
-    void moveTo(int posX, int posY);
+    virtual void moveDelta(int deltaX, int deltaY);
+    virtual void moveTo(int posX, int posY);
 
-    FieldIterator& operator++();
-    FieldIterator operator++(int);
-    FieldIterator& operator--();
-    FieldIterator operator--(int);
+    virtual FieldIterator& operator++();
+    virtual FieldIterator operator++(int);
+    virtual FieldIterator& operator--();
+    virtual FieldIterator operator--(int);
 };

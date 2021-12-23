@@ -1,5 +1,5 @@
 #pragma once
-#include "../Characters/MainHero.h"
+#include "../Entity/Characters/MainHero.h"
 #include "../UI/Models/Field.h"
 
 class RulesChecker {

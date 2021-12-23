@@ -3,7 +3,6 @@
 #include <iomanip>
 #include <cmath>
 #include "../Data/DataManager.h"
-#include "../Characters/Monster.h"
 #include "../Tools/ModelDataReader.h"
 
 using namespace std;
@@ -143,11 +142,26 @@ void NumsClass<Nums...>::f() {
 #include <filesystem>
 namespace fs = std::filesystem;
 
-int main() { //проверено
-    time_t seconds = time(NULL);
-    tm* timeinfo = localtime(&seconds);
+class A123 {
+public:
+    virtual void f() = 0;
+};
 
-    cout<<"Текущее время и дата:"<< timeinfo->tm_hour << ':' << timeinfo->tm_min << ':' << timeinfo->tm_sec << ' ' << endl;
+class A124 : public A123 {
+public:
+    void f() override {
+        int a = 2;
+    }
+};
+
+int main() { //проверено
+
+    auto p1 = std::unique_ptr<A123>(new A124());
+
+//    time_t seconds = time(NULL);
+//    tm* timeinfo = localtime(&seconds);
+//
+//    cout<<"Текущее время и дата:"<< timeinfo->tm_hour << ':' << timeinfo->tm_min << ':' << timeinfo->tm_sec << ' ' << endl;
     return 0;
 //    std::string path = "../SaveData/";
 //    std::vector<std::string> nameFiles;

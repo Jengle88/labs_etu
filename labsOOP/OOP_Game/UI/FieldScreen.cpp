@@ -75,8 +75,8 @@ FieldScreen::showStartingParamsAndGenerateField(KeyControl *keyController) { // 
     return { height, width, countWalls };
 }
 
-void FieldScreen::showUpdatedScreen(Field *field) const {
-    if (!field->getStatusStartFinish() || !field->getStatusWay()) {
+void FieldScreen::showUpdatedScreen(const std::shared_ptr<Field> &field) const {
+    if (!field->builder->isChosenStartFinish() || !field->builder->isWayGenerated()) {
         LoggerPull::writeData("gameLogs",LoggerDataAdapter<std::string>("Попытка отобразить не до конца сгенерированное поле"), LoggerPull::LoggingType::Error);
         throw std::logic_error("Попытка отобразить не до конца сгенерированное поле");
     }

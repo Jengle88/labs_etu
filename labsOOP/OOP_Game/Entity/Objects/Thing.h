@@ -2,6 +2,8 @@
 
 #include <string>
 #include <map>
+#include "../Prototype.h"
+
 enum ThingObject {
     ARMOR,
     SWORD,
@@ -9,7 +11,7 @@ enum ThingObject {
     THING_OBJECT_SIZE
 };
 
-class Thing {
+class Thing : public Prototype {
 public:
     virtual std::string getNameThing() const = 0;
     virtual int getTypeObject() const = 0;

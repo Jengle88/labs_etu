@@ -80,7 +80,7 @@ double Gargoyle::getDodgeFactor() const {
 }
 
 Gargoyle* Gargoyle::clone() const {
-    return new Gargoyle(model, name, health, attackPower, protection);
+    return new Gargoyle(model, name, health, attackPower, protection, luck);
 }
 
 bool Gargoyle::checkPositiveHealth() const {

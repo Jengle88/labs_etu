@@ -1,6 +1,6 @@
 #pragma once
-#include "../Characters/MainHero.h"
-#include "../Characters/Enemy.h"
+#include "../Entity/Characters/MainHero.h"
+#include "../Entity/Characters/Enemy.h"
 #include "../Data/DataManager.h"
 #include <unistd.h>
 #include "FieldScreen.h"

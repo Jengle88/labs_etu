@@ -4,17 +4,17 @@
 #include "CellPoint.h"
 
 class SaveDataAdapter {
-    int heightField = -1, widthField = -1; // V V
-    CellPoint start = {-1, -1}, finish = {-1, -1}; // V V
-    std::vector<CellPoint> walls; // V
-    CellPoint heroPos = {-1, -1}; // V
-    double heroHealth = -1; // V
-    std::vector<std::pair<std::string, std::pair<double, CellPoint>>> enemiesPos; // V
-    int cntSteps = -1; // V
-    std::vector<std::pair<std::string, std::pair<int, CellPoint>>> thingsPos; // V
-    int heroLevel = -1; // V
-    std::vector<std::pair<std::string, int>> heroThings; // V
-    std::vector<std::pair<std::string, int>> heroAchievements; // V
+    int heightField = -1, widthField = -1;
+    CellPoint start = {-1, -1}, finish = {-1, -1};
+    std::vector<CellPoint> walls;
+    CellPoint heroPos = {-1, -1};
+    double heroHealth = -1;
+    std::vector<std::pair<std::string, std::pair<double, CellPoint>>> enemiesPos;
+    int cntSteps = -1;
+    std::vector<std::pair<std::string, std::pair<int, CellPoint>>> thingsPos;
+    int heroLevel = -1;
+    std::vector<std::pair<std::string, int>> heroThings;
+    std::vector<std::pair<std::string, int>> heroAchievements;
 public:
     SaveDataAdapter() = default;
     int getHeightField() const;

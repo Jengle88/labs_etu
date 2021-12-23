@@ -10,12 +10,10 @@ int main() {
  * 2) Строитель - файл FieldScreen.h
  *
  * Паттерны 2:
- *  1) Стратегия - файл Enemy.h
- *  2) Абстрактная фабрика - файл Field.h
- *  3) Прототип - файл Character.h
+ *  1) Прототип - файл Character.h
  *
  *  Паттерны 3:
- *  1) Адаптер - файл LoggerDataAdapter.hpp
- *  2) Синглтон - файл LoggerPull.hpp
+ *  1) Адаптер - файл LoggerDataAdapter.h
+ *  2) Синглтон - файл LoggerPull.h
  *
  */

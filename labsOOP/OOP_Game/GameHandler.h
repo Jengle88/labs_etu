@@ -21,14 +21,14 @@ enum FightStatus {
     KILLED_HERO = 3
 };
 
-template<KeyControl** control, DifficultPreset &preset, RulesChecker **... checkers>
+template<KeyControl** control, DifficultPreset &preset,  FieldBuilder** builder, RulesChecker **... checkers>
 class GameHandler {
-    DataManager *dataManager = nullptr;
-    ThingsManager *thingsManager = nullptr;
-    KeyControl *keyControl = nullptr;
-    Field *field = nullptr;
-    FieldScreen *mainScreen = nullptr;
-    FightScreen *fightScreen = nullptr;
+    std::shared_ptr<DataManager> dataManager = nullptr; // shared, т.к ещё хранится в Field для получения, например, моделей героя и врагов
+    std::unique_ptr<ThingsManager> thingsManager = nullptr;
+    KeyControl *keyControl = nullptr; // память выделилась на стеке в функции, которая создаёт GameHandler
+    std::shared_ptr<Field> field = nullptr; // shared, так как нужен в thingsManager для определения нужных для выдачи вещей
+    std::unique_ptr<FieldScreen> mainScreen = nullptr;
+    std::unique_ptr<FightScreen> fightScreen = nullptr;
     bool isReady = false;
     bool finishEnable = false;
     std::string saveDataPath = "../SaveData/";
@@ -43,12 +43,12 @@ class GameHandler {
 
     // для FieldScreen: start
     void buildField(int height, int width, int countWalls) {
-        field = new Field(height, width, dataManager);
+        field = std::make_unique<Field>(height, width, dataManager, *builder);
         if (field->generateFullField(countWalls)) {
             LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Поле было полностью сгенерировано"));
             field->setHeroOnStart();
             field->createHero();
-            thingsManager = new ThingsManager(field);
+            thingsManager = std::make_unique<ThingsManager>(field);
         } else {
             std::cout << "Не удалось сгенерировать поле!\n";
             LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Не удалось сгенерировать поле"),
@@ -60,8 +60,7 @@ class GameHandler {
     void requestMoveHero(CellPoint from, CellPoint to, std::string &gameAction) {
         if (!field->getGrid().isValidIndexes(to.getX(), to.getY()))
             to = from;
-        bool moved = false;
-        moved = field->moveHero(to);
+        bool moved = field->moveHero(to);
         if (moved) {
             LoggerPull::writeData("gameLogs", LoggerDataAdapter<CellPoint>(to, "Герой сменил позицию"));
             auto thingOnPos = thingsManager->checkCellHasSmth(to);
@@ -120,11 +119,10 @@ class GameHandler {
                             "Герой начал сражение с врагом"));
 
 
-                    fightScreen = new FightScreen(this->field->getHero().getModel(), this->field->getEnemyFromPoint(
+                    fightScreen = std::make_unique<FightScreen>(this->field->getHero().getModel(), this->field->getEnemyFromPoint(
                             CellPoint(point.getX() + i, point.getY() + j)).getModel());
                     statusFight = fightStatusObserver(this->field->getHero(), this->field->getEnemyFromPoint(
                             CellPoint(point.getX() + i, point.getY() + j)));
-                    delete fightScreen;
                     fightScreen = nullptr;
 
 
@@ -180,7 +178,6 @@ class GameHandler {
             case PlayerKeysControl::FIELD_LOAD_DATA:
                 mainScreen->clearScreen();
                 showLoadScreen(true);
-//                keyControl->requestTrashIgnore();
                 requestMoveEnemies = false;
                 return true;
             case PlayerKeysControl::FIELD_TAKE_THING:
@@ -276,6 +273,7 @@ class GameHandler {
             return FightStatus::KILLED_ENEMY;
         else if (!mainHero.checkPositiveHealth())
             return FightStatus::KILLED_HERO;
+        return FightStatus::LEAVE_FIGHT;
     }
 
     int requestFightAction(int action, MainHero &mainHero, Enemy &enemy, int &selectedThing) {
@@ -400,13 +398,19 @@ class GameHandler {
                         selectedMenuItem++;
                     break;
                 case LOADSCREEN_ACCEPT_FILE:
-                    saveDataAdapter = saveManager->get()->loadData(selectedMenuItem, goodUpload);
+                    try {
+                        saveDataAdapter = saveManager->get()->loadData(selectedMenuItem, goodUpload);
+                    } catch (std::exception &e) {
+                        loadScreen.showMessage(e.what());
+                        sleep(1);
+                        break;
+                    }
                     if (goodUpload) {
                         if (field == nullptr)
                             generateField();
                         field->rebuildField(saveDataAdapter);
                         if (thingsManager == nullptr) {
-                            thingsManager = new ThingsManager(field);
+                            thingsManager = std::make_unique<ThingsManager>(field);
                         }
                         thingsManager->reeditThingsManager(saveDataAdapter);
                         loadRules();
@@ -447,18 +451,13 @@ class GameHandler {
 public:
     GameHandler() {
         keyControl = *control;
-        dataManager = new DataManager(preset.getThingsParams());
+        dataManager = std::make_unique<DataManager>(preset.getThingsParams());
         dataManager->uploadModels();
         LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Модели загружены"));
-        mainScreen = new FieldScreen();
+        mainScreen = std::make_unique<FieldScreen>();
     }
 
-    virtual ~GameHandler() {
-        delete mainScreen;
-        delete dataManager;
-        delete field;
-        delete thingsManager;
-    }
+    virtual ~GameHandler() = default;
 
     // для StartScreen: start
     void showStartScreen() {
@@ -485,13 +484,10 @@ public:
                             fieldBuilder();
                             loadRules();
                             observeField();
-                            delete field;
-                            delete thingsManager; // так как статистика вещей зависит от героя, а герой - от поля
                             field = nullptr;
                             thingsManager = nullptr;
                             break;
                         case MenuItemID::LOAD_GAME:
-
                             showLoadScreen(false);
                             break;
                         case MenuItemID::KEY_SETTINGS:
@@ -553,7 +549,7 @@ public:
     }
 
     void generateField() {
-        field = new Field(dataManager);
+        field = std::make_unique<Field>(dataManager, *builder);
         field->createHero();
     }
 

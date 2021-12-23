@@ -1,16 +1,17 @@
 #pragma once
 #include <vector>
-#include "../Tools/CellPoint.h"
+#include "../../Tools/CellPoint.h"
 #include <ctime>
 #include <cstdlib>
 #include <cmath>
 #include <string>
 #include <ostream>
+#include "../Prototype.h"
 
 #define ROOT_EPSILON 1e-2
 #define LOW_HEALTH_PERCENT 30
 
-class Character {
+class Character : public Prototype {
 protected:
     struct DefaultCharacterProperties{
         constexpr static char CHARACTER_NAME[] = "Character";

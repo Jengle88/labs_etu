@@ -1,13 +1,13 @@
 #include "ThingsManager.h"
-#include "../Logger/LoggerPull.h"
-#include "../Tools/SaveDataReader.h"
-#include "../Rules/DifficultDataReader.h"
+#include "../../Logger/LoggerPull.h"
+#include "../../Tools/SaveDataReader.h"
+#include "../../Rules/DifficultDataReader.h"
 
-ThingsManager::ThingsManager(Field *field, std::map<CellPoint, Thing*> visualThingsPlaces,
+ThingsManager::ThingsManager(const std::shared_ptr<Field> &field, std::map<CellPoint, Thing*> visualThingsPlaces,
                              std::map<CellPoint, Thing*> healthThingsPlaces)
         : field(field), visualThingsPlaces(visualThingsPlaces), nonVisualThingsPlaces(healthThingsPlaces) {}
 
-void ThingsManager::generateVisualThing(DataManager *dataManager) {
+void ThingsManager::generateVisualThing(const std::shared_ptr<DataManager> &dataManager) {
     constexpr auto getVectorFromMapPointThings = [](const std::map<CellPoint, Thing*> &table) {
         std::vector<Thing*> res(THING_OBJECT_SIZE - 1);
         for (auto &item: table)
@@ -28,20 +28,20 @@ void ThingsManager::generateVisualThing(DataManager *dataManager) {
 }
 
 void ThingsManager::checkThingsLevel(std::map<std::string, int> &achievements) {
-    if (levelThings == 1 && achievements["Monster"] >= 3 && achievements["Archer"] >= 1 &&
-        achievements["Gargoyle"] >= 1) {
+    if (achievements.size() > 0 && levelThings == 1 && achievements.count("Monster") >= 3 && achievements.count("Archer") >= 1 &&
+        achievements.count("Gargoyle") >= 1) {
         levelThings = 2;
     }
 }
 
 
-void ThingsManager::generateHealthThing(DataManager *dataManager) {
+void ThingsManager::generateHealthThing(const std::shared_ptr<DataManager> &dataManager) {
     CellPoint point = field->generateRandomFreePoint();
     this->nonVisualThingsPlaces[point] = dataManager->getHealthThing();
     field->setElem(point, CellObject(TypeCell::EMPTY, TypeObject::NOTHING, true));
 }
 
-void ThingsManager::tryGenerateThing(MainHero &hero, DataManager *dataManager) {
+void ThingsManager::tryGenerateThing(MainHero &hero, std::shared_ptr<DataManager> &dataManager) {
     auto &achievements = hero.getCountKilledEnemy();
     const auto &heroInventory = hero.getInventory();
 
@@ -101,7 +101,7 @@ std::vector<std::string> ThingsManager::prepareDataToSave() const {
             " " + std::to_string(thingPlace.first.getX()) + " " + std::to_string(thingPlace.first.getY()) + "\n");
     }
     data.push_back(SaveDataReader::END_TAG + "\n");
-    data.emplace_back("// уровень вещей\n");
+    data.emplace_back("// уровень героя\n");
     data.push_back("heroLevel " + std::to_string(levelThings) + "\n");
     return data;
 }

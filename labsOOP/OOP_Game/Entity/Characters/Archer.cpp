@@ -81,7 +81,7 @@ double Archer::getDodgeFactor() const {
 }
 
 Archer *Archer::clone() const {
-    return new Archer(model, name, health, attackPower, protection);
+    return new Archer(model, name, health, attackPower, protection, luck);
 }
 
 bool Archer::checkPositiveHealth() const {

@@ -13,7 +13,7 @@ enum MenuItemID {
 class StartScreen {
     std::vector<std::pair<std::string, int>> menuItemNamesIDs = {
             {"Start New Game",            START_NEW_GAME},
-            {"Load Game (not ready yet)", LOAD_GAME},
+            {"Load Game",                 LOAD_GAME},
             {"Key Settings",              KEY_SETTINGS},
             {"Exit",                      EXIT}
     };

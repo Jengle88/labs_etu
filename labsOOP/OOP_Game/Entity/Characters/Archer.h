@@ -1,7 +1,7 @@
 #pragma once
 #include "Enemy.h"
 #include "Character.h"
-#include "../Rules/CharacterProperties.h"
+#include "../../Rules/CharacterProperties.h"
 
 class Archer: public Character, public Enemy {
     struct ArcherProperties{

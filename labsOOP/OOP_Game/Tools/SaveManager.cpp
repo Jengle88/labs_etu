@@ -78,14 +78,19 @@ SaveDataAdapter SaveManager::loadData(int selectedFile, bool &check) const {
     SaveDataReader dataReader;
     SaveDataAdapter adapter;
     check = true;
-    LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Начато считывание файла загрузки " + pathsToFiles[selectedFile] ));
-    try {
-        dataReader.readSaveFile(pathsToFiles[selectedFile], adapter);
-    } catch (std::exception& e) {
-        check = false;
-        LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>(e.what()));
+    if (pathsToFiles.size() > selectedFile) {
+        LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>("Начато считывание файла загрузки " + pathsToFiles[selectedFile] ));
+        try {
+            dataReader.readSaveFile(pathsToFiles[selectedFile], adapter);
+        } catch (std::exception& e) {
+            check = false;
+            LoggerPull::writeData("gameLogs", LoggerDataAdapter<std::string>(e.what()));
+            throw std::invalid_argument("Ошибка при считывании данных\n");
+        }
+        return adapter;
+    } else {
+        throw std::invalid_argument("Обращение к несуществующему файлу\n");
     }
-    return adapter;
 }
 
 

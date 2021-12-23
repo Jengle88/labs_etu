@@ -4,7 +4,7 @@
 #include <map>
 #include "Character.h"
 #include "../Objects/Thing.h"
-#include "../Rules/CharacterProperties.h"
+#include "../../Rules/CharacterProperties.h"
 #include <algorithm>
 
 

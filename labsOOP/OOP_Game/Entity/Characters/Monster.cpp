@@ -79,7 +79,7 @@ double Monster::getDodgeFactor() const {
 }
 
 Monster *Monster::clone() const {
-    return new Monster(model, name, health, attackPower, protection);
+    return new Monster(model, name, health, attackPower, protection, luck);
 }
 
 bool Monster::checkPositiveHealth() const {

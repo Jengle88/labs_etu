@@ -1,7 +1,7 @@
 #include "LoggerPull.h"
 
 std::unordered_map<std::string, Logger*> LoggerPull::loggers;
-LoggerPull* LoggerPull::loggerPull = nullptr;
+std::unique_ptr<LoggerPull> LoggerPull::loggerPull = nullptr;
 
 std::unordered_map<const char*, LoggerPull::LoggerTypeData> LoggerPull::loggerTypeData = {
         { LoggerPull::LoggingType::Info, LoggerPull::LoggerTypeData(LoggerPull::LoggingType::Info, LoggerPull::LoggingColor::NONE) },
@@ -9,10 +9,10 @@ std::unordered_map<const char*, LoggerPull::LoggerTypeData> LoggerPull::loggerTy
         { LoggerPull::LoggingType::Error, LoggerPull::LoggerTypeData(LoggerPull::LoggingType::Error, LoggerPull::LoggingColor::RED) }
 };
 
-LoggerPull *LoggerPull::getInstance() {
+std::unique_ptr<LoggerPull>* LoggerPull::getInstance() {
     if (LoggerPull::loggerPull == nullptr)
-        LoggerPull::loggerPull = new LoggerPull();
-    return LoggerPull::loggerPull;
+        LoggerPull::loggerPull = std::unique_ptr<LoggerPull>(new LoggerPull()); // нельзя заменить из-за приватного конструктора
+    return &LoggerPull::loggerPull;
 }
 
 void LoggerPull::addFileLogger(const std::string &key, FileLogger *fileLogger) {
@@ -46,7 +46,6 @@ void LoggerPull::closeAllFileStreams() {
 
 LoggerPull::~LoggerPull() {
     closeAllFileStreams();
-    loggerPull = nullptr;
 }
 
 

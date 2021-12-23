@@ -1,5 +1,5 @@
 #include "SaveDataReader.h"
-#include "../Characters/MainHero.h"
+#include "../Entity/Characters/MainHero.h"
 #include "Grid.h"
 #include "../UI/Models/Field.h"
 
@@ -264,6 +264,11 @@ void SaveDataReader::dataValidator(const SaveDataAdapter &dataAdapter) {
         || !Grid::isValidIndexes(dataAdapter.getFinish().getX(), dataAdapter.getFinish().getY(),
                                  dataAdapter.getHeightField(), dataAdapter.getWidthField())) {
         throw std::invalid_argument("Недопустимое значение стартовой и финишной точки\n");
+    }
+    // проверка валидности непроходимых вершин
+    for (const auto &wall: dataAdapter.getWalls()) {
+        if (!Grid::isValidIndexes(wall.getX(), wall.getY(), dataAdapter.getHeightField(), dataAdapter.getWidthField()))
+            throw std::invalid_argument("Недопустимое значение непроходимой точки\n");
     }
     // проверка здоровья и позиций персонажей
     for (const auto &enemy: dataAdapter.getEnemiesPos()) {

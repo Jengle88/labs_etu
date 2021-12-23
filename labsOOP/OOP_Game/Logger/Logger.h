@@ -5,7 +5,7 @@
 
 class Logger {
 protected:
-    std::ostream *output = nullptr;
+    std::ostream *output = nullptr; // нельзя, так как нужно записывать также и логгинг в консоль
     virtual void writePreInfo(const std::string &info);
     virtual void writePostInfo(const std::string &info);
     virtual void writeStyleInfo(const std::string &style);

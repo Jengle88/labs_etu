@@ -1,0 +1,51 @@
+// <- обозначается как комментарий
+// размеры поля
+height 10
+width 15
+// позиции старта/финиша xy
+start 14 7
+finish 0 9
+// позиции непроходимых клеток xy
+wallsPos
+<start>
+1 1
+1 2
+2 1
+2 2
+2 3
+<end>
+// позиция героя (здоровье, позиция xy)
+MainHero 80 7 5
+// позиции врагов (здоровье, позиция xy)
+enemiesPosHealth
+<start>
+Monster 50 6 9
+Archer 60 11 5
+Gargoyle 65 13 1
+<end>
+// количество шагов
+cntSteps 10
+// расположение вещей (уровень, позиция xy)
+thingsPosLevel
+<start>
+armor 1 8 7
+healPotion 0 3 5
+<end>
+// уровень вещей
+heroLevel 1
+// вещи игрока (уровень)
+heroThings
+<start>
+sword 1
+healPotion 0
+healPotion 0
+<end>
+// достижения игрока (количество)
+heroAchievement
+<start>
+Monster 1
+Archer 2
+Gargoyle 0
+<end>
+
+

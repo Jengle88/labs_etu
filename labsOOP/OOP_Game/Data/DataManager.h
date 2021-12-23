@@ -1,10 +1,10 @@
 #pragma once
 #include <map>
 #include <unordered_map>
-#include "../Characters/Monster.h"
+#include "../Entity/Characters/Monster.h"
 #include "../Tools/ModelDataReader.h"
 #include "../Rules/ThingProperties.h"
-#include "../Objects/Thing.h"
+#include "../Entity/Objects/Thing.h"
 
 #
 

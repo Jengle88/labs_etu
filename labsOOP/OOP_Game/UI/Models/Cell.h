@@ -1,5 +1,5 @@
 #pragma once
-#include "../../Objects/CellObject.h"
+#include "../../Entity/Objects/CellObject.h"
 #include "../../Tools/CellPoint.h"
 
 class Cell {

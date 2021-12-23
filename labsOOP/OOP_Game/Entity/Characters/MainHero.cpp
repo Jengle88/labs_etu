@@ -1,5 +1,5 @@
 #include "MainHero.h"
-#include "../Rules/DifficultDataReader.h"
+#include "../../Rules/DifficultDataReader.h"
 
 std::string MainHero::MainHeroProperties::MAIN_HERO_NAME;
 double MainHero::MainHeroProperties::MAIN_HERO_CRITICAL_FACTOR;

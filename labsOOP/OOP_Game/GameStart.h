@@ -8,14 +8,16 @@
 #include "KeyControl/KeyboardControl.h"
 #include "KeyControl/KeyDataReader.h"
 #include "UI/KeySettingsScreen.h"
+#include "UI/Models/BuilderDefaultField.h"
 
+#define START_FINISH_DIST 2
 
 class GameStart {
 public:
     static void startGameMode() {
         std::setlocale(LC_ALL, "");
         srand(time(0));
-        LoggerPull *loggerPull = LoggerPull::getInstance();
+        std::unique_ptr<LoggerPull>* loggerPull = LoggerPull::getInstance();
         LoggerPull::addFileLogger("gameLogs", new FileLogger("logs.txt"));
 
         static auto dataDifficult = DifficultDataReader::readDifficultPresets("../Data/GameEntityProperties.txt");
@@ -28,10 +30,8 @@ public:
         static auto keyControl = static_cast<KeyControl*>(&keyboardControl);
         if (!keyControl->checkAllKeyBound())
             throw std::logic_error("Не все привязки указаны");
-
-        GameHandler<&keyControl, difficultPreset, &checker> gameHandler;
+        static FieldBuilder* fieldBuilder = new BuilderDefaultField(START_FINISH_DIST);
+        GameHandler<&keyControl, difficultPreset, &fieldBuilder, &checker> gameHandler;
         gameHandler.gameStart();
-
-        delete loggerPull;
     }
 };

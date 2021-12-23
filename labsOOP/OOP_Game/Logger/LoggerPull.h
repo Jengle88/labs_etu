@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 #include <vector>
+#include <memory>
 #include "Logger.h"
 #include "FileLogger.h"
 #include "ConsoleLogger.h"
@@ -19,9 +20,9 @@ class LoggerPull {
         LoggerTypeData(const char* type, const char* color): type(type), color(color) {}
     };
 
-    static std::unordered_map<std::string, Logger*> loggers;
+    static std::unordered_map<std::string, Logger*> loggers; // нельзя заменить на умные из-за полиморфизма
     static std::unordered_map<const char*, LoggerTypeData> loggerTypeData;
-    static LoggerPull* loggerPull;
+    static std::unique_ptr<LoggerPull> loggerPull;
     LoggerPull();
 
 public:
@@ -32,7 +33,7 @@ public:
     };
 
     ~LoggerPull();
-    static LoggerPull* getInstance();
+    static std::unique_ptr<LoggerPull>* getInstance();
     static void addFileLogger(const std::string& key, FileLogger *fileLogger);
     static void addConsoleLogger(const std::string& key, ConsoleLogger *consoleLogger);
     static void removeLogger(const std::string& key);
@@ -45,7 +46,7 @@ public:
 };
 
 template<typename T>
-void LoggerPull::writeData(const std::string &key, const LoggerDataAdapter<T> &data, const char *loggingType) {
+void LoggerPull::writeData(const std::string &key, const LoggerDataAdapter<T> &data, const char loggingType[]) {
     if (LoggerPull::loggers.count(key)) {
         auto& loggingTypeData = loggerTypeData[loggingType];
         std::string preInfo = std::string(loggingTypeData.type) + ": ";
