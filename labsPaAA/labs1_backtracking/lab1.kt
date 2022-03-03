@@ -1,3 +1,5 @@
+import kotlin.math.ceil
+import kotlin.math.sqrt
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTime
 
@@ -15,33 +17,40 @@ fun findFreeCell(field: MutableList<Int>): Pair<Int, Int> {
         }
     }
     if (field[minX] == field.size)
-        return Pair(-1,-1)
+        return Pair(-1, -1)
     return Pair(minX, field[minX])
 }
 
 data class Square(val xUpLeft: Int, val yUpLeft: Int, var size: Int)
 
 fun solve(n: Int): List<Square> {
+    if (n % 2 == 0) {
+        return listOf(
+            Square(0, 0, n / 2),
+            Square(n / 2, 0, n / 2),
+            Square(0, n / 2, n / 2),
+            Square(n / 2, n / 2, n / 2),
+        )
+    }
+
     val field: MutableList<Int> = MutableList(n) { 0 }
     val squares: MutableList<Square> = mutableListOf()
     var minAnswerSquares: MutableList<Square> = MutableList(n * n) { Square(0, 0, 0) }
-    for (i in 0 until n) {
-        for (j in 0 until n) {
-            minAnswerSquares[i] = Square(i, j, 1)
-        }
-    }
     squares.add(Square(0, 0, n - 1))
-    changeField(field, 0, n-1, n - 1)
+    changeField(field, 0, n - 1, n - 1)
     while (squares.isNotEmpty()) {
         val (x, y) = findFreeCell(field)
-        if (x == -1 && y == -1) {
-            if (minAnswerSquares.size > squares.size) {
+        if (x == -1 && y == -1 || // заполнили поле
+            squares.size >= minAnswerSquares.size || // до этого было решение лучше
+            (minAnswerSquares.size - squares.size == 2 && field.maxOf { it } < field.size) // нужно разместить 2 квадрата, но нижняя часть поля не заполнена (значит либо 2 квадрата не расставить, либо мы повернули поле на 180 и больший квадрат снизу - аналог большего квадрата сверху слева)
+        ) {
+            if (minAnswerSquares.size > squares.size && x == -1 && y == -1) {
                 for (i in squares.indices) {
                     minAnswerSquares[i] = Square(squares[i].xUpLeft, squares[i].yUpLeft, squares[i].size)
                 }
                 minAnswerSquares = minAnswerSquares.dropLast(minAnswerSquares.size - squares.size).toMutableList()
             }
-            while (squares.isNotEmpty() && (squares.last().size == 1 || squares.size >= minAnswerSquares.size)) {
+            while (squares.isNotEmpty() && (squares.last().size == 1 || squares.size >= minAnswerSquares.size || (minAnswerSquares.size - squares.size == 2 && field.maxOf { it } < field.size))) {
                 changeField(field, squares.last().xUpLeft, squares.last().size, -squares.last().size)
                 squares.removeLast()
             }
@@ -61,13 +70,15 @@ fun solve(n: Int): List<Square> {
     return minAnswerSquares
 }
 
-val DEBUG = true
+val ALL_TEST = false
 
 @OptIn(ExperimentalTime::class)
 fun main() {
-    if (DEBUG) {
-        for (n in 2 until 25) {
-            println("$n) ${measureTime { solve(n) }}")
+    if (ALL_TEST) {
+        for (n in 2 until 35) {
+            val lst: List<Square>
+            val time = measureTime { lst = solve(n) }
+            println("$n) ${time}, ansSize:${lst.size}")
         }
     } else {
         val n = readLine()!!.toInt()
