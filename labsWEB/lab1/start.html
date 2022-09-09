@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!--    Нужно, чтобы распознавались русские буквы-->
+    <meta charset="UTF-8">
+    <title>Welcome to nginx!</title>
+    <style>
+        body {
+            width: 35em;
+            margin: 0 auto;
+            font-family: Tahoma, Verdana, Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+<h1>Hello world!</h1>
+<div>
+    <label>
+        Введите имя: <br>
+        <input id="name_input">
+    </label>
+</div>
+<div>
+    <input id="input2">
+</div>
+<canvas id="canvas1" width="170" height="170">
+</canvas>
+<div>
+    <button
+            id="button1"
+            class="btn btn-primary btn-block mt-3"
+            onclick="moveTextFromInput()">
+        Button1
+    </button>
+    <button
+            id="button2"
+            class="btn btn-primary btn-block mt-3"
+            onclick="drawTetrisField()">
+        drawTetrisField
+    </button>
+</div>
+<script src="script1.js"></script>
+</body>
+</html>
