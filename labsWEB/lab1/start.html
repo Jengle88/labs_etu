@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <!--    Нужно, чтобы распознавались русские буквы-->
     <meta charset="UTF-8">
@@ -13,32 +13,53 @@
     </style>
 </head>
 <body>
-<h1>Hello world!</h1>
-<div>
-    <label>
-        Введите имя: <br>
-        <input id="name_input">
-    </label>
+
+<div id="title" style="text-align: center;"> <h1>Hello Tetris!</h1> </div>
+
+<!--GameScreen-->
+<div id="main_screen">
+    <div id="start_screen">
+        <label style="display: block; margin-bottom: 15px">
+            Введите имя: <br>
+            <input id="name_input">
+        </label>
+        <button
+                id="leaderboard"
+                class="btn btn-primary btn-block mt-3"
+                onclick="">
+            Leaderboard
+        </button>
+        <button
+            id="to_game_screen"
+            onclick="toGameScreen()">
+            Play game
+        </button>
+    </div>
+
+    <div id="game_screen" style="display: none">
+        <div id="game_info" style="display: block">
+            <button
+                    id="draw_tetris_field"
+                    class="btn btn-primary btn-block mt-3"
+                    onclick="drawTetrisField()">
+                drawTetrisField
+            </button>
+            <button
+                    id="to_start_screen"
+                    class="btn btn-primary btn-block mt-3"
+                    onclick="toStartScreen()">
+                toStartScreen
+            </button>
+
+        </div>
+        <canvas id="canvas1" width="170" height="170">
+        </canvas>
+    </div>
+
+
 </div>
-<div>
-    <input id="input2">
-</div>
-<canvas id="canvas1" width="170" height="170">
-</canvas>
-<div>
-    <button
-            id="button1"
-            class="btn btn-primary btn-block mt-3"
-            onclick="moveTextFromInput()">
-        Button1
-    </button>
-    <button
-            id="button2"
-            class="btn btn-primary btn-block mt-3"
-            onclick="drawTetrisField()">
-        drawTetrisField
-    </button>
-</div>
+
 <script src="script1.js"></script>
+<script src="drawScript.js"></script>
 </body>
 </html>
