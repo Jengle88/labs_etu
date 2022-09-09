@@ -10,10 +10,13 @@
 function toGameScreen() {
     document.getElementById("start_screen").style.display = "none"
     document.getElementById("game_screen").style.display = "flex"
+    drawTetrisField()
 }
+
 function toStartScreen() {
     document.getElementById("game_screen").style.display = "none"
     document.getElementById("start_screen").style.display = "block"
+    clearTetrisField()
 }
 
 
