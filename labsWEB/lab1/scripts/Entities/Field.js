@@ -1,6 +1,6 @@
 class Field {
     static clearElemColor = "#00000020"
-    static tetraminos = ["OTetramino", "OTetramino"] // FIXME исправить на I и O
+    static tetraminos = ["ITetramino", "OTetramino"]
 
     constructor(amountSquaresX, amountSquaresY) {
         this.width = amountSquaresX
@@ -35,7 +35,10 @@ class Field {
                 this.currTetramino = new OTetramino(startX, startY)
                 this.currTetramino.drawOnField(this.field)
                 break
-
+            case "ITetramino":
+                this.currTetramino = new ITetramino(startX, startY)
+                this.currTetramino.drawOnField(this.field)
+                break
         }
     }
 

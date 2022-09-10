@@ -11,6 +11,8 @@ class GameCycle {
             if (this.gameStatus === "play") {
                 switch (keyName) {
                     case "ArrowUp":
+                        this.gameField.currTetramino.rotateOnField(this.gameField.field)
+                        UIEditor.redrawTetrisField()
                         return
                     case "ArrowDown":
                         this.gameField.currTetramino.moveDown(this.gameField.field)
