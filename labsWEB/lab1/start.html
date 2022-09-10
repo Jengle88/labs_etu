@@ -44,34 +44,45 @@
 
     <!--GameScreen-->
     <div id="game_screen" style="display: none">
-        <div id="game_info">
+        <div id="game_info" style="width: fit-content">
             <h3 id="player_name" style="display: block">Игрок: noname</h3>
             <label id="current_level"
                    style="display: block; margin-bottom: 10px">Текущий уровень: 1</label>
             <label id="next_figure_title"
-                   style="display: block">Следующая фигура:</label>
+                   style="display: block; margin-bottom: 4px">Следующая фигура:</label>
             <canvas id="next_figure_canvas"
                     style="display: block; width: 110px; height: 110px; border: 1px solid #000;">
-
-
             </canvas>
+            <div style="display: block; margin-top: 15px; width: 350px">
+                <label id="keymap">Клавиши для управления:</label>
+                <ul>
+                    <li style="margin-bottom: 8px">Стрелка влево/вправо - переместить фигуру</li>
+                    <li style="margin-bottom: 8px">Стрелка вверх - повернуть фигуру</li>
+                    <li style="margin-bottom: 8px">Стрелка вниз - опустить фигуру вниз</li>
+                    <li style="margin-bottom: 8px">Пробел - пауза?</li>
+                </ul>
+            </div>
             <button
                     id="to_start_screen"
                     onclick="toStartScreen()">
                 toStartScreen
             </button>
         </div>
-        <div style="display: block; margin-left: 150px">
-            <canvas id="tetris_field" width="160" height="280" style="border: 1px solid #000;">
+        <div style="display: block; margin-left: 150px; margin-top: 19px">
+            <canvas id="tetris_field" width="160" height="320" style="border: 1px solid #000;">
             </canvas>
         </div>
+
+
     </div>
 
 
 </div>
 
 <!--Scripts-->
-<script src="navScript.js"></script>
-<script src="drawScript.js"></script>
+<script src="scripts/navScript.js"></script>
+<script src="scripts/drawScript.js"></script>
+<script src="scripts/utilities.js"></script>
+<script src="scripts/Tetramino.js"></script>
 </body>
 </html>
