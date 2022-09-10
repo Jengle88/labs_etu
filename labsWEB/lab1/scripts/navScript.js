@@ -16,10 +16,13 @@ function toGameScreen() {
     }
     document.getElementById("start_screen").style.display = "none"
     document.getElementById("game_screen").style.display = "flex"
+    gameCycle = new GameCycle()
+    gameCycle.addKeyListener()
     drawTetrisField()
 }
 
 function toStartScreen() {
+    gameCycle.removeKeyListener()
     let playerName = localStorage["curr_player_name"]
     saveRecordToLeaderboard(playerName);
     document.getElementById("game_screen").style.display = "none"

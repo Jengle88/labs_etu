@@ -1,5 +1,4 @@
 const drawingCanvas = document.getElementById('tetris_field')
-let gameCycle = null
 
 function drawTetrisGrid(context, width, height, squareSize, gameField) {
     context.strokeStyle = "#00000020"
@@ -19,7 +18,6 @@ function drawTetrisField() {
     if (drawingCanvas && drawingCanvas.getContext) {
         let context = drawingCanvas.getContext('2d')
         let squareSize = 20
-        gameCycle = new GameCycle()
         gameCycle.createField(drawingCanvas.width / squareSize, drawingCanvas.height / squareSize)
         drawTetrisGrid(context, drawingCanvas.width, drawingCanvas.height, squareSize, gameCycle.gameField)
     }
