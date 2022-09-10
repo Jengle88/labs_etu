@@ -1,6 +1,6 @@
 class Field {
     static clearElemColor = "#00000020"
-    static tetraminos = ["ITetramino", "OTetramino"]
+    static tetraminos = ["OTetramino", "ITetramino", "STetramino", "ZTetramino", "LTetramino", "JTetramino", "TTetramino"]
 
     constructor(amountSquaresX, amountSquaresY) {
         this.width = amountSquaresX
@@ -33,13 +33,27 @@ class Field {
         switch (Field.tetraminos[randomTetramino]) {
             case "OTetramino":
                 this.currTetramino = new OTetramino(startX, startY)
-                this.currTetramino.drawOnField(this.field)
                 break
             case "ITetramino":
                 this.currTetramino = new ITetramino(startX, startY)
-                this.currTetramino.drawOnField(this.field)
+                break
+            case "STetramino":
+                this.currTetramino = new STetramino(startX, startY)
+                break
+            case "ZTetramino":
+                this.currTetramino = new ZTetramino(startX, startY)
+                break
+            case "LTetramino":
+                this.currTetramino = new LTetramino(startX, startY)
+                break
+            case "JTetramino":
+                this.currTetramino = new JTetramino(startX, startY)
+                break
+            case "TTetramino":
+                this.currTetramino = new TTetramino(startX, startY)
                 break
         }
+        this.currTetramino.drawOnField(this.field)
     }
 
     clearField() {

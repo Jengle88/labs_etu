@@ -150,7 +150,7 @@ class Tetramino {
 
 
 class OTetramino extends Tetramino {
-    static color = "#eccf19"
+    static color = "#ec1920"
     static mapOfStates = new Map(Object.entries({
         0: ["....",
             ".**.",
@@ -227,5 +227,238 @@ class ITetramino extends Tetramino {
     rotateOnField(field) {
         return super.rotateOnField(field, ITetramino.mapOfStates, ITetramino.color);
     }
-    
+}
+
+class STetramino extends Tetramino {
+    static color = "#2dce1b"
+    static mapOfStates = new Map(Object.entries({
+        0: ["....",
+            "..**",
+            ".**.",
+            "...."],
+        1: ["..*.",
+            "..**",
+            "...*",
+            "...."]
+    }))
+
+    constructor(xRotatePoint, yRotatePoint) {
+        super(0, xRotatePoint, yRotatePoint);
+    }
+
+    drawOnField(field) {
+        super.drawOnField(field, STetramino.mapOfStates, STetramino.color)
+    }
+
+    clearOnField(field, clearElement) {
+        super.clearOnField(field, STetramino.mapOfStates, clearElement)
+    }
+
+    moveDown(field) {
+        return super.moveDown(field, STetramino.mapOfStates, STetramino.color);
+    }
+
+    moveRight(field) {
+        return super.moveRight(field, STetramino.mapOfStates, STetramino.color);
+    }
+
+    moveLeft(field) {
+        return super.moveLeft(field, STetramino.mapOfStates, STetramino.color);
+    }
+
+    rotateOnField(field) {
+        return super.rotateOnField(field, STetramino.mapOfStates, STetramino.color);
+    }
+}
+
+class ZTetramino extends Tetramino {
+    static color = "#e06d0f"
+    static mapOfStates = new Map(Object.entries({
+        0: ["....",
+            ".**.",
+            "..**",
+            "...."],
+        1: ["...*",
+            "..**",
+            "..*.",
+            "...."]
+    }))
+
+    constructor(xRotatePoint, yRotatePoint) {
+        super(0, xRotatePoint, yRotatePoint);
+    }
+
+    drawOnField(field) {
+        super.drawOnField(field, ZTetramino.mapOfStates, ZTetramino.color)
+    }
+
+    clearOnField(field, clearElement) {
+        super.clearOnField(field, ZTetramino.mapOfStates, clearElement)
+    }
+
+    moveDown(field) {
+        return super.moveDown(field, ZTetramino.mapOfStates, ZTetramino.color);
+    }
+
+    moveRight(field) {
+        return super.moveRight(field, ZTetramino.mapOfStates, ZTetramino.color);
+    }
+
+    moveLeft(field) {
+        return super.moveLeft(field, ZTetramino.mapOfStates, ZTetramino.color);
+    }
+
+    rotateOnField(field) {
+        return super.rotateOnField(field, ZTetramino.mapOfStates, ZTetramino.color);
+    }
+}
+
+class LTetramino extends Tetramino {
+    static color = "#ffc300"
+    static mapOfStates = new Map(Object.entries({
+        0: ["....",
+            ".***",
+            ".*..",
+            "...."],
+        1: ["..*.",
+            "..*.",
+            "..**",
+            "...."],
+        2: ["...*",
+            ".***",
+            "....",
+            "...."],
+        3: [".**.",
+            "..*.",
+            "..*.",
+            "...."]
+    }))
+
+    constructor(xRotatePoint, yRotatePoint) {
+        super(0, xRotatePoint, yRotatePoint);
+    }
+
+    drawOnField(field) {
+        super.drawOnField(field, LTetramino.mapOfStates, LTetramino.color)
+    }
+
+    clearOnField(field, clearElement) {
+        super.clearOnField(field, LTetramino.mapOfStates, clearElement)
+    }
+
+    moveDown(field) {
+        return super.moveDown(field, LTetramino.mapOfStates, LTetramino.color);
+    }
+
+    moveRight(field) {
+        return super.moveRight(field, LTetramino.mapOfStates, LTetramino.color);
+    }
+
+    moveLeft(field) {
+        return super.moveLeft(field, LTetramino.mapOfStates, LTetramino.color);
+    }
+
+    rotateOnField(field) {
+        return super.rotateOnField(field, LTetramino.mapOfStates, LTetramino.color);
+    }
+}
+
+class JTetramino extends Tetramino {
+    static color = "#000bb4"
+    static mapOfStates = new Map(Object.entries({
+        0: ["....",
+            ".***",
+            "...*",
+            "...."],
+        1: ["..**",
+            "..*.",
+            "..*.",
+            "...."],
+        2: [".*..",
+            ".***",
+            "....",
+            "...."],
+        3: ["..*.",
+            "..*.",
+            ".**.",
+            "...."]
+    }))
+
+    constructor(xRotatePoint, yRotatePoint) {
+        super(0, xRotatePoint, yRotatePoint);
+    }
+
+    drawOnField(field) {
+        super.drawOnField(field, JTetramino.mapOfStates, JTetramino.color)
+    }
+
+    clearOnField(field, clearElement) {
+        super.clearOnField(field, JTetramino.mapOfStates, clearElement)
+    }
+
+    moveDown(field) {
+        return super.moveDown(field, JTetramino.mapOfStates, JTetramino.color);
+    }
+
+    moveRight(field) {
+        return super.moveRight(field, JTetramino.mapOfStates, JTetramino.color);
+    }
+
+    moveLeft(field) {
+        return super.moveLeft(field, JTetramino.mapOfStates, JTetramino.color);
+    }
+
+    rotateOnField(field) {
+        return super.rotateOnField(field, JTetramino.mapOfStates, JTetramino.color);
+    }
+}
+
+class TTetramino extends Tetramino {
+    static color = "#900bec"
+    static mapOfStates = new Map(Object.entries({
+        0: ["....",
+            ".***",
+            "..*.",
+            "...."],
+        1: ["..*.",
+            "..**",
+            "..*.",
+            "...."],
+        2: ["..*.",
+            ".***",
+            "....",
+            "...."],
+        3: ["..*.",
+            ".**.",
+            "..*.",
+            "...."]
+    }))
+
+    constructor(xRotatePoint, yRotatePoint) {
+        super(0, xRotatePoint, yRotatePoint);
+    }
+
+    drawOnField(field) {
+        super.drawOnField(field, TTetramino.mapOfStates, TTetramino.color)
+    }
+
+    clearOnField(field, clearElement) {
+        super.clearOnField(field, TTetramino.mapOfStates, clearElement)
+    }
+
+    moveDown(field) {
+        return super.moveDown(field, TTetramino.mapOfStates, TTetramino.color);
+    }
+
+    moveRight(field) {
+        return super.moveRight(field, TTetramino.mapOfStates, TTetramino.color);
+    }
+
+    moveLeft(field) {
+        return super.moveLeft(field, TTetramino.mapOfStates, TTetramino.color);
+    }
+
+    rotateOnField(field) {
+        return super.rotateOnField(field, TTetramino.mapOfStates, TTetramino.color);
+    }
 }
