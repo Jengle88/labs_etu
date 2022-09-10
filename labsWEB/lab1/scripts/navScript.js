@@ -18,7 +18,7 @@ function toGameScreen() {
     document.getElementById("game_screen").style.display = "flex"
     gameCycle = new GameCycle()
     gameCycle.addKeyListener()
-    drawTetrisField()
+    UIEditor.drawTetrisField()
 }
 
 function toStartScreen() {
@@ -27,7 +27,7 @@ function toStartScreen() {
     saveRecordToLeaderboard(playerName);
     document.getElementById("game_screen").style.display = "none"
     document.getElementById("start_screen").style.display = "block"
-    clearTetrisField()
+    UIEditor.clearTetrisField()
 }
 
 
