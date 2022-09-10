@@ -1,3 +1,4 @@
+
 class Tetramino {
     // TODO добавить состояния, цвет, точку поворота; методы отрисовки и поворота добавить в наследниках
     /*
@@ -18,9 +19,10 @@ class Tetramino {
         if (this.checkDraw(field, mapOfState, Field.clearElemColor)) {
             let xStart = this.xRotatePoint - 2
             let yStart = this.yRotatePoint - 1
-            for (let dx = 0; dx < mapOfState[this.state][0].length; dx++) {
-                for (let dy = 0; dy < mapOfState[this.state].length; dy++) {
-                    if (mapOfState[this.state][dy][dx] === '*') {
+            let figure = mapOfState.get(this.state.toString())
+            for (let dx = 0; dx < figure[0].length; dx++) {
+                for (let dy = 0; dy < figure.length; dy++) {
+                    if (figure[dy][dx] === '*') {
                         if (0 <= xStart + dx && xStart + dx < field[0].length &&
                             0 <= yStart + dy && yStart + dy < field.length) {
                             field[yStart + dy][xStart + dx] = color
@@ -37,9 +39,10 @@ class Tetramino {
     checkDraw(field, mapOfState, clearElement = Field.clearElemColor) {
         let xStart = this.xRotatePoint - 2
         let yStart = this.yRotatePoint - 1
-        for (let dx = 0; dx < mapOfState[this.state][0].length; dx++) {
-            for (let dy = 0; dy < mapOfState[this.state].length; dy++) {
-                if (mapOfState[this.state][dy][dx] === '*') {
+        let figure = mapOfState.get(this.state.toString())
+        for (let dx = 0; dx < figure[0].length; dx++) {
+            for (let dy = 0; dy < figure.length; dy++) {
+                if (figure[dy][dx] === '*') {
                     const x = xStart + dx
                     const y = yStart + dy
                     if (!(0 <= x && x < field[0].length && 0 <= y && y < field.length && field[y][x] === clearElement)) {
@@ -52,38 +55,86 @@ class Tetramino {
     }
 
     clearOnField(field, mapOfState, clearElement = Field.clearElemColor) {
-        this.drawOnField(field, mapOfState, clearElement)
+        let xStart = this.xRotatePoint - 2
+        let yStart = this.yRotatePoint - 1
+        let figure = mapOfState.get(this.state.toString())
+        for (let dx = 0; dx < figure[0].length; dx++) {
+            for (let dy = 0; dy < figure.length; dy++) {
+                if (figure[dy][dx] === '*') {
+                    if (0 <= xStart + dx && xStart + dx < field[0].length &&
+                        0 <= yStart + dy && yStart + dy < field.length) {
+                        field[yStart + dy][xStart + dx] = clearElement
+                    }
+                }
+            }
+        }
     }
 
     moveDown(field, mapOfState, color) {
+        this.clearOnField(field, Field.clearElemColor)
         if (this.checkMoveDown(field, mapOfState)) {
-            this.clearOnField(field, mapOfState)
             this.yRotatePoint++
             return this.drawOnField(field, mapOfState, color)
+        } else {
+            return this.drawOnField(field, mapOfState, color)
         }
-        return false
     }
+
     checkMoveDown(field, mapOfState, clearElement = Field.clearElemColor) {
         let xStart = this.xRotatePoint - 2
         let yStart = this.yRotatePoint
-        for (let dx = 0; dx < mapOfState[this.state][0].length; dx++) {
-            for (let dy = 0; dy < mapOfState[this.state].length; dy++) {
-                if (mapOfState[this.state][dy][dx] === '*') {
+        let figure = mapOfState.get(this.state.toString())
+        return this.#checkMove(figure, field, xStart, yStart, clearElement)
+    }
+
+    moveRight(field, mapOfState, color) {
+        this.clearOnField(field, Field.clearElemColor)
+        if (this.checkMoveRight(field, mapOfState)) {
+            this.xRotatePoint++
+            return this.drawOnField(field, mapOfState, color)
+        } else {
+            return this.drawOnField(field, mapOfState, color)
+        }
+    }
+    checkMoveRight(field, mapOfState, clearElement = Field.clearElemColor) {
+        let xStart = this.xRotatePoint - 1
+        let yStart = this.yRotatePoint - 1
+        let figure = mapOfState.get(this.state.toString())
+        return this.#checkMove(figure, field, xStart, yStart, clearElement);
+    }
+
+    moveLeft(field, mapOfState, color) {
+        this.clearOnField(field, Field.clearElemColor)
+        if (this.checkMoveLeft(field, mapOfState)) {
+            this.xRotatePoint--
+            return this.drawOnField(field, mapOfState, color)
+        } else {
+            return this.drawOnField(field, mapOfState, color)
+        }
+    }
+    checkMoveLeft(field, mapOfState, clearElement = Field.clearElemColor) {
+        let xStart = this.xRotatePoint - 3
+        let yStart = this.yRotatePoint - 1
+        let figure = mapOfState.get(this.state.toString())
+        return this.#checkMove(figure, field, xStart, yStart, clearElement);
+    }
+
+    #checkMove(figure, field, xStart, yStart, clearElement) {
+        for (let dx = 0; dx < figure[0].length; dx++) {
+            for (let dy = 0; dy < figure.length; dy++) {
+                if (figure[dy][dx] === '*') {
                     if (0 <= xStart + dx && xStart + dx < field[0].length &&
                         0 <= yStart + dy && yStart + dy < field.length) {
-                        if(field[yStart + dy][xStart + dx] !== clearElement)
+                        if (field[yStart + dy][xStart + dx] !== clearElement)
                             return false
-                    }
+                    } else
+                        return false
                 }
             }
         }
         return true
     }
 
-    moveRight(field, mapOfState, color) { }
-    moveLeft(field, mapOfState, color) { }
-    checkMoveRight(field, mapOfState) { }
-    checkMoveLeft(field, mapOfState) { }
     rotateOnField(field, mapOfState, color) { }
     checkRotate(field, mapOfState) { }
 }
@@ -91,9 +142,12 @@ class Tetramino {
 
 class OTetramino extends Tetramino {
     static color = "#eccf19"
-    static mapOfStates = new Map({
-        0: ["....", ".**.", ".**.", "...."],
-    })
+    static mapOfStates = new Map(Object.entries({
+        0: ["....",
+            ".**.",
+            ".**.",
+            "...."],
+    }))
 
     constructor(xRotatePoint, yRotatePoint) {
         super(0, xRotatePoint, yRotatePoint);
@@ -110,12 +164,24 @@ class OTetramino extends Tetramino {
     moveDown(field) {
         return super.moveDown(field, OTetramino.mapOfStates, OTetramino.color);
     }
+    moveRight(field) {
+        return super.moveRight(field, OTetramino.mapOfStates, OTetramino.color);
+    }
+    moveLeft(field) {
+        return super.moveLeft(field, OTetramino.mapOfStates, OTetramino.color);
+    }
 }
 
 class ITetramino extends Tetramino {
     static color = "#1b77ce"
-    static mapOfStates = new Map({
-        0: ["....", "****", "....", "...."],
-        1: ["..*.", "..*.", "..*.", "..*."]
-    })
+    static mapOfStates = new Map(Object.entries({
+        0: ["..*.",
+            "..*.",
+            "..*.",
+            "..*."],
+        1: ["....",
+            "****",
+            "....",
+            "...."]
+    }))
 }
