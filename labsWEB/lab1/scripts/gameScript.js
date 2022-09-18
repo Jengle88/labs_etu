@@ -2,13 +2,23 @@ let gameCycle = null
 
 class GameCycle {
     #keyListener;
-    // #currTime;
-    static #pauseTimeMS = 300
+    #pauseTimeMS;
     static TAG = "gameScript"
+    static moveDownPlusScore = 2
+    static removeOneLinePlusScore = 10
 
     constructor() {
         this.gameField = null
         this.gameStatus = "pause"
+        this.#pauseTimeMS = 300
+        this.gameScoreProxy = new Proxy( { score: 0 }, {
+            set(target, p, value) {
+                target[p] = value
+                document.getElementById("player_score").textContent = `Счёт: ${value}`
+                return true
+            }
+        })
+
         this.#keyListener = (event) => {
             const keyName = event.key
             if (this.gameStatus === "play" && this.gameField.currTetramino != null) {
@@ -18,7 +28,8 @@ class GameCycle {
                         UIEditor.redrawTetrisField()
                         return
                     case "ArrowDown":
-                        this.gameField.moveCurrentTetraminoDown()
+                        if(this.gameField.moveCurrentTetraminoDown())
+                            this.gameScoreProxy.score = this.gameScoreProxy.score + GameCycle.moveDownPlusScore
                         UIEditor.redrawTetrisField()
                         return
                     case "ArrowLeft":
@@ -52,7 +63,7 @@ class GameCycle {
         this.gameField = new Field(width, height)
     }
 
-    async startGame() {
+    startGame() {
         let currThis = this
         this.gameCycle = setInterval(() => {
             if (currThis.gameStatus === "play") {
@@ -63,7 +74,7 @@ class GameCycle {
                     currThis.log("Тетрамина сгенерирована");
                 } else { // есть фигура для снижения
                     if (!currThis.gameField.moveCurrentTetraminoDown()) {
-                        currThis.gameField.removeFullLine()
+                        this.gameScoreProxy.score += currThis.gameField.removeFullLine() * GameCycle.removeOneLinePlusScore
                         currThis.gameField.currTetramino = null
                     }
                     currThis.log("Тетрамина опустилась вниз");
@@ -71,7 +82,7 @@ class GameCycle {
                 // возвращает количество удалённых строк
                 UIEditor.redrawTetrisField()
             }
-        }, GameCycle.#pauseTimeMS)
+        }, this.#pauseTimeMS)
     }
 
     log(text) {
@@ -79,13 +90,12 @@ class GameCycle {
     }
 
     pauseGame() {
-
+        clearInterval(this.gameCycle)
     }
 
     gameOver() {
         alert("GameOver")
     }
-
 
     removeKeyListener() {
         document.removeEventListener('keydown', this.#keyListener)
