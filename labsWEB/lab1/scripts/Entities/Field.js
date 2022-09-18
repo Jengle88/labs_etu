@@ -6,13 +6,12 @@ class Field {
         this.width = amountSquaresX
         this.height = amountSquaresY
         this.score = 0
-        this.field = null
+        this.field = []
         this.currTetramino = null
         this.generateField(this.height, this.width);
     }
 
     generateField(height, width) {
-        this.field = []
         for (let i = 0; i < height; i++) {
             this.field.push([])
             for (let j = 0; j < width; j++) {
@@ -23,6 +22,7 @@ class Field {
 
     generateTetramino() {
         let randomTetramino = Math.floor(Math.random() * 100) % Field.tetraminos.length
+        // randomTetramino = 1
         let startX = this.width / 2
         let startY = 0
         if (Field.tetraminos[randomTetramino] !== "ITetramino") {
@@ -53,9 +53,52 @@ class Field {
                 this.currTetramino = new TTetramino(startX, startY)
                 break
         }
-        this.currTetramino.drawOnField(this.field)
+        return this.currTetramino.drawOnField(this.field)
     }
 
+    moveCurrentTetraminoDown() {
+        return this.currTetramino.moveDown(this.field)
+    }
+
+    moveCurrentTetraminoLeft() {
+        return this.currTetramino.moveLeft(this.field)
+    }
+
+    moveCurrentTetraminoRight() {
+        return this.currTetramino.moveRight(this.field)
+    }
+
+    rotateCurrentTetramino() {
+        return this.currTetramino.rotateOnField(this.field)
+    }
+
+    removeFullLine() {
+        let cntFullLine = 0
+        let freeLines = []
+        for (let currLineIndex = this.height-1; currLineIndex >= 0; currLineIndex--) {
+            if (this.field[currLineIndex].find(item => item === Field.clearElemColor) === undefined) {
+                cntFullLine++
+                for (let i = 0; i < this.width; i++) {
+                    this.field[currLineIndex][i] = Field.clearElemColor
+                }
+                freeLines.push(currLineIndex)
+            } else if (this.field[currLineIndex].filter(it => it === Field.clearElemColor).length !== this.field[currLineIndex].length) {
+                if (freeLines.length !== 0) {
+                    for (let i = 0; i < this.width; i++) {
+                        this.field[freeLines[0]][i] = this.field[currLineIndex][i]
+                        this.field[currLineIndex][i] = Field.clearElemColor
+                    }
+                    freeLines.shift()
+                    freeLines.push(currLineIndex)
+                }
+            }
+        }
+        return cntFullLine
+    }
+
+    removeCurrentTetramino() {
+        return this.currTetramino.clearOnField(this.field, Field.clearElemColor)
+    }
     clearField() {
         this.field = null
     }

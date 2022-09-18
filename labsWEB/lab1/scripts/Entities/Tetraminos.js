@@ -1,5 +1,4 @@
 class Tetramino {
-    // TODO добавить состояния, цвет, точку поворота; методы отрисовки и поворота добавить в наследниках
     /*
         +----+
         |    |
@@ -15,7 +14,7 @@ class Tetramino {
     }
 
     drawOnField(field, mapOfState, color) {
-        if (this.checkDraw(field, mapOfState, Field.clearElemColor)) {
+        if (this.#checkDraw(field, mapOfState, Field.clearElemColor)) {
             let xStart = this.xRotatePoint - 2
             let yStart = this.yRotatePoint - 1
             let figure = mapOfState.get(this.state.toString())
@@ -32,10 +31,9 @@ class Tetramino {
             return true
         } else
             return false
-
     }
 
-    checkDraw(field, mapOfState, clearElement = Field.clearElemColor) {
+    #checkDraw(field, mapOfState, clearElement = Field.clearElemColor) {
         let xStart = this.xRotatePoint - 2
         let yStart = this.yRotatePoint - 1
         let figure = mapOfState.get(this.state.toString())
@@ -71,13 +69,16 @@ class Tetramino {
 
     moveDown(field, mapOfState, color) {
         this.clearOnField(field, Field.clearElemColor)
-        if (this.checkMoveDown(field, mapOfState)) {
+        if (this.#checkMoveDown(field, mapOfState)) {
             this.yRotatePoint++
+        } else {
+            this.drawOnField(field, mapOfState, color)
+            return false
         }
         return this.drawOnField(field, mapOfState, color)
     }
 
-    checkMoveDown(field, mapOfState, clearElement = Field.clearElemColor) {
+    #checkMoveDown(field, mapOfState, clearElement = Field.clearElemColor) {
         let xStart = this.xRotatePoint - 2
         let yStart = this.yRotatePoint
         let figure = mapOfState.get(this.state.toString())
@@ -86,13 +87,16 @@ class Tetramino {
 
     moveRight(field, mapOfState, color) {
         this.clearOnField(field, Field.clearElemColor)
-        if (this.checkMoveRight(field, mapOfState)) {
+        if (this.#checkMoveRight(field, mapOfState)) {
             this.xRotatePoint++
+        } else {
+            this.drawOnField(field, mapOfState, color)
+            return false
         }
         return this.drawOnField(field, mapOfState, color)
     }
 
-    checkMoveRight(field, mapOfState, clearElement = Field.clearElemColor) {
+    #checkMoveRight(field, mapOfState, clearElement = Field.clearElemColor) {
         let xStart = this.xRotatePoint - 1
         let yStart = this.yRotatePoint - 1
         let figure = mapOfState.get(this.state.toString())
@@ -101,14 +105,17 @@ class Tetramino {
 
     moveLeft(field, mapOfState, color) {
         this.clearOnField(field, Field.clearElemColor)
-        if (this.checkMoveLeft(field, mapOfState)) {
+        if (this.#checkMoveLeft(field, mapOfState)) {
             this.xRotatePoint--
+        } else {
+            this.drawOnField(field, mapOfState, color)
+            return false
         }
         return this.drawOnField(field, mapOfState, color)
 
     }
 
-    checkMoveLeft(field, mapOfState, clearElement = Field.clearElemColor) {
+    #checkMoveLeft(field, mapOfState, clearElement = Field.clearElemColor) {
         let xStart = this.xRotatePoint - 3
         let yStart = this.yRotatePoint - 1
         let figure = mapOfState.get(this.state.toString())
@@ -133,14 +140,17 @@ class Tetramino {
 
     rotateOnField(field, mapOfState, color) {
         this.clearOnField(field, Field.clearElemColor)
-        if (this.checkRotate(field, mapOfState)) {
+        if (this.#checkRotate(field, mapOfState)) {
             this.state = (this.state + 1) % mapOfState.size
+        } else {
+            this.drawOnField(field, mapOfState, color)
+            return false
         }
         return this.drawOnField(field, mapOfState, color)
 
     }
 
-    checkRotate(field, mapOfState, clearElement = Field.clearElemColor) {
+    #checkRotate(field, mapOfState, clearElement = Field.clearElemColor) {
         let xStart = this.xRotatePoint - 2
         let yStart = this.yRotatePoint - 1
         let newFigure = mapOfState.get(((this.state + 1) % mapOfState.size).toString())
@@ -163,7 +173,7 @@ class OTetramino extends Tetramino {
     }
 
     drawOnField(field) {
-        super.drawOnField(field, OTetramino.mapOfStates, OTetramino.color)
+        return super.drawOnField(field, OTetramino.mapOfStates, OTetramino.color)
     }
 
     clearOnField(field, clearElement) {
@@ -181,7 +191,7 @@ class OTetramino extends Tetramino {
     moveLeft(field) {
         return super.moveLeft(field, OTetramino.mapOfStates, OTetramino.color);
     }
-    
+
     rotateOnField(field) {
         return super.rotateOnField(field, OTetramino.mapOfStates, OTetramino.color);
     }
@@ -205,7 +215,7 @@ class ITetramino extends Tetramino {
     }
 
     drawOnField(field) {
-        super.drawOnField(field, ITetramino.mapOfStates, ITetramino.color)
+        return super.drawOnField(field, ITetramino.mapOfStates, ITetramino.color)
     }
 
     clearOnField(field, clearElement) {
@@ -247,7 +257,7 @@ class STetramino extends Tetramino {
     }
 
     drawOnField(field) {
-        super.drawOnField(field, STetramino.mapOfStates, STetramino.color)
+        return super.drawOnField(field, STetramino.mapOfStates, STetramino.color)
     }
 
     clearOnField(field, clearElement) {
@@ -289,7 +299,7 @@ class ZTetramino extends Tetramino {
     }
 
     drawOnField(field) {
-        super.drawOnField(field, ZTetramino.mapOfStates, ZTetramino.color)
+        return super.drawOnField(field, ZTetramino.mapOfStates, ZTetramino.color)
     }
 
     clearOnField(field, clearElement) {
@@ -339,7 +349,7 @@ class LTetramino extends Tetramino {
     }
 
     drawOnField(field) {
-        super.drawOnField(field, LTetramino.mapOfStates, LTetramino.color)
+        return super.drawOnField(field, LTetramino.mapOfStates, LTetramino.color)
     }
 
     clearOnField(field, clearElement) {
@@ -389,7 +399,7 @@ class JTetramino extends Tetramino {
     }
 
     drawOnField(field) {
-        super.drawOnField(field, JTetramino.mapOfStates, JTetramino.color)
+        return super.drawOnField(field, JTetramino.mapOfStates, JTetramino.color)
     }
 
     clearOnField(field, clearElement) {
@@ -439,7 +449,7 @@ class TTetramino extends Tetramino {
     }
 
     drawOnField(field) {
-        super.drawOnField(field, TTetramino.mapOfStates, TTetramino.color)
+        return super.drawOnField(field, TTetramino.mapOfStates, TTetramino.color)
     }
 
     clearOnField(field, clearElement) {
