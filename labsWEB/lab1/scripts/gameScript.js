@@ -43,20 +43,23 @@ class GameCycle {
                 }
             }
             if (keyName === " ") {
-                if (this.gameStatus === "play") {
-                    this.gameStatus = "pause"
-                    this.pauseGame()
-                } else {
-                    this.gameStatus = "play"
-                    this.startGame()
+                switch (this.gameStatus) {
+                    case "play":
+                        this.gameStatus = "pause"
+                        this.pauseGame()
+                        break
+                    case "pause":
+                        this.gameStatus = "play"
+                        this.startGame()
+                        break
+                    case "gameover":
+                        toStartScreen()
+                        break
                 }
+
             }
         }
         this.gameCycle = null
-    }
-
-    addKeyListener() {
-        document.addEventListener('keydown', this.#keyListener)
     }
 
     createField(width, height) {
@@ -85,20 +88,26 @@ class GameCycle {
         }, this.#pauseTimeMS)
     }
 
-    log(text) {
-        console.log(`${GameCycle.TAG}: ${text}`)
-    }
-
     pauseGame() {
         clearInterval(this.gameCycle)
     }
 
     gameOver() {
         alert("GameOver")
+        this.gameStatus = "gameover"
+        this.pauseGame()
+    }
+
+    addKeyListener() {
+        document.addEventListener('keydown', this.#keyListener)
     }
 
     removeKeyListener() {
         document.removeEventListener('keydown', this.#keyListener)
+    }
+
+    log(text) {
+        console.log(`${GameCycle.TAG}: ${text}`)
     }
 }
 
