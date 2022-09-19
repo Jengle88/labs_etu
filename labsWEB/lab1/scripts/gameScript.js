@@ -37,7 +37,8 @@ class GameCycle {
     }
 
     startGame() {
-        this.gameField.generateNextTetramino()
+        if (!this.gameField.nextTetramino)
+            this.gameField.generateNextTetramino()
         this.setTimerForTetraminos()
     }
 
