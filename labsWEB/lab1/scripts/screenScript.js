@@ -8,8 +8,8 @@ function prepareNickname(maxCharacterInNick) {
 
 function prepareScreen() {
     const maxCharacterInNick = 25
-    document.getElementById("current_level").textContent = "Уровень: 1"
-    document.getElementById("player_score").textContent = "Счёт: 0"
+    document.getElementById("current_level").textContent = `Уровень: ${gameCycle.currLevel}`
+    document.getElementById("player_score").textContent = `Счёт: ${gameCycle.gameScoreProxy.score}`
     prepareNickname(maxCharacterInNick)
 }
 
@@ -23,6 +23,7 @@ function toGameScreen() {
     document.getElementById("start_screen").style.display = "none"
     document.getElementById("game_screen").style.display = "flex"
     gameCycle = new GameCycle()
+    gameCycle.createField(UIEditor.fieldCanvas.clientWidth / UIEditor.squareSize, UIEditor.fieldCanvas.clientHeight / UIEditor.squareSize)
     prepareScreen()
     gameCycle.addKeyListener()
     UIEditor.drawTetrisField()

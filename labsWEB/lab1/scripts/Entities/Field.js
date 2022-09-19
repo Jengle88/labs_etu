@@ -1,5 +1,4 @@
 class Field {
-    static clearElemColor = "#00000020"
     static tetraminos = ["OTetramino", "ITetramino", "STetramino", "ZTetramino", "LTetramino", "JTetramino", "TTetramino"]
 
     constructor(amountSquaresX, amountSquaresY) {
@@ -7,7 +6,6 @@ class Field {
         this.height = amountSquaresY
         this.score = 0
         this.field = []
-        this.currTetramino = null
         this.generateField(this.height, this.width);
     }
 
@@ -15,12 +13,17 @@ class Field {
         for (let i = 0; i < height; i++) {
             this.field.push([])
             for (let j = 0; j < width; j++) {
-                this.field[i].push(Field.clearElemColor)
+                this.field[i].push(UIEditor.clearElemColor)
             }
         }
     }
 
-    generateTetramino() {
+    setCurrTetramino() {
+        this.currTetramino = this.nextTetramino
+        return this.currTetramino.drawOnField(this.field)
+    }
+
+    generateNextTetramino() {
         let randomTetramino = Math.floor(Math.random() * 100) % Field.tetraminos.length
         // randomTetramino = 1
         let startX = this.width / 2
@@ -32,28 +35,27 @@ class Field {
         }
         switch (Field.tetraminos[randomTetramino]) {
             case "OTetramino":
-                this.currTetramino = new OTetramino(startX, startY)
+                this.nextTetramino = new OTetramino(startX, startY)
                 break
             case "ITetramino":
-                this.currTetramino = new ITetramino(startX, startY)
+                this.nextTetramino = new ITetramino(startX, startY)
                 break
             case "STetramino":
-                this.currTetramino = new STetramino(startX, startY)
+                this.nextTetramino = new STetramino(startX, startY)
                 break
             case "ZTetramino":
-                this.currTetramino = new ZTetramino(startX, startY)
+                this.nextTetramino = new ZTetramino(startX, startY)
                 break
             case "LTetramino":
-                this.currTetramino = new LTetramino(startX, startY)
+                this.nextTetramino = new LTetramino(startX, startY)
                 break
             case "JTetramino":
-                this.currTetramino = new JTetramino(startX, startY)
+                this.nextTetramino = new JTetramino(startX, startY)
                 break
             case "TTetramino":
-                this.currTetramino = new TTetramino(startX, startY)
+                this.nextTetramino = new TTetramino(startX, startY)
                 break
         }
-        return this.currTetramino.drawOnField(this.field)
     }
 
     moveCurrentTetraminoDown() {
@@ -76,17 +78,17 @@ class Field {
         let cntFullLine = 0
         let freeLines = []
         for (let currLineIndex = this.height-1; currLineIndex >= 0; currLineIndex--) {
-            if (this.field[currLineIndex].find(item => item === Field.clearElemColor) === undefined) {
+            if (this.field[currLineIndex].find(item => item === UIEditor.clearElemColor) === undefined) {
                 cntFullLine++
                 for (let i = 0; i < this.width; i++) {
-                    this.field[currLineIndex][i] = Field.clearElemColor
+                    this.field[currLineIndex][i] = UIEditor.clearElemColor
                 }
                 freeLines.push(currLineIndex)
-            } else if (this.field[currLineIndex].filter(it => it === Field.clearElemColor).length !== this.field[currLineIndex].length) {
+            } else if (this.field[currLineIndex].filter(it => it === UIEditor.clearElemColor).length !== this.field[currLineIndex].length) {
                 if (freeLines.length !== 0) {
                     for (let i = 0; i < this.width; i++) {
                         this.field[freeLines[0]][i] = this.field[currLineIndex][i]
-                        this.field[currLineIndex][i] = Field.clearElemColor
+                        this.field[currLineIndex][i] = UIEditor.clearElemColor
                     }
                     freeLines.shift()
                     freeLines.push(currLineIndex)
@@ -94,12 +96,5 @@ class Field {
             }
         }
         return cntFullLine
-    }
-
-    removeCurrentTetramino() {
-        return this.currTetramino.clearOnField(this.field, Field.clearElemColor)
-    }
-    clearField() {
-        this.field = null
     }
 }

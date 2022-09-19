@@ -14,7 +14,7 @@ class Tetramino {
     }
 
     drawOnField(field, mapOfState, color) {
-        if (this.#checkDraw(field, mapOfState, Field.clearElemColor)) {
+        if (this.#checkDraw(field, mapOfState, UIEditor.clearElemColor)) {
             let xStart = this.xRotatePoint - 2
             let yStart = this.yRotatePoint - 1
             let figure = mapOfState.get(this.state.toString())
@@ -33,7 +33,7 @@ class Tetramino {
             return false
     }
 
-    #checkDraw(field, mapOfState, clearElement = Field.clearElemColor) {
+    #checkDraw(field, mapOfState, clearElement = UIEditor.clearElemColor) {
         let xStart = this.xRotatePoint - 2
         let yStart = this.yRotatePoint - 1
         let figure = mapOfState.get(this.state.toString())
@@ -51,7 +51,7 @@ class Tetramino {
         return true
     }
 
-    clearOnField(field, mapOfState, clearElement = Field.clearElemColor) {
+    clearOnField(field, mapOfState, clearElement = UIEditor.clearElemColor) {
         let xStart = this.xRotatePoint - 2
         let yStart = this.yRotatePoint - 1
         let figure = mapOfState.get(this.state.toString())
@@ -68,7 +68,7 @@ class Tetramino {
     }
 
     moveDown(field, mapOfState, color) {
-        this.clearOnField(field, Field.clearElemColor)
+        this.clearOnField(field, UIEditor.clearElemColor)
         if (this.#checkMoveDown(field, mapOfState)) {
             this.yRotatePoint++
         } else {
@@ -78,7 +78,7 @@ class Tetramino {
         return this.drawOnField(field, mapOfState, color)
     }
 
-    #checkMoveDown(field, mapOfState, clearElement = Field.clearElemColor) {
+    #checkMoveDown(field, mapOfState, clearElement = UIEditor.clearElemColor) {
         let xStart = this.xRotatePoint - 2
         let yStart = this.yRotatePoint
         let figure = mapOfState.get(this.state.toString())
@@ -86,7 +86,7 @@ class Tetramino {
     }
 
     moveRight(field, mapOfState, color) {
-        this.clearOnField(field, Field.clearElemColor)
+        this.clearOnField(field, UIEditor.clearElemColor)
         if (this.#checkMoveRight(field, mapOfState)) {
             this.xRotatePoint++
         } else {
@@ -96,7 +96,7 @@ class Tetramino {
         return this.drawOnField(field, mapOfState, color)
     }
 
-    #checkMoveRight(field, mapOfState, clearElement = Field.clearElemColor) {
+    #checkMoveRight(field, mapOfState, clearElement = UIEditor.clearElemColor) {
         let xStart = this.xRotatePoint - 1
         let yStart = this.yRotatePoint - 1
         let figure = mapOfState.get(this.state.toString())
@@ -104,7 +104,7 @@ class Tetramino {
     }
 
     moveLeft(field, mapOfState, color) {
-        this.clearOnField(field, Field.clearElemColor)
+        this.clearOnField(field, UIEditor.clearElemColor)
         if (this.#checkMoveLeft(field, mapOfState)) {
             this.xRotatePoint--
         } else {
@@ -115,7 +115,7 @@ class Tetramino {
 
     }
 
-    #checkMoveLeft(field, mapOfState, clearElement = Field.clearElemColor) {
+    #checkMoveLeft(field, mapOfState, clearElement = UIEditor.clearElemColor) {
         let xStart = this.xRotatePoint - 3
         let yStart = this.yRotatePoint - 1
         let figure = mapOfState.get(this.state.toString())
@@ -139,7 +139,7 @@ class Tetramino {
     }
 
     rotateOnField(field, mapOfState, color) {
-        this.clearOnField(field, Field.clearElemColor)
+        this.clearOnField(field, UIEditor.clearElemColor)
         if (this.#checkRotate(field, mapOfState)) {
             this.state = (this.state + 1) % mapOfState.size
         } else {
@@ -150,7 +150,7 @@ class Tetramino {
 
     }
 
-    #checkRotate(field, mapOfState, clearElement = Field.clearElemColor) {
+    #checkRotate(field, mapOfState, clearElement = UIEditor.clearElemColor) {
         let xStart = this.xRotatePoint - 2
         let yStart = this.yRotatePoint - 1
         let newFigure = mapOfState.get(((this.state + 1) % mapOfState.size).toString())

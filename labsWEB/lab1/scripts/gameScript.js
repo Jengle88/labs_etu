@@ -10,7 +10,8 @@ class GameCycle {
     constructor() {
         this.gameField = null
         this.gameStatus = "pause"
-        this.#pauseTimeMS = 300
+        this.#pauseTimeMS = 500
+        this.currLevel = 1
         this.gameScoreProxy = new Proxy( { score: 0 }, {
             set(target, p, value) {
                 target[p] = value
@@ -18,7 +19,49 @@ class GameCycle {
                 return true
             }
         })
+        this.setKeyListener();
+        this.gameCycle = null
+    }
 
+    createField(width, height) {
+        this.gameField = new Field(width, height)
+    }
+
+    startGame() {
+        let currThis = this
+        this.gameField.generateNextTetramino()
+        this.gameCycle = setInterval(() => {
+            if (currThis.gameStatus === "play") {
+                if (currThis.gameField.currTetramino == null) {
+                    // генерация новой фигуры
+                    if (!currThis.gameField.setCurrTetramino())
+                        currThis.gameOver()
+                    currThis.gameField.generateNextTetramino()
+                    UIEditor.drawPreviewTetramino(this.gameField.nextTetramino)
+                    currThis.log("Тетрамина сгенерирована");
+                } else { // есть фигура для снижения
+                    if (!currThis.gameField.moveCurrentTetraminoDown()) {
+                        this.gameScoreProxy.score += currThis.gameField.removeFullLine() * GameCycle.removeOneLinePlusScore
+                        currThis.gameField.currTetramino = null
+                    }
+                    currThis.log("Тетрамина опустилась вниз");
+                }
+                UIEditor.redrawTetrisField()
+            }
+        }, this.#pauseTimeMS)
+    }
+
+    pauseGame() {
+        clearInterval(this.gameCycle)
+    }
+
+    gameOver() {
+        alert("GameOver")
+        this.gameStatus = "gameover"
+        this.pauseGame()
+    }
+
+    setKeyListener() {
         this.#keyListener = (event) => {
             const keyName = event.key
             if (this.gameStatus === "play" && this.gameField.currTetramino != null) {
@@ -28,7 +71,7 @@ class GameCycle {
                         UIEditor.redrawTetrisField()
                         return
                     case "ArrowDown":
-                        if(this.gameField.moveCurrentTetraminoDown())
+                        if (this.gameField.moveCurrentTetraminoDown())
                             this.gameScoreProxy.score = this.gameScoreProxy.score + GameCycle.moveDownPlusScore
                         UIEditor.redrawTetrisField()
                         return
@@ -59,43 +102,6 @@ class GameCycle {
 
             }
         }
-        this.gameCycle = null
-    }
-
-    createField(width, height) {
-        this.gameField = new Field(width, height)
-    }
-
-    startGame() {
-        let currThis = this
-        this.gameCycle = setInterval(() => {
-            if (currThis.gameStatus === "play") {
-                if (currThis.gameField.currTetramino == null) {
-                    // генерация новой фигуры
-                    if (!currThis.gameField.generateTetramino())
-                        currThis.gameOver()
-                    currThis.log("Тетрамина сгенерирована");
-                } else { // есть фигура для снижения
-                    if (!currThis.gameField.moveCurrentTetraminoDown()) {
-                        this.gameScoreProxy.score += currThis.gameField.removeFullLine() * GameCycle.removeOneLinePlusScore
-                        currThis.gameField.currTetramino = null
-                    }
-                    currThis.log("Тетрамина опустилась вниз");
-                }
-                // возвращает количество удалённых строк
-                UIEditor.redrawTetrisField()
-            }
-        }, this.#pauseTimeMS)
-    }
-
-    pauseGame() {
-        clearInterval(this.gameCycle)
-    }
-
-    gameOver() {
-        alert("GameOver")
-        this.gameStatus = "gameover"
-        this.pauseGame()
     }
 
     addKeyListener() {
