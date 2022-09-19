@@ -17,13 +17,13 @@
 </head>
 <body>
 
-<div id="title" style="text-align: center;"><h1>Привет Tetris!</h1></div>
+<div id="title" style="text-align: center;"><h1>Simple Tetris</h1></div>
 
 <!--GameScreen-->
 <div id="main_screen">
     <!--StartScreen-->
-    <div id="start_screen">
-        <h2 style="margin-bottom: 35px">Игра Tetris</h2>
+    <div id="start_screen" style="display: flex; flex-direction: column; align-items: center">
+        <h2 style="margin-bottom: 35px">Добро пожаловать!</h2>
         <label style="display: block; margin-bottom: 15px">
             Введите ник игрока: <br>
             <input id="name_input"
@@ -71,7 +71,7 @@
             <button
                     id="to_start_screen_from_game_screen"
                     onclick="ScreenScript.toStartScreen()">
-                Назад
+                На главное меню
             </button>
         </div>
         <div style="display: block; margin-left: 150px; margin-top: 19px">
@@ -80,13 +80,16 @@
         </div>
     </div>
 
-    <div id="leaderboard_screen" style="display: none">
+    <div id="leaderboard_screen" style="display: none; flex-direction: column; align-items: center">
         <h3 style="text-align: center">
             Таблица рекордов
         </h3>
         <div class="two-column-list" id="leadearboard_list">
         </div>
-        <button id="to_start_screen_from_leaderboard_screen" onclick="ScreenScript.toStartScreen()">
+        <button id="to_start_screen_from_leaderboard_screen"
+                onclick="ScreenScript.toStartScreen()"
+                style="width: 200px; height: 35px; font-size: medium"
+        >
             На главное меню
         </button>
     </div>

@@ -14,7 +14,7 @@ function saveRecordToLeaderboard(playerName) {
     } else {
         let leaderboard = parseMapFromJSON(localStorage["leaderboard"])
         if (gameCycle && gameCycle.gameScoreProxy) {
-            let prevRecord = leaderboard.get<Number>(playerName)
+            let prevRecord = leaderboard.get(playerName)
             if (!prevRecord)
                 prevRecord = 0
             leaderboard.set(playerName, Math.max(gameCycle.gameScoreProxy.score, prevRecord))
