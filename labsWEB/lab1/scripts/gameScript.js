@@ -6,16 +6,25 @@ class GameCycle {
     static TAG = "gameScript"
     static moveDownPlusScore = 2
     static removeOneLinePlusScore = 10
-
+    static deltaPauseTime = 10
+    // начиная с 3-го числа формула очков: [i-1] + ([i-1] - [i-2]) + 50, 13000 приведена как завершающая
+    static nextLevelPoints = [150, 300, 500, 750, 1050, 1400, 1800, 2250, 2750, 3300, 3900, 4550, 5250, 6000, 6800, 7650, 8550, 9500, 10500, 13000]
     constructor() {
         this.gameField = null
         this.gameStatus = "pause"
         this.#pauseTimeMS = 500
         this.currLevel = 1
+        let thisGameCycle = this
         this.gameScoreProxy = new Proxy( { score: 0 }, {
             set(target, p, value) {
                 target[p] = value
                 document.getElementById("player_score").textContent = `Счёт: ${value}`
+                let index = GameCycle.nextLevelPoints.findIndex((valueLocal) => {
+                    return valueLocal > value
+                })
+                if (index !== -1 && index + 1 > thisGameCycle.currLevel) {
+                    thisGameCycle.levelUp(index + 1)
+                }
                 return true
             }
         })
@@ -23,28 +32,41 @@ class GameCycle {
         this.gameCycle = null
     }
 
+    levelUp(newLevel) {
+        this.currLevel = newLevel
+        this.#pauseTimeMS -= GameCycle.deltaPauseTime
+        this.pauseGame()
+        this.setTimerForTetraminos()
+        document.getElementById("current_level").textContent = `Уровень: ${gameCycle.currLevel}`
+        this.log(`Изменился уровень: ${newLevel}`)
+    }
+
     createField(width, height) {
         this.gameField = new Field(width, height)
     }
 
     startGame() {
-        let currThis = this
         this.gameField.generateNextTetramino()
+        this.setTimerForTetraminos()
+    }
+
+    setTimerForTetraminos() {
+        let thisGameCycle = this
         this.gameCycle = setInterval(() => {
-            if (currThis.gameStatus === "play") {
-                if (currThis.gameField.currTetramino == null) {
+            if (thisGameCycle.gameStatus === "play") {
+                if (thisGameCycle.gameField.currTetramino == null) {
                     // генерация новой фигуры
-                    if (!currThis.gameField.setCurrTetramino())
-                        currThis.gameOver()
-                    currThis.gameField.generateNextTetramino()
+                    if (!thisGameCycle.gameField.setCurrTetramino())
+                        thisGameCycle.gameOver()
+                    thisGameCycle.gameField.generateNextTetramino()
                     UIEditor.drawPreviewTetramino(this.gameField.nextTetramino)
-                    currThis.log("Тетрамина сгенерирована");
+                    thisGameCycle.log("Тетрамина сгенерирована");
                 } else { // есть фигура для снижения
-                    if (!currThis.gameField.moveCurrentTetraminoDown()) {
-                        this.gameScoreProxy.score += currThis.gameField.removeFullLine() * GameCycle.removeOneLinePlusScore
-                        currThis.gameField.currTetramino = null
+                    if (!thisGameCycle.gameField.moveCurrentTetraminoDown()) {
+                        this.gameScoreProxy.score += thisGameCycle.gameField.removeFullLine() * GameCycle.removeOneLinePlusScore
+                        thisGameCycle.gameField.currTetramino = null
                     }
-                    currThis.log("Тетрамина опустилась вниз");
+                    thisGameCycle.log("Тетрамина опустилась вниз");
                 }
                 UIEditor.redrawTetrisField()
             }
@@ -59,6 +81,7 @@ class GameCycle {
         alert("GameOver")
         this.gameStatus = "gameover"
         this.pauseGame()
+        saveRecordToLeaderboard(localStorage["curr_player_name"])
     }
 
     setKeyListener() {
