@@ -37,7 +37,8 @@ class GameCycle {
     }
 
     startGame() {
-        this.gameField.generateNextTetramino()
+        if (!this.gameField.nextTetramino)
+            this.gameField.generateNextTetramino()
         this.setTimerForTetraminos()
     }
 
@@ -119,7 +120,7 @@ class GameCycle {
                         this.startGame()
                         break
                     case "gameover":
-                        ScreenScript.toStartScreen()
+                        ScreenScript.toLeaderboardScreen()
                         break
                 }
 
