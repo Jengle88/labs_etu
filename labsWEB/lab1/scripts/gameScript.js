@@ -32,15 +32,6 @@ class GameCycle {
         this.gameCycle = null
     }
 
-    levelUp(newLevel) {
-        this.currLevel = newLevel
-        this.#pauseTimeMS -= GameCycle.deltaPauseTime
-        this.pauseGame()
-        this.setTimerForTetraminos()
-        document.getElementById("current_level").textContent = `Уровень: ${gameCycle.currLevel}`
-        this.log(`Изменился уровень: ${newLevel}`)
-    }
-
     createField(width, height) {
         this.gameField = new Field(width, height)
     }
@@ -48,6 +39,17 @@ class GameCycle {
     startGame() {
         this.gameField.generateNextTetramino()
         this.setTimerForTetraminos()
+    }
+
+    pauseGame() {
+        clearInterval(this.gameCycle)
+    }
+
+    gameOver() {
+        alert("GameOver")
+        this.gameStatus = "gameover"
+        this.pauseGame()
+        saveRecordToLeaderboard(localStorage["curr_player_name"])
     }
 
     setTimerForTetraminos() {
@@ -73,15 +75,13 @@ class GameCycle {
         }, this.#pauseTimeMS)
     }
 
-    pauseGame() {
-        clearInterval(this.gameCycle)
-    }
-
-    gameOver() {
-        alert("GameOver")
-        this.gameStatus = "gameover"
+    levelUp(newLevel) {
+        this.currLevel = newLevel
+        this.#pauseTimeMS -= GameCycle.deltaPauseTime
         this.pauseGame()
-        saveRecordToLeaderboard(localStorage["curr_player_name"])
+        this.setTimerForTetraminos()
+        document.getElementById("current_level").textContent = `Уровень: ${gameCycle.currLevel}`
+        this.log(`Изменился уровень: ${newLevel}`)
     }
 
     setKeyListener() {
