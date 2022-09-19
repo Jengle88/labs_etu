@@ -119,7 +119,7 @@ class GameCycle {
                         this.startGame()
                         break
                     case "gameover":
-                        toStartScreen()
+                        ScreenScript.toStartScreen()
                         break
                 }
 

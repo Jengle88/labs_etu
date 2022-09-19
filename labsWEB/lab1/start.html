@@ -3,6 +3,9 @@
 <head>
     <!--Нужно, чтобы распознавались русские буквы-->
     <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="style.css">
+
     <title>Welcome to Tetris!</title>
     <style>
         body {
@@ -30,13 +33,13 @@
         <div id="start_screen_buttons" style="width: 200px;">
             <button id="leaderboard"
                     style="width: 65%"
-                    onclick="">
+                    onclick="ScreenScript.toLeaderboardScreen()">
                 Таблица рекордов
             </button>
             <button
                     id="to_game_screen"
                     style="width: 30%"
-                    onclick="toGameScreen()">
+                    onclick="ScreenScript.toGameScreen()">
                 Играть
             </button>
         </div>
@@ -66,8 +69,8 @@
                 </ul>
             </div>
             <button
-                    id="to_start_screen"
-                    onclick="toStartScreen()">
+                    id="to_start_screen_from_game_screen"
+                    onclick="ScreenScript.toStartScreen()">
                 Назад
             </button>
         </div>
@@ -75,11 +78,18 @@
             <canvas id="tetris_field" width="200" height="400" style="border: 1px solid #000;">
             </canvas>
         </div>
-
-
     </div>
 
-
+    <div id="leaderboard_screen" style="display: none">
+        <h3 style="text-align: center">
+            Таблица рекордов
+        </h3>
+        <div class="two-column-list" id="leadearboard_list">
+        </div>
+        <button id="to_start_screen_from_leaderboard_screen" onclick="ScreenScript.toStartScreen()">
+            На главное меню
+        </button>
+    </div>
 </div>
 
 <!--Scripts-->
