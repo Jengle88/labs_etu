@@ -38,7 +38,13 @@ class ScreenScript {
         } else {
             localStorage["curr_player_name"] = "Player 1"
         }
-
+        if (gameCycle) {
+            let playerName = localStorage["curr_player_name"]
+            saveRecordToLeaderboard(playerName)
+            gameCycle.removeKeyListener()
+            UIEditor.clearTetrisField()
+        }
+        saveRecordToLeaderboard(localStorage["curr_player_name"] )
         document.getElementById("game_screen").style.display = "none"
         document.getElementById("start_screen").style.display = "none"
         document.getElementById("leaderboard_screen").style.display = "flex"

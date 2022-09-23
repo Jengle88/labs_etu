@@ -9,15 +9,19 @@ function saveRecordToLeaderboard(playerName) {
         let leaderboard = new Map() // создание новой таблицы лидеров
         if (gameCycle && gameCycle.gameScoreProxy) {
             leaderboard.set(playerName, gameCycle.gameScoreProxy.score)
+        } else {
+            leaderboard.set(playerName, 0)
         }
         localStorage["leaderboard"] = JSON.stringify(Object.fromEntries(leaderboard))
     } else {
         let leaderboard = parseMapFromJSON(localStorage["leaderboard"])
+        let record = 0
+        if (leaderboard.has(playerName))
+            record = leaderboard.get(playerName)
         if (gameCycle && gameCycle.gameScoreProxy) {
-            let prevRecord = leaderboard.get(playerName)
-            if (!prevRecord)
-                prevRecord = 0
-            leaderboard.set(playerName, Math.max(gameCycle.gameScoreProxy.score, prevRecord))
+            leaderboard.set(playerName, Math.max(gameCycle.gameScoreProxy.score, record))
+        } else {
+            leaderboard.set(playerName, record)
         }
         localStorage["leaderboard"] = JSON.stringify(Object.fromEntries(leaderboard)) // обновление рекорда
     }
