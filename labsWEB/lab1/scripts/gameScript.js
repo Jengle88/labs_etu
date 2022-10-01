@@ -4,9 +4,9 @@ class GameCycle {
     #keyListener;
     #pauseTimeMS;
     static TAG = "gameScript"
-    static moveDownPlusScore = 2
+    static moveDownPlusScore = 30
     static removeOneLinePlusScore = 10
-    static deltaPauseTime = 10
+    static deltaPauseTime = 150
     // начиная с 3-го числа формула очков: [i-1] + ([i-1] - [i-2]) + 50, 13000 приведена как завершающая
     static nextLevelPoints = [150, 300, 500, 750, 1050, 1400, 1800, 2250, 2750, 3300, 3900, 4550, 5250, 6000, 6800, 7650, 8550, 9500, 10500, 13000]
     constructor() {

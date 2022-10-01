@@ -2,6 +2,8 @@ class ScreenScript {
     static maxCharacterInNickForGameScreen = 25
     static maxCharacterInNickForLeaderboardScreen = 40
 
+    // FIXME: поле с тетрисом не всегда очищается
+
     static toGameScreen() {
         let input = document.getElementById("name_input")
         if (input && input.value) {
@@ -39,8 +41,6 @@ class ScreenScript {
             localStorage["curr_player_name"] = "Player 1"
         }
         if (gameCycle) {
-            let playerName = localStorage["curr_player_name"]
-            saveRecordToLeaderboard(playerName)
             gameCycle.removeKeyListener()
             UIEditor.clearTetrisField()
         }
@@ -114,8 +114,3 @@ class ScreenScript {
         }
     }
 }
-
-
-
-
-
