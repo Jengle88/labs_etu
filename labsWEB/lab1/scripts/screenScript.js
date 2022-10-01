@@ -2,6 +2,8 @@ class ScreenScript {
     static maxCharacterInNickForGameScreen = 25
     static maxCharacterInNickForLeaderboardScreen = 40
 
+    // FIXME: поле с тетрисом не всегда очищается
+
     static toGameScreen() {
         let input = document.getElementById("name_input")
         if (input && input.value) {
@@ -38,7 +40,11 @@ class ScreenScript {
         } else {
             localStorage["curr_player_name"] = "Player 1"
         }
-
+        if (gameCycle) {
+            gameCycle.removeKeyListener()
+            UIEditor.clearTetrisField()
+        }
+        saveRecordToLeaderboard(localStorage["curr_player_name"] )
         document.getElementById("game_screen").style.display = "none"
         document.getElementById("start_screen").style.display = "none"
         document.getElementById("leaderboard_screen").style.display = "flex"
@@ -108,8 +114,3 @@ class ScreenScript {
         }
     }
 }
-
-
-
-
-
