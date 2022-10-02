@@ -1,0 +1,19 @@
+{
+  "name": "lab2",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scripts/index.js",
+  "scripts": {
+    "start": "node scripts/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ajax": "^0.0.4",
+    "audit": "^0.0.6",
+    "express": "^4.18.1",
+    "fix": "^0.0.3",
+    "npm": "^8.19.2",
+    "pug-cli": "^1.0.0-alpha6"
+  }
+}

@@ -1,0 +1,32 @@
+.two-column-list {
+    display: table;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.two-column-row {
+    display: table-row;
+    background: #e2e5e7;
+}
+
+.two-column-row-item-left {
+    display: table-cell;
+    width: 70%;
+    vertical-align: top;
+    padding: 5px;
+}
+.two-column-row-item-right {
+    display: table-cell;
+    width: 30%;
+    vertical-align: top;
+    padding: 5px;
+}
+
+.two-column-row .two-column-row-item-left:first-child {
+    border-right: 30px solid #fff;
+    border-bottom: 15px solid #fff;
+}
+.two-column-row .two-column-row-item-right:last-child {
+    border-left: 30px solid #fff;
+    border-bottom: 15px solid #fff;
+}
