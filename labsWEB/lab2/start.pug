@@ -1,0 +1,11 @@
+html
+    head
+        meta(charset="utf-8")
+        title Страница
+    body
+        h1 Счётчик
+        -if (value === 1)
+            p Добро пожаловать!
+        -else
+            p Добро пожаловать снова!
+                =value
