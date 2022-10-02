@@ -1,11 +1,18 @@
 html
     head
         meta(charset="utf-8")
+        link(rel="stylesheet", href="style.css")
         title Страница
     body
-        h1 Счётчик
-        -if (value === 1)
-            p Добро пожаловать!
+        // startScreen - аргумент для рендеринга страницы
+        -if (startScreen === "mainScreen")
+            div(id="mainScreen")
+            h1.mainTitle Библиотека
+            hr.divider
         -else
-            p Добро пожаловать снова!
-                =value
+            h1 Text
+        // -if (value === 1)
+        //     p Добро пожаловать!3333
+        // -else
+        //     p Добро пожаловать снова!555
+        //         =value

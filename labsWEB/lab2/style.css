@@ -1,3 +1,18 @@
+h1.mainTitle {
+    text-align: center;
+    font-family: "Roboto Light", serif;
+    font-size: xx-large;
+}
+
+hr.divider {
+    width: 80%;
+    align-content: center;
+    background: rgba(0, 0, 0, 0.4);
+    border: 0;
+    height: 1px;
+    display: block;
+}
+
 .two-column-list {
     display: table;
     width: 100%;
