@@ -5,14 +5,30 @@ html
         title Страница
     body
         // startScreen - аргумент для рендеринга страницы
-        -if (startScreen === "mainScreen")
-            div(id="mainScreen")
-            h1.mainTitle Библиотека
-            hr.divider
-        -else
-            h1 Text
-        // -if (value === 1)
-        //     p Добро пожаловать!3333
+        //if(value === 1)
+        div(id="main_screen")
+        h1.main-title Библиотека
+        div.main-page-part
+            hr.divider(id="main_divider")
+            div.library-block
+                div.list-of-books-block(id="list_of_books_block")
+                    div.title-and-button
+                        h3.title-of-list Список книг:
+                        button.add-new-book(id="add_new_book", onclick="scriptStart()") +Книга
+                    div.list-of-books(id="list_of_books")
+                        div.book-in-list-of-books(id="book_in_list_of_books")
+                            div.book-title-and-author(id="book_title_and_author")
+                                p.book-title(id="book_title") Название книги
+                                p.book-author(id="book_author") Автор книги
+                            div.book-status-and-actions(id="book_status_and_actions")
+                                p.book-status(id="book_status") Просрочена
+                                div.book-actions(id="book_actions")
+                                    img.book-action-icon(id="book_action_add", src="ic_add_book.png")
+                                    img.book-action-icon(id="book_action_remove", src="ic_remove_book.png")
+
+                div.list-of-filters(id="list_of_filters")
+                    h3.title-of-list Фильтры:
+
+        script(src="scripts/index.js")
         // -else
-        //     p Добро пожаловать снова!555
-        //         =value
+        //    h1 Text
