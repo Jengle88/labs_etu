@@ -4,8 +4,6 @@ html
         link(rel="stylesheet", href="style.css")
         title Страница
     body
-        // startScreen - аргумент для рендеринга страницы
-        //if(value === 1)
         div(id="main_screen")
         h1.main-title Библиотека
         div.main-page-part
@@ -25,10 +23,26 @@ html
                                 div.book-actions(id="book_actions")
                                     img.book-action-icon(id="book_action_add", src="ic_add_book.png")
                                     img.book-action-icon(id="book_action_remove", src="ic_remove_book.png")
-
-                div.list-of-filters(id="list_of_filters")
+                div.list-of-filters-block(id="list_of_filters_block")
                     h3.title-of-list Фильтры:
+                    p.filter-title Название содержит:
+                    input.filter-input-text(type="text", placeholder="Не выбрано")
+                    p.filter-title ФИО автора содержит:
+                    input.filter-input-text(type="text", placeholder="Не выбрано")
+                    p.filter-title Возврат к дате:
+                    input.filter-input-date(type="date")
+                    div.filter-list-of-status-block
+                        p.filter-title Статус книги:
+                        div.filter-list-of-status
+                            div.filter-book-status
+                                input.filter-book-status-checkbox(id="book_status_in_stock", type="checkbox")
+                                label(for="book_status_in_stock") В наличии
+                            div.filter-book-status
+                                input.filter-book-status-checkbox(id="book_status_unavailable", type="checkbox")
+                                label(for="book_status_unavailable") Занята
+                            div.filter-book-status
+                                input.filter-book-status-checkbox(id="book_status_overdue", type="checkbox")
+                                label(for="book_status_overdue") Просрочена
 
+                    button.filter-accept ПРИНЯТЬ
         script(src="scripts/index.js")
-        // -else
-        //    h1 Text
