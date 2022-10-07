@@ -222,3 +222,10 @@ button.filter-accept {
     width: 20px;
     height: 20px;
 }
+
+label.filter-text-for-checkbox {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+}

@@ -36,13 +36,15 @@ html
                         div.filter-list-of-status
                             div.filter-book-status
                                 input.filter-book-status-checkbox(id="book_status_in_stock", type="checkbox")
-                                label(for="book_status_in_stock") В наличии
+                                label.filter-text-for-checkbox(for="book_status_in_stock") В наличии
                             div.filter-book-status
                                 input.filter-book-status-checkbox(id="book_status_unavailable", type="checkbox")
-                                label(for="book_status_unavailable") Занята
+                                label.filter-text-for-checkbox(for="book_status_unavailable") Занята
                             div.filter-book-status
                                 input.filter-book-status-checkbox(id="book_status_overdue", type="checkbox")
-                                label(for="book_status_overdue") Просрочена
+                                label.filter-text-for-checkbox(for="book_status_overdue") Просрочена
 
                     button.filter-accept ПРИНЯТЬ
         script(src="scripts/index.js")
+        script(src="scripts/TableRowBook.js")
+        script(src="scripts/routes.js")
