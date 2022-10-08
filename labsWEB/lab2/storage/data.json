@@ -1,0 +1,19 @@
+{
+  "books": [
+    {
+      "title": "Book 1",
+      "author": "Author 1",
+      "state": "IN_STOCK"
+    },
+    {
+      "title": "Book 2",
+      "author": "Author 2",
+      "state": "UNAVAILABLE"
+    },
+    {
+      "title": "Book 3",
+      "author": "Author 3",
+      "state": "OVERDUE"
+    }
+  ]
+}

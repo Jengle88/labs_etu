@@ -1,32 +1,231 @@
-.two-column-list {
-    display: table;
-    width: 100%;
-    border-collapse: collapse;
+div.main-page-part {
+    width: 80%;
+    margin: 0 auto;
 }
 
-.two-column-row {
-    display: table-row;
-    background: #e2e5e7;
+div.library-block {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0;
+    gap: 66px;
 }
 
-.two-column-row-item-left {
-    display: table-cell;
+div.list-of-books-block {
     width: 70%;
-    vertical-align: top;
-    padding: 5px;
-}
-.two-column-row-item-right {
-    display: table-cell;
-    width: 30%;
-    vertical-align: top;
-    padding: 5px;
+    height: 100%;
+    margin-right: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 32px 0;
+    gap: 24px;
 }
 
-.two-column-row .two-column-row-item-left:first-child {
-    border-right: 30px solid #fff;
-    border-bottom: 15px solid #fff;
+div.title-and-button {
+    width: fit-content;
+    display: flex;
+    flex-direction: row;
 }
-.two-column-row .two-column-row-item-right:last-child {
-    border-left: 30px solid #fff;
-    border-bottom: 15px solid #fff;
+
+div.list-of-books {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    row-gap: 24px;
+}
+
+div.book-in-list-of-books {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: fit-content;
+    padding: 8px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    background: white;
+    filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.2));
+}
+
+div.book-title-and-author {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0;
+}
+
+div.book-status-and-actions {
+    margin-left: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+div.book-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 14px;
+}
+
+div.list-of-filters-block {
+    width: 20%;
+    height: 100%;
+    margin-right: 66px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 32px;
+    gap: 16px;
+    border-left: 1px solid #000000;
+}
+
+div.filter-list-of-status-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+    gap: 6px;
+}
+
+div.filter-list-of-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+    gap: 6px;
+}
+
+div.filter-book-status {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    gap: 1px;
+}
+
+img.book-action-icon {
+    width: 36px;
+    height: 36px;
+}
+
+p.book-status {
+    margin: 0 0 4px;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    letter-spacing: 0.25px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+p.book-title {
+    margin: 0 0 4px;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 24px;
+    letter-spacing: 0.15px;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+p.book-author {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+h1.main-title {
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-size: 60px
+}
+
+hr.divider {
+    background: rgba(0, 0, 0, 0.4);
+    border: 0;
+    height: 1px;
+    display: block;
+}
+
+h3.title-of-list {
+    align-content: flex-start;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    margin: 0;
+}
+
+button.add-new-book {
+    width: 80px;
+    height: 24px;
+    margin-left: 24px;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: center;
+    letter-spacing: 1.25px;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 0.7);
+    background: lightgray;
+    border: black;
+    border-radius: 5px;
+}
+
+p.filter-title {
+    margin: 0 0 2px;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 20px;
+    letter-spacing: 0.25px;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+input.filter-input-text {
+    margin: 0;
+    width: 230px;
+    height: auto;
+    padding-bottom: 24px;
+}
+
+input.filter-input-date {
+    margin: 0;
+    width: 230px;
+    height: auto;
+    padding-bottom: 24px;
+}
+
+button.filter-accept {
+    width: 230px;
+    height: 36px;
+    background: blueviolet;
+    color: white;
+    border: white;
+    border-radius: 5px;
+}
+
+.filter-book-status-checkbox {
+    width: 20px;
+    height: 20px;
+}
+
+label.filter-text-for-checkbox {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
 }
