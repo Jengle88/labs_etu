@@ -5,6 +5,7 @@ html
         link(rel="stylesheet", href="style.css")
         title Страница
     body
+
         div(id="main_screen")
         h1.main-title Библиотека
         div.main-page-part
@@ -15,7 +16,17 @@ html
                         h3.title-of-list Список книг:
                         button.add-new-book(id="add_new_book", onclick="scriptStart()") +Книга
                     div.list-of-books(id="list_of_books")
-                - const val = value
+                    - const booklist = value
+                    each book in booklist
+                        div.book-in-list-of-books(id="book_in_list_of_books")
+                            div.book-title-and-author(id="book_title_and_author")
+                                p.book-title(id="book_title") #{book.title}
+                                p.book-author(id="book_author") #{book.author}
+                            div.book-status-and-actions(id="book_status_and_actions")
+                                p.book-status(id="book_status") #{book.status}
+                                div.book-actions(id="book_actions")
+                                    img.book-action-icon(id="book_action_add", src="drawable/ic_add_book.png")
+                                    img.book-action-icon(id="book_action_remove", src="drawable/ic_remove_book.png")
                 div.list-of-filters-block(id="list_of_filters_block")
                     h3.title-of-list Фильтры:
                     p.filter-title Название содержит:

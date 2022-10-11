@@ -18,17 +18,3 @@ function scriptStart() {
         listOfBooks.appendChild(newBook)
     }
 }
-/*
-
-                        // - const data = fs.readFileSync("./storage/data.json")
-                        // - for(let book in data)
-                        //   div.book-in-list-of-books(id="book_in_list_of_books")
-                        //       div.book-title-and-author(id="book_title_and_author")
-                        //           p.book-title(id="book_title") #{book.title}
-                        //           p.book-author(id="book_author") #{book.author}
-                        //       div.book-status-and-actions(id="book_status_and_actions")
-                        //           p.book-status(id="book_status") #{book.status}
-                        //           div.book-actions(id="book_actions")
-                        //               img.book-action-icon(id="book_action_add", src="ic_add_book.png")
-                        //               img.book-action-icon(id="book_action_remove", src="ic_remove_book.png")
- */
