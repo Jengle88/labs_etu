@@ -3,22 +3,26 @@
     {
       "title": "Book 1",
       "author": "Author 1",
-      "state": "IN_STOCK"
+      "status": "IN_STOCK",
+      "return_date": null
     },
     {
       "title": "Book 2",
       "author": "Author 2",
-      "state": "UNAVAILABLE"
+      "status": "UNAVAILABLE",
+      "return_date": "25.11.2022"
     },
     {
       "title": "Book 3",
       "author": "Author 3",
-      "state": "OVERDUE"
+      "status": "OVERDUE",
+      "return_date": "02.10.2022"
     },
     {
       "title": "Book 32",
       "author": "Author 335",
-      "state": "OVERDUE"
+      "status": "OVERDUE",
+      "return_date": "05.10.2022"
     }
   ]
 }

@@ -1,13 +1,16 @@
 const express = require("express");
 const server = express()
+const path = require('path');
 
 server.use(express.json({ extended: false }));
 
-server.use("/styles", express.static(__dirname))
-server.use("/scripts", express.static(__dirname + "/scripts"))
+server.use(express.static(path.join(__dirname, 'public')));
+
+server.use("/styles", express.static(__dirname + '/public/styles'))
+server.use("/scripts", express.static(__dirname + '/public/scripts'))
 
 server.set("view engine", "pug")
-server.set("views", __dirname)
+server.set("views", __dirname + "/public/templates")
 
 server.use("/", require("./routes"))
 
