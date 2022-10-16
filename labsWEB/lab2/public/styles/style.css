@@ -51,13 +51,13 @@ div.book-in-list-of-books {
 div.book-title-and-author {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 80%;
     gap: 0;
 }
 
 div.book-status-and-actions {
-    margin-left: auto;
-    width: 15%;
+    margin-left: 4px;
+    width: 20%;
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -113,6 +113,7 @@ img.book-action-icon {
 }
 
 p.book-status {
+    width: fit-content;
     margin: 0 0 4px;
     font-family: 'Roboto', sans-serif;
     font-style: normal;
@@ -120,6 +121,7 @@ p.book-status {
     font-size: 16px;
     line-height: 20px;
     text-align: end;
+    align-self: end;
     letter-spacing: 0.25px;
     color: rgba(0, 0, 0, 0.6);
 }
