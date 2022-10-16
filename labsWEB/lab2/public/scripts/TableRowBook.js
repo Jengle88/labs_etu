@@ -33,11 +33,11 @@ export class TableRowBook {
         return bookStatusAndActions
     }
 
-    static createBookRow(title, author, status, onclickAction) {
+    static createBookRow(title, author, status, onclickTakeAction, onclickReturnAction) {
         let newBook = document.createElement("div")
         newBook.className = "book-in-list-of-books"
         let bookTitleAndAuthor = TableRowBook.#createBookTitleAndAuthorDiv(title, author);
-        let bookStatusAndActions = TableRowBook.#createBookStatusAndActionsDiv(status, onclickAction)
+        let bookStatusAndActions = TableRowBook.#createBookStatusAndActionsDiv(status, onclickTakeAction, onclickReturnAction)
         newBook.append(bookTitleAndAuthor, bookStatusAndActions)
         return newBook
     }

@@ -6,7 +6,7 @@ export class Preprocessor {
         UNKNOWN: "UNKNOWN"
     })
 
-    static fromLocaleStatus(status) {
+    static statusToLocaleLang(status) {
         switch (status) {
             case Preprocessor.BookStatus.IN_STOCK: return "В наличии";
             case Preprocessor.BookStatus.UNAVAILABLE: return "Занята";
@@ -15,7 +15,7 @@ export class Preprocessor {
         }
     }
 
-    static toLocaleStatus(status) {
+    static statusFromLocaleLang(status) {
         switch (status) {
             case "В наличии": return Preprocessor.BookStatus.IN_STOCK;
             case "Занята": return Preprocessor.BookStatus.UNAVAILABLE;

@@ -2,6 +2,8 @@ const express = require("express");
 const server = express()
 const path = require('path');
 
+const PORT = process.env.PORT || 3000
+
 server.use(express.json({ extended: false }));
 
 server.use(express.static(path.join(__dirname, 'public')));
@@ -14,7 +16,6 @@ server.set("views", __dirname + "/public/templates")
 
 server.use("/", require("./routes"))
 
-const PORT = process.env.PORT || 3000
 
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
