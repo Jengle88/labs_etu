@@ -1,10 +1,4 @@
-import {
-    Preprocessor
-} from "./Preprocessor.js";
-
 const URL = `http://localhost:3000`
-
-// API
 
 /**
  * @route GET /api/get_books
@@ -31,19 +25,23 @@ export async function getBookById(bookId) {
  * @param book new book
  */
 export async function addBook(book) {
-    let bookMock = new Object({title: "Книга 1", author: "Автор 1", status: Preprocessor.BookStatus.IN_STOCK, return_date: "02.10.2022"})
     let response = await fetch(URL + "/api/add_book", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({bookMock})
+        body: JSON.stringify({book})
     })
+    return await response.json()
+}
 
-    let result = await response.json()
+export async function saveBookDataToStorage(book) {
+    await addBook(book)
     toIndexPage()
+}
 
-    return result
+export function cancelAddBookRequest() {
+    toIndexPage()
 }
 
 export function toIndexPage() {

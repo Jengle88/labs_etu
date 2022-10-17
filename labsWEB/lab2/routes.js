@@ -36,7 +36,7 @@ router.get("/api/get_books", (req, res) => {
  * @desc Add new book to storage
  */
 router.post("/api/add_book", (req, res) => {
-    let book = req.body.bookMock
+    let book = req.body.book
 
     if (!book)
         res.send("Error book data")
@@ -52,6 +52,7 @@ router.post("/api/add_book", (req, res) => {
  * @desc Loads start page with books
  */
 router.get("/", async (req, res) => {
+    database = require("./storage/data.json")
     console.log(`Open start page`)
     res.render('start', {
         value: database.books

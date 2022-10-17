@@ -1,7 +1,10 @@
 import {
-    toAddNewBookPage
+    toAddNewBookPage,
 } from "./client.js";
 
-let addBookButton = document.getElementById("add_new_book")
+// set id
+const buttonAddNewBook = document.getElementById("start_add_new_book")
 
-addBookButton.addEventListener('click', toAddNewBookPage)
+// set listeners
+buttonAddNewBook.addEventListener("click", toAddNewBookPage)
+
