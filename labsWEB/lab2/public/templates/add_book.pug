@@ -1,0 +1,27 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        link(rel="stylesheet", href="../styles/style_add_book.css")
+        link(rel="stylesheet", href="../styles/style_common.css")
+        title Страница
+    body
+        div(id="main_screen")
+        h1.main-title Библиотека
+        hr.divider(id="main_divider")
+        div.main-page-part
+            h4.add-book-title Добавить книгу
+            div.add-book-part
+                div.book-input-textfield
+                    p.book-input-title Название книги:
+                    input.book-input-text(type="text", id="abb_book_new_book_title")
+                div.book-input-textfield
+                    p.book-input-title ФИО автора:
+                    input.book-input-text(type="text", id="abb_book_new_book_author")
+                div.buttons-for-action
+                    button.action(type="submit", id="add_book_book_save") СОХРАНИТЬ
+                    button.action(type="submit", id="add_book_book_cancel") ОТМЕНИТЬ
+        script(src="../scripts/client.js", type="module")
+        script(src="../scripts/add_book.js", type="module")
+
+

@@ -1,0 +1,19 @@
+div.main-page-part {
+    width: 80%;
+    margin: 0 auto;
+}
+
+h1.main-title {
+    text-align: center;
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    font-size: 60px
+}
+
+hr.divider {
+    background: rgba(0, 0, 0, 0.4);
+    border: 0;
+    height: 1px;
+    width: 80%;
+    display: block;
+}

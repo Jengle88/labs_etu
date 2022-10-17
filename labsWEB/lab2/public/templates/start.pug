@@ -2,20 +2,38 @@ doctype html
 html
     head
         meta(charset="utf-8")
-        link(rel="stylesheet", href="style.css")
+        link(rel="stylesheet", href="../styles/style_main_page.css")
+        link(rel="stylesheet", href="../styles/style_common.css")
         title Страница
     body
         div(id="main_screen")
         h1.main-title Библиотека
+        hr.divider(id="main_divider")
         div.main-page-part
-            hr.divider(id="main_divider")
             div.library-block
                 div.list-of-books-block(id="list_of_books_block")
                     div.title-and-button
                         h3.title-of-list Список книг:
-                        button.add-new-book(id="add_new_book", onclick="scriptStart()") +Книга
+                        button.add-new-book(id="start_add_new_book") +Книга
                     div.list-of-books(id="list_of_books")
-                - const val = value
+                        - const booklist = value
+                        each book in booklist
+                            div.book-in-list-of-books(id="book_in_list_of_books")
+                                div.book-title-and-author(id="book_title_and_author")
+                                    p.book-title(id="book_title") #{book.title}
+                                    p.book-author(id="book_author") #{book.author}
+                                div.book-status-and-actions(id="book_status_and_actions")
+                                    - if (book.status === "IN_STOCK")
+                                        p.book-status В наличии
+                                    - else if (book.status === "UNAVAILABLE")
+                                        p.book-status Занята
+                                    - else if (book.status === "OVERDUE")
+                                        p.book-status Просрочена
+                                    - else
+                                        p.book-status Неизвестно
+                                    div.book-actions(id="book_actions")
+                                        img.book-action-icon(id="book_action_take", src="../drawable/ic_add_book.png")
+                                        img.book-action-icon(id="book_action_return", src="../drawable/ic_remove_book.png")
                 div.list-of-filters-block(id="list_of_filters_block")
                     h3.title-of-list Фильтры:
                     p.filter-title Название содержит:
@@ -36,7 +54,7 @@ html
                             div.filter-book-status
                                 input.filter-book-status-checkbox(id="book_status_overdue", type="checkbox")
                                 label.filter-text-for-checkbox(for="book_status_overdue") Просрочена
-                    button.filter-accept ПРИНЯТЬ
-        script(src="scripts/index.js", type=module)
-        script(src="scripts/TableRowBook.js", type=module)
-        script(src="scripts/routes.js", type=module)
+                    button.filter-accept(type="submit", id="") ПРИНЯТЬ
+        script(src="../scripts/index.js", type="module")
+        script(src="../scripts/client.js", type="module")
+        script(src="../scripts/TableRowBook.js", type="module")
