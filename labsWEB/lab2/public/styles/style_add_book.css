@@ -35,6 +35,14 @@ input[type='text'].book-input-text {
     margin: 0;
 }
 
+input[type='date'].book-input-date {
+    width: 100%;
+    height: auto;
+    font-size: 24px;
+    text-align: center;
+    margin: 0;
+}
+
 p.book-input-title {
     width: 100%;
     margin: 0 0 8px;

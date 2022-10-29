@@ -6,7 +6,7 @@ const fs = require("fs")
  * @type {{books: [{id: "", title: "", author: "", status: "", return_date: ""}]}}
  * @desc Array with books
  */
-let database = require("./storage/data.json")
+let database = require("./storage/books_data.json")
 
 
 /**
@@ -43,7 +43,7 @@ router.post("/api/add_book", (req, res) => {
 
     book.id = getFreeId()
     database.books.push(book)
-    fs.writeFileSync("./storage/data.json", JSON.stringify(database))
+    fs.writeFileSync("./storage/books_data.json", JSON.stringify(database))
     res.send(database)
 })
 
@@ -52,7 +52,7 @@ router.post("/api/add_book", (req, res) => {
  * @desc Loads start page with books
  */
 router.get("/", async (req, res) => {
-    database = require("./storage/data.json")
+    database = require("./storage/books_data.json")
     console.log(`Open start page`)
     res.render('start', {
         value: database.books
