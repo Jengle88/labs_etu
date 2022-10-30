@@ -5,6 +5,7 @@ div.main-page-part {
 
 h1.main-title {
     text-align: center;
+    cursor: pointer;
     font-family: "Roboto", sans-serif;
     font-weight: 300;
     font-size: 60px
@@ -16,4 +17,13 @@ hr.divider {
     height: 1px;
     width: 80%;
     display: block;
+}
+
+h4.page-title {
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 34px;
+    line-height: 36px;
+    text-align: center;
 }
