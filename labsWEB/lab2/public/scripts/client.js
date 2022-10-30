@@ -51,6 +51,19 @@ export async function editBook(editedBook) {
     return await response.json()
 }
 
+export async function removeBook(bookId) {
+    let response = await fetch(URL + "/api/remove_book", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({bookId: bookId})
+    })
+    let answer = await response.json()
+    toIndexPage()
+    return answer
+}
+
 export async function saveBookDataToStorage(book) {
     await addBook(book)
     toIndexPage()

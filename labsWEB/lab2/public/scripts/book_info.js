@@ -1,6 +1,7 @@
 import {
     toIndexPage,
-    editBook
+    editBook,
+    removeBook
 } from "./client.js";
 import {Preprocessor} from "./Preprocessor.js";
 import {Book} from "./Book.js";
@@ -26,13 +27,12 @@ const bookReleaseDateText = document.getElementById("book_info_item_book_release
 const bookWasTakenByText = document.getElementById("book_info_item_book_was_taken_by")
 const bookReturnDateText = document.getElementById("book_info_item_book_return_date")
 
-let editing = false
+let isEditingMode = false
 
 mainTitle.addEventListener("click", toIndexPage)
 
-
 editInfoButton.addEventListener("click", () => {
-    if (editing) {
+    if (isEditingMode) {
         extractInfoFromInputsToText();
         changeInputsDisplay("none");
         changeTextDisplay("flex");
@@ -52,10 +52,16 @@ editInfoButton.addEventListener("click", () => {
         changeInputsDisplay("flex");
         changeTextDisplay("none");
     }
-    editing = !editing
+    isEditingMode = !isEditingMode
 })
 
-
+deleteBookButton.addEventListener("click", () => {
+    let confirmDelete = confirm("Вы уверены, что хотите удалить книгу?")
+    if (confirmDelete) {
+        let id = document.URL.slice(document.URL.lastIndexOf("/")+1, document.URL.length)
+        removeBook(Number(id))
+    }
+})
 
 
 function extractInfoFromInputsToText() {

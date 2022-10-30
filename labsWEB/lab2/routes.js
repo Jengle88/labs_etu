@@ -69,6 +69,28 @@ router.put("/api/edit_book", (req, res) => {
     res.send(database)
 })
 
+/**
+ * @route DELETE /api/remove_book
+ * @desc Remove book from storage
+ */
+router.delete("/api/remove_book", (req, res) => {
+    let bookId = req.body.bookId
+
+    if (!bookId)
+        res.send("Error book data")
+
+    let indexOfBook =
+        database.books.findIndex((bookInStorage) => { return bookInStorage.id === bookId })
+    if (indexOfBook === -1) {
+        console.log("/api/edit_book: Book index not found")
+        res.send("Error book data")
+    }
+
+    database.books.splice(indexOfBook, 1)
+    fs.writeFileSync("./storage/books_data.json", JSON.stringify(database))
+    res.send(database)
+})
+
 
 // ********* NAVIGATION TO VIEW
 /**
