@@ -24,7 +24,7 @@ export class Book {
 
     dateIfNull(value) {
         if (value === null)
-            return "01.01.1970"
+            return "1970-01-01"
         else
             return value
     }

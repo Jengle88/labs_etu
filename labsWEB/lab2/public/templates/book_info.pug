@@ -12,32 +12,52 @@ html
         div.main-page-part
             h4.page-title Информация о книге
             div.book-info-part
+                - const book = {}
+                - // копия объекта
+                - Object.assign(book, value)
                 div.book-info-item
                     p.book-info-item-title Название книги:
-                    p.book-info-item-info(id="book_info_item_book_title") Книга 1
+                    p.book-info-item-info(id="book_info_item_book_title") #{book.title}
+                    input.book-info-item-info-input(id="book_info_item_book_title_input")
                 div.book-info-item
                     p.book-info-item-title ФИО автора:
-                    p.book-info-item-info(id="book_info_item_book_author") Автор Автор Авторович
+                    p.book-info-item-info(id="book_info_item_book_author") #{book.author}
+                    input.book-info-item-info-input(id="book_info_item_book_author_input")
                 div.book-info-item
                     p.book-info-item-title Текущий статус:
-                    p.book-info-item-info(id="book_info_item_book_status") В наличии
+                    case book.status
+                        when "IN_STOCK"
+                            - book.status = "В наличии"
+                        when "UNAVAILABLE"
+                            - book.status = "Занята"
+                        when "OVERDUE"
+                            - book.status = "Просрочена"
+                        default
+                            - book.status = "Неизвестно"
+                    p.book-info-item-info(id="book_info_item_book_status") #{book.status}
+                    select.book-info-item-info-select(id="book_info_item_book_status_select")
+                        option(value="IN_STOCK") В наличии
+                        option(value="UNAVAILABLE") Занята
+                        option(value="OVERDUE") Просрочена
                 div.book-info-item
                     p.book-info-item-title Дата выпуска:
-                    p.book-info-item-info(id="book_info_item_book_release_date") 15.03.2021
-                div.book-info-item(hidden=true)
+                    p.book-info-item-info(id="book_info_item_book_release_date") #{book.release_date}
+                    input.book-info-item-info-input(type="date" id="book_info_item_book_release_date_input")
+                div.book-info-item
                     p.book-info-item-title Сейчас у:
-                    p.book-info-item-info(id="book_info_item_book_was_taken_by") (Необязательно)Человек Человек Человекович
-                div.book-info-item(hidden=true)
+                    p.book-info-item-info(id="book_info_item_book_was_taken_by") #{book.was_taken_by}
+                    input.book-info-item-info-input(id="book_info_item_book_was_taken_by_input")
+                div.book-info-item
                     p.book-info-item-title Дата возврата:
-                    p.book-info-item-info(id="book_info_item_book_return_date") 15.03.2022
+                    p.book-info-item-info(id="book_info_item_book_return_date") #{book.return_date}
+                    input.book-info-item-info-input(type="date" id="book_info_item_book_return_date_input")
                 div.book-info-buttons-for-action
-                    img.book-info-button(src="../drawable/ic_take_book.png")
-                    img.book-info-button(src="../drawable/ic_return_book.png")
-                    img.book-info-button(src="../drawable/ic_edit_info.png")
-                    img.book-info-button(src="../drawable/ic_delete_book.png")
-
+                    img.book-info-button(id="book_info_take_book_button" src="../drawable/ic_take_book.png")
+                    img.book-info-button(id="book_info_return_book_button" src="../drawable/ic_return_book.png")
+                    img.book-info-button(id="book_info_edit_info_button" src="../drawable/ic_edit_info.png")
+                    img.book-info-button(id="book_info_delete_book_button" src="../drawable/ic_delete_book.png")
 
         script(src="../scripts/client.js", type="module")
-        script(src="../scripts/add_book.js", type="module")
+        script(src="../scripts/book_info.js", type="module")
 
 

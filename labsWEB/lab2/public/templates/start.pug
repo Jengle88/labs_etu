@@ -18,7 +18,7 @@ html
                     div.list-of-books(id="list_of_books")
                         - const booklist = value
                         each book in booklist
-                            div.book-in-list-of-books(id="book_in_list_of_books")
+                            div.book-in-list-of-books(id=`book_in_list_of_books#${book.id}`)
                                 div.book-title-and-author(id="book_title_and_author")
                                     p.book-title(id="book_title") #{book.title}
                                     p.book-author(id="book_author") #{book.author}

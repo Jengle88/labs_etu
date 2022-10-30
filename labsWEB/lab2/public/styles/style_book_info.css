@@ -7,10 +7,11 @@ div.book-info-part {
 }
 
 div.book-info-item {
+    width: 650px;
     box-sizing: border-box;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-start;
     padding: 0;
     gap: 40px;
@@ -33,8 +34,11 @@ img.book-info-button {
 }
 
 p.book-info-item-title {
-    width: 135px;
+    width: 250px;
     height: 24px;
+    margin: 2px 0 16px;
+    display: flex;
+    justify-content: flex-start;
     font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
@@ -45,8 +49,11 @@ p.book-info-item-title {
 }
 
 p.book-info-item-info {
-    width: 400px;
+    width: 100%;
     height: 24px;
+    margin: 2px 0 16px;
+    display: flex;
+    justify-content: flex-start;
     font-family: 'Roboto', sans-serif;
     font-style: normal;
     font-weight: 400;
@@ -54,4 +61,34 @@ p.book-info-item-info {
     line-height: 24px;
     letter-spacing: 0.5px;
     color: rgba(0, 0, 0, 0.87);
+}
+
+input.book-info-item-info-input {
+    width: 100%;
+    height: auto;
+    display: none;
+    justify-content: flex-start;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+    color: rgba(0, 0, 0, 0.87);
+    max-lines: 1;
+}
+
+select.book-info-item-info-select {
+    width: 100%;
+    height: auto;
+    display: none;
+    justify-content: flex-start;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0.5px;
+    color: rgba(0, 0, 0, 0.87);
+    max-lines: 1;
 }

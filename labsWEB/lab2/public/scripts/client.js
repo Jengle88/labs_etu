@@ -35,6 +35,35 @@ export async function addBook(book) {
     return await response.json()
 }
 
+/**
+ * @route PUT /api/add_book
+ * @desc Edit book to storage
+ * @param editedBook book for save to storage
+ */
+export async function editBook(editedBook) {
+    let response = await fetch(URL + "/api/edit_book", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({editedBook})
+    })
+    return await response.json()
+}
+
+export async function removeBook(bookId) {
+    let response = await fetch(URL + "/api/remove_book", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({bookId: bookId})
+    })
+    let answer = await response.json()
+    toIndexPage()
+    return answer
+}
+
 export async function saveBookDataToStorage(book) {
     await addBook(book)
     toIndexPage()
@@ -50,4 +79,8 @@ export function toIndexPage() {
 
 export function toAddNewBookPage() {
     window.location.href = URL + "/add_new_book"
+}
+
+export function toBookInfoPage(id) {
+    window.location.href = URL + `/book_info/${id}`
 }
