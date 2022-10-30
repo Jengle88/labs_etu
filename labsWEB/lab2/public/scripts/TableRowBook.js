@@ -21,11 +21,11 @@ export class TableRowBook {
         let bookActionsDiv = document.createElement("div")
         bookActionsDiv.className = "book-actions"
         let takeBookActionImg = document.createElement("img")
-        takeBookActionImg.src = "../drawable/ic_add_book.png"
+        takeBookActionImg.src = "../drawable/ic_take_book.png"
         takeBookActionImg.className = "book-action-icon"
         takeBookActionImg.onclick = onclickTakeAction
         let returnBookActionImg = document.createElement("img")
-        returnBookActionImg.src = "../drawable/ic_remove_book.png"
+        returnBookActionImg.src = "../drawable/ic_return_book.png"
         returnBookActionImg.className = "book-action-icon"
         returnBookActionImg.onclick = onclickReturnAction
         bookActionsDiv.append(takeBookActionImg, returnBookActionImg)

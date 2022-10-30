@@ -7,10 +7,10 @@ html
         title Страница
     body
         div(id="main_screen")
-        h1.main-title Библиотека
+        h1.main-title(id="main_title") Библиотека
         hr.divider(id="main_divider")
         div.main-page-part
-            h4.add-book-title Добавить книгу
+            h4.page-title Добавить книгу
             div.add-book-part
                 div.book-input-textfield
                     p.book-input-title Название книги:
@@ -18,6 +18,9 @@ html
                 div.book-input-textfield
                     p.book-input-title ФИО автора:
                     input.book-input-text(type="text", id="abb_book_new_book_author")
+                div.book-input-textfield
+                    p.book-input-title Дата выпуска:
+                    input.book-input-date(type="date", id="abb_book_new_book_release_date")
                 div.buttons-for-action
                     button.action(type="submit", id="add_book_book_save") СОХРАНИТЬ
                     button.action(type="submit", id="add_book_book_cancel") ОТМЕНИТЬ

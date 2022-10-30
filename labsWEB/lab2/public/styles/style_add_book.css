@@ -35,6 +35,14 @@ input[type='text'].book-input-text {
     margin: 0;
 }
 
+input[type='date'].book-input-date {
+    width: 100%;
+    height: auto;
+    font-size: 24px;
+    text-align: center;
+    margin: 0;
+}
+
 p.book-input-title {
     width: 100%;
     margin: 0 0 8px;
@@ -46,15 +54,6 @@ p.book-input-title {
     text-align: center;
     letter-spacing: 0.5px;
     color: rgba(0, 0, 0, 0.87);
-}
-
-h4.add-book-title {
-    font-family: 'Roboto', sans-serif;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 34px;
-    line-height: 36px;
-    text-align: center;
 }
 
 button.action {

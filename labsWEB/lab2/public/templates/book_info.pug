@@ -1,0 +1,43 @@
+doctype html
+html
+    head
+        meta(charset="utf-8")
+        link(rel="stylesheet", href="../styles/style_book_info.css")
+        link(rel="stylesheet", href="../styles/style_common.css")
+        title Страница
+    body
+        div(id="main_screen")
+        h1.main-title(id="main_title") Библиотека
+        hr.divider(id="main_divider")
+        div.main-page-part
+            h4.page-title Информация о книге
+            div.book-info-part
+                div.book-info-item
+                    p.book-info-item-title Название книги:
+                    p.book-info-item-info(id="book_info_item_book_title") Книга 1
+                div.book-info-item
+                    p.book-info-item-title ФИО автора:
+                    p.book-info-item-info(id="book_info_item_book_author") Автор Автор Авторович
+                div.book-info-item
+                    p.book-info-item-title Текущий статус:
+                    p.book-info-item-info(id="book_info_item_book_status") В наличии
+                div.book-info-item
+                    p.book-info-item-title Дата выпуска:
+                    p.book-info-item-info(id="book_info_item_book_release_date") 15.03.2021
+                div.book-info-item(hidden=true)
+                    p.book-info-item-title Сейчас у:
+                    p.book-info-item-info(id="book_info_item_book_was_taken_by") (Необязательно)Человек Человек Человекович
+                div.book-info-item(hidden=true)
+                    p.book-info-item-title Дата возврата:
+                    p.book-info-item-info(id="book_info_item_book_return_date") 15.03.2022
+                div.book-info-buttons-for-action
+                    img.book-info-button(src="../drawable/ic_take_book.png")
+                    img.book-info-button(src="../drawable/ic_return_book.png")
+                    img.book-info-button(src="../drawable/ic_edit_info.png")
+                    img.book-info-button(src="../drawable/ic_delete_book.png")
+
+
+        script(src="../scripts/client.js", type="module")
+        script(src="../scripts/add_book.js", type="module")
+
+
