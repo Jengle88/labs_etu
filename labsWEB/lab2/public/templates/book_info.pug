@@ -12,32 +12,43 @@ html
         div.main-page-part
             h4.page-title Информация о книге
             div.book-info-part
+                - const book = {}
+                - // копия объекта
+                - Object.assign(book, value)
                 div.book-info-item
                     p.book-info-item-title Название книги:
-                    p.book-info-item-info(id="book_info_item_book_title") Книга 1
+                    p.book-info-item-info(id="book_info_item_book_title") #{book.title}
                 div.book-info-item
                     p.book-info-item-title ФИО автора:
-                    p.book-info-item-info(id="book_info_item_book_author") Автор Автор Авторович
+                    p.book-info-item-info(id="book_info_item_book_author") #{book.author}
                 div.book-info-item
                     p.book-info-item-title Текущий статус:
-                    p.book-info-item-info(id="book_info_item_book_status") В наличии
+                    case book.status
+                        when "IN_STOCK"
+                            - book.status = "В наличии"
+                        when "UNAVAILABLE"
+                            - book.status = "Занята"
+                        when "OVERDUE"
+                            - book.status = "Просрочена"
+                        default
+                            - book.status = "Неизвестно"
+                    p.book-info-item-info(id="book_info_item_book_status") #{book.status}
                 div.book-info-item
                     p.book-info-item-title Дата выпуска:
-                    p.book-info-item-info(id="book_info_item_book_release_date") 15.03.2021
+                    p.book-info-item-info(id="book_info_item_book_release_date") #{book.release_date}
                 div.book-info-item(hidden=true)
                     p.book-info-item-title Сейчас у:
-                    p.book-info-item-info(id="book_info_item_book_was_taken_by") (Необязательно)Человек Человек Человекович
+                    p.book-info-item-info(id="book_info_item_book_was_taken_by") #{book.was_taken_by}
                 div.book-info-item(hidden=true)
                     p.book-info-item-title Дата возврата:
-                    p.book-info-item-info(id="book_info_item_book_return_date") 15.03.2022
+                    p.book-info-item-info(id="book_info_item_book_return_date") #{book.return_date}
                 div.book-info-buttons-for-action
                     img.book-info-button(src="../drawable/ic_take_book.png")
                     img.book-info-button(src="../drawable/ic_return_book.png")
                     img.book-info-button(src="../drawable/ic_edit_info.png")
                     img.book-info-button(src="../drawable/ic_delete_book.png")
 
-
         script(src="../scripts/client.js", type="module")
-        script(src="../scripts/add_book.js", type="module")
+        script(src="../scripts/book_info.js", type="module")
 
 

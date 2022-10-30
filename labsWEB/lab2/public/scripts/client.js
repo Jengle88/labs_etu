@@ -51,3 +51,7 @@ export function toIndexPage() {
 export function toAddNewBookPage() {
     window.location.href = URL + "/add_new_book"
 }
+
+export function toBookInfoPage(id) {
+    window.location.href = URL + `/book_info/${id}`
+}

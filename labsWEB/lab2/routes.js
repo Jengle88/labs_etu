@@ -68,6 +68,20 @@ router.get("/add_new_book", async (req, res) => {
     res.render('add_book')
 })
 
+router.get("/book_info/:book_id", async (req, res) => {
+    console.log(`book id: ${req.params.book_id}`)
+    if (isNaN(Number(req.params.book_id)))
+        res.send("Invalid book id")
+
+    const id = Number(req.params.book_id)
+    const book = database.books.find(item => item.id === id)
+    if (book === undefined)
+        res.send("Invalid book id")
+    res.render('book_info', {
+        value: book
+    })
+})
+
 /**
  * @route GET *
  * @desc If request not found
