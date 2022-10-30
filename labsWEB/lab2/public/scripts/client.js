@@ -35,6 +35,22 @@ export async function addBook(book) {
     return await response.json()
 }
 
+/**
+ * @route PUT /api/add_book
+ * @desc Edit book to storage
+ * @param editedBook book for save to storage
+ */
+export async function editBook(editedBook) {
+    let response = await fetch(URL + "/api/edit_book", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({editedBook})
+    })
+    return await response.json()
+}
+
 export async function saveBookDataToStorage(book) {
     await addBook(book)
     toIndexPage()

@@ -48,6 +48,30 @@ router.post("/api/add_book", (req, res) => {
 })
 
 /**
+ * @route PUT /api/edit_book
+ * @desc Edit book in storage
+ */
+router.put("/api/edit_book", (req, res) => {
+    let book = req.body.editedBook
+
+    if (!book)
+        res.send("Error book data")
+
+    let indexOfBook =
+        database.books.findIndex((bookInStorage) => { return bookInStorage.id === book.id })
+    if (indexOfBook === -1) {
+        console.log("/api/edit_book: Book index not found")
+        res.send("Error book data")
+    }
+
+    database.books[indexOfBook] = book
+    fs.writeFileSync("./storage/books_data.json", JSON.stringify(database))
+    res.send(database)
+})
+
+
+// ********* NAVIGATION TO VIEW
+/**
  * @route GET /
  * @desc Loads start page with books
  */
@@ -68,6 +92,11 @@ router.get("/add_new_book", async (req, res) => {
     res.render('add_book')
 })
 
+/**
+ * @route GET /book_info/:book_id
+ * @param book_id - id of the required book
+ * @desc Loads page for new book
+ */
 router.get("/book_info/:book_id", async (req, res) => {
     console.log(`book id: ${req.params.book_id}`)
     if (isNaN(Number(req.params.book_id)))
