@@ -1,3 +1,5 @@
+import {Preprocessor} from "./Preprocessor.js";
+
 const URL = `http://localhost:3000`
 
 /**
@@ -15,7 +17,7 @@ export async function getBooks() {
  * @param bookId id (Number) of the required book
  */
 export async function getBookById(bookId) {
-    let response = await fetch(URL + "/api/get_book" + bookId.toString())
+    let response = await fetch(URL + "/api/get_book/" + bookId.toString())
     return await response.json()
 }
 
@@ -51,6 +53,11 @@ export async function editBook(editedBook) {
     return await response.json()
 }
 
+/**
+ * @route PUT /api/remove_book
+ * @desc Remove book to storage
+ * @param bookId book id, which need to remove
+ */
 export async function removeBook(bookId) {
     let response = await fetch(URL + "/api/remove_book", {
         method: "DELETE",
@@ -62,6 +69,40 @@ export async function removeBook(bookId) {
     let answer = await response.json()
     toIndexPage()
     return answer
+}
+
+/**
+ * @desc Take book from storage
+ * @param bookId book id, which need to remove
+ * @param wasTakenBy nickname of reader
+ * @param returnDate deadline for book return
+ */
+export async function takeBook(bookId, wasTakenBy, returnDate) {
+    let book = await getBookById(bookId)
+    if (book && book.status === Preprocessor.BookStatus.IN_STOCK) {
+        book.was_taken_by = wasTakenBy
+        book.return_date = returnDate
+        book.status = Preprocessor.BookStatus.UNAVAILABLE
+        editBook(book)
+    } else {
+        console.log("/api/takeBook: Book not found or already taken")
+    }
+}
+
+/**
+ * @desc Return book to storage
+ * @param bookId book id, which need to remove
+ */
+export async function returnBook(bookId) {
+    let book = await getBookById(bookId)
+    if (book && (book.status === Preprocessor.BookStatus.UNAVAILABLE || book.status === Preprocessor.BookStatus.OVERDUE)) {
+        book.was_taken_by = null
+        book.return_date = null
+        book.status = Preprocessor.BookStatus.IN_STOCK
+        editBook(book)
+    } else {
+        console.log("/api/returnBook: book was not found or no one took it")
+    }
 }
 
 export async function saveBookDataToStorage(book) {

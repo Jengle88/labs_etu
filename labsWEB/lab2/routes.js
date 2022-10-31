@@ -16,7 +16,7 @@ let database = require("./storage/books_data.json")
  */
 router.get("/api/get_book/:book_id", (req, res) => {
     if (isNaN(Number(req.params.book_id)))
-        res.send("Invalid book id")
+        res.send(null)
 
     const id = Number(req.params.book_id)
     const book = database.books.find(item => item.id === id)
