@@ -1,12 +1,16 @@
 import {
     toIndexPage,
     editBook,
-    removeBook
+    removeBook,
+    takeBook,
+    getBookById,
+    returnBook
 } from "./client.js";
 import {Preprocessor} from "./Preprocessor.js";
 import {Book} from "./Book.js";
 
 const mainTitle = document.getElementById("main_title")
+let id = document.URL.slice(document.URL.lastIndexOf("/")+1, document.URL.length)
 
 const takeBookButton = document.getElementById("book_info_take_book_button")
 const returnBookButton = document.getElementById("book_info_return_book_button")
@@ -31,12 +35,52 @@ let isEditingMode = false
 
 mainTitle.addEventListener("click", toIndexPage)
 
+function updateBookInfo(book) {
+    bookTitleText.innerText = book.title
+    bookAuthorText.innerText = book.author
+    bookStatusText.innerText = Preprocessor.statusToLocaleLang(book.status)
+    bookWasTakenByText.innerText = book.was_taken_by
+    bookReturnDateText.innerText = book.return_date
+}
+
+takeBookButton.addEventListener("click", async () => {
+    if (takeBookButton.disable)
+        return
+    if (Number(id)) {
+        await takeBook(Number(id), "Human1", "2022-12-3")
+        let book = await getBookById(id)
+        updateBookInfo(book)
+    }
+})
+
+returnBookButton.addEventListener("click", async () => {
+    if (returnBookButton.disable)
+        return
+    if (Number(id)) {
+        await returnBook(Number(id))
+        let book = await getBookById(id)
+        updateBookInfo(book)
+    }
+})
+
+function enableButtons() {
+    takeBookButton.disable = false
+    returnBookButton.disable = false
+    deleteBookButton.disable = false
+}
+
+function disableButtons() {
+    takeBookButton.disable = true
+    returnBookButton.disable = true
+    deleteBookButton.disable = true
+}
+
 editInfoButton.addEventListener("click", () => {
     if (isEditingMode) {
+        enableButtons()
         extractInfoFromInputsToText();
         changeInputsDisplay("none");
         changeTextDisplay("flex");
-        let id = document.URL.slice(document.URL.lastIndexOf("/")+1, document.URL.length)
         let book = new Book(
             Number(id),
             bookTitleText.innerText,
@@ -48,6 +92,7 @@ editInfoButton.addEventListener("click", () => {
         )
         editBook(book);
     } else {
+        disableButtons()
         extractInfoFromTextToInput();
         changeInputsDisplay("flex");
         changeTextDisplay("none");
@@ -56,9 +101,10 @@ editInfoButton.addEventListener("click", () => {
 })
 
 deleteBookButton.addEventListener("click", () => {
+    if (deleteBookButton.disable)
+        return
     let confirmDelete = confirm("Вы уверены, что хотите удалить книгу?")
     if (confirmDelete) {
-        let id = document.URL.slice(document.URL.lastIndexOf("/")+1, document.URL.length)
         removeBook(Number(id))
     }
 })
@@ -69,8 +115,8 @@ function extractInfoFromInputsToText() {
     bookAuthorText.innerText = bookAuthorInput.value
     bookStatusText.innerText = Preprocessor.statusToLocaleLang(bookStatusSelect.value)
     bookReleaseDateText.innerText = bookReleaseDateInput.value
-    bookWasTakenByText.innerText = bookWasTakenByInput.value
-    bookReturnDateText.innerText = bookReturnDateInput.value
+    bookWasTakenByText.innerText = _nullIfEmpty(bookWasTakenByInput.value)
+    bookReturnDateText.innerText = _nullIfEmpty(bookReturnDateInput.value)
 }
 
 function extractInfoFromTextToInput() {
@@ -80,8 +126,8 @@ function extractInfoFromTextToInput() {
         return Preprocessor.statusFromLocaleLang(bookStatusText.innerText) === status.value
     })
     bookReleaseDateInput.value = bookReleaseDateText.innerText
-    bookWasTakenByInput.value = bookWasTakenByText.innerText
-    bookReturnDateInput.value = bookReturnDateText.innerText
+    bookWasTakenByInput.value = _nullIfEmpty(bookWasTakenByText.innerText)
+    bookReturnDateInput.value = _nullIfEmpty(bookReturnDateText.innerText)
 }
 
 function changeInputsDisplay(displayParams) {
@@ -102,3 +148,9 @@ function changeTextDisplay(displayParams) {
     bookReturnDateText.style.display = displayParams
 }
 
+function _nullIfEmpty(text) {
+    if (text.length === 0)
+        return null
+    else
+        return text
+}

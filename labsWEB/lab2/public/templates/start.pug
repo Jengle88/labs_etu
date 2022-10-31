@@ -20,7 +20,7 @@ html
                         each book in booklist
                             div.book-in-list-of-books(id=`book_in_list_of_books#${book.id}`)
                                 div.book-title-and-author(id="book_title_and_author")
-                                    p.book-title(id="book_title") #{book.title}
+                                    p.book-title(id=`book_title#${book.id}`) #{book.title}
                                     p.book-author(id="book_author") #{book.author}
                                 div.book-status-and-actions(id="book_status_and_actions")
                                     - if (book.status === "IN_STOCK")
@@ -32,8 +32,8 @@ html
                                     - else
                                         p.book-status Неизвестно
                                     div.book-actions(id="book_actions")
-                                        img.book-action-icon(id="book_action_take", src="../drawable/ic_take_book.png")
-                                        img.book-action-icon(id="book_action_return", src="../drawable/ic_return_book.png")
+                                        img.book-action-icon(id=`book_action_take#${book.id}`, src="../drawable/ic_take_book.png")
+                                        img.book-action-icon(id=`book_action_return#${book.id}`, src="../drawable/ic_return_book.png")
                 div.list-of-filters-block(id="list_of_filters_block")
                     h3.title-of-list Фильтры:
                     p.filter-title Название содержит:
