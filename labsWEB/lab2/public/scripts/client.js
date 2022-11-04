@@ -95,7 +95,7 @@ export async function takeBook(bookId, wasTakenBy, returnDate) {
  */
 export async function returnBook(bookId) {
     let book = await getBookById(bookId)
-    if (book && (book.status === Preprocessor.BookStatus.UNAVAILABLE || book.status === Preprocessor.BookStatus.OVERDUE)) {
+    if (book && (book.status === Preprocessor.BookStatus.UNAVAILABLE)) {
         book.was_taken_by = null
         book.return_date = null
         book.status = Preprocessor.BookStatus.IN_STOCK

@@ -38,7 +38,7 @@ mainTitle.addEventListener("click", toIndexPage)
 function updateBookInfo(book) {
     bookTitleText.innerText = book.title
     bookAuthorText.innerText = book.author
-    bookStatusText.innerText = Preprocessor.statusToLocaleLang(book.status)
+    bookStatusText.innerText = Preprocessor.statusToLocaleLang(book.status, book.return_date)
     bookWasTakenByText.innerText = book.was_taken_by
     bookReturnDateText.innerText = book.return_date
 }
@@ -113,7 +113,7 @@ deleteBookButton.addEventListener("click", () => {
 function extractInfoFromInputsToText() {
     bookTitleText.innerText = bookTitleInput.value
     bookAuthorText.innerText = bookAuthorInput.value
-    bookStatusText.innerText = Preprocessor.statusToLocaleLang(bookStatusSelect.value)
+    bookStatusText.innerText = Preprocessor.statusToLocaleLang(bookStatusSelect.value, bookReturnDateInput.value)
     bookReleaseDateText.innerText = bookReleaseDateInput.value
     bookWasTakenByText.innerText = _nullIfEmpty(bookWasTakenByInput.value)
     bookReturnDateText.innerText = _nullIfEmpty(bookReturnDateInput.value)

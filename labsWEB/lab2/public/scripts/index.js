@@ -33,6 +33,7 @@ listOfBooks.forEach(htmlBookCard => {
     document.getElementById(`book_action_take#${id}`)
         .addEventListener("click", async () => {
             if (Number(id)) {
+                // FIXME заменить на подстановку пользователя
                 await takeBook(Number(id), "Human1", "2022-12-3")
                 let book = await getBookById(id)
                 updateBookCard(book, htmlBookCard)

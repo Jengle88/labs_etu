@@ -29,9 +29,10 @@ html
                         when "IN_STOCK"
                             - book.status = "В наличии"
                         when "UNAVAILABLE"
-                            - book.status = "Занята"
-                        when "OVERDUE"
-                            - book.status = "Просрочена"
+                            - if((new Date(book.return_date)) < (new Date(Date.now())))
+                                - book.status = "Просрочена"
+                            - else
+                                - book.status = "Занята"
                         default
                             - book.status = "Неизвестно"
                     p.book-info-item-info(id="book_info_item_book_status") #{book.status}
