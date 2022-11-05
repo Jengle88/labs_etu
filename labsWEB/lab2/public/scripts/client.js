@@ -114,6 +114,15 @@ export function cancelAddBookRequest() {
     toIndexPage()
 }
 
+export function actionWithCheckCurrUser(actionIfUserAuthorized, actionIfUserUnauthorized = () => {
+    alert("Пользователь не авторизован")
+}) {
+    if (localStorage["current_user"] !== undefined && localStorage["current_user"].length !== 0)
+        actionIfUserAuthorized()
+    else
+        actionIfUserUnauthorized()
+}
+
 export function toIndexPage() {
     window.location.href = URL + "/"
 }

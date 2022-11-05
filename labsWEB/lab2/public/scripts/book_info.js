@@ -4,13 +4,13 @@ import {
     removeBook,
     takeBook,
     getBookById,
-    returnBook
+    returnBook, actionWithCheckCurrUser
 } from "./client.js";
 import {Preprocessor} from "./Preprocessor.js";
 import {Book} from "./Book.js";
 
 const mainTitle = document.getElementById("main_title")
-let id = document.URL.slice(document.URL.lastIndexOf("/")+1, document.URL.length)
+let id = document.URL.slice(document.URL.lastIndexOf("/") + 1, document.URL.length)
 
 const takeBookButton = document.getElementById("book_info_take_book_button")
 const returnBookButton = document.getElementById("book_info_return_book_button")
@@ -43,24 +43,28 @@ function updateBookInfo(book) {
     bookReturnDateText.innerText = book.return_date
 }
 
-takeBookButton.addEventListener("click", async () => {
-    if (takeBookButton.disable)
-        return
-    if (Number(id)) {
-        await takeBook(Number(id), "Human1", "2022-12-3")
-        let book = await getBookById(id)
-        updateBookInfo(book)
-    }
+takeBookButton.addEventListener("click", () => {
+    actionWithCheckCurrUser(async () => {
+        if (takeBookButton.disable)
+            return
+        if (Number(id)) {
+            await takeBook(Number(id), "Human1", "2022-12-3")
+            let book = await getBookById(id)
+            updateBookInfo(book)
+        }
+    })
 })
 
-returnBookButton.addEventListener("click", async () => {
-    if (returnBookButton.disable)
-        return
-    if (Number(id)) {
-        await returnBook(Number(id))
-        let book = await getBookById(id)
-        updateBookInfo(book)
-    }
+returnBookButton.addEventListener("click", () => {
+    actionWithCheckCurrUser(async () => {
+        if (returnBookButton.disable)
+            return
+        if (Number(id)) {
+            await returnBook(Number(id))
+            let book = await getBookById(id)
+            updateBookInfo(book)
+        }
+    })
 })
 
 function enableButtons() {
@@ -76,37 +80,41 @@ function disableButtons() {
 }
 
 editInfoButton.addEventListener("click", () => {
-    if (isEditingMode) {
-        enableButtons()
-        extractInfoFromInputsToText();
-        changeInputsDisplay("none");
-        changeTextDisplay("flex");
-        let book = new Book(
-            Number(id),
-            bookTitleText.innerText,
-            bookAuthorText.innerText,
-            Preprocessor.statusFromLocaleLang(bookStatusText.innerText),
-            bookReleaseDateText.innerText,
-            bookWasTakenByText.innerText,
-            bookReturnDateText.innerText
-        )
-        editBook(book);
-    } else {
-        disableButtons()
-        extractInfoFromTextToInput();
-        changeInputsDisplay("flex");
-        changeTextDisplay("none");
-    }
-    isEditingMode = !isEditingMode
+    actionWithCheckCurrUser(() => {
+        if (isEditingMode) {
+            enableButtons()
+            extractInfoFromInputsToText();
+            changeInputsDisplay("none");
+            changeTextDisplay("flex");
+            let book = new Book(
+                Number(id),
+                bookTitleText.innerText,
+                bookAuthorText.innerText,
+                Preprocessor.statusFromLocaleLang(bookStatusText.innerText),
+                bookReleaseDateText.innerText,
+                bookWasTakenByText.innerText,
+                bookReturnDateText.innerText
+            )
+            editBook(book);
+        } else {
+            disableButtons()
+            extractInfoFromTextToInput();
+            changeInputsDisplay("flex");
+            changeTextDisplay("none");
+        }
+        isEditingMode = !isEditingMode
+    })
 })
 
 deleteBookButton.addEventListener("click", () => {
-    if (deleteBookButton.disable)
-        return
-    let confirmDelete = confirm("Вы уверены, что хотите удалить книгу?")
-    if (confirmDelete) {
-        removeBook(Number(id))
-    }
+    actionWithCheckCurrUser(() => {
+        if (deleteBookButton.disable)
+            return
+        let confirmDelete = confirm("Вы уверены, что хотите удалить книгу?")
+        if (confirmDelete) {
+            removeBook(Number(id))
+        }
+    })
 })
 
 
