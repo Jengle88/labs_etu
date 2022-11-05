@@ -4,13 +4,14 @@ import {
     removeBook,
     takeBook,
     getBookById,
-    returnBook
+    returnBook,
+    actionWithCheckCurrUser
 } from "./client.js";
 import {Preprocessor} from "./Preprocessor.js";
 import {Book} from "./Book.js";
 
 const mainTitle = document.getElementById("main_title")
-let id = document.URL.slice(document.URL.lastIndexOf("/")+1, document.URL.length)
+let id = document.location.pathname.slice(document.location.pathname.lastIndexOf("/") + 1, document.location.pathname.length)
 
 const takeBookButton = document.getElementById("book_info_take_book_button")
 const returnBookButton = document.getElementById("book_info_return_book_button")
@@ -33,34 +34,60 @@ const bookReturnDateText = document.getElementById("book_info_item_book_return_d
 
 let isEditingMode = false
 
+const takeBookEnterInfoDialog = document.getElementById("take_book_enter_info_dialog")
+const takeBookEnterInfoInputReturnDate = document.getElementById("take_book_enter_info_input_return_date")
+const takeBookEnterInfoButtonAccept = document.getElementById("take_book_enter_info_button_accept")
+const takeBookEnterInfoButtonCancel = document.getElementById("take_book_enter_info_button_cancel")
+
+takeBookEnterInfoDialog.style.display = "none"
+
 mainTitle.addEventListener("click", toIndexPage)
 
 function updateBookInfo(book) {
     bookTitleText.innerText = book.title
     bookAuthorText.innerText = book.author
-    bookStatusText.innerText = Preprocessor.statusToLocaleLang(book.status)
+    bookStatusText.innerText = Preprocessor.statusToLocaleLang(book.status, book.return_date)
     bookWasTakenByText.innerText = book.was_taken_by
     bookReturnDateText.innerText = book.return_date
 }
 
-takeBookButton.addEventListener("click", async () => {
-    if (takeBookButton.disable)
-        return
-    if (Number(id)) {
-        await takeBook(Number(id), "Human1", "2022-12-3")
-        let book = await getBookById(id)
-        updateBookInfo(book)
-    }
+function prepareTakeBookDialog(acceptWithoutHideDialog, cancelWithoutHideDialog = () => {}) {
+    takeBookEnterInfoDialog.style.display = "flex"
+
+    takeBookEnterInfoButtonAccept.addEventListener("click", () => {
+        acceptWithoutHideDialog(takeBookEnterInfoInputReturnDate.value)
+        takeBookEnterInfoDialog.style.display = "none"
+    })
+    takeBookEnterInfoButtonCancel.addEventListener("click", () => {
+        cancelWithoutHideDialog()
+        takeBookEnterInfoDialog.style.display = "none"
+    })
+}
+
+takeBookButton.addEventListener("click", () => {
+    actionWithCheckCurrUser(() => {
+        if (takeBookButton.disable)
+            return
+        prepareTakeBookDialog(async (returnDate) => {
+            if (Number(id)) {
+                await takeBook(Number(id), localStorage["current_user"], returnDate)
+                let book = await getBookById(id)
+                updateBookInfo(book)
+            }
+        })
+    })
 })
 
-returnBookButton.addEventListener("click", async () => {
-    if (returnBookButton.disable)
-        return
-    if (Number(id)) {
-        await returnBook(Number(id))
-        let book = await getBookById(id)
-        updateBookInfo(book)
-    }
+returnBookButton.addEventListener("click", () => {
+    actionWithCheckCurrUser(async () => {
+        if (returnBookButton.disable)
+            return
+        if (Number(id)) {
+            await returnBook(Number(id))
+            let book = await getBookById(id)
+            updateBookInfo(book)
+        }
+    })
 })
 
 function enableButtons() {
@@ -76,44 +103,48 @@ function disableButtons() {
 }
 
 editInfoButton.addEventListener("click", () => {
-    if (isEditingMode) {
-        enableButtons()
-        extractInfoFromInputsToText();
-        changeInputsDisplay("none");
-        changeTextDisplay("flex");
-        let book = new Book(
-            Number(id),
-            bookTitleText.innerText,
-            bookAuthorText.innerText,
-            Preprocessor.statusFromLocaleLang(bookStatusText.innerText),
-            bookReleaseDateText.innerText,
-            bookWasTakenByText.innerText,
-            bookReturnDateText.innerText
-        )
-        editBook(book);
-    } else {
-        disableButtons()
-        extractInfoFromTextToInput();
-        changeInputsDisplay("flex");
-        changeTextDisplay("none");
-    }
-    isEditingMode = !isEditingMode
+    actionWithCheckCurrUser(() => {
+        if (isEditingMode) {
+            enableButtons()
+            extractInfoFromInputsToText();
+            changeInputsDisplay("none");
+            changeTextDisplay("flex");
+            let book = new Book(
+                Number(id),
+                bookTitleText.innerText,
+                bookAuthorText.innerText,
+                Preprocessor.statusFromLocaleLang(bookStatusText.innerText),
+                bookReleaseDateText.innerText,
+                bookWasTakenByText.innerText,
+                bookReturnDateText.innerText
+            )
+            editBook(book);
+        } else {
+            disableButtons()
+            extractInfoFromTextToInput();
+            changeInputsDisplay("flex");
+            changeTextDisplay("none");
+        }
+        isEditingMode = !isEditingMode
+    })
 })
 
 deleteBookButton.addEventListener("click", () => {
-    if (deleteBookButton.disable)
-        return
-    let confirmDelete = confirm("Вы уверены, что хотите удалить книгу?")
-    if (confirmDelete) {
-        removeBook(Number(id))
-    }
+    actionWithCheckCurrUser(() => {
+        if (deleteBookButton.disable)
+            return
+        let confirmDelete = confirm("Вы уверены, что хотите удалить книгу?")
+        if (confirmDelete) {
+            removeBook(Number(id))
+        }
+    })
 })
 
 
 function extractInfoFromInputsToText() {
     bookTitleText.innerText = bookTitleInput.value
     bookAuthorText.innerText = bookAuthorInput.value
-    bookStatusText.innerText = Preprocessor.statusToLocaleLang(bookStatusSelect.value)
+    bookStatusText.innerText = Preprocessor.statusToLocaleLang(bookStatusSelect.value, bookReturnDateInput.value)
     bookReleaseDateText.innerText = bookReleaseDateInput.value
     bookWasTakenByText.innerText = _nullIfEmpty(bookWasTakenByInput.value)
     bookReturnDateText.innerText = _nullIfEmpty(bookReturnDateInput.value)

@@ -27,14 +27,17 @@ html
                                         p.book-status В наличии
                                     - else if (book.status === "UNAVAILABLE")
                                         p.book-status Занята
-                                    - else if (book.status === "OVERDUE")
-                                        p.book-status Просрочена
                                     - else
                                         p.book-status Неизвестно
                                     div.book-actions(id="book_actions")
                                         img.book-action-icon(id=`book_action_take#${book.id}`, src="../drawable/ic_take_book.png")
                                         img.book-action-icon(id=`book_action_return#${book.id}`, src="../drawable/ic_return_book.png")
-                div.list-of-filters-block(id="list_of_filters_block")
+                div.right-side-panel
+                    div.authorization-panel
+                        div.authorization-panel-title-and-unauthorization
+                            p.average-title Пользователь:
+                            p.authorization-panel-unauthorization(id="authorization_panel_unauthorization") (Выйти)
+                        p.authorization-panel-current-user(id="authorization_panel_current_user")
                     h3.title-of-list Фильтры:
                     p.filter-title Название содержит:
                     input.filter-input-text(type="text", placeholder="Не выбрано")
@@ -56,6 +59,19 @@ html
                                 label.filter-text-for-checkbox(for="book_status_overdue") Просрочена
                     button.filter-button(type="submit", id="filters_button_clean_filters") ОЧИСТИТЬ ФИЛЬТРЫ
                     button.filter-button(type="submit", id="filters_button_accept") ПРИНЯТЬ
+                dialog.take-book-enter-info-dialog(id="take_book_enter_info_dialog")
+                    form.take-book-enter-info-form
+                        p Когда книга будет возвращена
+                        input(type="date" id="take_book_enter_info_input_return_date")
+                        button(type="submit" id="take_book_enter_info_button_accept") Принять
+                        button(type="submit" id="take_book_enter_info_button_cancel") Отменить
+                dialog.authorization-dialog(id="authorization_dialog")
+                    form.authorization-form(method="dialog")
+                        p Введите свой логин пользователя
+                        div.authorization-form-input-part
+                            label Логин:
+                            input(type="text" id="authorization_dialog_user_login")
+                        button(type="submit" id="authorization_dialog_accept") Войти
         script(src="../scripts/index.js", type="module")
         script(src="../scripts/client.js", type="module")
         script(src="../scripts/TableRowBook.js", type="module")

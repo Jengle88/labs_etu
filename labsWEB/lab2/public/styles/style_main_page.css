@@ -65,7 +65,7 @@ div.book-actions {
     gap: 14px;
 }
 
-div.list-of-filters-block {
+div.right-side-panel {
     width: 20%;
     height: 100%;
     margin-right: 66px;
@@ -100,6 +100,30 @@ div.filter-book-status {
     align-items: center;
     padding: 0;
     gap: 1px;
+}
+
+div.authorization-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0;
+    gap: 16px;
+}
+
+div.authorization-panel-title-and-unauthorization {
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0;
+    gap: 8px;
+}
+
+div.authorization-form-input-part {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 8px;
+    gap: 4px;
 }
 
 img.book-action-icon {
@@ -216,4 +240,41 @@ label.filter-text-for-checkbox {
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
+}
+
+dialog.authorization-dialog {
+    position: center;
+    display: none;
+}
+
+form.authorization-form {
+    display: flex;
+    flex-direction: column;
+}
+
+p.authorization-panel-current-user {
+    margin: 8px 0 0;
+    display: flex;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+
+    letter-spacing: 0.15px;
+    text-decoration-line: underline;
+}
+
+p.authorization-panel-unauthorization {
+    margin: 0;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+
+    letter-spacing: 0.15px;
+
+    color: #5600E8;
 }

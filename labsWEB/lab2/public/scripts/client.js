@@ -79,11 +79,15 @@ export async function removeBook(bookId) {
  */
 export async function takeBook(bookId, wasTakenBy, returnDate) {
     let book = await getBookById(bookId)
-    if (book && book.status === Preprocessor.BookStatus.IN_STOCK) {
-        book.was_taken_by = wasTakenBy
-        book.return_date = returnDate
-        book.status = Preprocessor.BookStatus.UNAVAILABLE
-        editBook(book)
+    if (book) {
+        if (book.status === Preprocessor.BookStatus.IN_STOCK) {
+            book.was_taken_by = wasTakenBy
+            book.return_date = returnDate
+            book.status = Preprocessor.BookStatus.UNAVAILABLE
+            editBook(book)
+        } else {
+            alert("Книга уже занята")
+        }
     } else {
         console.log("/api/takeBook: Book not found or already taken")
     }
@@ -95,11 +99,15 @@ export async function takeBook(bookId, wasTakenBy, returnDate) {
  */
 export async function returnBook(bookId) {
     let book = await getBookById(bookId)
-    if (book && (book.status === Preprocessor.BookStatus.UNAVAILABLE || book.status === Preprocessor.BookStatus.OVERDUE)) {
-        book.was_taken_by = null
-        book.return_date = null
-        book.status = Preprocessor.BookStatus.IN_STOCK
-        editBook(book)
+    if (book && (book.status === Preprocessor.BookStatus.UNAVAILABLE)) {
+        if (localStorage["current_user"] === book.was_taken_by) {
+            book.was_taken_by = null
+            book.return_date = null
+            book.status = Preprocessor.BookStatus.IN_STOCK
+            editBook(book)
+        } else {
+            alert("Книга была выдана не вам")
+        }
     } else {
         console.log("/api/returnBook: book was not found or no one took it")
     }
@@ -112,6 +120,15 @@ export async function saveBookDataToStorage(book) {
 
 export function cancelAddBookRequest() {
     toIndexPage()
+}
+
+export function actionWithCheckCurrUser(actionIfUserAuthorized, actionIfUserUnauthorized = () => {
+    alert("Пользователь не авторизован")
+}) {
+    if (localStorage["current_user"] !== undefined && localStorage["current_user"].length !== 0)
+        actionIfUserAuthorized()
+    else
+        actionIfUserUnauthorized()
 }
 
 export function toIndexPage() {

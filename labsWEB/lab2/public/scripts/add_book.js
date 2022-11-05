@@ -1,7 +1,7 @@
 import {
     saveBookDataToStorage,
     cancelAddBookRequest,
-    toIndexPage,
+    toIndexPage, actionWithCheckCurrUser,
 } from "./client.js";
 import {Preprocessor} from "./Preprocessor.js";
 import {Book} from "./Book.js"
@@ -15,9 +15,19 @@ const inputReleaseDate = document.getElementById("abb_book_new_book_release_date
 const mainTitle = document.getElementById("main_title")
 
 // set listeners
-buttonBookSave.addEventListener("click", saveBookData)
-buttonBookCancel.addEventListener("click", cancelAddBookRequest)
+buttonBookSave.addEventListener("click", () => {
+    actionWithCheckCurrUser(() => {
+        saveBookData()
+    })
+})
+buttonBookCancel.addEventListener("click", () => {
+    actionWithCheckCurrUser(() => {
+        cancelAddBookRequest()
+    })
+
+})
 mainTitle.addEventListener("click", toIndexPage)
+
 
 // clear fields
 inputBookTitle.value = ""
