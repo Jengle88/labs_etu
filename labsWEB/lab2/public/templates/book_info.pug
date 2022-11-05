@@ -58,6 +58,12 @@ html
                     img.book-info-button(id="book_info_edit_info_button" src="../drawable/ic_edit_info.png")
                     img.book-info-button(id="book_info_delete_book_button" src="../drawable/ic_delete_book.png")
 
+                dialog.take-book-enter-info-dialog(id="take_book_enter_info_dialog")
+                    form.take-book-enter-info-form
+                        p Когда книга будет возвращена
+                        input(type="date" id="take_book_enter_info_input_return_date")
+                        button(type="submit" id="take_book_enter_info_button_accept") Принять
+                        button(type="submit" id="take_book_enter_info_button_cancel") Отменить
         script(src="../scripts/client.js", type="module")
         script(src="../scripts/book_info.js", type="module")
 

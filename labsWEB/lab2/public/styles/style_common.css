@@ -40,3 +40,13 @@ p.average-title {
 
     color: rgba(0, 0, 0, 0.87);
 }
+
+dialog.take-book-enter-info-dialog {
+    position: center;
+    display: none;
+}
+
+form.take-book-enter-info-form {
+    display: flex;
+    flex-direction: column;
+}

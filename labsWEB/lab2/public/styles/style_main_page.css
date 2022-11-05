@@ -102,7 +102,7 @@ div.filter-book-status {
     gap: 1px;
 }
 
-div.logging-panel {
+div.authorization-panel {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -110,7 +110,7 @@ div.logging-panel {
     gap: 16px;
 }
 
-div.logging-panel-title-and-unlogging {
+div.authorization-panel-title-and-unauthorization {
     margin: 0;
     display: flex;
     flex-direction: row;
@@ -119,7 +119,7 @@ div.logging-panel-title-and-unlogging {
     gap: 8px;
 }
 
-div.logging-form-input-part {
+div.authorization-form-input-part {
     display: flex;
     flex-direction: row;
     margin-bottom: 8px;
@@ -242,17 +242,17 @@ label.filter-text-for-checkbox {
     font-size: 16px;
 }
 
-dialog.logging-dialog {
+dialog.authorization-dialog {
     position: center;
     display: none;
 }
 
-form.logging-form {
+form.authorization-form {
     display: flex;
     flex-direction: column;
 }
 
-p.logging-panel-current-user {
+p.authorization-panel-current-user {
     margin: 8px 0 0;
     display: flex;
     font-family: 'Roboto', sans-serif;
@@ -265,7 +265,7 @@ p.logging-panel-current-user {
     text-decoration-line: underline;
 }
 
-p.logging-panel-unlogging {
+p.authorization-panel-unauthorization {
     margin: 0;
     cursor: pointer;
     font-family: 'Roboto', sans-serif;

@@ -4,13 +4,14 @@ import {
     removeBook,
     takeBook,
     getBookById,
-    returnBook, actionWithCheckCurrUser
+    returnBook,
+    actionWithCheckCurrUser
 } from "./client.js";
 import {Preprocessor} from "./Preprocessor.js";
 import {Book} from "./Book.js";
 
 const mainTitle = document.getElementById("main_title")
-let id = document.URL.slice(document.URL.lastIndexOf("/") + 1, document.URL.length)
+let id = document.location.pathname.slice(document.location.pathname.lastIndexOf("/") + 1, document.location.pathname.length)
 
 const takeBookButton = document.getElementById("book_info_take_book_button")
 const returnBookButton = document.getElementById("book_info_return_book_button")
@@ -33,6 +34,13 @@ const bookReturnDateText = document.getElementById("book_info_item_book_return_d
 
 let isEditingMode = false
 
+const takeBookEnterInfoDialog = document.getElementById("take_book_enter_info_dialog")
+const takeBookEnterInfoInputReturnDate = document.getElementById("take_book_enter_info_input_return_date")
+const takeBookEnterInfoButtonAccept = document.getElementById("take_book_enter_info_button_accept")
+const takeBookEnterInfoButtonCancel = document.getElementById("take_book_enter_info_button_cancel")
+
+takeBookEnterInfoDialog.style.display = "none"
+
 mainTitle.addEventListener("click", toIndexPage)
 
 function updateBookInfo(book) {
@@ -43,15 +51,30 @@ function updateBookInfo(book) {
     bookReturnDateText.innerText = book.return_date
 }
 
+function prepareTakeBookDialog(acceptWithoutHideDialog, cancelWithoutHideDialog = () => {}) {
+    takeBookEnterInfoDialog.style.display = "flex"
+
+    takeBookEnterInfoButtonAccept.addEventListener("click", () => {
+        acceptWithoutHideDialog(takeBookEnterInfoInputReturnDate.value)
+        takeBookEnterInfoDialog.style.display = "none"
+    })
+    takeBookEnterInfoButtonCancel.addEventListener("click", () => {
+        cancelWithoutHideDialog()
+        takeBookEnterInfoDialog.style.display = "none"
+    })
+}
+
 takeBookButton.addEventListener("click", () => {
-    actionWithCheckCurrUser(async () => {
+    actionWithCheckCurrUser(() => {
         if (takeBookButton.disable)
             return
-        if (Number(id)) {
-            await takeBook(Number(id), "Human1", "2022-12-3")
-            let book = await getBookById(id)
-            updateBookInfo(book)
-        }
+        prepareTakeBookDialog(async (returnDate) => {
+            if (Number(id)) {
+                await takeBook(Number(id), localStorage["current_user"], returnDate)
+                let book = await getBookById(id)
+                updateBookInfo(book)
+            }
+        })
     })
 })
 
