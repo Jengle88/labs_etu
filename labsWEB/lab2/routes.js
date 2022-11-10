@@ -19,7 +19,7 @@ let BookStatus = Object.freeze({
 /**
  * @route GET /api/get_book/:book_id
  * @param book_id - id of the required book
- * @desc Return available ID for new book
+ * @desc Return book by ID
  */
 router.get("/api/get_book/:book_id", (req, res) => {
     if (isNaN(Number(req.params.book_id)))
@@ -113,13 +113,13 @@ router.put("/api/get_books_with_filter", (req, res) => {
     let checkReturnDate = filterParams.returnDate === null ? (book) => {return true} : (book) => {
         return book.return_date == null || ((new Date(book.return_date)) < (new Date(filteredBooks.returnDate)))
     }
-    let checkIsInStock = filterParams.isInStock === null ? (book) => {return true} : (book) => {
+    let checkIsInStock = filterParams.isInStock === null ? (book) => {return false} : (book) => {
         return (book.status === BookStatus.IN_STOCK)
     }
-    let checkIsUnavailable = filterParams.isUnavailable === null ? (book) => {return true} : (book) => {
-        return (book.status === BookStatus.UNAVAILABLE)
+    let checkIsUnavailable = filterParams.isUnavailable === null ? (book) => {return false} : (book) => {
+        return (book.status === BookStatus.UNAVAILABLE) && !((new Date(book.return_date)) < (new Date(Date.now())))
     }
-    let checkIsOverdue = filterParams.isOverdue === null ? (book) => {return true} : (book) => {
+    let checkIsOverdue = filterParams.isOverdue === null ? (book) => {return false} : (book) => {
         return (book.status === BookStatus.UNAVAILABLE) && ((new Date(book.return_date)) < (new Date(Date.now()))
         )
     }
@@ -127,7 +127,7 @@ router.put("/api/get_books_with_filter", (req, res) => {
     for (let i = 0; i < database.books.length; i++) {
         let book = database.books[i]
         let result = checkTitle(book) && checkAuthor(book) && checkReturnDate(book) &&
-            checkIsInStock(book) && checkIsUnavailable(book) && checkIsOverdue(book)
+            (checkIsInStock(book) || checkIsUnavailable(book) || checkIsOverdue(book))
         if (result)
             filteredBooks.push(book)
     }

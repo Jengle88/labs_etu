@@ -20,6 +20,11 @@ export async function getBooksWithFilter(
     isUnavailable = null,
     isOverdue = null
 ) {
+    if (isInStock === null && isUnavailable === null && isOverdue === null) {
+        isInStock = true
+        isUnavailable = true
+        isOverdue = true
+    }
     let nullOrData = (data) => { return data === null || data.length === 0 ? null : data }
     let response = await fetch(URL + "/api/get_books_with_filter", {
         method: "PUT",
@@ -43,7 +48,7 @@ export async function getBooksWithFilter(
 
 /**
  * @route GET /api/get_book/:book_id
- * @desc Return available ID for new book
+ * @desc Return book by ID
  * @param bookId id (Number) of the required book
  */
 export async function getBookById(bookId) {
