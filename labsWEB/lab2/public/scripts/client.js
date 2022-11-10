@@ -3,11 +3,41 @@ import {Preprocessor} from "./Preprocessor.js";
 const URL = `http://localhost:3000`
 
 /**
- * @route GET /api/get_books
+ * @route PUT /api/get_books_with_filter
+ * @param title - string that can be in the title of a book
+ * @param author - string that can be in the author`s FIO of a book
+ * @param returnDate - return date
+ * @param isInStock - book is in stock?
+ * @param isUnavailable - book is unavailable?
+ * @param isOverdue - book is overdue?
  * @desc Return array of books
  */
-export async function getBooks() {
-    let response = await fetch(URL + "/api/get_books")
+export async function getBooksWithFilter(
+    title = null,
+    author = null,
+    returnDate = null,
+    isInStock = null,
+    isUnavailable = null,
+    isOverdue = null
+) {
+    let nullOrData = (data) => { return data === null || data.length === 0 ? null : data }
+    let response = await fetch(URL + "/api/get_books_with_filter", {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title: nullOrData(title),
+            author: nullOrData(author),
+            returnDate: nullOrData(returnDate),
+            isInStock: nullOrData(isInStock),
+            isUnavailable: nullOrData(isUnavailable),
+            isOverdue: nullOrData(isOverdue),
+        })
+    })
+
+
+
     return await response.json()
 }
 
@@ -54,7 +84,7 @@ export async function editBook(editedBook) {
 }
 
 /**
- * @route PUT /api/remove_book
+ * @route DELETE /api/remove_book
  * @desc Remove book to storage
  * @param bookId book id, which need to remove
  */
@@ -73,7 +103,7 @@ export async function removeBook(bookId) {
 
 /**
  * @desc Take book from storage
- * @param bookId book id, which need to remove
+ * @param bookId book id
  * @param wasTakenBy nickname of reader
  * @param returnDate deadline for book return
  */

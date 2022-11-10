@@ -19,17 +19,21 @@ html
                         - const booklist = value
                         each book in booklist
                             div.book-in-list-of-books(id=`book_in_list_of_books#${book.id}`)
-                                div.book-title-and-author(id="book_title_and_author")
+                                div.book-title-and-author
                                     p.book-title(id=`book_title#${book.id}`) #{book.title}
                                     p.book-author(id="book_author") #{book.author}
-                                div.book-status-and-actions(id="book_status_and_actions")
-                                    - if (book.status === "IN_STOCK")
-                                        p.book-status В наличии
-                                    - else if (book.status === "UNAVAILABLE")
-                                        p.book-status Занята
-                                    - else
-                                        p.book-status Неизвестно
-                                    div.book-actions(id="book_actions")
+                                div.book-status-and-actions
+                                    case book.status
+                                        when "IN_STOCK"
+                                            p.book-status В наличии
+                                        when "UNAVAILABLE"
+                                            - if((new Date(book.return_date)) < (new Date(Date.now())))
+                                                p.book-status Просрочена
+                                            - else
+                                                p.book-status Занята
+                                        default
+                                            p.book-status Неизвестно
+                                    div.book-actions
                                         img.book-action-icon(id=`book_action_take#${book.id}`, src="../drawable/ic_take_book.png")
                                         img.book-action-icon(id=`book_action_return#${book.id}`, src="../drawable/ic_return_book.png")
                 div.right-side-panel
@@ -40,25 +44,25 @@ html
                         p.authorization-panel-current-user(id="authorization_panel_current_user")
                     h3.title-of-list Фильтры:
                     p.filter-title Название содержит:
-                    input.filter-input-text(type="text", placeholder="Не выбрано")
+                    input.filter-input-text(id="filter_input_title", type="text", placeholder="Не выбрано")
                     p.filter-title ФИО автора содержит:
-                    input.filter-input-text(type="text", placeholder="Не выбрано")
+                    input.filter-input-text(id="filter_input_author", type="text", placeholder="Не выбрано")
                     p.filter-title Возврат к дате:
-                    input.filter-input-date(type="date")
+                    input.filter-input-date(id="filter_input_return_date", type="date")
                     div.filter-list-of-status-block
                         p.filter-title Статус книги:
                         div.filter-list-of-status
                             div.filter-book-status
-                                input.filter-book-status-checkbox(id="book_status_in_stock", type="checkbox")
-                                label.filter-text-for-checkbox(for="book_status_in_stock") В наличии
+                                input.filter-book-status-checkbox(id="filter_input_book_status_in_stock", type="checkbox")
+                                label.filter-text-for-checkbox(for="filter_input_book_status_in_stock") В наличии
                             div.filter-book-status
-                                input.filter-book-status-checkbox(id="book_status_unavailable", type="checkbox")
-                                label.filter-text-for-checkbox(for="book_status_unavailable") Занята
+                                input.filter-book-status-checkbox(id="filter_input_book_status_unavailable", type="checkbox")
+                                label.filter-text-for-checkbox(for="filter_input_book_status_unavailable") Занята
                             div.filter-book-status
-                                input.filter-book-status-checkbox(id="book_status_overdue", type="checkbox")
-                                label.filter-text-for-checkbox(for="book_status_overdue") Просрочена
-                    button.filter-button(type="submit", id="filters_button_clean_filters") ОЧИСТИТЬ ФИЛЬТРЫ
-                    button.filter-button(type="submit", id="filters_button_accept") ПРИНЯТЬ
+                                input.filter-book-status-checkbox(id="filter_input_book_status_overdue", type="checkbox")
+                                label.filter-text-for-checkbox(for="filter_input_book_status_overdue") Просрочена
+                    button.filter-button(type="submit", id="filter_button_clean_filters") ОЧИСТИТЬ ФИЛЬТРЫ
+                    button.filter-button(type="submit", id="filter_button_accept") ПРИНЯТЬ
                 dialog.take-book-enter-info-dialog(id="take_book_enter_info_dialog")
                     form.take-book-enter-info-form
                         p Когда книга будет возвращена

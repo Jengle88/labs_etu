@@ -3,10 +3,17 @@ const router = express.Router()
 const fs = require("fs")
 
 /**
- * @type {{books: [{id: "", title: "", author: "", status: "", return_date: ""}]}}
+ * @type {{books: [{id: int, title: string, author: string, status: string, release_date: Date, was_taken_by: string, return_date: Date}]}}
  * @desc Array with books
  */
 let database = require("./storage/books_data.json")
+
+// COPY FROM Preprocessor.js
+let BookStatus = Object.freeze({
+    IN_STOCK: "IN_STOCK",
+    UNAVAILABLE: "UNAVAILABLE",
+    UNKNOWN: "UNKNOWN"
+})
 
 
 /**
@@ -89,6 +96,42 @@ router.delete("/api/remove_book", (req, res) => {
     database.books.splice(indexOfBook, 1)
     fs.writeFileSync("./storage/books_data.json", JSON.stringify(database))
     res.send(database)
+})
+
+/**
+ * @route PUT /api/get_books_with_filter
+ * @desc Get filtered list of books
+ */
+router.put("/api/get_books_with_filter", (req, res) => {
+    let filterParams = req.body
+    let checkTitle = filterParams.title === null ? (book) => {return true} : (book) => {
+        return (book.title.indexOf(filterParams.title) !== -1)
+    }
+    let checkAuthor = filterParams.author === null ? (book) => {return true} : (book) => {
+        return (book.author.indexOf(filterParams.author) !== -1)
+    }
+    let checkReturnDate = filterParams.returnDate === null ? (book) => {return true} : (book) => {
+        return book.return_date == null || ((new Date(book.return_date)) < (new Date(filteredBooks.returnDate)))
+    }
+    let checkIsInStock = filterParams.isInStock === null ? (book) => {return true} : (book) => {
+        return (book.status === BookStatus.IN_STOCK)
+    }
+    let checkIsUnavailable = filterParams.isUnavailable === null ? (book) => {return true} : (book) => {
+        return (book.status === BookStatus.UNAVAILABLE)
+    }
+    let checkIsOverdue = filterParams.isOverdue === null ? (book) => {return true} : (book) => {
+        return (book.status === BookStatus.UNAVAILABLE) && ((new Date(book.return_date)) < (new Date(Date.now()))
+        )
+    }
+    let filteredBooks = []
+    for (let i = 0; i < database.books.length; i++) {
+        let book = database.books[i]
+        let result = checkTitle(book) && checkAuthor(book) && checkReturnDate(book) &&
+            checkIsInStock(book) && checkIsUnavailable(book) && checkIsOverdue(book)
+        if (result)
+            filteredBooks.push(book)
+    }
+    res.send(filteredBooks)
 })
 
 
