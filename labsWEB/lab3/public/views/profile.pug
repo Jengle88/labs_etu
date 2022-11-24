@@ -1,0 +1,36 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet/less" type="text/css" href="../stylesheets/common_style.less")
+        link(rel="stylesheet/less" type="text/css" href="../stylesheets/profile.less")
+        script(src="https://cdn.jsdelivr.net/npm/less")
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
+        script(src="../scripts/jquery.js" type="module")
+
+    body.all
+        - const user = value ? value.user : {name:"", birth:"", id:"", gender:"", role:"", email:"" }
+        - const userFriends = value ? value.userFriends : []
+        - const userPosts = value ? value.userPosts : []
+
+        header(id="common_header")
+            a(href="/" id="index_header_profile_link") На главную
+            a(href="/admin_panel" id="index_header_admin_panel_link") Панель управления
+
+        main(id="profile_main")
+            div(id="profile_content")
+                section(id="profile_content_header")
+                    h2 Страница пользователя
+                    div(id="profile_content_header_buttons")
+                        a(href=`/edit_profile/${user.id}`)
+                            button(type="button" id="profile_edit_user" class="button_warning action_button") Редактировать
+                        button(type="button" id=`banUser#${user.id}` class="button_danger action_button") Заблокировать
+
+
+
+
+
+
+

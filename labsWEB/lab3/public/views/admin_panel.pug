@@ -25,8 +25,8 @@ html(lang="en")
                         tr
                             th(scope="col") Логин
                             th(scope="col") Дата рождения
+                            th(scope="col") Пол
                             th(scope="col") Роль
-                            th(scope="col") Статус
                             th(scope="col") Почта
                             th(scope="col") Управление
                     tbody
@@ -34,8 +34,8 @@ html(lang="en")
                             tr
                                 th(class="admin_panel_table_user_name" scope="row") #{user.name}
                                 td(class="admin_panel_table_birth_date" scope="") #{user.birth}
+                                td(class="admin_panel_table_gender" scope="") #{user.gender}
                                 td(class="admin_panel_table_role" scope="") #{user.role}
-                                td(class="admin_panel_table_status" scope="") #{user.status}
                                 td(class="admin_panel_table_email" scope="") #{user.email}
                                 td(class="admin_panel_table_buttons" scope="")
                                     a(href=`/profile/${user.id}`)

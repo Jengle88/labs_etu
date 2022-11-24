@@ -29,7 +29,6 @@ router.get("/admin_panel", async (req, res) => {
     res.status(200)
     res.render("admin_panel", {
         value: {
-            accessEnable: true,
             usersInfo: usersInfo
         }
     })
@@ -37,10 +36,10 @@ router.get("/admin_panel", async (req, res) => {
 
 /**
  * @route GET /profile/:user_id
- * @param user_id User ID
+ * @param userId User ID
  * @description Profile page of user
  */
-router.get("/profile/:user_id", async (req, res) => {
+router.get("/profile/:userId", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
 
     const userId = req.params.userId
@@ -69,7 +68,6 @@ router.get("/profile/:user_id", async (req, res) => {
     res.status(200)
     res.render("profile", {
         value: {
-            access: true,
             user: user,
             userFriends: userFriends,
             userPosts: userPosts
