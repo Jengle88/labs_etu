@@ -27,6 +27,30 @@ html(lang="en")
                         a(href=`/edit_profile/${user.id}`)
                             button(type="button" id="profile_edit_user" class="button_warning action_button") Редактировать
                         button(type="button" id=`banUser#${user.id}` class="button_danger action_button") Заблокировать
+                div(id="profile_main_content")
+                    section(id="profile_card")
+                        div(id="profile_card_content")
+                            p Данные профиля
+                            div.profile-info
+                                p.profile-card-title Имя:
+                                p.profile-card-value(id="profile_name") #{user.name}
+                            div.profile-info
+                                p.profile-card-title Дата рождения:
+                                p.profile-card-value(id="profile_birth") #{user.birth}
+                            div.profile-info
+                                p.profile-card-title Пол:
+                                p.profile-card-value(id="profile_gender") #{user.gender}
+                            div.profile-info
+                                p.profile-card-title Роль:
+                                p.profile-card-value(id="profile_role") #{user.role}
+                            div.profile-info
+                                p.profile-card-title Почта:
+                                p.profile-card-value(id="profile_email") #{user.email}
+
+                    section(id="profile_wall")
+                        div(id="profile_wall_header")
+                            h4(id="profile_wall_header_posts" class="profile_wall_header_active") Новости
+                            h4(id="profile_wall_header_friends") Друзья
 
 
 
