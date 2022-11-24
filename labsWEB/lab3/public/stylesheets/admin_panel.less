@@ -1,0 +1,42 @@
+@full_width: 100%;
+@content_width: 80%;
+
+@red_background_color: #ce5044;
+@yellow_background_color: #e8c655;
+@blue_background_color: #559bdc;
+
+#admin_panel_main {
+  width: @full_width;
+  display: flex;
+  justify-content: center;
+}
+
+#control_panel_content {
+  width: @content_width;
+  margin-top: 32px;
+  h3 {
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+}
+
+.action_button {
+  margin-right: 10px;
+}
+
+button {
+  padding: 3px;
+}
+
+button.button_primary {
+  background-color: #559bdc;
+}
+
+button.button_warning {
+  background-color: #e8c655;
+}
+
+button.button_danger {
+  background-color: #ce5044;
+}

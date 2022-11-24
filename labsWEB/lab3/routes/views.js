@@ -19,7 +19,7 @@ router.get("/", async (_, res) => {
  * @desc Panel for administrator
  */
 router.get("/admin_panel", async (req, res) => {
-    database = JSON.parse(fs.readFileSync("../storage/database.json"))
+    database = JSON.parse(fs.readFileSync("./storage/database.json"))
     let usersInfo = database.users
 
     usersInfo.forEach(user => {
@@ -36,7 +36,7 @@ router.get("/admin_panel", async (req, res) => {
 })
 
 router.get("/profile/:user_id", async (req, res) => {
-    database = JSON.parse(fs.readFileSync("../storage/database.json"))
+    database = JSON.parse(fs.readFileSync("./storage/database.json"))
 
     const userId = req.params.userId
     let user = null

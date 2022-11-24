@@ -14,8 +14,7 @@ server.use("/scripts", express.static(__dirname + '/public/scripts'))
 server.set("views", __dirname + "/public/views")
 server.set("view engine", "pug")
 
-server.use("/", require("./routes/posts.js"))
-
+server.use("/", require("./routes/views.js"))
 
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
