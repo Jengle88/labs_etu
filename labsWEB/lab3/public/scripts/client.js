@@ -1,17 +1,58 @@
 const url = "https://localhost:3000"
 
+
+/**
+ * @route DELETE /api/users/delete_user/:user_id
+ * @param userId User ID
+ * @description Delete user info from database
+ */
+export async function deleteUser(userId) {
+    let response = await fetch(url + `/api/users/delete_user/${userId}`, {
+        method: "DELETE"
+    })
+    return await response.json()
+}
+
+/**
+ * @route PUT /api/users/edit_user/:user_id
+ * @param user Edited user
+ * @param userId User ID
+ * @description Edit user info in database
+ */
+export async function editUser(user, userId) {
+    let response = await fetch(url + `/api/users/edit_user/${userId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({user})
+    })
+    return await response.json()
+}
+
+/**
+ * @route PUT /api/users/ban_user/:user_id
+ * @param userId User ID
+ * @description Ban user in database
+ */
+export async function banUser(userId) {
+    let response = await fetch(url + `/api/users/ban_user/${userId}`, {
+        method: "PUT"
+    })
+    return await response.json()
+}
+
 /**
  * @route GET /
- * @desc Index page
+ * @description Index page
  */
 export function toIndexPage() {
     window.location.href = url + "/"
 }
 /**
  * @route GET /admin_panel
- * @desc Admin panel page
+ * @description Admin panel page
  */
-
 export function toAdminPanelPage() {
     window.location.href = url + "/admin_panel"
 }
@@ -19,7 +60,7 @@ export function toAdminPanelPage() {
 /**
  * @route GET /profile/:userId
  * @param userId User ID
- * @desc Page with profile of user
+ * @description Page with profile of user
  */
 export function toProfilePage(userId) {
     window.location.href = url + `/profile/${userId}`
@@ -28,7 +69,7 @@ export function toProfilePage(userId) {
 /**
  * @route GET /edit_profile/:userId
  * @param userId User ID
- * @desc Page with profile of user for editing
+ * @description Page with profile of user for editing
  */
 export function toEditProfilePage(userId) {
     window.location.href = url + `/edit_profile/${userId}`

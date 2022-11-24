@@ -7,7 +7,7 @@ let localizeData = require("../utils/data_interceptor.js").localizeData
 
 /**
  * @route GET /
- * @desc Start page
+ * @description Start page
  */
 router.get("/", async (_, res) => {
     res.status(200)
@@ -16,7 +16,7 @@ router.get("/", async (_, res) => {
 
 /**
  * @route GET /admin_panel
- * @desc Panel for administrator
+ * @description Panel for administrator
  */
 router.get("/admin_panel", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
@@ -35,14 +35,22 @@ router.get("/admin_panel", async (req, res) => {
     })
 })
 
+/**
+ * @route GET /profile/:user_id
+ * @param user_id User ID
+ * @description Profile page of user
+ */
 router.get("/profile/:user_id", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
 
     const userId = req.params.userId
     let user = null
-    database.users.forEach(_user => {
-        if (_user.id === userId) user = _user
-    })
+    for(let _user of database.users) {
+        if (_user.id === userId) {
+            user = _user
+            break
+        }
+    }
     if (user === null) {
         res.status(404)
         res.render("not_found")
@@ -63,8 +71,8 @@ router.get("/profile/:user_id", async (req, res) => {
         value: {
             access: true,
             user: user,
-            user_friends: userFriends,
-            user_posts: userPosts
+            userFriends: userFriends,
+            userPosts: userPosts
         }
     })
 })
