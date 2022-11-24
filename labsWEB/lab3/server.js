@@ -8,11 +8,11 @@ server.use(express.json({ extended: false }));
 
 server.use(express.static(path.join(__dirname, 'public')));
 
-server.use("/styles", express.static(__dirname + '/public/styles'))
+server.use("/stylesheets", express.static(__dirname + '/public/stylesheets'))
 server.use("/scripts", express.static(__dirname + '/public/scripts'))
 
+server.set("views", __dirname + "/public/views")
 server.set("view engine", "pug")
-server.set("views", __dirname + "/public/templates")
 
 server.use("/", require("./routes/posts.js"))
 

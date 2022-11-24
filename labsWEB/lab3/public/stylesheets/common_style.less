@@ -1,0 +1,32 @@
+@full_width: 100%;
+@content_width: 80%;
+
+@background_color: #ecf0f1;
+@font_color: #559bdc;
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+body {
+  width: @full_width;
+}
+
+#common_header {
+  height: 40px;
+  width: @full_width;
+  background-color: @font_color;
+
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+
+  a {
+    color: @background_color;
+    text-decoration: none;
+    margin: 0 15px;
+  }
+}
+
