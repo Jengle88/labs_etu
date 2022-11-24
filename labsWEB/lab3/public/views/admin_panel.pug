@@ -1,0 +1,54 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet/less" type="text/css" href="../stylesheets/admin_panel.less")
+        link(rel="stylesheet/less" type="text/css" href="../stylesheets/common_style.less")
+        script(src="https://cdn.jsdelivr.net/npm/less")
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
+        script(src="../scripts/jquery.js" type="module")
+        title Панель управления
+    body.all
+        - const users = value ? value.usersInfo : []
+
+        header(id="common_header")
+            a(href="/" id="index_header_profile_link") На главную
+            a(href="/admin_panel" id="index_header_admin_panel_link") Панель управления
+
+        main(id="admin_panel_main")
+            div(id="control_panel_content")
+                h3 Пользователи
+                table(class="table")
+                    thead
+                        tr
+                            th(scope="col") Логин
+                            th(scope="col") Дата рождения
+                            th(scope="col") Роль
+                            th(scope="col") Статус
+                            th(scope="col") Почта
+                            th(scope="col") Управление
+                    tbody
+                        each user in users
+                            tr
+                                th(class="admin_panel_table_user_name" scope="row") #{user.name}
+                                td(class="admin_panel_table_birth_date" scope="") #{user.birth}
+                                td(class="admin_panel_table_role" scope="") #{user.role}
+                                td(class="admin_panel_table_status" scope="") #{user.status}
+                                td(class="admin_panel_table_email" scope="") #{user.email}
+                                td(class="admin_panel_table_buttons" scope="")
+                                    a(href=`/profile/${user.id}`)
+                                        button(type="button" class="button_primary action_button") Профиль
+                                    a(href=`/edit_profile/${user.id}`)
+                                        button(type="button" class="button_warning action_button") Редактировать
+                                    button(type="button" id=`admin_panel_table_ban_user#${user.id}`
+                                        class="button_danger action_button") Заблокировать
+
+        script(src="../scripts/client.js" type="module")
+        script(src="../scripts/control_panel.js" type="module")
+        script(src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous")
+
+
+
+

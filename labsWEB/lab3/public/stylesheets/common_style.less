@@ -1,0 +1,33 @@
+@full_width: 100%;
+@background_page_color: rgba(222, 226, 230, 0.75);
+
+@header_font_color: #ecf0f1;
+@header_background_color: #559bdc;
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+body.all {
+  width: @full_width;
+  background-color: @background_page_color;
+}
+
+#common_header {
+  height: 40px;
+  width: @full_width;
+  background-color: @header_background_color;
+
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+
+  a {
+    color: @header_font_color;
+    text-decoration: none;
+    margin: 0 15px;
+  }
+}
+
