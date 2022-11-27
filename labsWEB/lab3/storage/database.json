@@ -40,7 +40,7 @@
   "posts": [
     {
       "date": "2010-10-10",
-      "text": "Aba bo boba.",
+      "text": "Aba bo boba.\nAba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.Aba bo boba.",
       "id": "post1",
       "userId": "1"
     },
@@ -49,6 +49,18 @@
       "text": "NANI?????!!!",
       "id": "post2",
       "userId": "2"
+    },
+    {
+      "date": "2010-10-10",
+      "text": "Hi! :)",
+      "id": "post3",
+      "userId": "3"
+    },
+    {
+      "date": "2010-10-10",
+      "text": "NANI?????!!! What?!?!?!!?",
+      "id": "post4",
+      "userId": "4"
     }
   ]
 }

@@ -58,6 +58,7 @@ router.get("/profile/:userId", async (req, res) => {
 
     localizeData(user)
 
+    let friendsPosts = database.posts.filter(post => user.friends.includes(post.userId))
     let userPosts = database.posts.filter(post => post.userId === userId)
     let userFriends = user.friends.map(friendId => database.users.filter(user => user.id === friendId)[0])
 
@@ -69,13 +70,12 @@ router.get("/profile/:userId", async (req, res) => {
     res.render("profile", {
         value: {
             user: user,
-            userFriends: userFriends,
-            userPosts: userPosts
+            friendsPosts: friendsPosts,
+            userPosts: userPosts,
+            userFriends: userFriends
         }
     })
 })
-
-//TODO ...
 
 router.get("*", (_, res) => {
     res.status(404)
