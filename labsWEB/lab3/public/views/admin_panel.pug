@@ -39,10 +39,10 @@ html(lang="en")
                                 td(class="admin_panel_table_email" scope="") #{user.email}
                                 td(class="admin_panel_table_buttons" scope="")
                                     a(href=`/profile/${user.id}`)
-                                        button(type="button" class="button_primary action_button") Профиль
+                                        button.button-primary(type="button" class="action-button") Профиль
                                     a(href=`/edit_profile/${user.id}`)
-                                        button(type="button" class="button_warning action_button") Редактировать
-                                    button(type="button" class="button_danger action_button ban_button"
+                                        button.button-warning(type="button" class="action-button") Редактировать
+                                    button.button-danger(type="button" class="action-button ban_button"
                                         id=`admin_panel_table_ban_user#${user.id}`) Заблокировать
 
         script(src="../scripts/client.js" type="module")
