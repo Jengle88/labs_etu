@@ -10,6 +10,7 @@ html(lang="en")
         link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
         script(src="../scripts/jquery.js" type="module")
         title Панель управления
+
     body.all
         - const users = value ? value.usersInfo : []
 
@@ -25,8 +26,8 @@ html(lang="en")
                         tr
                             th(scope="col") Логин
                             th(scope="col") Дата рождения
+                            th(scope="col") Пол
                             th(scope="col") Роль
-                            th(scope="col") Статус
                             th(scope="col") Почта
                             th(scope="col") Управление
                     tbody
@@ -34,19 +35,19 @@ html(lang="en")
                             tr
                                 th(class="admin_panel_table_user_name" scope="row") #{user.name}
                                 td(class="admin_panel_table_birth_date" scope="") #{user.birth}
+                                td(class="admin_panel_table_gender" scope="") #{user.gender}
                                 td(class="admin_panel_table_role" scope="") #{user.role}
-                                td(class="admin_panel_table_status" scope="") #{user.status}
                                 td(class="admin_panel_table_email" scope="") #{user.email}
                                 td(class="admin_panel_table_buttons" scope="")
                                     a(href=`/profile/${user.id}`)
-                                        button(type="button" class="button_primary action_button") Профиль
+                                        button.button-primary(type="button" class="action-button") Профиль
                                     a(href=`/edit_profile/${user.id}`)
-                                        button(type="button" class="button_warning action_button") Редактировать
-                                    button(type="button" id=`admin_panel_table_ban_user#${user.id}`
-                                        class="button_danger action_button") Заблокировать
+                                        button.button-warning(type="button" class="action-button") Редактировать
+                                    button.button-danger(type="button" class="action-button ban_button"
+                                        id=`admin_panel_table_ban_user#${user.id}`) Заблокировать
 
         script(src="../scripts/client.js" type="module")
-        script(src="../scripts/control_panel.js" type="module")
+        script(src="../scripts/admin_panel.js" type="module")
         script(src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous")
 
 

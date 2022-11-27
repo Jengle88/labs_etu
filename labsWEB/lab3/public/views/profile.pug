@@ -1,0 +1,111 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet/less" type="text/css" href="../stylesheets/common_style.less")
+        link(rel="stylesheet/less" type="text/css" href="../stylesheets/profile.less")
+        script(src="https://cdn.jsdelivr.net/npm/less")
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
+        script(src="../scripts/jquery.js" type="module")
+        title Профиль
+
+    body.all
+        - const user = value ? value.user : {name:"", birth:"", id:"", gender:"", role:"", email:"" }
+        - const userFriends = value ? value.userFriends : []
+        - const friendsPosts = value ? value.friendsPosts : []
+        - const userPosts = value ? value.userPosts : []
+
+        header(id="common_header")
+            a(href="/" id="index_header_profile_link") На главную
+            a(href="/admin_panel" id="index_header_admin_panel_link") Панель управления
+
+        main(id="profile_main")
+            div(id="profile_content")
+                section(id="profile_content_header")
+                    h2 Страница пользователя
+                    div(id="profile_content_header_buttons")
+                        a(href=`/edit_profile/${user.id}`)
+                            button.button-warning(type="button" id="profile_edit_user" class="action-button") Редактировать
+                        button.button-danger(type="button" id=`banUser#${user.id}` class="action-button ban_button") Заблокировать
+                div(id="profile_main_content")
+                    section(id="profile_card")
+                        div(id="profile_card_content")
+                            p Данные профиля
+                            div.profile-info
+                                p.profile-card-title Имя:
+                                p.profile-card-value(id="profile_name") #{user.name}
+                            div.profile-info
+                                p.profile-card-title Дата рождения:
+                                p.profile-card-value(id="profile_birth") #{user.birth}
+                            div.profile-info
+                                p.profile-card-title Пол:
+                                p.profile-card-value(id="profile_gender") #{user.gender}
+                            div.profile-info
+                                p.profile-card-title Роль:
+                                p.profile-card-value(id="profile_role") #{user.role}
+                            div.profile-info
+                                p.profile-card-title Почта:
+                                p.profile-card-value(id="profile_email") #{user.email}
+
+                    section(id="profile_wall")
+                        div(id="profile_wall_header")
+                            h4.profile-wall-header-active(id="profile_wall_header_friends_posts") Новости друзей
+                            h4.profile-wall-header-inactive(id="profile_wall_header_posts") Ваши новости
+                            h4.profile-wall-header-inactive(id="profile_wall_header_friends") Друзья
+
+                        section.active(id="profile_wall_posts")
+                            div(id="profile_wall_friends_posts_column" class="profile-wall-posts-column active")
+                                each post in friendsPosts
+                                    div(id="profile_wall_post_text")
+                                        div(id="profile_wall_post_text_header")
+                                            div(id="profile_wall_post_text_header_user_info")
+                                                - let friendName = userFriends.find((user) => { return user.id === post.userId }).name
+                                                a.profile-wall-post-text-username(href=`/profile/${post.userId}`) #{friendName}
+                                                p (#{post.date})
+                                            img(type="button" class="action-button delete_post" src="../drawable/ic_delete.png"
+                                                id=`deletePost#${post.id}`)
+                                        p(id="profile_wall_post_text_value") #{post.text}
+
+                            div(id="profile_wall_posts_column" class="profile-wall-posts-column inactive")
+                                each post in userPosts
+                                    div(id="profile_wall_post_text")
+                                        div(id="profile_wall_post_text_header")
+                                            div(id="profile_wall_post_text_header_user_info")
+                                                a.profile-wall-post-text-username(href=`/profile/${post.userId}`) #{user.name}
+                                                p (#{post.date})
+                                            img(type="button" class="action-button delete_post" src="../drawable/ic_delete.png"
+                                                id=`deletePost#${post.id}`)
+                                        p(id="profile_wall_post_text_value") #{post.text}
+
+                        section.inactive(id="profile_wall_friends")
+                            table(class="table")
+                                thead
+                                    tr
+                                        th(scope="col") Логин
+                                        th(scope="col") Дата рождения
+                                        th(scope="col") Пол
+                                        th(scope="col") Роль
+                                        th(scope="col") Почта
+                                        th(scope="col") Управление
+                                tbody
+                                    each user in userFriends
+                                        tr
+                                            th(class="profile_table_user_name" scope="row") #{user.name}
+                                            td(class="profile_table_birth_date" scope="") #{user.birth}
+                                            td(class="profile_table_gender" scope="") #{user.gender}
+                                            td(class="profile_table_role" scope="") #{user.role}
+                                            td(class="profile_table_email" scope="") #{user.email}
+                                            td(class="profile_table_buttons" scope="")
+                                                a(href=`/profile/${user.id}`)
+                                                    button.button-primary(type="button" class="action-button") Профиль
+                                                a(href=`/edit_profile/${user.id}`)
+                                                    button.button-warning(type="button" class="action-button") Редактировать
+                                                button.button-danger(type="button" class="action-button ban_button"
+                                                    id=`admin_panel_table_ban_user#${user.id}`) Заблокировать
+        script(src="../scripts/client.js" type="module")
+        script(src="../scripts/profile.js" type="module")
+
+
+

@@ -7,7 +7,7 @@ let localizeData = require("../utils/data_interceptor.js").localizeData
 
 /**
  * @route GET /
- * @desc Start page
+ * @description Start page
  */
 router.get("/", async (_, res) => {
     res.status(200)
@@ -16,7 +16,7 @@ router.get("/", async (_, res) => {
 
 /**
  * @route GET /admin_panel
- * @desc Panel for administrator
+ * @description Panel for administrator
  */
 router.get("/admin_panel", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
@@ -29,20 +29,27 @@ router.get("/admin_panel", async (req, res) => {
     res.status(200)
     res.render("admin_panel", {
         value: {
-            accessEnable: true,
             usersInfo: usersInfo
         }
     })
 })
 
-router.get("/profile/:user_id", async (req, res) => {
+/**
+ * @route GET /profile/:userId
+ * @param userId User ID
+ * @description Profile page of user
+ */
+router.get("/profile/:userId", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
 
     const userId = req.params.userId
     let user = null
-    database.users.forEach(_user => {
-        if (_user.id === userId) user = _user
-    })
+    for(let _user of database.users) {
+        if (_user.id === userId) {
+            user = _user
+            break
+        }
+    }
     if (user === null) {
         res.status(404)
         res.render("not_found")
@@ -51,6 +58,7 @@ router.get("/profile/:user_id", async (req, res) => {
 
     localizeData(user)
 
+    let friendsPosts = database.posts.filter(post => user.friends.includes(post.userId))
     let userPosts = database.posts.filter(post => post.userId === userId)
     let userFriends = user.friends.map(friendId => database.users.filter(user => user.id === friendId)[0])
 
@@ -61,15 +69,13 @@ router.get("/profile/:user_id", async (req, res) => {
     res.status(200)
     res.render("profile", {
         value: {
-            access: true,
             user: user,
-            user_friends: userFriends,
-            user_posts: userPosts
+            friendsPosts: friendsPosts,
+            userPosts: userPosts,
+            userFriends: userFriends
         }
     })
 })
-
-//TODO ...
 
 router.get("*", (_, res) => {
     res.status(404)
