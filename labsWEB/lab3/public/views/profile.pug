@@ -65,7 +65,7 @@ html(lang="en")
                                                 a.profile-wall-post-text-username(href=`/profile/${post.userId}`) #{friendName}
                                                 p (#{post.date})
                                             img(type="button" class="action-button delete_post" src="../drawable/ic_delete.png"
-                                                id=`deletePost#${user.id}`)
+                                                id=`deletePost#${post.id}`)
                                         p(id="profile_wall_post_text_value") #{post.text}
 
                             div(id="profile_wall_posts_column" class="profile-wall-posts-column inactive")
@@ -76,7 +76,7 @@ html(lang="en")
                                                 a.profile-wall-post-text-username(href=`/profile/${post.userId}`) #{user.name}
                                                 p (#{post.date})
                                             img(type="button" class="action-button delete_post" src="../drawable/ic_delete.png"
-                                                id=`deletePost#${user.id}`)
+                                                id=`deletePost#${post.id}`)
                                         p(id="profile_wall_post_text_value") #{post.text}
 
                         section.inactive(id="profile_wall_friends")

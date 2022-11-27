@@ -1,8 +1,19 @@
 const url = "https://localhost:3000"
 
+/**
+ * @route DELETE /api/posts/delete_post/:postId
+ * @param postId Post ID
+ * @description Delete post from database
+ */
+export async function deletePost(postId) {
+    let response = await fetch(url + `/api/posts/delete_post/${postId}`, {
+        method: "DELETE"
+    })
+    return await response.json()
+}
 
 /**
- * @route DELETE /api/users/delete_user/:user_id
+ * @route DELETE /api/users/delete_user/:userId
  * @param userId User ID
  * @description Delete user info from database
  */
@@ -14,7 +25,7 @@ export async function deleteUser(userId) {
 }
 
 /**
- * @route PUT /api/users/edit_user/:user_id
+ * @route PUT /api/users/edit_user/:userId
  * @param user Edited user
  * @param userId User ID
  * @description Edit user info in database
@@ -31,7 +42,7 @@ export async function editUser(user, userId) {
 }
 
 /**
- * @route PUT /api/users/ban_user/:user_id
+ * @route PUT /api/users/ban_user/:userId
  * @param userId User ID
  * @description Ban user in database
  */

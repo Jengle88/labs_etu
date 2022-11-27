@@ -35,7 +35,7 @@ router.get("/admin_panel", async (req, res) => {
 })
 
 /**
- * @route GET /profile/:user_id
+ * @route GET /profile/:userId
  * @param userId User ID
  * @description Profile page of user
  */
