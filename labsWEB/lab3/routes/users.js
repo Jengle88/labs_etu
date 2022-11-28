@@ -4,7 +4,7 @@ const fs = require("fs");
 
 let database;
 
-router.get("ban_user/:userId", async (req, res) => {
+router.put("/ban_user/:userId", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
     const userId = req.params.userId
     let userIndex = database.users.findIndex((user) => { return user.id === userId })
@@ -22,7 +22,7 @@ router.get("ban_user/:userId", async (req, res) => {
     res.send(database.users)
 })
 
-router.delete("delete_user/:userId", async (req, res) => {
+router.delete("/delete_user/:userId", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
     const userId = req.params.userId
     let userIndex = database.users.findIndex((user) => { return user.id === userId })

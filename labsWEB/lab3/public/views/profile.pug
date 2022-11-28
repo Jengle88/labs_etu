@@ -28,9 +28,10 @@ html(lang="en")
                     div(id="profile_content_header_buttons")
                         a(href=`/edit_profile/${user.id}`)
                             button.button-warning(type="button" id="profile_edit_user" class="action-button") Редактировать
-                        button.button-danger(type="button" id=`banUser#${user.id}` class="action-button ban_button") Заблокировать
+                        button.button-danger(type="button" id=`ban_user#${user.id}` class="action-button ban_button") Заблокировать
                 div(id="profile_main_content")
                     section(id="profile_card")
+                        img(src=user.image_link id="profile_user_image")
                         div(id="profile_card_content")
                             p Данные профиля
                             div.profile-info
@@ -108,7 +109,7 @@ html(lang="en")
                                                 a(href=`/edit_profile/${user.id}`)
                                                     button.button-warning(type="button" class="action-button") Редактировать
                                                 button.button-danger(type="button" class="action-button ban_button"
-                                                    id=`admin_panel_table_ban_user#${user.id}`) Заблокировать
+                                                    id=`ban_user#${user.id}`) Заблокировать
         script(src="../scripts/client.js" type="module")
         script(src="../scripts/profile.js" type="module")
 

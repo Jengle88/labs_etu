@@ -44,6 +44,7 @@
 #profile_card {
   display: flex;
   align-items: center;
+  flex-direction: column;
   background-color: @background_page_color;
   height: fit-content;
   padding-bottom: 20px;
@@ -136,7 +137,7 @@
   justify-content: flex-start;
   align-content: space-around;
   width: 95%;
-  gap: 8px;
+  gap: 6px;
   a, p {
     align-self: center;
     margin: 0;
@@ -150,6 +151,12 @@
   word-break: break-all;
 }
 
+#profile_user_image {
+  width: 200px;
+  height: 200px;
+  align-content: center;
+}
+
 div.profile-wall-posts-column {
   width: @full_width;
   flex-direction: column;
@@ -160,6 +167,11 @@ img.delete_post {
   width: 32px;
   display: flex;
   flex-direction: row-reverse;
+}
+
+.profile_table_buttons {
+  width: 32%;
+  font-size: 14px;
 }
 
 h4.profile-wall-header-active {

@@ -1,7 +1,7 @@
 import {banUser, deletePost} from "./client.js";
 
 $(".ban_button").on("click", async function() {
-    const userId = $(this).attr("id").split("banUser#")[1]
+    const userId = $(this).attr("id").split("ban_user#")[1]
     if (!isNaN(Number(userId))) {
         await banUser(userId)
     }
