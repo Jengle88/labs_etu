@@ -1,5 +1,5 @@
 @full_width: 100%;
-@content_width: 80%;
+@content_width: 85%;
 @background_page_color: #ecf0f1;
 @font_color: #34495e;
 @highlight_color: #1b77ce;
@@ -44,8 +44,10 @@
 #profile_card {
   display: flex;
   align-items: center;
+  flex-direction: column;
   background-color: @background_page_color;
-  height: 300px;
+  height: fit-content;
+  padding-bottom: 20px;
 }
 
 #profile_card_content {
@@ -135,7 +137,7 @@
   justify-content: flex-start;
   align-content: space-around;
   width: 95%;
-  gap: 8px;
+  gap: 6px;
   a, p {
     align-self: center;
     margin: 0;
@@ -149,16 +151,27 @@
   word-break: break-all;
 }
 
+#profile_user_image {
+  width: 200px;
+  height: 200px;
+  align-content: center;
+}
+
 div.profile-wall-posts-column {
   width: @full_width;
   flex-direction: column;
 }
 
 img.delete_post {
-  height: 40px;
-  width: 40px;
+  height: 32px;
+  width: 32px;
   display: flex;
   flex-direction: row-reverse;
+}
+
+.profile_table_buttons {
+  width: 32%;
+  font-size: 14px;
 }
 
 h4.profile-wall-header-active {

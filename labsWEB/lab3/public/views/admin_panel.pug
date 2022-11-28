@@ -28,6 +28,7 @@ html(lang="en")
                             th(scope="col") Дата рождения
                             th(scope="col") Пол
                             th(scope="col") Роль
+                            th(scope="col") Статус
                             th(scope="col") Почта
                             th(scope="col") Управление
                     tbody
@@ -37,6 +38,7 @@ html(lang="en")
                                 td(class="admin_panel_table_birth_date" scope="") #{user.birth}
                                 td(class="admin_panel_table_gender" scope="") #{user.gender}
                                 td(class="admin_panel_table_role" scope="") #{user.role}
+                                td(class="admin_panel_table_status" scope="") #{user.status}
                                 td(class="admin_panel_table_email" scope="") #{user.email}
                                 td(class="admin_panel_table_buttons" scope="")
                                     a(href=`/profile/${user.id}`)
@@ -44,7 +46,7 @@ html(lang="en")
                                     a(href=`/edit_profile/${user.id}`)
                                         button.button-warning(type="button" class="action-button") Редактировать
                                     button.button-danger(type="button" class="action-button ban_button"
-                                        id=`admin_panel_table_ban_user#${user.id}`) Заблокировать
+                                        id=`ban_user#${user.id}`) Заблокировать
 
         script(src="../scripts/client.js" type="module")
         script(src="../scripts/admin_panel.js" type="module")

@@ -1,10 +1,16 @@
 import {banUser, deletePost} from "./client.js";
 
 $(".ban_button").on("click", async function() {
-    const userId = $(this).attr("id").split("banUser#")[1]
+    const userId = $(this).attr("id").split("ban_user#")[1]
     if (!isNaN(Number(userId))) {
         await banUser(userId)
     }
+    location.reload()
+})
+
+$(".delete_post").on("click", async function() {
+    const postId = $(this).attr("id").split("deletePost#")[1]
+    await deletePost(postId)
     location.reload()
 })
 
@@ -39,10 +45,4 @@ $("#profile_wall_header_friends").on("click", function () {
 
     $("#profile_wall_posts").attr("class", "inactive")
     $("#profile_wall_friends").attr("class", "active")
-})
-
-$(".delete_post").on("click", async function() {
-    const postId = $(this).attr("id").split("deletePost#")[1]
-    await deletePost(postId)
-    location.reload()
 })
