@@ -1,1 +1,74 @@
-{"users":[{"name":"Name 1","birth":"2002-05-23","gender":"male","role":"user","email":"name1@email.com","id":"1","friends":["3"]},{"name":"Name 2","birth":"2004-05-12","role":"admin","gender":"male","email":"name2@email.com","id":"2","friends":["1"]},{"name":"name3","birth":"2000-07-03","role":"banned","gender":"female","email":"name3@email.com","id":"3","friends":["1","2"]},{"name":"name4","birth":"2001-07-23","role":"user","gender":"female","email":"name4@email.com","id":"4","friends":["1","2"]}],"posts":[{"date":"2010-10-10","text":"NANI?????!!!","id":"post2","userId":"2"},{"date":"2010-10-10","text":"Hi! :)","id":"post3","userId":"3"},{"date":"2010-10-10","text":"NANI?????!!! What?!?!?!!?","id":"post4","userId":"4"}]}
+{
+  "users": [
+    {
+      "name": "Name 1",
+      "birth": "2002-05-23",
+      "gender": "male",
+      "role": "user",
+      "status": "banned",
+      "email": "name1@email.com",
+      "id": "1",
+      "friends": [
+        "3"
+      ]
+    },
+    {
+      "name": "Name 2",
+      "birth": "2004-05-12",
+      "role": "admin",
+      "status": "confirmed",
+      "gender": "male",
+      "email": "name2@email.com",
+      "id": "2",
+      "friends": [
+        "1"
+      ]
+    },
+    {
+      "name": "name3",
+      "birth": "2000-07-03",
+      "role": "user",
+      "status": "confirmed",
+      "gender": "female",
+      "email": "name3@email.com",
+      "id": "3",
+      "friends": [
+        "1",
+        "2"
+      ]
+    },
+    {
+      "name": "name4",
+      "birth": "2001-07-23",
+      "role": "user",
+      "status": "unconfirmed",
+      "gender": "female",
+      "email": "name4@email.com",
+      "id": "4",
+      "friends": [
+        "1",
+        "2"
+      ]
+    }
+  ],
+  "posts": [
+    {
+      "date": "2010-10-10",
+      "text": "NANI?????!!!",
+      "id": "post2",
+      "userId": "2"
+    },
+    {
+      "date": "2010-10-10",
+      "text": "Hi! :)",
+      "id": "post3",
+      "userId": "3"
+    },
+    {
+      "date": "2010-10-10",
+      "text": "NANI?????!!! What?!?!?!!?",
+      "id": "post4",
+      "userId": "4"
+    }
+  ]
+}

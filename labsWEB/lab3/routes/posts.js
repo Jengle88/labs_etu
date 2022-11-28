@@ -11,12 +11,11 @@ let database;
  */
 router.delete("/delete_post/:postId", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
-
     const postId = req.params.postId
     let postIndex = database.posts.findIndex((post) => { return post.id === postId })
     if (postIndex === -1) {
         res.status(404)
-        res.send("Post not found")
+        res.send("Post not found :(")
     }
 
     database.posts.splice(postIndex, postIndex + 1)

@@ -8,6 +8,12 @@ $(".ban_button").on("click", async function() {
     location.reload()
 })
 
+$(".delete_post").on("click", async function() {
+    const postId = $(this).attr("id").split("deletePost#")[1]
+    await deletePost(postId)
+    location.reload()
+})
+
 $("#profile_wall_header_friends_posts").on("click", function () {
     $(this).attr("class", "profile-wall-header-active")
     $("#profile_wall_header_posts").attr("class", "profile-wall-header-inactive")
@@ -39,10 +45,4 @@ $("#profile_wall_header_friends").on("click", function () {
 
     $("#profile_wall_posts").attr("class", "inactive")
     $("#profile_wall_friends").attr("class", "active")
-})
-
-$(".delete_post").on("click", async function() {
-    const postId = $(this).attr("id").split("deletePost#")[1]
-    await deletePost(postId)
-    location.reload()
 })

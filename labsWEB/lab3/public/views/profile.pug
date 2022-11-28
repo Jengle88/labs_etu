@@ -12,7 +12,7 @@ html(lang="en")
         title Профиль
 
     body.all
-        - const user = value ? value.user : {name:"", birth:"", id:"", gender:"", role:"", email:"" }
+        - const user = value ? value.user : {name:"", birth:"", id:"", gender:"", role:"",  status:"", email:""}
         - const userFriends = value ? value.userFriends : []
         - const friendsPosts = value ? value.friendsPosts : []
         - const userPosts = value ? value.userPosts : []
@@ -45,6 +45,9 @@ html(lang="en")
                             div.profile-info
                                 p.profile-card-title Роль:
                                 p.profile-card-value(id="profile_role") #{user.role}
+                            div.profile-info
+                                p.profile-card-title Статус:
+                                p.profile-card-value(id="profile_status") #{user.status}
                             div.profile-info
                                 p.profile-card-title Почта:
                                 p.profile-card-value(id="profile_email") #{user.email}
@@ -87,6 +90,7 @@ html(lang="en")
                                         th(scope="col") Дата рождения
                                         th(scope="col") Пол
                                         th(scope="col") Роль
+                                        th(scope="col") Статус
                                         th(scope="col") Почта
                                         th(scope="col") Управление
                                 tbody
@@ -96,6 +100,7 @@ html(lang="en")
                                             td(class="profile_table_birth_date" scope="") #{user.birth}
                                             td(class="profile_table_gender" scope="") #{user.gender}
                                             td(class="profile_table_role" scope="") #{user.role}
+                                            td(class="profile_table_status" scope="") #{user.status}
                                             td(class="profile_table_email" scope="") #{user.email}
                                             td(class="profile_table_buttons" scope="")
                                                 a(href=`/profile/${user.id}`)

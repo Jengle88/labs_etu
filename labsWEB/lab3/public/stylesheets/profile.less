@@ -1,5 +1,5 @@
 @full_width: 100%;
-@content_width: 80%;
+@content_width: 85%;
 @background_page_color: #ecf0f1;
 @font_color: #34495e;
 @highlight_color: #1b77ce;
@@ -45,7 +45,8 @@
   display: flex;
   align-items: center;
   background-color: @background_page_color;
-  height: 300px;
+  height: fit-content;
+  padding-bottom: 20px;
 }
 
 #profile_card_content {
@@ -155,8 +156,8 @@ div.profile-wall-posts-column {
 }
 
 img.delete_post {
-  height: 40px;
-  width: 40px;
+  height: 32px;
+  width: 32px;
   display: flex;
   flex-direction: row-reverse;
 }
