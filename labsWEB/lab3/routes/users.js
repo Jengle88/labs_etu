@@ -4,6 +4,27 @@ const fs = require("fs");
 
 let database;
 
+router.put("/edit_user/:userId", async (req, res) => {
+    database = JSON.parse(fs.readFileSync("./storage/database.json"))
+    let editedUser = req.body.editedUser
+    const userId = req.params.userId
+    let userIndex = database.users.findIndex((user) => { return user.id === userId })
+    if (userIndex === -1) {
+        res.status(404)
+        res.send("User not found :(")
+    }
+
+    let user = database.users[userIndex]
+    for (let key in user) {
+        user[key] = editedUser[key]
+    }
+
+    let data = JSON.stringify(database)
+    fs.writeFileSync("./storage/database.json", data)
+    res.status(200)
+    res.send(database.users)
+})
+
 router.put("/ban_user/:userId", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
     const userId = req.params.userId

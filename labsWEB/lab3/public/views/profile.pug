@@ -106,8 +106,6 @@ html(lang="en")
                                             td(class="profile_table_buttons" scope="")
                                                 a(href=`/profile/${user.id}`)
                                                     button.button-primary(type="button" class="action-button") Профиль
-                                                a(href=`/edit_profile/${user.id}`)
-                                                    button.button-warning(type="button" class="action-button") Редактировать
                                                 button.button-danger(type="button" class="action-button ban_button"
                                                     id=`ban_user#${user.id}`) Заблокировать
         script(src="../scripts/client.js" type="module")

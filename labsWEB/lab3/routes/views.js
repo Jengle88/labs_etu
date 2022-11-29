@@ -21,7 +21,6 @@ router.get("/", async (_, res) => {
 router.get("/admin_panel", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
     let usersInfo = database.users
-
     usersInfo.forEach(user => {
         localizeData(user)
     })
@@ -41,7 +40,6 @@ router.get("/admin_panel", async (req, res) => {
  */
 router.get("/profile/:userId", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
-
     const userId = req.params.userId
     let user = null
     for(let _user of database.users) {
@@ -75,6 +73,31 @@ router.get("/profile/:userId", async (req, res) => {
             userFriends: userFriends
         }
     })
+})
+
+router.get("/edit_profile/:userId", async (req, res) => {
+    database = JSON.parse(fs.readFileSync("./storage/database.json"))
+    const userId = req.params.userId
+    let user = null
+    for(let _user of database.users) {
+        if (_user.id === userId) {
+            user = _user
+            break
+        }
+    }
+    if (user === null) {
+        res.status(404)
+        res.render("not_found")
+        return
+    }
+
+    res.status(200)
+    res.render("edit_profile", {
+        value: {
+            user: user
+        }
+    })
+
 })
 
 router.get("*", (_, res) => {
