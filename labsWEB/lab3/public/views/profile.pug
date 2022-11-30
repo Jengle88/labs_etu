@@ -35,6 +35,9 @@ html(lang="en")
                         div(id="profile_card_content")
                             p Данные профиля
                             div.profile-info
+                                p.profile-card-title ID:
+                                p.profile-card-value(id="profile_id") #{user.id}
+                            div.profile-info
                                 p.profile-card-title Имя:
                                 p.profile-card-value(id="profile_name") #{user.name}
                             div.profile-info

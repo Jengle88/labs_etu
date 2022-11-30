@@ -4,6 +4,19 @@ const fs = require("fs");
 
 let database;
 
+router.get("/get_user/:userId", async (req, res) => {
+    database = JSON.parse(fs.readFileSync("./storage/database.json"))
+    const userId = req.params.userId
+    let userIndex = database.users.findIndex((user) => { return user.id === userId })
+    if (userIndex === -1) {
+        res.status(404)
+        res.send("User not found :(")
+    }
+
+    res.status(200)
+    res.send(database.users[userIndex])
+})
+
 router.put("/edit_user/:userId", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
     let editedUser = req.body.editedUser
@@ -15,7 +28,21 @@ router.put("/edit_user/:userId", async (req, res) => {
     }
 
     let user = database.users[userIndex]
-    for (let key in user) {
+    if (user["id"] !== editedUser["id"]) {
+        for (let post of database.posts) {
+            if (post.userId === user.id)
+                post.userId = editedUser["id"]
+        }
+        for (let tempUser of database.users) {
+            for(let i = 0; i < tempUser.friends.length; i++) {
+                if (tempUser.friends[i] === user.id)
+                    tempUser.friends[i] = editedUser["id"]
+            }
+        }
+    }
+
+
+    for (let key in editedUser) {
         user[key] = editedUser[key]
     }
 

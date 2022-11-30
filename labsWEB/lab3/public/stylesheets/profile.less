@@ -34,6 +34,7 @@
   background-color: @background_page_color;
   padding-top: 10px;
   padding-left: 10px;
+  padding-bottom: 10px;
   height: fit-content;
 }
 
@@ -46,8 +47,9 @@
   align-items: center;
   flex-direction: column;
   background-color: @background_page_color;
-  height: fit-content;
+  height: auto;
   padding-bottom: 20px;
+  border-right: 1px solid #000000;
 }
 
 #profile_card_content {
@@ -71,7 +73,7 @@
   p.profile-card-title {
     width: 150px;
     height: 24px;
-    margin: 2px 0 16px;
+    margin: 16px 0 4px;
     display: flex;
     justify-content: flex-start;
     font-family: 'Roboto', sans-serif;
@@ -86,7 +88,7 @@
   p.profile-card-value {
     width: fit-content;
     height: 24px;
-    margin: 2px 0 16px;
+    margin: 16px 0 4px;
     display: flex;
     justify-content: flex-start;
     font-family: 'Roboto', sans-serif;

@@ -1,5 +1,17 @@
 const url = "https://localhost:3000"
 
+
+/**
+ * @route GET /api/get_user/:userId
+ * @desc  Return user by userId
+ */
+export async function getUser(userId) {
+    let response = await fetch(url + `/api/users/get_user/${userId}`, {
+        method: "GET"
+    })
+    return await response.json()
+}
+
 /**
  * @route DELETE /api/posts/delete_post/:postId
  * @param postId Post ID
@@ -13,30 +25,18 @@ export async function deletePost(postId) {
 }
 
 /**
- * @route DELETE /api/users/delete_user/:userId
- * @param userId User ID
- * @description Delete user info from database
- */
-export async function deleteUser(userId) {
-    let response = await fetch(url + `/api/users/delete_user/${userId}`, {
-        method: "DELETE"
-    })
-    return await response.json()
-}
-
-/**
  * @route PUT /api/users/edit_user/:userId
- * @param user Edited user
+ * @param editedUser
  * @param userId User ID
  * @description Edit user info in database
  */
-export async function editUser(user, userId) {
+export async function editUser(editedUser, userId) {
     let response = await fetch(url + `/api/users/edit_user/${userId}`, {
         method: "PUT",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({user})
+        body: JSON.stringify({editedUser})
     })
     return await response.json()
 }
