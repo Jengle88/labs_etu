@@ -1,6 +1,7 @@
 const express = require("express")
 const router  = express.Router()
 const fs = require("fs")
+const path = require("path");
 
 let database;
 let localizeData = require("../utils/data_interceptor.js").localizeData
@@ -11,7 +12,7 @@ let localizeData = require("../utils/data_interceptor.js").localizeData
  */
 router.get("/", async (_, res) => {
     res.status(200)
-    res.render("start")
+    res.sendFile(path.join(__dirname, "../public/views/start.html"))
 })
 
 /**
@@ -26,11 +27,7 @@ router.get("/admin_panel", async (req, res) => {
     })
 
     res.status(200)
-    res.render("admin_panel", {
-        value: {
-            usersInfo: usersInfo
-        }
-    })
+    res.sendFile(path.join(__dirname, "../public/views/admin_panel.html"))
 })
 
 /**
@@ -64,14 +61,7 @@ router.get("/profile/:userId", async (req, res, next) => {
     })
 
     res.status(200)
-    res.render("profile", {
-        value: {
-            user: user,
-            friendsPosts: friendsPosts,
-            userPosts: userPosts,
-            userFriends: userFriends
-        }
-    })
+    res.sendFile(path.join(__dirname, "../public/views/profile.html"))
 })
 
 router.get("/edit_profile/:userId", async (req, res) => {
@@ -90,12 +80,7 @@ router.get("/edit_profile/:userId", async (req, res) => {
     }
 
     res.status(200)
-    res.render("edit_profile", {
-        value: {
-            user: user
-        }
-    })
-
+    res.sendFile(path.join(__dirname, "../public/views/edit_profile.html"))
 })
 
 router.get("*", (_, res) => {

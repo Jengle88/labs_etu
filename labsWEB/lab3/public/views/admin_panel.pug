@@ -31,7 +31,7 @@ html(lang="en")
                             th(scope="col") Статус
                             th(scope="col") Почта
                             th(scope="col") Управление
-                    tbody
+                    tbody(id="table_body")
                         each user in users
                             tr
                                 th(class="admin_panel_table_user_name" scope="row") #{user.name}
