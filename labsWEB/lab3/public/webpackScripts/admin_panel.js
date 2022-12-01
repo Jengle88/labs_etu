@@ -1,0 +1,5 @@
+require("../stylesheets/common_style.less")
+require("../stylesheets/admin_panel.less")
+require("../build/scripts/admin_panel.js")
+require("../build/scripts/client.js")
+require("../build/scripts/jquery.js")
