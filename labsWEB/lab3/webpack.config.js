@@ -7,7 +7,7 @@ const path = require("path");
 // Copying public folders
 try {
     console.log("Public/certificate folder: ");
-    fse.copySync("./public/certificate", "./dist_webpack/public/certificate", { overwrite: true });
+    fse.copySync("./public/certificate", "./dist_webpack/public/certificate", {overwrite: true});
     console.log('Done!');
 } catch (err) {
     console.error(err)
@@ -16,7 +16,7 @@ try {
 // Routes import
 try {
     console.log("Routes folder: ");
-    fse.copySync("./public/build/routes", "./dist_webpack/routes", { overwrite: true });
+    fse.copySync("./public/build/routes", "./dist_webpack/routes", {overwrite: true});
     console.log('Done!');
 } catch (err) {
     console.error(err)
@@ -56,10 +56,10 @@ module.exports = {
     mode: "development",
     devtool: false,
     entry: {
-        index:          "./public/webpack_scripts/start.js",
-        profile:        "./public/webpack_scripts/profile.js",
-        edit_profile:   "./public/webpack_scripts/edit_profile.js",
-        control_panel:  "./public/webpack_scripts/admin_panel.js",
+        start: "./public/webpack_scripts/start.js",
+        profile: "./public/webpack_scripts/profile.js",
+        edit_profile: "./public/webpack_scripts/edit_profile.js",
+        admin_panel: "./public/webpack_scripts/admin_panel.js",
     },
     output: {
         path: path.resolve(__dirname, "dist_webpack"),

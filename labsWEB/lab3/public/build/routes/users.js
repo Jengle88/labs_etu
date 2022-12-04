@@ -27,7 +27,26 @@ router.get("/get_user/:userId", async (req, res) => {
     res.send(database.users[userIndex])
 })
 
-router.get("api/users/get_full_user_info/:userId", async (req, res) => {
+router.get("/get_user_with_localize/:userId", async (req, res) => {
+    database = JSON.parse(fs.readFileSync("./storage/database.json"))
+    const userId = req.params.userId
+    let userIndex = database.users.findIndex((user) => { return user.id === userId })
+    if (userIndex === -1) {
+        res.status(404)
+        res.send("User not found :(")
+    }
+    let user = database.users[userIndex]
+    let localizeUser = Object.assign({}, user)
+    localizeUser = localizeData(localizeUser)
+    let userInfo = {
+        user: user,
+        localizeUser: localizeUser
+    }
+    res.status(200)
+    res.send(userInfo)
+})
+
+router.get("/get_full_user_info/:userId", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
     const userId = req.params.userId
     let userIndex = database.users.findIndex((user) => { return user.id === userId })

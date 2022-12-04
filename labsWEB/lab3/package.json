@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "clean-webpack": "rm -rf webpack",
-    "clean-gulp": "rm -rf ",
+    "clean_webpack": "rm -rf dist_webpack",
+    "clean_gulp": "rm -rf dist_gulp",
     "webpack_build": "npm run clean_webpack && webpack --progress",
     "webpack_prod": "node dist_webpack/server.js",
     "gulp_build": "npm run clean_gulp && gulp",
@@ -14,7 +14,7 @@
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "babel-loader": "^9.0.0",
-    "express": "~4.16.1",
+    "express": "^4.18.2",
     "fs-extra": "^10.1.0",
     "gulp": "^4.0.2",
     "gulp-babel": "^8.0.0",
@@ -24,12 +24,12 @@
     "gulp-uglify": "^3.0.2",
     "html": "^1.0.0",
     "html-webpack-plugin": "^5.5.0",
-    "http-errors": "~1.6.3",
     "http": "^0.0.1-security",
     "https": "^1.0.0",
     "jquery": "^3.6.1",
     "less": "^4.1.3",
     "pug": "^3.0.2",
+    "pug-loader": "^2.4.0",
     "webpack": "^5.74.0",
     "webpack-node-externals": "^3.0.0"
   },

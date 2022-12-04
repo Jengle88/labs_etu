@@ -1,6 +1,6 @@
 require("../stylesheets/common_style.less")
 require("../stylesheets/profile.less")
 require("../stylesheets/edit_profile.less")
-require("../build/scripts/edit_profile.js")
-require("../build/scripts/client.js")
 require("../build/scripts/jquery.js")
+require("../build/scripts/client.js")
+require("../build/scripts/edit_profile.js")

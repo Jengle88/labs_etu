@@ -5,7 +5,7 @@ const url = "https://localhost:3000"
  * @description  Return users list
  */
 export const getUsers = async () => {
-    let response = await fetch(url + "/api/users/get_all_users")
+    let response = await fetch(url + "/api/users/get_users")
     return await response.json()
 }
 
@@ -21,12 +21,23 @@ export async function getUser(userId) {
 }
 
 /**
+ * @route GET /api/users/get_user_with_localize/:userId
+ * @description  Return user with localize by userId
+ */
+export async function getUserWithLocalize(userId) {
+    let response = await fetch(url + `/api/users/get_user_with_localize/${userId}`, {
+        method: "GET"
+    })
+    return await response.json()
+}
+
+/**
  * @route GET /api/users/get_full_user_info/:userId
  * @param userId User ID
  * @description Get user info + friends + user posts + friends posts
  */
 export async function getFullUserInfo(userId) {
-    let response = await fetch(url + `api/users/get_full_user_info/${userId}`, {
+    let response = await fetch(url + `/api/users/get_full_user_info/${userId}`, {
         method: "GET"
     })
     return await response.json()

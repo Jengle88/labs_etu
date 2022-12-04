@@ -1,11 +1,12 @@
-import {getUser} from "./client.js";
-import {localizeData} from "../../../utils/data_interceptor.js";
+import {getUser, getUserWithLocalize} from "./client.js";
 import {banUser, editUser, toEditProfilePage} from "../../scripts/client.js";
 
 $(document)
     .ready(async function() {
         const userId = document.location.href.split("/").slice(-1)
-        const user = await getUser(userId)
+        const userWithLocalize = await getUserWithLocalize(userId)
+        const user = userWithLocalize.user
+        const localizeUser = userWithLocalize.localizeUser
 
         $("#edit_profile_id_input").val(user.id)
         $("#edit_profile_name_input").val(user.name)
@@ -16,15 +17,14 @@ $(document)
         $("#edit_profile_status_select").val(user.status)
         $("#edit_profile_email_input").val(user.email)
 
-        localizeData(user)
         $("#profile_user_image").attr("src", user.image_link)
-        $("#profile_id").val(user.id)
-        $("#profile_name").val(user.name)
-        $("#profile_birth").val(user.birth)
-        $("#profile_gender").val(user.gender)
-        $("#profile_role").val(user.role)
-        $("#profile_status").val(user.status)
-        $("#profile_email").val(user.email)
+        $("#profile_id").text(localizeUser.id)
+        $("#profile_name").text(localizeUser.name)
+        $("#profile_birth").text(localizeUser.birth)
+        $("#profile_gender").text(localizeUser.gender)
+        $("#profile_role").text(localizeUser.role)
+        $("#profile_status").text(localizeUser.status)
+        $("#profile_email").text(localizeUser.email)
 
         $(".ban_button").on("click", async function() {
             const userId = $(this).attr("id").split("ban_user#")[1]

@@ -51,6 +51,15 @@ try {
     console.error(err)
 }
 
+// Drawable import
+try {
+    console.log("Drawable: ");
+    fse.copySync("./public/drawable", "./dist_gulp/public/drawable", { overwrite: true });
+    console.log('Success!');
+} catch (err) {
+    console.error(err)
+}
+
 paths = {
     less: {
         src: "public/stylesheets/*.less",
