@@ -21,6 +21,17 @@ export async function getUser(userId) {
 }
 
 /**
+ * @route GET /api/users/get_full_user_info/:userId
+ * @param userId User ID
+ * @description Get user info + friends + user posts + friends posts
+ */
+export async function getFullUserInfo(userId) {
+    let response = await fetch(url + `api/users/get_full_user_info/${userId}`, {
+        method: "GET"
+    })
+    return await response.json()
+}
+/**
  * @route DELETE /api/posts/delete_post/:postId
  * @param postId Post ID
  * @description Delete post from database

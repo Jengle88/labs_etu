@@ -5,7 +5,11 @@
   "scripts": {
     "start": "node server.js",
     "clean-webpack": "rm -rf webpack",
-    "clean-gulp": "rm -rf "
+    "clean-gulp": "rm -rf ",
+    "webpack_build": "npm run clean_webpack && webpack --progress",
+    "webpack_prod": "node dist_webpack/server.js",
+    "gulp_build": "npm run clean_gulp && gulp",
+    "gulp_prod": "node dist_gulp/server.js gulp"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -28,5 +32,16 @@
     "pug": "^3.0.2",
     "webpack": "^5.74.0",
     "webpack-node-externals": "^3.0.0"
+  },
+  "devDependencies": {
+    "webpack-cli": "^4.10.0",
+    "@babel/preset-env": "^7.19.1",
+    "@babel/register": "^7.18.9",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.2.5",
+    "css-loader": "^6.7.1",
+    "less-loader": "^11.0.0",
+    "style-loader": "^3.3.1"
   }
 }

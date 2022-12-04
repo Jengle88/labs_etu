@@ -1,0 +1,22 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet/less" type="text/css" href="../stylesheets/common_style.css")
+        link(rel="stylesheet/less" type="text/css" href="../stylesheets/start.css")
+        script(src="https://cdn.jsdelivr.net/npm/less")
+        title Лабораторная работа 3
+
+    body.all
+        header(id="common_header")
+            a(href="/" id="index_header_profile_link") На главную
+            a(href="/admin_panel" id="index_header_admin_panel_link") Панель управления
+
+        main(id="index_main")
+            div(id="index_main_div")
+                h1 Добро пожаловать!
+        script(src="../scripts/start.js")
+        script(src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous")
+        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous")
