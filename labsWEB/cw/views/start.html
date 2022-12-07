@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!--Нужно, чтобы распознавались русские буквы-->
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="../stylesheets/start.css">
+
+    <title>Street brawler</title>
+    <style>
+        body {
+            background: url("./images/background.jpg") fixed top;
+            width: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 auto;
+            font-family: Tahoma, Verdana, Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<div id="title" style="text-align: center;"><h1>Street brawler</h1></div>
+
+<!--GameScreen-->
+<div id="main_screen">
+    <!--StartScreen-->
+    <div id="start_screen" style="display: flex; flex-direction: column; align-items: center">
+        <h2 style="margin-bottom: 35px">Добро пожаловать!</h2>
+        <label style="display: block; margin-bottom: 15px">
+            Введите ник игрока: <br>
+            <input id="name_input"
+                   style="margin-top: 3px; width: 200px"
+                   placeholder="Player 1">
+        </label>
+        <div id="start_screen_buttons" style="width: 200px;">
+            <button id="leaderboard"
+                    style="width: 65%"
+                    onclick="ScreenScript.toLeaderboardScreen()">
+                Таблица рекордов
+            </button>
+            <button
+                    id="to_game_screen"
+                    style="width: 30%"
+                    onclick="ScreenScript.toGameScreen()">
+                Играть
+            </button>
+        </div>
+    </div>
+
+<!--    &lt;!&ndash;GameScreen&ndash;&gt;
+    <div id="game_screen" style="display: none">
+        <div id="game_info" style="width: fit-content">
+            <h3 id="player_name" style="display: block">Игрок: noname</h3>
+            <label id="current_level"
+                   style="display: block; margin-bottom: 10px">Текущий уровень: 1</label>
+            <label id="next_figure_title"
+                   style="display: block; margin-bottom: 4px">Следующая фигура:</label>
+            <canvas id="next_figure_canvas" width="80" height="80"
+                    style="display: block; border: 1px solid #000;">
+            </canvas>
+            <label id="player_score"
+                   style="display: block; margin-top: 15px; margin-bottom: 10px">Счёт: 0</label>
+
+            <div style="display: block; margin-top: 15px; width: 350px">
+                <label id="keymap">Клавиши для управления:</label>
+                <ul>
+                    <li style="margin-bottom: 8px">Стрелка влево/вправо - переместить фигуру</li>
+                    <li style="margin-bottom: 8px">Стрелка вверх - повернуть фигуру</li>
+                    <li style="margin-bottom: 8px">Стрелка вниз - опустить фигуру вниз</li>
+                    <li style="margin-bottom: 8px">Пробел - пауза/старт игры/вернуться после проигрыша</li>
+                </ul>
+            </div>
+            <button
+                    id="to_start_screen_from_game_screen"
+                    onclick="ScreenScript.toStartScreen()">
+                На главное меню
+            </button>
+        </div>
+        <div style="display: block; margin-left: 150px; margin-top: 19px">
+            <canvas id="tetris_field" width="200" height="400" style="border: 1px solid #000;">
+            </canvas>
+        </div>
+    </div>-->
+
+    <!--LeaderboardScreen-->
+    <div id="leaderboard_screen" style="display: none; flex-direction: column; align-items: center">
+        <h3 style="text-align: center">
+            Таблица рекордов
+        </h3>
+        <div class="two-column-list" id="leadearboard_list">
+        </div>
+        <button id="to_start_screen_from_leaderboard_screen"
+                onclick="ScreenScript.toStartScreen()"
+                style="width: 200px; height: 35px; font-size: medium">
+            На главное меню
+        </button>
+    </div>
+</div>
+
+<!--Scripts-->
+<script src="../scripts/screenScript.js"></script>
+<script src="../scripts/utilities.js"></script>
+
+
+</body>
+</html>

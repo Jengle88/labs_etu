@@ -1,0 +1,12 @@
+body {
+    display: flex;
+    flex-direction: row;
+}
+
+#game_field {
+    display: flex;
+    flex-direction: row;
+    height: 780px;
+    width: 1140px;
+    padding-right: 80px;
+}
