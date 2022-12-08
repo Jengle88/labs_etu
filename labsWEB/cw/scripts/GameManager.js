@@ -53,10 +53,10 @@ export class GameManager {
         }
         this.gameCycle = setInterval(() => {
             this.checkGameWon()
+            this.tryMoveEnemiesToTheirHome()
             this.mapManager.draw(this.canvas, this.ctx)
             this.checkHeal()
             this.checkGameOver()
-            this.hero.move(true)
         }, 30)
     }
 
@@ -99,8 +99,21 @@ export class GameManager {
         document.dispatchEvent(gameEndEvent)
     }
 
+    tryMoveEnemiesToTheirHome() {
+        const prevEnemiesPos = this.mapManager.enemiesPos
+        const enemiesNextToHeroPos = this.mapManager.checkHeroNextToEnemy()
+        this.enemies.forEach((enemy, index) => {
+            if (enemiesNextToHeroPos.find((pos) => { return enemy.point === pos })) {
+                this.movementManager.moveEnemy(enemy, this.hero.point)
+            } else if (enemy.point !== prevEnemiesPos[index])
+                this.movementManager.moveEnemy(enemy, prevEnemiesPos[index])
+        })
+    }
+
     async restartGame() {
         clearInterval(this.gameCycle)
         await this.init()
     }
+
+
 }

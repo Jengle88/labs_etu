@@ -3,7 +3,8 @@ import {SpriteManager} from "./SpriteManager.js";
 export class MapManager {
 
     static URL = "https://localhost:3000"
-    static neededDist = 5 // TODO Исправить на нужное расстояние
+    static neededDistForEnemy = 100 // TODO Исправить на нужное расстояние
+    static neededDistForObject = 25 // TODO Исправить на нужное расстояние
 
     constructor() {
         this.spriteManager = new SpriteManager()
@@ -61,7 +62,7 @@ export class MapManager {
 
     checkHeroNextToHeal() {
         this.healPositions.forEach((healPos) => {
-            if (this.#getDist(this.heroPos, healPos) <= MapManager.neededDist)
+            if (this.#getDist(this.heroPos, healPos) <= MapManager.neededDistForObject)
                 return healPos
         })
         return null
@@ -75,16 +76,17 @@ export class MapManager {
     }
 
     checkHeroNextToEnemy() {
+        let enemies = []
         this.enemiesPos.forEach((enemyPos) => {
-            if (this.#getDist(this.heroPos, enemyPos) <= MapManager.neededDist)
-                return true
+            if (this.#getDist(this.heroPos, enemyPos) <= MapManager.neededDistForEnemy)
+                enemies.push(enemyPos)
         })
-        return false
+        return enemies
     }
 
     checkHeroNextToFinish() {
         this.finishPositions.forEach((finishPos) => {
-            if (this.#getDist(this.heroPos, finishPos) <= MapManager.neededDist)
+            if (this.#getDist(this.heroPos, finishPos) <= MapManager.neededDistForObject)
                 return true
         })
         return false

@@ -5,16 +5,45 @@ export class MovementManager {
         this.mapManager = mapManager
     }
 
-    moveHero(hero, dir) {
-        let newX = dir === "a" ? hero.point.x - hero.currSpeed : hero.point.x
-        newX = dir === "d" ? hero.point.x + hero.currSpeed : newX
-        let newY = dir === "w" ? hero.point.y - hero.currSpeed : hero.point.y
-        newY = dir === "s" ? hero.point.y + hero.currSpeed : newY
+    moveCharacter(character, dir) {
+        switch (dir) {
+            case "a": character.currLRDir = "l"; break
+            case "d": character.currLRDir = "r"; break
+        }
+        let newX = dir === "a" ? character.point.x - character.currSpeed : character.point.x
+        newX = dir === "d" ? character.point.x + character.currSpeed : newX
+        let newY = dir === "w" ? character.point.y - character.currSpeed : character.point.y
+        newY = dir === "s" ? character.point.y + character.currSpeed : newY
 
         if (this.checkFreePath(newX, newY)) {
-            hero.point.x = newX
-            hero.point.y = newY
+            character.point.x = newX
+            character.point.y = newY
+            return true
+        } else
+            return false
+    }
+
+    heroAttack(hero) {
+        const dir = hero.currLRDir
+        // TODO написать атаку игрока
+    }
+
+    moveEnemy(enemy, targetPos) {
+        let imagineEnemyX = enemy.point.x - enemy.point.x % 2 
+        let imagineTargetX = targetPos.x - targetPos.x % 2 
+        let imagineEnemyY = enemy.point.y - enemy.point.y % 2 
+        let imagineTargetY = targetPos.y - targetPos.y % 2 
+        if (imagineEnemyX !== imagineTargetX || imagineEnemyY !== imagineTargetY) {
+            if (imagineEnemyX < imagineTargetX)
+                this.moveCharacter(enemy, "d")
+            else if (imagineEnemyX > imagineTargetX)
+                this.moveCharacter(enemy, "a")
+            if (imagineEnemyY < imagineTargetY)
+                this.moveCharacter(enemy, "s")
+            else if (imagineEnemyY > imagineTargetY)
+                this.moveCharacter(enemy, "w")
         }
+
     }
 
     checkFreePath(newX, newY) {

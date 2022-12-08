@@ -16,7 +16,7 @@ class Character extends Placeable {
 }
 
 export class Hero extends Character {
-    constructor(point, currSpeed = 5, health = 150, damage = 10, superDamage =  damage * 1.3) {
+    constructor(point, currSpeed = 7, health = 150, damage = 10, superDamage =  damage * 1.3) {
         super(point, currSpeed, health, damage);
         this.superDamage = superDamage
         this.currLRDir = "r"

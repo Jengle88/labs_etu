@@ -18,11 +18,11 @@ export class EventManager {
         const action = this.keyBind[event.keyCode]
         if (action) {
             switch (action) {
-                case "w": this.movementManager.moveHero(this.hero, "w"); break;
-                case "a": this.movementManager.moveHero(this.hero, "a"); this.hero.currLRDir = "l"; break;
-                case "s": this.movementManager.moveHero(this.hero, "s"); break;
-                case "d": this.movementManager.moveHero(this.hero, "d"); this.hero.currLRDir = "r"; break;
-                case "f": /*attack*/; break;
+                case "w": this.movementManager.moveCharacter(this.hero, "w"); break;
+                case "a": this.movementManager.moveCharacter(this.hero, "a"); break;
+                case "s": this.movementManager.moveCharacter(this.hero, "s"); break;
+                case "d": this.movementManager.moveCharacter(this.hero, "d"); break;
+                case "f": this.movementManager.heroAttack(this.hero); break;
             }
         }
     }
