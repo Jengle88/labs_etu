@@ -1,20 +1,12 @@
-class Movable extends Placeable {
-    constructor(point, currSpeed = 0) {
+import {Placeable} from "./GameObjects.js";
+
+class Character extends Placeable {
+    constructor(point, currSpeed, health, damage) {
         super(point);
         this.currSpeed = currSpeed
-    }
-
-    move() {
-        this.point.x += this.currSpeed
-        this.point.y += this.currSpeed
-    }
-}
-
-class Character extends Movable {
-    constructor(point, currSpeed, health, damage) {
-        super(point, currSpeed);
         this.health = health
         this.damage = damage
+        this.shouldAttack = false
     }
 
     makeHit = (enemy) => {
@@ -22,8 +14,8 @@ class Character extends Movable {
     }
 }
 
-class Hero extends Character {
-    constructor(point, currSpeed = 3, health = 150, damage = 10, superDamage =  damage * 1.3) {
+export class Hero extends Character {
+    constructor(point, currSpeed = 5, health = 150, damage = 10, superDamage =  damage * 1.3) {
         super(point, currSpeed, health, damage);
         this.superDamage = superDamage
     }
@@ -38,9 +30,9 @@ class Hero extends Character {
 
 }
 
-class Enemy extends Character {
-
+export class Enemy extends Character {
     constructor(point, currSpeed = 2, health = 50, damage = 7) {
         super(point, currSpeed, health, damage);
+        this.shouldAttack = true
     }
 }
