@@ -4,8 +4,8 @@ import {GameManager} from "./GameManager.js";
 const gameManager = new GameManager()
 await gameManager.init()
 // Нужно для первоначальной инициализации
-// const interval = setInterval(() => {gameManager.mapManager.draw(gameManager.canvas, gameManager.ctx)}, 10)
-// setTimeout(() => {clearInterval(interval)}, 100)
+const interval = setInterval(() => {gameManager.mapManager.draw(gameManager.canvas, gameManager.ctx)}, 10)
+setTimeout(() => {clearInterval(interval)}, 100)
 
 const startGameBtn = document.getElementById("game_start")
 

@@ -19,9 +19,9 @@ export class EventManager {
         if (action) {
             switch (action) {
                 case "w": this.movementManager.moveHero(this.hero, "w"); break;
-                case "a": this.movementManager.moveHero(this.hero, "a"); break;
+                case "a": this.movementManager.moveHero(this.hero, "a"); this.hero.currLRDir = "l"; break;
                 case "s": this.movementManager.moveHero(this.hero, "s"); break;
-                case "d": this.movementManager.moveHero(this.hero, "d"); break;
+                case "d": this.movementManager.moveHero(this.hero, "d"); this.hero.currLRDir = "r"; break;
                 case "f": /*attack*/; break;
             }
         }

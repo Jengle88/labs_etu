@@ -7,22 +7,19 @@ export class MapManager {
 
     constructor() {
         this.spriteManager = new SpriteManager()
-        this.tilesImages = {}
     }
 
     async init(level) {
-        let response = await fetch(URL + `/level_data/${level}`)
+        let response = await fetch(MapManager.URL + `/level_data/${level}`)
         this.levelData = await response.json()
         this.fieldWidth = this.levelData["width"]
         this.fieldHeight = this.levelData["height"]
         this.tileSize = this.levelData["tileheight"]
 
-        this.layerField = this.levelData["layers"][0]["data"]
-
-        let finishLayer = this.levelData["layers"][1].find((layerData) => { return layerData.name === "finish" })
-        let healPlacesLayer = this.levelData["layers"][1].find((layerData) => { return layerData.name === "heal_places" })
-        let heroPlaceLayer = this.levelData["layers"][1].find((layerData) => { return layerData.name === "hero_place" })
-        let enemyPlacesLayer = this.levelData["layers"][1].find((layerData) => { return layerData.name === "enemy_places" })
+        let finishLayer = this.levelData["layers"][1]["layers"].find((layerData) => { return layerData.name === "finish" })
+        let healPlacesLayer = this.levelData["layers"][1]["layers"].find((layerData) => { return layerData.name === "heal_places" })
+        let heroPlaceLayer = this.levelData["layers"][1]["layers"].find((layerData) => { return layerData.name === "hero_place" })
+        let enemyPlacesLayer = this.levelData["layers"][1]["layers"].find((layerData) => { return layerData.name === "enemy_places" })
 
         // Points
         this.finishPositions = this.#getPositions(finishLayer["data"], [])
@@ -36,24 +33,45 @@ export class MapManager {
         this.enemiesStartPositions.forEach((enemy) => {
             this.enemiesPos.push(new Point(enemy.x, enemy.y))
         })
-        this.healsPos = []
-        this.healPositions.forEach((heal) => {
-            this.healsPos.push(new HealObject(heal.x, heal.y))
-        })
 
         this.tilesets = this.levelData["tilesets"]
     }
 
+    setObjectsForDir(hero, enemies) {
+        this.hero = hero
+        this.enemies = enemies
+    }
+
     draw(canvas, ctx) {
-        // TODO написать функцию отрисовки
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        ctx.drawImage(this.spriteManager.getSprite(SpriteManager.spritesName.level1Background), 0, 0)
+        ctx.drawImage(this.spriteManager.getSprite(
+            this.hero.currLRDir === "l" ? SpriteManager.spritesName.mainHeroL : SpriteManager.spritesName.mainHeroR
+        ), this.heroPos.x, this.heroPos.y)
+        this.enemies.forEach((enemy) => {
+            ctx.drawImage(this.spriteManager.getSprite(
+                enemy.currLRDir === "l" ? SpriteManager.spritesName.enemy1L : SpriteManager.spritesName.enemy1R
+            ), enemy.point.x, enemy.point.y)
+        })
+        this.healPositions.forEach((healPos) => {
+            ctx.drawImage(this.spriteManager.getSprite(SpriteManager.spritesName.heal1), healPos.x, healPos.y)
+        })
     }
 
     checkHeroNextToHeal() {
         this.healPositions.forEach((healPos) => {
             if (this.#getDist(this.heroPos, healPos) <= MapManager.neededDist)
-                return true
+                return healPos
         })
-        return false
+        return null
+    }
+
+    removeHealFromField(healPos) {
+        let healIndex = this.healPositions.findIndex((heal) => { return heal.point === healPos })
+        if (healIndex !== -1) {
+            this.healPositions.splice(healIndex, 1)
+        }
     }
 
     checkHeroNextToEnemy() {
@@ -75,9 +93,8 @@ export class MapManager {
 
 
     #getPositions(src, dest) {
-        const width = this.fieldWidth / this.tileSize
         src.forEach((value, index) => {
-            if (value !== 0) dest.push(new Point(index % width, index / width))
+            if (value !== 0) dest.push(new Point((index % this.fieldWidth) * this.tileSize, Math.floor(index / this.fieldWidth) * this.tileSize))
         })
         return dest
     }
@@ -88,7 +105,7 @@ export class MapManager {
 
 }
 
-class Point {
+export class Point {
     constructor(x, y) {
         this.x = x
         this.y = y

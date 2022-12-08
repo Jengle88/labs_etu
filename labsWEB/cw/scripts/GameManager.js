@@ -1,4 +1,8 @@
-import {MapManager, Point} from "./MapManager.js";
+import {MapManager} from "./MapManager.js";
+import {Enemy, Hero} from "./Characters.js";
+import {HealObject} from "./GameObjects.js";
+import {MovementManager} from "./MovementManager.js";
+import {EventManager} from "./EventManager.js";
 
 export class GameManager {
 
@@ -8,6 +12,7 @@ export class GameManager {
     }
     constructor() {
         this.mapManager = new MapManager()
+        this.movementManager = new MovementManager(this.mapManager)
         this.level = 1
         this.currScore = 0
         this.allLevelFinished = false
@@ -18,12 +23,19 @@ export class GameManager {
         await this.mapManager.init(this.level)
         
         this.hero = new Hero(this.mapManager.heroPos)
+
+        this.eventManager = new EventManager()
+        this.eventManager.setup(this.hero, this.movementManager)
+
         this.enemies = []
         this.mapManager.enemiesPos.forEach((enemyPos) => {
             this.enemies.push(new Enemy(enemyPos))
         })
+
+        this.mapManager.setObjectsForDir(this.hero, this.enemies)
+
         this.heals = []
-        this.mapManager.healsPos.forEach((healPos) => {
+        this.mapManager.healPositions.forEach((healPos) => {
             this.heals.push(new HealObject(healPos))
         })
         
@@ -31,21 +43,35 @@ export class GameManager {
         this.canvas = document.getElementById("game_field")
         this.ctx = this.canvas.getContext("2d")
 
-        this.ctx.canvas.width = this.mapManager.fieldWidth
-        this.ctx.canvas.height = this.mapManager.fieldHeight
+        this.ctx.canvas.width = this.mapManager.fieldWidth * this.mapManager.tileSize
+        this.ctx.canvas.height = this.mapManager.fieldHeight * this.mapManager.tileSize
     }
 
     async start() {
         if (this.isGameOver) {
             await this.restartGame()
         }
+        this.gameCycle = setInterval(() => {
+            this.checkGameWon()
+            this.mapManager.draw(this.canvas, this.ctx)
+            this.checkHeal()
+            this.checkGameOver()
+            this.hero.move(true)
+        }, 30)
     }
 
     checkHeal() {
-        if (false) {
-
+        let healPos = this.mapManager.checkHeroNextToHeal()
+        if (healPos !== null) {
+            let healObject = this.heals.find((heal) => {return heal.point === healPos})
+            if (healObject !== undefined) {
+                this.hero.makeHeal(healObject)
+                this.mapManager.removeHealFromField(healPos)
+                let healIndex = this.heals.findIndex((heal) => { return heal.point === healPos })
+                if (healIndex === -1)
+                    this.heals.splice(healIndex, 1)
+            }
         }
-        // TODO проверить наличие лечебного объекта
     }
 
     checkGameOver() {
@@ -68,12 +94,13 @@ export class GameManager {
 
     finishGame() {
         this.isGameOver = true
-
+        clearInterval(this.gameCycle)
         let gameEndEvent = new CustomEvent("finishGame")
         document.dispatchEvent(gameEndEvent)
     }
 
     async restartGame() {
+        clearInterval(this.gameCycle)
         await this.init()
     }
 }
