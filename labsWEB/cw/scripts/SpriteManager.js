@@ -1,16 +1,23 @@
 export class SpriteManager {
     static spritesName = Object.freeze({
-        mainHeroR: "main_hero_r",
-        enemy1L: "enemy1_l",
+        level1Background: "level1Background",
+        level2Background: "level2Background",
+        mainHeroR: "mainHeroR",
+        enemy1L: "enemy1L",
         heal1: "heal1"
     })
 
     constructor() {
         this.sprites = {}
+        this.loadAllSprites()
     }
 
     loadAllSprites() {
         // TODO Дописать повороты персонажей
+        this.sprites[SpriteManager.spritesName.level1Background] = new Image()
+        this.sprites[SpriteManager.spritesName.level1Background].src = "/images/city_level1_ready2.png"
+        this.sprites[SpriteManager.spritesName.level2Background] = new Image()
+        this.sprites[SpriteManager.spritesName.level2Background].src = "/images/city_level2_ready2.png"
         this.sprites[SpriteManager.spritesName.mainHeroR] = new Image();
         this.sprites[SpriteManager.spritesName.mainHeroR].src = "images/main_hero_r.png"
         this.sprites[SpriteManager.spritesName.enemy1L] = new Image();
@@ -19,11 +26,12 @@ export class SpriteManager {
         this.sprites[SpriteManager.spritesName.heal1].src = "images/heal1.png"
     }
 
+
     getSprite(spriteName) {
         if (spriteName in SpriteManager.spritesName) {
-            return this.sprites[name]
+            return this.sprites[spriteName]
         } else {
-            throw `Can't find ${name} sprite`
+            throw `Can't find ${spriteName} sprite`
         }
     }
 }
