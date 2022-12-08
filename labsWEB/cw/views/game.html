@@ -22,14 +22,20 @@
                 <li style="margin-bottom: 8px">Пробел - пауза/старт игры/вернуться после проигрыша</li>
             </ul>
         </div>
+        <button id="game_start">
+            Начать игру
+        </button>
         <button
                 id="to_start_screen_from_game_screen"
-                onclick="ScreenScript.load()">
-<!--                onclick="ScreenScript.toStartScreen()">-->
+                onclick="ScreenScript.toStartScreen()">
             На главное меню
         </button>
     </div>
 
-<script src="scripts/screenScript.js"></script>
+<script src="../scripts/ScreenScript.js"></script>
+<script src="../scripts/game.js" type="module"></script>
+<script src="../scripts/GameManager.js" type="module"></script>
+<script src="../scripts/MapManager.js" type="module"></script>
+<script src="../scripts/utilities.js"></script>
 </body>
 </html>

@@ -9,6 +9,9 @@
     ],
     "file.lastUsedOpenFilter": "Все файлы (*)",
     "fileStates": {
+        "": {
+            "scaleInDock": 2
+        },
         "#city_level1 (копия)": {
             "scaleInDock": 0.125,
             "scaleInEditor": 1
@@ -114,11 +117,11 @@
             "expandedGroupLayers": [
                 5
             ],
-            "scale": 0.5444907407407408,
-            "selectedLayer": 2,
+            "scale": 0.5,
+            "selectedLayer": 3,
             "viewCenter": {
-                "x": 776.8727149051949,
-                "y": 799.8299464331263
+                "x": 832,
+                "y": 395
             }
         },
         "city_level1_ready2.json#Spritesheet_Heart": {
@@ -131,6 +134,9 @@
             "scaleInDock": 1
         },
         "city_level1_ready2.json#enemy1": {
+            "scaleInDock": 1
+        },
+        "city_level1_ready2.json#heal1": {
             "scaleInDock": 1
         },
         "city_level1_ready2.json#main_hero": {
@@ -164,8 +170,8 @@
             "scale": 0.75,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 756,
-                "y": 579.3333333333334
+                "x": 779.3333333333333,
+                "y": 539.3333333333333
             }
         },
         "city_level1_ready2.tmx#city_level1_ready": {
