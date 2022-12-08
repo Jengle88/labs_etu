@@ -1,14 +1,13 @@
 class Placeable {
-    constructor(xPos, yPos) {
-        this.xPos = xPos
-        this.yPos = yPos
+    constructor(point) {
+        this.point = point
     }
 }
 
 class HealObject extends Placeable {
 
-    constructor(xPos, yPos, healEffect = 25) {
-        super(xPos, yPos);
+    constructor(point, healEffect = 25) {
+        super(point);
         this.healEffect = healEffect
     }
 

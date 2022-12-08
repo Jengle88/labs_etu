@@ -1,18 +1,18 @@
 class Movable extends Placeable {
-    constructor(xPos, yPos, currSpeed = 0) {
-        super(xPos, yPos);
+    constructor(point, currSpeed = 0) {
+        super(point);
         this.currSpeed = currSpeed
     }
 
     move() {
-        this.xPos += this.currSpeed
-        this.yPos += this.currSpeed
+        this.point.x += this.currSpeed
+        this.point.y += this.currSpeed
     }
 }
 
 class Character extends Movable {
-    constructor(xPos, yPos, currSpeed, health, damage) {
-        super(xPos, yPos, currSpeed);
+    constructor(point, currSpeed, health, damage) {
+        super(point, currSpeed);
         this.health = health
         this.damage = damage
     }
@@ -23,8 +23,8 @@ class Character extends Movable {
 }
 
 class Hero extends Character {
-    constructor(xPos, yPos, currSpeed = 3, health = 150, damage = 10, superDamage =  damage * 1.3) {
-        super(xPos, yPos, currSpeed, health, damage);
+    constructor(point, currSpeed = 3, health = 150, damage = 10, superDamage =  damage * 1.3) {
+        super(point, currSpeed, health, damage);
         this.superDamage = superDamage
     }
 
@@ -40,7 +40,7 @@ class Hero extends Character {
 
 class Enemy extends Character {
 
-    constructor(xPos, yPos, currSpeed = 2, health = 100, damage = 7) {
-        super(xPos, yPos, currSpeed, health, damage);
+    constructor(point, currSpeed = 2, health = 50, damage = 7) {
+        super(point, currSpeed, health, damage);
     }
 }
