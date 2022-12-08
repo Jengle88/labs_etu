@@ -1,9 +1,7 @@
 class ScreenScript {
-    static maxCharacterInNickForGameScreen = 25
     static maxCharacterInNickForLeaderboardScreen = 40
 
     static URL = "https://localhost:3000"
-    // FIXME: поле с тетрисом не всегда очищается
 
     static toGameScreen() {
         let input = document.getElementById("name_input")
@@ -11,35 +9,14 @@ class ScreenScript {
             localStorage["curr_player_name"] = input.value
         } else {
             localStorage["curr_player_name"] = "Player 1"
-        } // FIXME
+        }
         window.location = ScreenScript.URL + "/game"
-
-        // document.getElementById("start_screen").style.display = "none"
-        // document.getElementById("leaderboard_screen").style.display = "none"
-        // document.getElementById("game_screen").style.display = "flex"
-        // gameCycle = new GameCycle()
-        // gameCycle.createField(UIEditor.fieldCanvas.clientWidth / UIEditor.squareSize, UIEditor.fieldCanvas.clientHeight / UIEditor.squareSize)
-        // ScreenScript.#prepareScreen()
-        // gameCycle.addKeyListener()
-        // UIEditor.drawTetrisField()
-    }
-
-    static load() {
-        let canvas = document.getElementById("game_field")
-        let context = canvas.getContext("2d")
-        let image = new Image(300, 300)
-        image.src = "images/city_level1(1).png"
-        context.drawImage(image, 0, 0, 300, 300)
     }
 
     static toStartScreen() {
-        if (/*gameCycle*/true) { // FIXME
-            let playerName = localStorage["curr_player_name"]
-            saveRecordToLeaderboard(playerName)
-            // gameCycle.removeKeyListener() // FIXME
-            // UIEditor.clearTetrisField()
-        }
-        // document.getElementById("game_screen").style.display = "none"
+        let playerName = localStorage["curr_player_name"]
+        saveRecordToLeaderboard(playerName)
+        window.location = ScreenScript.URL + "/"
         document.getElementById("leaderboard_screen").style.display = "none"
         document.getElementById("start_screen").style.display = "flex"
     }
@@ -51,12 +28,6 @@ class ScreenScript {
         } else {
             localStorage["curr_player_name"] = "Player 1"
         }
-        if (/*gameCycle*/ true) { // FIXME
-            // gameCycle.removeKeyListener()
-            // UIEditor.clearTetrisField()
-        }
-        saveRecordToLeaderboard(localStorage["curr_player_name"] )
-        // document.getElementById("game_screen").style.display = "none"
         document.getElementById("start_screen").style.display = "none"
         document.getElementById("leaderboard_screen").style.display = "flex"
         let leaderboardList = document.getElementById("leadearboard_list")
@@ -90,15 +61,6 @@ class ScreenScript {
         if (newText.length > maxCharacterInText)
             newText = newText.slice(0, maxCharacterInText).concat("...")
         return newText
-    }
-
-    static #prepareScreen() {
-        document.getElementById("current_level").textContent = `Уровень: ${"1"}` // FIXME
-        document.getElementById("player_score").textContent = `Счёт: ${"10"}` // FIXME
-        document.getElementById("player_name").textContent = ScreenScript.#prepareText(
-            "Игрок: " + localStorage["curr_player_name"],
-            ScreenScript.maxCharacterInNickForGameScreen
-        )
     }
 
     static #addAllRowsToLeaderboard(leaderboardArray, leaderboardList) {
