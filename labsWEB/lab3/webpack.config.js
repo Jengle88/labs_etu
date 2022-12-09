@@ -59,7 +59,7 @@ module.exports = {
         start: "./public/webpack_scripts/start.js",
         profile: "./public/webpack_scripts/profile.js",
         edit_profile: "./public/webpack_scripts/edit_profile.js",
-        admin_panel: "./public/webpack_scripts/admin_panel.js",
+        admin_panel: "./public/webpack_scripts/admin_panel.js"
     },
     output: {
         path: path.resolve(__dirname, "dist_webpack"),
