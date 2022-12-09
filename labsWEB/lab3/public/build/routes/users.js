@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const fs = require("fs");
-const {localizeData} = require("../../../utils/data_interceptor.js");
+const {localizeData} = require("../utils/data_interceptor.js");
 
 let database;
 
