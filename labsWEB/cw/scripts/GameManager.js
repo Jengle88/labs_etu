@@ -100,13 +100,11 @@ export class GameManager {
     }
 
     tryMoveEnemiesToTheirHome() {
-        const prevEnemiesPos = this.mapManager.enemiesPos
         const enemiesNextToHeroPos = this.mapManager.checkHeroNextToEnemy()
         this.enemies.forEach((enemy, index) => {
             if (enemiesNextToHeroPos.find((pos) => { return enemy.point === pos })) {
-                this.movementManager.moveEnemy(enemy, this.hero.point)
-            } else if (enemy.point !== prevEnemiesPos[index])
-                this.movementManager.moveEnemy(enemy, prevEnemiesPos[index])
+                this.movementManager.moveEnemy(enemy, index, this.hero.point)
+            }
         })
     }
 

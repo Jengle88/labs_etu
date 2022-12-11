@@ -3,7 +3,8 @@ import {SpriteManager} from "./SpriteManager.js";
 export class MapManager {
 
     static URL = "https://localhost:3000"
-    static neededDistForEnemy = 100 // TODO Исправить на нужное расстояние
+    static neededDistForEnemy = 200 // TODO Исправить на нужное расстояние
+    static neededDistForAttack = 70 // TODO Исправить на нужное расстояние
     static neededDistForObject = 25 // TODO Исправить на нужное расстояние
 
     constructor() {
@@ -82,6 +83,10 @@ export class MapManager {
                 enemies.push(enemyPos)
         })
         return enemies
+    }
+
+    checkCharacterMayAttack(attackedCharacterPos, defensiveCharacterPos) {
+        return this.#getDist(attackedCharacterPos, defensiveCharacterPos) <= MapManager.neededDistForAttack
     }
 
     checkHeroNextToFinish() {

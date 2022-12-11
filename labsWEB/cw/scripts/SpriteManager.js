@@ -15,7 +15,6 @@ export class SpriteManager {
     }
 
     loadAllSprites() {
-        // TODO Дописать повороты персонажей
         this.sprites[SpriteManager.spritesName.level1Background] = new Image()
         this.sprites[SpriteManager.spritesName.level1Background].src = "/images/city_level1_ready2.png"
         this.sprites[SpriteManager.spritesName.level2Background] = new Image()
