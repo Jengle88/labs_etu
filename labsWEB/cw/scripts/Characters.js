@@ -29,7 +29,6 @@ export class Hero extends Character {
     makeHeal(healObject) {
         this.health += healObject.healEffect
     }
-
 }
 
 export class Enemy extends Character {

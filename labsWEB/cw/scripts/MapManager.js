@@ -4,7 +4,6 @@ export class MapManager {
 
     static URL = "https://localhost:3000"
     static neededDistForEnemy = 200 // TODO Исправить на нужное расстояние
-    static neededDistForAttack = 70 // TODO Исправить на нужное расстояние
     static neededDistForObject = 25 // TODO Исправить на нужное расстояние
 
     constructor() {
@@ -46,19 +45,23 @@ export class MapManager {
 
     draw(canvas, ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-
         ctx.drawImage(this.spriteManager.getSprite(SpriteManager.spritesName.level1Background), 0, 0)
         ctx.drawImage(this.spriteManager.getSprite(
             this.hero.currLRDir === "l" ? SpriteManager.spritesName.mainHeroL : SpriteManager.spritesName.mainHeroR
-        ), this.heroPos.x, this.heroPos.y)
+        ), this.heroPos.x, this.heroPos.y, this.tileSize, this.tileSize)
         this.enemies.forEach((enemy) => {
             ctx.drawImage(this.spriteManager.getSprite(
                 enemy.currLRDir === "l" ? SpriteManager.spritesName.enemy1L : SpriteManager.spritesName.enemy1R
-            ), enemy.point.x, enemy.point.y)
+            ), enemy.point.x, enemy.point.y, this.tileSize, this.tileSize)
         })
         this.healPositions.forEach((healPos) => {
-            ctx.drawImage(this.spriteManager.getSprite(SpriteManager.spritesName.heal1), healPos.x, healPos.y)
+            ctx.drawImage(this.spriteManager.getSprite(
+                SpriteManager.spritesName.heal1), healPos.x, healPos.y, this.tileSize, this.tileSize)
         })
+        if (this.hero.shouldAttack)
+            ctx.drawImage(this.spriteManager.getSprite(SpriteManager.spritesName.hit1),
+                this.heroPos.x + (this.hero.currLRDir === "r" ? 1 : -1 ) * this.tileSize / 2,
+                this.heroPos.y, this.tileSize, this.tileSize) // при y смещение не нужно, так как берётся верхний левый угол для y, из-за чего тайл корректно выводится
     }
 
     checkHeroNextToHeal() {
@@ -78,15 +81,11 @@ export class MapManager {
 
     checkHeroNextToEnemy() {
         let enemies = []
-        this.enemiesPos.forEach((enemyPos) => {
-            if (this.#getDist(this.heroPos, enemyPos) <= MapManager.neededDistForEnemy)
-                enemies.push(enemyPos)
+        this.enemies.forEach((enemy) => {
+            if (this.#getDist(this.heroPos, enemy.point) <= MapManager.neededDistForEnemy)
+                enemies.push(enemy.point)
         })
         return enemies
-    }
-
-    checkCharacterMayAttack(attackedCharacterPos, defensiveCharacterPos) {
-        return this.#getDist(attackedCharacterPos, defensiveCharacterPos) <= MapManager.neededDistForAttack
     }
 
     checkHeroNextToFinish() {

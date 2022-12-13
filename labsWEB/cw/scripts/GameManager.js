@@ -12,7 +12,6 @@ export class GameManager {
     }
     constructor() {
         this.mapManager = new MapManager()
-        this.movementManager = new MovementManager(this.mapManager)
         this.level = 1
         this.currScore = 0
         this.allLevelFinished = false
@@ -25,6 +24,8 @@ export class GameManager {
         this.hero = new Hero(this.mapManager.heroPos)
 
         this.eventManager = new EventManager()
+        this.movementManager = new MovementManager(this.mapManager)
+
         this.eventManager.setup(this.hero, this.movementManager)
 
         this.enemies = []
@@ -53,9 +54,10 @@ export class GameManager {
         }
         this.gameCycle = setInterval(() => {
             this.checkGameWon()
-            this.tryMoveEnemiesToTheirHome()
-            this.mapManager.draw(this.canvas, this.ctx)
             this.checkHeal()
+            this.checkEnemiesAlive()
+            this.tryMoveEnemies()
+            this.mapManager.draw(this.canvas, this.ctx)
             this.checkGameOver()
         }, 30)
     }
@@ -95,11 +97,12 @@ export class GameManager {
     finishGame() {
         this.isGameOver = true
         clearInterval(this.gameCycle)
+        clearInterval(this.movementManager.heroAttackCoolDown)
         let gameEndEvent = new CustomEvent("finishGame")
         document.dispatchEvent(gameEndEvent)
     }
 
-    tryMoveEnemiesToTheirHome() {
+    tryMoveEnemies() {
         const enemiesNextToHeroPos = this.mapManager.checkHeroNextToEnemy()
         this.enemies.forEach((enemy, index) => {
             if (enemiesNextToHeroPos.find((pos) => { return enemy.point === pos })) {
@@ -108,10 +111,19 @@ export class GameManager {
         })
     }
 
-    async restartGame() {
-        clearInterval(this.gameCycle)
-        await this.init()
+    checkEnemiesAlive() {
+        for (let i = 0; i < this.enemies.length; i++) {
+            if (this.enemies[i].health <= 0) {
+                this.enemies.splice(i, 1)
+                this.mapManager.enemiesPos.splice(i, 1)
+            }
+        }
     }
 
 
+    async restartGame() {
+        clearInterval(this.gameCycle)
+        clearInterval(this.movementManager.heroAttackCoolDown)
+        await this.init()
+    }
 }

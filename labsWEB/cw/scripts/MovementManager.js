@@ -1,8 +1,36 @@
+import {Point} from "./MapManager.js";
 
 export class MovementManager {
 
     constructor(mapManager) {
         this.mapManager = mapManager
+        this.heroAttackCoolDown = setInterval(() => {
+            let hero = this.mapManager.hero
+            if (!hero.shouldAttack)
+                return
+            let upX = hero.point.x, upY = hero.point.y - this.mapManager.tileSize
+            let downX = hero.point.x, downY = hero.point.y + this.mapManager.tileSize
+            let dirX, dirY = hero.point.y
+            if (hero.currLRDir === "l")
+                dirX = hero.point.x - this.mapManager.tileSize
+            else
+                dirX = hero.point.x + this.mapManager.tileSize
+
+            let attackedEnemies = []
+            for (let i = 0; i < this.mapManager.enemiesPos.length; i++) {
+                let enemyPos = this.mapManager.enemiesPos[i]
+                if (this.#checkInTile(enemyPos, upX, upY) ||
+                        this.#checkInTile(enemyPos, downX, downY) ||
+                        this.#checkInTile(enemyPos, dirX, dirY)) {
+                    attackedEnemies.push(this.mapManager.enemies[i])
+                }
+            }
+            for (let i = 0; i < attackedEnemies.length; i++) {
+                hero.makeHit(attackedEnemies[i], false)
+            }
+            setTimeout(() => {}, 120)
+            hero.shouldAttack = false
+        }, 150)
     }
 
     moveCharacter(character, dir, shouldNotCheckHero, currentEnemy) {
@@ -24,8 +52,7 @@ export class MovementManager {
     }
 
     heroAttack(hero) {
-        const dir = hero.currLRDir
-
+        hero.shouldAttack = true
     }
 
     moveEnemy(enemy, enemyNum, targetPos) {
@@ -59,25 +86,25 @@ export class MovementManager {
         let rdTileY = newY + this.mapManager.tileSize
 
         // left up
-        if (this.isWall(luTileX, luTileY) || this.isCharacter(luTileX, luTileY, shouldNotCheckHero, currentEnemy))
+        if (this.#isWall(luTileX, luTileY) || this.#isCharacter(luTileX, luTileY, shouldNotCheckHero, currentEnemy))
             return false
         // right up
-        if (this.isWall(ruTileX, ruTileY) || this.isCharacter(ruTileX, ruTileY, shouldNotCheckHero, currentEnemy))
+        if (this.#isWall(ruTileX, ruTileY) || this.#isCharacter(ruTileX, ruTileY, shouldNotCheckHero, currentEnemy))
             return false
         // left down
-        if (this.isWall(ldTileX, ldTileY) || this.isCharacter(ldTileX, ldTileY, shouldNotCheckHero, currentEnemy))
+        if (this.#isWall(ldTileX, ldTileY) || this.#isCharacter(ldTileX, ldTileY, shouldNotCheckHero, currentEnemy))
             return false
         // right down
-        if (this.isWall(rdTileX, rdTileY) || this.isCharacter(rdTileX, rdTileY, shouldNotCheckHero, currentEnemy))
+        if (this.#isWall(rdTileX, rdTileY) || this.#isCharacter(rdTileX, rdTileY, shouldNotCheckHero, currentEnemy))
             return false
         return true
     }
 
-    isWall(x, y) {
+    #isWall(x, y) {
         return this.mapManager.collisionPosition.find((wall) => { return wall.x <= x && x < wall.x + this.mapManager.tileSize &&
             wall.y <= y && y < wall.y + this.mapManager.tileSize })
     }
-    isCharacter(x, y, shouldNotCheckHero = false, currentEnemy = -1) {
+    #isCharacter(x, y, shouldNotCheckHero = false, currentEnemy = -1) {
         let cnt = 0
         cnt += !shouldNotCheckHero && (this.mapManager.heroPos.x <= x && x <= this.mapManager.heroPos.x + this.mapManager.tileSize &&
             this.mapManager.heroPos.y <= y && y <= this.mapManager.heroPos.y + this.mapManager.tileSize)
@@ -87,5 +114,21 @@ export class MovementManager {
                 this.mapManager.enemiesPos[i].y <= y && y <= this.mapManager.enemiesPos[i].y + this.mapManager.tileSize)
         }
         return cnt > 0
+    }
+
+    #checkInTile(enemyPos, x, y) {
+        let positions = [
+            /* lu */ new Point(x, y),
+            /* ru */ new Point(x + this.mapManager.tileSize, y),
+            /* ld */ new Point(x, y + this.mapManager.tileSize),
+            /* rd */ new Point(x + this.mapManager.tileSize, y + this.mapManager.tileSize)
+        ]
+        for (let i = 0; i < positions.length; i++) {
+            if ((enemyPos.x <= positions[i].x && positions[i].x <= enemyPos.x + this.mapManager.tileSize &&
+                enemyPos.y <= positions[i].y && positions[i].y <= enemyPos.y + this.mapManager.tileSize)) {
+                return true
+            }
+        }
+        return false
     }
 }

@@ -6,7 +6,8 @@ export class SpriteManager {
         mainHeroL: "mainHeroL",
         enemy1L: "enemy1L",
         enemy1R: "enemy1R",
-        heal1: "heal1"
+        heal1: "heal1",
+        hit1: "hit1",
     })
 
     constructor() {
@@ -29,6 +30,8 @@ export class SpriteManager {
         this.sprites[SpriteManager.spritesName.enemy1R].src = "/images/enemy1_r.png"
         this.sprites[SpriteManager.spritesName.heal1] = new Image();
         this.sprites[SpriteManager.spritesName.heal1].src = "/images/heal1.png"
+        this.sprites[SpriteManager.spritesName.hit1] = new Image();
+        this.sprites[SpriteManager.spritesName.hit1].src = "/images/hit1.png"
     }
 
 
