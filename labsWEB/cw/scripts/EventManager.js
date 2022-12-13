@@ -1,29 +1,52 @@
 
 export class EventManager {
 
-    setup(hero, movementManager) {
-        this.hero = hero
-        this.movementManager = movementManager
-        this.keyBind = {
-            87: "w",
-            65: "a",
-            83: "s",
-            68: "d",
-            70: "f",
+    static keyToNum(key) {
+        switch (key) {
+            case "w": return 87;
+            case "a": return 65;
+            case "s": return 83;
+            case "d": return 68;
+            case "f": return 70;
+            case  "e": return 101;
         }
+    }
+
+    constructor(heroAttack, heroTakeObject) {
+        this.moveKeyBind = {
+            87: { key: "w", pressed: false },
+            65: { key: "a", pressed: false },
+            83: { key: "s", pressed: false },
+            68: { key: "d", pressed: false }
+        }
+        this.actionKeyBind = {
+            70: { key: "f" },
+            101: { key: "e" }
+        }
+        this.heroAttack = heroAttack
+        this.takeObject = heroTakeObject
         document.body.addEventListener("keydown", this.onKeyDownFunc.bind(this))
+        document.body.addEventListener("keyup", this.onKeyUpFunc.bind(this))
     }
 
     onKeyDownFunc(event) {
-        const action = this.keyBind[event.keyCode]
-        if (action) {
-            switch (action) {
-                case "w": this.movementManager.moveCharacter(this.hero, "w", true); break;
-                case "a": this.movementManager.moveCharacter(this.hero, "a", true); break;
-                case "s": this.movementManager.moveCharacter(this.hero, "s", true); break;
-                case "d": this.movementManager.moveCharacter(this.hero, "d", true); break;
-                case "f": this.movementManager.heroAttack(this.hero); break;
+        let action = this.moveKeyBind[event.keyCode]
+        if (action && action.key) {
+            action.pressed = true
+            return
+        }
+        action = this.actionKeyBind[event.keyCode]
+        if (action && action.key) {
+            switch (action.key) {
+                case "f": this.heroAttack(); break;
+                case "e": this.takeObject(); break;
             }
+        }
+    }
+    onKeyUpFunc(event) {
+        const action = this.moveKeyBind[event.keyCode].key
+        if (action) {
+            this.moveKeyBind[event.keyCode].pressed = false
         }
     }
 }

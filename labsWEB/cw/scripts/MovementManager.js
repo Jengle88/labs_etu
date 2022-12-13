@@ -1,9 +1,25 @@
 import {Point} from "./MapManager.js";
+import {EventManager} from "./EventManager.js";
 
 export class MovementManager {
 
-    constructor(mapManager) {
+    constructor(mapManager, eventManager) {
         this.mapManager = mapManager
+        this.eventManager = eventManager
+        this.movementChecker = setInterval(() => {
+            if (this.eventManager.moveKeyBind[EventManager.keyToNum("w")].pressed) {
+                this.moveCharacter(this.mapManager.hero, "w", true)
+            }
+            if (this.eventManager.moveKeyBind[EventManager.keyToNum("a")].pressed) {
+                this.moveCharacter(this.mapManager.hero, "a", true)
+            }
+            if (this.eventManager.moveKeyBind[EventManager.keyToNum("s")].pressed) {
+                this.moveCharacter(this.mapManager.hero, "s", true)
+            }
+            if (this.eventManager.moveKeyBind[EventManager.keyToNum("d")].pressed) {
+                this.moveCharacter(this.mapManager.hero, "d", true)
+            }
+        }, 30)
         this.heroAttackCoolDown = setInterval(() => {
             let hero = this.mapManager.hero
             if (!hero.shouldAttack)
@@ -28,9 +44,9 @@ export class MovementManager {
             for (let i = 0; i < attackedEnemies.length; i++) {
                 hero.makeHit(attackedEnemies[i], false)
             }
-            setTimeout(() => {}, 120)
+            setTimeout(() => {}, 80)
             hero.shouldAttack = false
-        }, 150)
+        }, 100)
     }
 
     moveCharacter(character, dir, shouldNotCheckHero, currentEnemy) {
@@ -53,6 +69,12 @@ export class MovementManager {
 
     heroAttack(hero) {
         hero.shouldAttack = true
+    }
+
+    takeObject(hero) {
+        if (this.mapManager.checkHeroNextToHeal()) {
+
+        }
     }
 
     moveEnemy(enemy, enemyNum, targetPos) {

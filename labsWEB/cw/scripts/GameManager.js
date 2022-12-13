@@ -23,10 +23,11 @@ export class GameManager {
         
         this.hero = new Hero(this.mapManager.heroPos)
 
-        this.eventManager = new EventManager()
-        this.movementManager = new MovementManager(this.mapManager)
-
-        this.eventManager.setup(this.hero, this.movementManager)
+        this.eventManager = new EventManager(
+            () => { this.movementManager.heroAttack(this.hero) },
+            () => { this.movementManager.takeObject(this.hero) }
+        )
+        this.movementManager = new MovementManager(this.mapManager, this.eventManager)
 
         this.enemies = []
         this.mapManager.enemiesPos.forEach((enemyPos) => {
@@ -98,6 +99,7 @@ export class GameManager {
         this.isGameOver = true
         clearInterval(this.gameCycle)
         clearInterval(this.movementManager.heroAttackCoolDown)
+        clearInterval(this.movementManager.movementChecker)
         let gameEndEvent = new CustomEvent("finishGame")
         document.dispatchEvent(gameEndEvent)
     }
@@ -124,6 +126,7 @@ export class GameManager {
     async restartGame() {
         clearInterval(this.gameCycle)
         clearInterval(this.movementManager.heroAttackCoolDown)
+        clearInterval(this.movementManager.movementChecker)
         await this.init()
     }
 }

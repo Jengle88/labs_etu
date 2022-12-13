@@ -16,7 +16,7 @@ class Character extends Placeable {
 }
 
 export class Hero extends Character {
-    constructor(point, currSpeed = 7, health = 150, damage = 10, superDamage =  damage * 1.3) {
+    constructor(point, currSpeed = 4, health = 150, damage = 10, superDamage =  damage * 1.3) {
         super(point, currSpeed, health, damage);
         this.superDamage = superDamage
         this.currLRDir = "r"
@@ -32,7 +32,7 @@ export class Hero extends Character {
 }
 
 export class Enemy extends Character {
-    constructor(point, currSpeed = 2, health = 50, damage = 7) {
+    constructor(point, currSpeed = 3, health = 50, damage = 4) {
         super(point, currSpeed, health, damage);
         this.shouldAttack = true
         this.currLRDir = (point.x / 13 + point.y / 13 * Math.random()) % 7 < 3 ? "r" : "l"
