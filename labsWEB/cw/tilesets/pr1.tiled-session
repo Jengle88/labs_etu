@@ -117,11 +117,11 @@
             "expandedGroupLayers": [
                 5
             ],
-            "scale": 0.5,
+            "scale": 1,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 832,
-                "y": 395
+                "x": 1078,
+                "y": 134.5
             }
         },
         "city_level1_ready2.json#Spritesheet_Heart": {
@@ -134,7 +134,8 @@
             "scaleInDock": 1
         },
         "city_level1_ready2.json#enemy1": {
-            "scaleInDock": 1
+            "scaleInDock": 1,
+            "scaleInEditor": 5.5
         },
         "city_level1_ready2.json#heal1": {
             "scaleInDock": 1
