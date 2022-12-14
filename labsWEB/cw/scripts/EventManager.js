@@ -8,7 +8,7 @@ export class EventManager {
             case "s": return 83;
             case "d": return 68;
             case "f": return 70;
-            case  "e": return 101;
+            case  "e": return 69;
         }
     }
 
@@ -21,7 +21,7 @@ export class EventManager {
         }
         this.actionKeyBind = {
             70: { key: "f" },
-            101: { key: "e" }
+            69: { key: "e" }
         }
         this.heroAttack = heroAttack
         this.takeObject = heroTakeObject
@@ -44,8 +44,8 @@ export class EventManager {
         }
     }
     onKeyUpFunc(event) {
-        const action = this.moveKeyBind[event.keyCode].key
-        if (action) {
+        const action = this.moveKeyBind[event.keyCode]
+        if (action && action.key) {
             this.moveKeyBind[event.keyCode].pressed = false
         }
     }

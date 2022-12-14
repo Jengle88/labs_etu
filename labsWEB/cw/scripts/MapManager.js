@@ -4,7 +4,8 @@ export class MapManager {
 
     static URL = "https://localhost:3000"
     static neededDistForEnemy = 200 // TODO Исправить на нужное расстояние
-    static neededDistForObject = 25 // TODO Исправить на нужное расстояние
+    static neededDistForEnemyAttack = 50 // TODO Исправить на нужное расстояние
+    static neededDistForObject = 40 // TODO Исправить на нужное расстояние
 
     constructor() {
         this.spriteManager = new SpriteManager()
@@ -46,18 +47,18 @@ export class MapManager {
     draw(canvas, ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
         ctx.drawImage(this.spriteManager.getSprite(SpriteManager.spritesName.level1Background), 0, 0)
-        ctx.drawImage(this.spriteManager.getSprite(
-            this.hero.currLRDir === "l" ? SpriteManager.spritesName.mainHeroL : SpriteManager.spritesName.mainHeroR
-        ), this.heroPos.x, this.heroPos.y, this.tileSize, this.tileSize)
+        this.healPositions.forEach((healPos) => {
+            ctx.drawImage(this.spriteManager.getSprite(
+                SpriteManager.spritesName.heal1), healPos.x, healPos.y, this.tileSize, this.tileSize)
+        })
         this.enemies.forEach((enemy) => {
             ctx.drawImage(this.spriteManager.getSprite(
                 enemy.currLRDir === "l" ? SpriteManager.spritesName.enemy1L : SpriteManager.spritesName.enemy1R
             ), enemy.point.x, enemy.point.y, this.tileSize, this.tileSize)
         })
-        this.healPositions.forEach((healPos) => {
-            ctx.drawImage(this.spriteManager.getSprite(
-                SpriteManager.spritesName.heal1), healPos.x, healPos.y, this.tileSize, this.tileSize)
-        })
+        ctx.drawImage(this.spriteManager.getSprite(
+            this.hero.currLRDir === "l" ? SpriteManager.spritesName.mainHeroL : SpriteManager.spritesName.mainHeroR
+        ), this.heroPos.x, this.heroPos.y, this.tileSize, this.tileSize)
         if (this.hero.shouldAttack)
             ctx.drawImage(this.spriteManager.getSprite(SpriteManager.spritesName.hit1),
                 this.heroPos.x + (this.hero.currLRDir === "r" ? 1 : -1 ) * this.tileSize / 2,
@@ -65,15 +66,20 @@ export class MapManager {
     }
 
     checkHeroNextToHeal() {
-        this.healPositions.forEach((healPos) => {
-            if (this.#getDist(this.heroPos, healPos) <= MapManager.neededDistForObject)
+        for (let i = 0; i < this.healPositions.length; i++) {
+            let healPos = this.healPositions[i]
+            let dist = MapManager.getDist(
+                new Point(this.heroPos.x + this.tileSize / 2, this.heroPos.y + this.tileSize / 2),
+                new Point(healPos.x + this.tileSize / 2, healPos.y + this.tileSize / 2)
+            )
+            if (dist <= MapManager.neededDistForObject)
                 return healPos
-        })
+        }
         return null
     }
 
     removeHealFromField(healPos) {
-        let healIndex = this.healPositions.findIndex((heal) => { return heal.point === healPos })
+        let healIndex = this.healPositions.findIndex((_healPos) => { return _healPos === healPos })
         if (healIndex !== -1) {
             this.healPositions.splice(healIndex, 1)
         }
@@ -82,7 +88,7 @@ export class MapManager {
     checkHeroNextToEnemy() {
         let enemies = []
         this.enemies.forEach((enemy) => {
-            if (this.#getDist(this.heroPos, enemy.point) <= MapManager.neededDistForEnemy)
+            if (MapManager.getDist(this.heroPos, enemy.point) <= MapManager.neededDistForEnemy)
                 enemies.push(enemy.point)
         })
         return enemies
@@ -90,7 +96,7 @@ export class MapManager {
 
     checkHeroNextToFinish() {
         this.finishPositions.forEach((finishPos) => {
-            if (this.#getDist(this.heroPos, finishPos) <= MapManager.neededDistForObject)
+            if (MapManager.getDist(this.heroPos, finishPos) <= MapManager.neededDistForObject)
                 return true
         })
         return false
@@ -105,7 +111,7 @@ export class MapManager {
         return dest
     }
 
-    #getDist(point1, point2) {
+    static getDist(point1, point2) {
         return Math.sqrt(Math.pow(point1.x - point2.x, 2) + Math.pow(point1.y - point2.y, 2))
     }
 

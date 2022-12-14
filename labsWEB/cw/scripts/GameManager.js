@@ -25,7 +25,12 @@ export class GameManager {
 
         this.eventManager = new EventManager(
             () => { this.movementManager.heroAttack(this.hero) },
-            () => { this.movementManager.takeObject(this.hero) }
+            () => {
+                let healPos = this.mapManager.checkHeroNextToHeal()
+                let heal = this.heals.find((heal) => { return heal.point === healPos })
+                if (heal)
+                    this.movementManager.takeHeal(this.hero, heal) // FIXME починить чётность пикселя при перемещении врага
+            }
         )
         this.movementManager = new MovementManager(this.mapManager, this.eventManager)
 
@@ -55,26 +60,11 @@ export class GameManager {
         }
         this.gameCycle = setInterval(() => {
             this.checkGameWon()
-            this.checkHeal()
             this.checkEnemiesAlive()
             this.tryMoveEnemies()
             this.mapManager.draw(this.canvas, this.ctx)
             this.checkGameOver()
         }, 30)
-    }
-
-    checkHeal() {
-        let healPos = this.mapManager.checkHeroNextToHeal()
-        if (healPos !== null) {
-            let healObject = this.heals.find((heal) => {return heal.point === healPos})
-            if (healObject !== undefined) {
-                this.hero.makeHeal(healObject)
-                this.mapManager.removeHealFromField(healPos)
-                let healIndex = this.heals.findIndex((heal) => { return heal.point === healPos })
-                if (healIndex === -1)
-                    this.heals.splice(healIndex, 1)
-            }
-        }
     }
 
     checkGameOver() {
@@ -100,6 +90,7 @@ export class GameManager {
         clearInterval(this.gameCycle)
         clearInterval(this.movementManager.heroAttackCoolDown)
         clearInterval(this.movementManager.movementChecker)
+        clearInterval(this.movementManager.enemyAttackCoolDown)
         let gameEndEvent = new CustomEvent("finishGame")
         document.dispatchEvent(gameEndEvent)
     }
@@ -127,6 +118,7 @@ export class GameManager {
         clearInterval(this.gameCycle)
         clearInterval(this.movementManager.heroAttackCoolDown)
         clearInterval(this.movementManager.movementChecker)
+        clearInterval(this.movementManager.enemyAttackCoolDown)
         await this.init()
     }
 }

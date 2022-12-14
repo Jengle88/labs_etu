@@ -1,4 +1,4 @@
-import {Point} from "./MapManager.js";
+import {MapManager, Point} from "./MapManager.js";
 import {EventManager} from "./EventManager.js";
 
 export class MovementManager {
@@ -44,9 +44,14 @@ export class MovementManager {
             for (let i = 0; i < attackedEnemies.length; i++) {
                 hero.makeHit(attackedEnemies[i], false)
             }
-            setTimeout(() => {}, 80)
+            setTimeout(() => {}, 100)
             hero.shouldAttack = false
-        }, 100)
+        }, 300)
+        this.enemyAttackCoolDown = setInterval(() => {
+            for (let i = 0; i < this.mapManager.enemies.length; i++) {
+                this.tryEnemyAttack(this.mapManager.enemies[i])
+            }
+        }, 400)
     }
 
     moveCharacter(character, dir, shouldNotCheckHero, currentEnemy) {
@@ -71,10 +76,9 @@ export class MovementManager {
         hero.shouldAttack = true
     }
 
-    takeObject(hero) {
-        if (this.mapManager.checkHeroNextToHeal()) {
-
-        }
+    takeHeal(hero, heal) {
+        hero.makeHeal(heal)
+        this.mapManager.removeHealFromField(heal.point)
     }
 
     moveEnemy(enemy, enemyNum, targetPos) {
@@ -94,6 +98,19 @@ export class MovementManager {
                 this.moveCharacter(enemy, "w", false, enemyNum)
         }
 
+    }
+
+    tryEnemyAttack(enemy) {
+        let heroPos = this.mapManager.heroPos
+        if (MapManager.getDist(
+            new Point(heroPos.x + this.mapManager.tileSize / 2, heroPos.y + this.mapManager.tileSize / 2), // центр героя
+            new Point(enemy.point.x + this.mapManager.tileSize / 2, enemy.point.y + this.mapManager.tileSize / 2) // центр врага
+        ) <= MapManager.neededDistForEnemyAttack) {
+            enemy.makeHit(this.mapManager.hero, false)
+            if (this.mapManager.hero.health <= 0) {
+                alert("Наш герой погиб!")
+            }
+        }
     }
 
     checkFreePath(newX, newY, shouldNotCheckHero, currentEnemy) {
