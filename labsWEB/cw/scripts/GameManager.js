@@ -22,6 +22,7 @@ export class GameManager {
         this.isGameOver = false
 
         this.gameEndEvent = new CustomEvent("finishGame")
+        this.clearMessage = new CustomEvent("clearMessage")
 
         this.scoreUpdateAndPrint = (delta) => {
             this.currScore += delta
@@ -38,6 +39,7 @@ export class GameManager {
 
         this.toNextLevel = async () => {
             if (this.allowNextLevel && this.mapManager.checkHeroNextToFinish()) {
+                document.dispatchEvent(this.clearMessage)
                 await this.init()
             }
         }
@@ -157,7 +159,6 @@ export class GameManager {
 
     checkHeroAlive() {
         if (this.mapManager.hero.health <= 0) {
-            alert("Наш герой погиб!")
             this.finishGame()
         }
     }

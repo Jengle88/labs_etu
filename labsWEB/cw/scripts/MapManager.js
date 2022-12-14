@@ -95,10 +95,10 @@ export class MapManager {
     }
 
     checkHeroNextToFinish() {
-        this.finishPositions.forEach((finishPos) => {
+        for (const finishPos of this.finishPositions) {
             if (MapManager.getDist(this.heroPos, finishPos) <= MapManager.neededDistForObject)
                 return true
-        })
+        }
         return false
     }
 
