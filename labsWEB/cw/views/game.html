@@ -9,15 +9,23 @@
     <canvas id="game_field"></canvas>
     <div id="game_info" style="display: flex; flex-direction: column; width: fit-content">
         <h3 id="player_name" style="display: flex">Игрок: noname</h3>
-        <label id="current_level"
-               style="display: block; margin-bottom: 10px">Текущий уровень: 1</label>
-        <label id="player_score"
-               style="display: block; margin-top: 15px; margin-bottom: 10px">Счёт: 0</label>
+        <div style="display: flex; flex-direction: row">
+            <label id="current_level_title"
+                   style="display: block; margin-bottom: 10px">Текущий уровень: </label>
+            <label id="current_level_value"
+                   style="display: block; margin-bottom: 10px; margin-left: 8px">1</label>
+        </div>
+        <div style="display: flex; flex-direction: row">
+            <label id="player_score_title"
+                   style="display: block; margin-top: 15px; margin-bottom: 10px">Счёт: </label>
+            <label id="player_score_value"
+                   style="display: block; margin-top: 15px; margin-bottom: 10px; margin-left: 8px">0</label>
+        </div>
         <div style="display: flex; flex-direction: row">
             <label id="hero_health_title"
                    style="display: block; margin-top: 15px; margin-bottom: 10px">Здоровье: </label>
             <label id="hero_health_value"
-                   style="display: block; margin-top: 15px; margin-bottom: 10px">150</label>
+                   style="display: block; margin-top: 15px; margin-bottom: 10px; margin-left: 8px">150</label>
         </div>
 
         <div style="display: block; margin-top: 15px; width: 350px">
@@ -29,11 +37,13 @@
                 <li style="margin-bottom: 8px">Пробел - пауза/старт игры/вернуться после проигрыша</li>
             </ul>
         </div>
-        <button id="game_start">
+        <button id="restart_game" style="visibility: hidden">
+            Перезапустить игру
+        </button>
+        <button id="game_start" style="visibility: visible">
             Начать игру
         </button>
-        <button
-                id="to_start_screen_from_game_screen"
+        <button id="to_start_screen_from_game_screen"
                 onclick="ScreenScript.toStartScreen()">
             На главное меню
         </button>

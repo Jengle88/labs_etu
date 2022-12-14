@@ -1,9 +1,10 @@
 import {MapManager, Point} from "./MapManager.js";
 import {EventManager} from "./EventManager.js";
+import {GameManager} from "./GameManager.js";
 
 export class MovementManager {
 
-    constructor(mapManager, eventManager) {
+    constructor(mapManager, eventManager, scoreUpdateAndPrint, healthPrint) {
         this.mapManager = mapManager
         this.eventManager = eventManager
         this.movementChecker = setInterval(() => {
@@ -43,6 +44,10 @@ export class MovementManager {
             }
             for (let i = 0; i < attackedEnemies.length; i++) {
                 hero.makeHit(attackedEnemies[i], false)
+                scoreUpdateAndPrint(GameManager.scoreDeltas.hit)
+                if (attackedEnemies[i].health <= 0) {
+                    scoreUpdateAndPrint(GameManager.scoreDeltas.kill)
+                }
             }
             setTimeout(() => {}, 100)
             hero.shouldAttack = false
@@ -52,6 +57,8 @@ export class MovementManager {
                 this.tryEnemyAttack(this.mapManager.enemies[i])
             }
         }, 400)
+
+        this.healthPrint = healthPrint
     }
 
     moveCharacter(character, dir, shouldNotCheckHero, currentEnemy) {
@@ -78,8 +85,8 @@ export class MovementManager {
 
     takeHeal(hero, heal) {
         hero.makeHeal(heal)
-        document.getElementById("hero_health_value").innerText = ` ${ this.mapManager.hero.health.toFixed(2) }`
-                this.mapManager.removeHealFromField(heal.point)
+        this.healthPrint(hero.health)
+        this.mapManager.removeHealFromField(heal.point)
     }
 
     moveEnemy(enemy, enemyNum, targetPos) {
@@ -108,10 +115,7 @@ export class MovementManager {
             new Point(enemy.point.x + this.mapManager.tileSize / 2, enemy.point.y + this.mapManager.tileSize / 2) // центр врага
         ) <= MapManager.neededDistForEnemyAttack) {
             enemy.makeHit(this.mapManager.hero, false)
-            document.getElementById("hero_health_value").innerText = ` ${ this.mapManager.hero.health.toFixed(2) }`
-            if (this.mapManager.hero.health <= 0) {
-                alert("Наш герой погиб!")
-            }
+            this.healthPrint(this.mapManager.hero.health)
         }
     }
 

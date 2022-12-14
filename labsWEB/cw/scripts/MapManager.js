@@ -5,7 +5,7 @@ export class MapManager {
     static URL = "https://localhost:3000"
     static neededDistForEnemy = 200 // TODO Исправить на нужное расстояние
     static neededDistForEnemyAttack = 50 // TODO Исправить на нужное расстояние
-    static neededDistForObject = 40 // TODO Исправить на нужное расстояние
+    static neededDistForObject = 20 // TODO Исправить на нужное расстояние
 
     constructor() {
         this.spriteManager = new SpriteManager()
@@ -101,8 +101,6 @@ export class MapManager {
         })
         return false
     }
-
-
 
     #getPositions(src, dest) {
         src.forEach((value, index) => {

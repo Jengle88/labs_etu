@@ -8,11 +8,12 @@ export class EventManager {
             case "s": return 83;
             case "d": return 68;
             case "f": return 70;
-            case  "e": return 69;
+            case "e": return 69;
+            case "q": return 81;
         }
     }
 
-    constructor(heroAttack, heroTakeObject) {
+    constructor(heroAttack, heroTakeObject, toNextLevel) {
         this.moveKeyBind = {
             87: { key: "w", pressed: false },
             65: { key: "a", pressed: false },
@@ -21,10 +22,12 @@ export class EventManager {
         }
         this.actionKeyBind = {
             70: { key: "f" },
-            69: { key: "e" }
+            69: { key: "e" },
+            81: { key: "q" }
         }
         this.heroAttack = heroAttack
         this.takeObject = heroTakeObject
+        this.toNextLevel = toNextLevel
         document.body.addEventListener("keydown", this.onKeyDownFunc.bind(this))
         document.body.addEventListener("keyup", this.onKeyUpFunc.bind(this))
     }
@@ -40,6 +43,7 @@ export class EventManager {
             switch (action.key) {
                 case "f": this.heroAttack(); break;
                 case "e": this.takeObject(); break;
+                case "q": this.toNextLevel(); break;
             }
         }
     }

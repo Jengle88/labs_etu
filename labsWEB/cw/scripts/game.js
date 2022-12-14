@@ -8,10 +8,19 @@ const interval = setInterval(() => {gameManager.mapManager.draw(gameManager.canv
 setTimeout(() => {clearInterval(interval)}, 100)
 
 const startGameBtn = document.getElementById("game_start")
+const restartGameBtn = document.getElementById("restart_game")
 
 startGameBtn.addEventListener("click", async () => {
     if (!gameManager.allLevelFinished) {
-        startGameBtn.disabled = true
+        document.getElementById("game_start").style.visibility = "hidden"
+        document.getElementById("restart_game").style.visibility = "visible"
+        await gameManager.start()
+    }
+})
+
+restartGameBtn.addEventListener("click", async () => {
+    if (gameManager.isGameOver) {
+        await gameManager.init()
         await gameManager.start()
     }
 })
@@ -21,6 +30,7 @@ document.addEventListener("finishGame", () => {
         alert("Вы завершили все уровни")
     }
     if (gameManager.currScore >= GameManager.levelScores[gameManager.level]) {
+        gameManager.level++
         alert("Открылся выход в нижнем правом углу")
     }
 })
