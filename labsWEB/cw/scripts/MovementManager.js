@@ -78,7 +78,8 @@ export class MovementManager {
 
     takeHeal(hero, heal) {
         hero.makeHeal(heal)
-        this.mapManager.removeHealFromField(heal.point)
+        document.getElementById("hero_health_value").innerText = ` ${ this.mapManager.hero.health.toFixed(2) }`
+                this.mapManager.removeHealFromField(heal.point)
     }
 
     moveEnemy(enemy, enemyNum, targetPos) {
@@ -107,6 +108,7 @@ export class MovementManager {
             new Point(enemy.point.x + this.mapManager.tileSize / 2, enemy.point.y + this.mapManager.tileSize / 2) // центр врага
         ) <= MapManager.neededDistForEnemyAttack) {
             enemy.makeHit(this.mapManager.hero, false)
+            document.getElementById("hero_health_value").innerText = ` ${ this.mapManager.hero.health.toFixed(2) }`
             if (this.mapManager.hero.health <= 0) {
                 alert("Наш герой погиб!")
             }
