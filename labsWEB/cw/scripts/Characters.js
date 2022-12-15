@@ -22,8 +22,8 @@ export class Hero extends Character {
         this.currLRDir = "r"
     }
 
-    makeHit = (enemy, shouldSuperHit) => {
-        enemy.health -= shouldSuperHit ? this.damage : this.superDamage
+    makeHit = (enemy) => {
+        enemy.health -= Math.floor(this.point.x / 13 + this.point.y / 13 * Math.random()) % 7 < 3 ? this.damage : this.superDamage
     }
 
     makeHeal(healObject) {
@@ -32,13 +32,14 @@ export class Hero extends Character {
 }
 
 export class Enemy extends Character {
-    constructor(point, currSpeed = 3, health = 50, damage = 4) {
+    constructor(point, currSpeed = 3, health = 50, damage = 4, superDamage =  damage * 1.2) {
         super(point, currSpeed, health, damage);
         this.shouldAttack = true
-        this.currLRDir = (point.x / 13 + point.y / 13 * Math.random()) % 7 < 3 ? "r" : "l"
+        this.superDamage = superDamage
+        this.currLRDir = Math.floor(point.x / 13 + point.y / 13 * Math.random()) % 7 < 3 ? "r" : "l" // начальный поворот врага определяется случайно
     }
 
     makeHit = (hero) => {
-        hero.health -= hero.currLRDir === this.currLRDir ? this.damage : this.damage * 1.2
+        hero.health -= hero.currLRDir === this.currLRDir ? this.damage : this.superDamage
     }
 }

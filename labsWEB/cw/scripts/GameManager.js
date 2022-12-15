@@ -7,7 +7,7 @@ import {EventManager} from "./EventManager.js";
 export class GameManager {
 
     static levelScores = {
-        1: 10,
+        1: 400,
         2: 700
     }
     static scoreDeltas = {
@@ -15,7 +15,6 @@ export class GameManager {
         kill : 15
     }
     constructor() {
-
         this.mapManager = new MapManager()
         this.level = 1
         this.allLevelFinished = false
@@ -29,11 +28,11 @@ export class GameManager {
             document.getElementById("player_score_value").innerText = ` ${this.currScore}`
         }
 
-        this.levelPrinter = () => {
-            document.getElementById("current_level_value").innerText = ` ${this.level}`
+        this.levelPrinter = (level = this.level) => {
+            document.getElementById("current_level_value").innerText = ` ${level}`
         }
 
-        this.healthPrinter = (health) => {
+        this.healthPrinter = (health = this.hero.health) => {
             document.getElementById("hero_health_value").innerText = `${ Math.max(health.toFixed(2), 0) }`
         }
 
@@ -67,7 +66,7 @@ export class GameManager {
                 let healPos = this.mapManager.checkHeroNextToHeal()
                 let heal = this.heals.find((heal) => { return heal.point === healPos })
                 if (heal)
-                    this.movementManager.takeHeal(this.hero, heal) // FIXME починить чётность пикселя при перемещении врага
+                    this.movementManager.takeHeal(this.hero, heal)
             },
             this.toNextLevel
         )

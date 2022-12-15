@@ -91,10 +91,10 @@ export class MovementManager {
 
     moveEnemy(enemy, enemyNum, targetPos) {
         // Нужно, чтобы модели врагов не колебались от нечётности пикселя
-        let imagineEnemyX = enemy.point.x - enemy.point.x % 2 
-        let imagineTargetX = targetPos.x - targetPos.x % 2 
-        let imagineEnemyY = enemy.point.y - enemy.point.y % 2 
-        let imagineTargetY = targetPos.y - targetPos.y % 2 
+        let imagineEnemyX = enemy.point.x - enemy.point.x % 3
+        let imagineTargetX = targetPos.x - targetPos.x % 3
+        let imagineEnemyY = enemy.point.y - enemy.point.y % 3
+        let imagineTargetY = targetPos.y - targetPos.y % 3
         if (imagineEnemyX !== imagineTargetX || imagineEnemyY !== imagineTargetY) {
             if (imagineEnemyX < imagineTargetX)
                 this.moveCharacter(enemy, "d", false, enemyNum)

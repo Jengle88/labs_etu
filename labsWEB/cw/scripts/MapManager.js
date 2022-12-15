@@ -3,9 +3,9 @@ import {SpriteManager} from "./SpriteManager.js";
 export class MapManager {
 
     static URL = "https://localhost:3000"
-    static neededDistForEnemy = 200 // TODO Исправить на нужное расстояние
-    static neededDistForEnemyAttack = 50 // TODO Исправить на нужное расстояние
-    static neededDistForObject = 20 // TODO Исправить на нужное расстояние
+    static neededDistForEnemy = 200
+    static neededDistForEnemyAttack = 50
+    static neededDistForObject = 30
 
     constructor() {
         this.spriteManager = new SpriteManager()
