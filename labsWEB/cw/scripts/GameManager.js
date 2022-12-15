@@ -67,12 +67,19 @@ export class GameManager {
         this.hero = new Hero(this.mapManager.heroPos)
 
         this.eventManager = new EventManager(
-            () => { this.movementManager.heroAttack(this.hero); this.audioManager.playSound(AudioManager.gameSound.hitAudio) },
             () => {
-                let healPos = this.mapManager.checkHeroNextToHeal()
-                let heal = this.heals.find((heal) => { return heal.point === healPos })
-                if (heal)
-                    this.movementManager.takeHeal(this.hero, heal)
+                if (!this.isGameOver && !this.allLevelFinished) {
+                    this.movementManager.heroAttack(this.hero)
+                    this.audioManager.playSound(AudioManager.gameSound.hitAudio)
+                }
+            },
+            () => {
+                if (!this.isGameOver && !this.allLevelFinished) {
+                    let healPos = this.mapManager.checkHeroNextToHeal()
+                    let heal = this.heals.find((heal) => { return heal.point === healPos })
+                    if (heal)
+                        this.movementManager.takeHeal(this.hero, heal)
+                }
             },
             this.toNextLevel
         )
@@ -100,9 +107,7 @@ export class GameManager {
     }
 
     async start() {
-        if (this.isGameOver) {
-            await this.restartGame()
-        }
+        this.isGameOver = false
         this.gameCycle = setInterval(() => {
             this.checkGameWon()
             this.checkEnemiesAlive()
@@ -172,13 +177,5 @@ export class GameManager {
         if (this.mapManager.hero.health <= 0) {
             this.finishGame()
         }
-    }
-
-    async restartGame() {
-        clearInterval(this.gameCycle)
-        clearInterval(this.movementManager.heroAttackCoolDown)
-        clearInterval(this.movementManager.movementChecker)
-        clearInterval(this.movementManager.enemyAttackCoolDown)
-        await this.init()
     }
 }

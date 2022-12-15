@@ -21,6 +21,7 @@ startGameBtn.addEventListener("click", async () => {
 
 restartGameBtn.addEventListener("click", async () => {
     gameMessage.innerText = ""
+    gameManager.finishGame()
     await gameManager.init()
     await gameManager.start()
 })

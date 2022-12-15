@@ -9,6 +9,8 @@ export class AudioManager {
         this.background2Audio = new Audio("audio/background2_audio.mp3")
         this.hitAudio = new Audio("audio/hit.wav")
         this.characterDeathAudio = new Audio("audio/character_death.wav")
+        this.background1Audio.loop = true
+        this.background2Audio.loop = true
     }
 
     playBackground(level) {
