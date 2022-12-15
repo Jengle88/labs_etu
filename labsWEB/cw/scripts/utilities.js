@@ -4,25 +4,17 @@ function parseMapFromJSON (jsonObject) {
     return new Map(Object.entries(parseJson))
 }
 
-function saveRecordToLeaderboard(playerName) {
+function saveRecordToLeaderboard(playerName, score) {
     if (localStorage.getItem("leaderboard") == null) {
         let leaderboard = new Map() // создание новой таблицы лидеров
-        if (true /*gameCycle && gameCycle.gameScoreProxy*/) { // FIXME
-            leaderboard.set(playerName, 10 /*gameCycle.gameScoreProxy.score*/) // FIXME
-        } else {
-            leaderboard.set(playerName, 0)
-        }
+            leaderboard.set(playerName, score)
         localStorage["leaderboard"] = JSON.stringify(Object.fromEntries(leaderboard))
     } else {
         let leaderboard = parseMapFromJSON(localStorage["leaderboard"])
         let record = 0
         if (leaderboard.has(playerName))
             record = leaderboard.get(playerName)
-        if (true/*gameCycle && gameCycle.gameScoreProxy*/) {  // FIXME
-            leaderboard.set(playerName, Math.max(10/*gameCycle.gameScoreProxy.score*/, record))
-        } else {
-            leaderboard.set(playerName, record)
-        }
+        leaderboard.set(playerName, Math.max(score, record))
         localStorage["leaderboard"] = JSON.stringify(Object.fromEntries(leaderboard)) // обновление рекорда
     }
 }

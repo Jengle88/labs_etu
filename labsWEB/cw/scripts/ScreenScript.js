@@ -14,8 +14,6 @@ class ScreenScript {
     }
 
     static toStartScreen() {
-        let playerName = localStorage["curr_player_name"]
-        saveRecordToLeaderboard(playerName)
         window.location = ScreenScript.URL + "/"
         document.getElementById("leaderboard_screen").style.display = "none"
         document.getElementById("start_screen").style.display = "flex"

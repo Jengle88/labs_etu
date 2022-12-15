@@ -40,6 +40,7 @@ export class GameManager {
         this.toNextLevel = async () => {
             if (this.allowNextLevel && this.mapManager.checkHeroNextToFinish()) {
                 document.dispatchEvent(this.clearMessage)
+                saveRecordToLeaderboard(localStorage["curr_player_name"], this.currScore)
                 await this.init()
             }
         }
