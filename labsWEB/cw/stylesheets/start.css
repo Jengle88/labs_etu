@@ -1,12 +1,24 @@
+body {
+    background: #929292 url("../images/game_logo.png") no-repeat fixed top;
+    width: auto;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    font-family: Tahoma, Verdana, Arial, sans-serif;
+}
+
 .two-column-list {
     display: table;
+    background: #929292;
     width: 100%;
     border-collapse: collapse;
 }
 
 .two-column-row {
     display: table-row;
-    background: #e2e5e7;
+    background: #929292;
 }
 
 .two-column-row-item-left {
@@ -23,10 +35,10 @@
 }
 
 .two-column-row .two-column-row-item-left:first-child {
-    border-right: 30px solid #fff;
-    border-bottom: 15px solid #fff;
+    border-right: 30px solid #929292;
+    border-bottom: 15px solid #929292;
 }
 .two-column-row .two-column-row-item-right:last-child {
-    border-left: 30px solid #fff;
-    border-bottom: 15px solid #fff;
+    border-left: 30px solid #929292;
+    border-bottom: 15px solid #929292;
 }

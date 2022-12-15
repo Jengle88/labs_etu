@@ -1,6 +1,11 @@
 body {
+    background: #929292;
+    width: auto;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    font-family: Tahoma, Verdana, Arial, sans-serif;
 }
 #game_div {
     display: flex;

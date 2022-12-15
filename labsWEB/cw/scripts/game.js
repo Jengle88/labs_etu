@@ -10,6 +10,7 @@ setTimeout(() => {clearInterval(interval)}, 100)
 const startGameBtn = document.getElementById("game_start")
 const restartGameBtn = document.getElementById("restart_game")
 const gameMessage = document.getElementById("game_message")
+document.getElementById("player_name").innerText = `Игрок: ${localStorage["curr_player_name"]}`
 
 startGameBtn.addEventListener("click", async () => {
     document.getElementById("game_start").style.visibility = "hidden"
