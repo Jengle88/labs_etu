@@ -3,6 +3,8 @@ import {Enemy, Hero} from "./Characters.js";
 import {HealObject} from "./GameObjects.js";
 import {MovementManager} from "./MovementManager.js";
 import {EventManager} from "./EventManager.js";
+import {SpriteManager} from "./SpriteManager.js";
+import {AudioManager} from "./AudioManager.js";
 
 export class GameManager {
 
@@ -15,7 +17,8 @@ export class GameManager {
         kill : 15
     }
     constructor() {
-        this.mapManager = new MapManager()
+        this.audioManager = new AudioManager()
+        this.mapManager = new MapManager(new SpriteManager())
         this.level = 1
         this.allLevelFinished = false
         this.isGameOver = false
@@ -43,6 +46,9 @@ export class GameManager {
                 clearInterval(this.movementManager.heroAttackCoolDown)
                 clearInterval(this.movementManager.movementChecker)
                 clearInterval(this.movementManager.enemyAttackCoolDown)
+                this.audioManager.pauseBackground(this.level)
+                this.level++
+                this.audioManager.playBackground(this.level)
                 await this.init()
             }
         }
@@ -61,7 +67,7 @@ export class GameManager {
         this.hero = new Hero(this.mapManager.heroPos)
 
         this.eventManager = new EventManager(
-            () => { this.movementManager.heroAttack(this.hero) },
+            () => { this.movementManager.heroAttack(this.hero); this.audioManager.playSound(AudioManager.gameSound.hitAudio) },
             () => {
                 let healPos = this.mapManager.checkHeroNextToHeal()
                 let heal = this.heals.find((heal) => { return heal.point === healPos })
@@ -105,11 +111,13 @@ export class GameManager {
             this.mapManager.draw(this.canvas, this.ctx)
             this.checkGameOver()
         }, 30)
+        this.audioManager.playBackground(this.level)
     }
 
     checkGameOver() {
         if (this.hero.health <= 0) {
             this.currScore = 0
+            this.audioManager.playSound(AudioManager.gameSound.characterDeathAudio)
             this.level = 1
             this.finishGame()
         }

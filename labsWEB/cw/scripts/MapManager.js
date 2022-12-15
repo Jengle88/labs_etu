@@ -7,8 +7,8 @@ export class MapManager {
     static neededDistForEnemyAttack = 50
     static neededDistForObject = 30
 
-    constructor() {
-        this.spriteManager = new SpriteManager()
+    constructor(spriteManager) {
+        this.spriteManager = spriteManager
         this.background = null
     }
 

@@ -35,7 +35,6 @@ document.addEventListener("finishGame", () => {
         return
     }
     if (gameManager.currScore >= GameManager.levelScores[gameManager.level]) {
-        gameManager.level++
         gameMessage.innerText = "Открылся выход в правом нижнем углу. Дойдите до него и нажмите q"
         return
     }
