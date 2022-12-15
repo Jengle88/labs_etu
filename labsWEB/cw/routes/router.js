@@ -14,7 +14,7 @@ router.get("/level_data/:level", async (req, res) => {
     let level = req.params["level"]
     switch (level) {
         case "1": res.send(fs.readFileSync("tilesets/city_level1_ready2.json")); break;
-        case "2": res.send("{}"/*fs.readFileSync("tilesets/city_level1_ready2.json")*/); break;
+        case "2": res.send(fs.readFileSync("tilesets/city_level2_ready2.json")); break;
         default: res.send("{}")
     }
 })

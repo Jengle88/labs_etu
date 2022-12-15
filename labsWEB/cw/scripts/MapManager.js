@@ -9,10 +9,15 @@ export class MapManager {
 
     constructor() {
         this.spriteManager = new SpriteManager()
+        this.background = null
     }
 
     async init(level) {
         let response = await fetch(MapManager.URL + `/level_data/${level}`)
+        switch (level) {
+            case 1: this.background = this.spriteManager.getSprite(SpriteManager.spritesName.level1Background); break;
+            case 2: this.background = this.spriteManager.getSprite(SpriteManager.spritesName.level2Background); break;
+        }
         this.levelData = await response.json()
         this.fieldWidth = this.levelData["width"]
         this.fieldHeight = this.levelData["height"]
@@ -46,7 +51,7 @@ export class MapManager {
 
     draw(canvas, ctx) {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
-        ctx.drawImage(this.spriteManager.getSprite(SpriteManager.spritesName.level1Background), 0, 0)
+        ctx.drawImage(this.background, 0, 0)
         this.healPositions.forEach((healPos) => {
             ctx.drawImage(this.spriteManager.getSprite(
                 SpriteManager.spritesName.heal1), healPos.x, healPos.y, this.tileSize, this.tileSize)

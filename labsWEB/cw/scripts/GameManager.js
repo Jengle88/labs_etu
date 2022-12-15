@@ -7,7 +7,7 @@ import {EventManager} from "./EventManager.js";
 export class GameManager {
 
     static levelScores = {
-        1: 400,
+        1: 10,
         2: 700
     }
     static scoreDeltas = {
@@ -41,6 +41,9 @@ export class GameManager {
             if (this.allowNextLevel && this.mapManager.checkHeroNextToFinish()) {
                 document.dispatchEvent(this.clearMessage)
                 saveRecordToLeaderboard(localStorage["curr_player_name"], this.currScore)
+                clearInterval(this.movementManager.heroAttackCoolDown)
+                clearInterval(this.movementManager.movementChecker)
+                clearInterval(this.movementManager.enemyAttackCoolDown)
                 await this.init()
             }
         }

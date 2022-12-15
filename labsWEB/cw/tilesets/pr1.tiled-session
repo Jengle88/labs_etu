@@ -117,11 +117,11 @@
             "expandedGroupLayers": [
                 5
             ],
-            "scale": 1,
-            "selectedLayer": 1,
+            "scale": 0.5,
+            "selectedLayer": 4,
             "viewCenter": {
-                "x": 1078,
-                "y": 134.5
+                "x": 612,
+                "y": 451
             }
         },
         "city_level1_ready2.json#Spritesheet_Heart": {
@@ -185,6 +185,29 @@
             "scaleInDock": 1
         },
         "city_level1_ready2.tmx#main_hero": {
+            "scaleInDock": 1
+        },
+        "city_level2_ready2.json": {
+            "scale": 0.5,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 1050,
+                "y": 469
+            }
+        },
+        "city_level2_ready2.json#city_level1_ready": {
+            "scaleInDock": 0.5
+        },
+        "city_level2_ready2.json#colors": {
+            "scaleInDock": 1
+        },
+        "city_level2_ready2.json#enemy1": {
+            "scaleInDock": 1
+        },
+        "city_level2_ready2.json#heal1": {
+            "scaleInDock": 1
+        },
+        "city_level2_ready2.json#main_hero": {
             "scaleInDock": 1
         },
         "daseqwe.tmx": {
