@@ -152,6 +152,7 @@ export class GameManager {
         clearInterval(this.movementManager.movementChecker)
         clearInterval(this.movementManager.enemyAttackCoolDown)
         document.dispatchEvent(this.gameEndEvent)
+        saveRecordToLeaderboard(this.hero, this.currScore)
         this.levelPrinter()
     }
 
