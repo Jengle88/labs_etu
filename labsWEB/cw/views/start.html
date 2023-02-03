@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!--Нужно, чтобы распознавались русские буквы-->
+    <meta charset="UTF-8">
+
+    <link rel="stylesheet" href="../stylesheets/start.css">
+
+    <title>Street brawler</title>
+</head>
+<body>
+
+<div id="title" style="text-align: center;"><h1>Street brawler</h1></div>
+
+<!--GameScreen-->
+<div id="main_screen">
+    <!--StartScreen-->
+    <div id="start_screen" style="display: flex; flex-direction: column; align-items: center">
+        <h2 style="margin-bottom: 35px">Добро пожаловать!</h2>
+        <label style="display: block; margin-bottom: 15px">
+            Введите ник игрока: <br>
+            <input id="name_input"
+                   style="margin-top: 3px; width: 200px"
+                   placeholder="Player 1">
+        </label>
+        <div id="start_screen_buttons" style="width: 200px;">
+            <button id="leaderboard"
+                    style="width: 65%"
+                    onclick="ScreenScript.toLeaderboardScreen()">
+                Таблица рекордов
+            </button>
+            <button
+                    id="to_game_screen"
+                    style="width: 30%"
+                    onclick="ScreenScript.toGameScreen()">
+                Играть
+            </button>
+        </div>
+    </div>
+
+    <!--LeaderboardScreen-->
+    <div id="leaderboard_screen" style="display: none; flex-direction: column; align-items: center;">
+        <h3 style="text-align: center">
+            Таблица рекордов
+        </h3>
+        <div class="two-column-list" id="leadearboard_list">
+        </div>
+        <button id="to_start_screen_from_leaderboard_screen"
+                onclick="ScreenScript.toStartScreen()"
+                style="width: 200px; height: 35px; font-size: medium">
+            На главное меню
+        </button>
+    </div>
+</div>
+
+<!--Scripts-->
+<script src="../scripts/ScreenScript.js"></script>
+<script src="../scripts/utilities.js"></script>
+
+
+</body>
+</html>

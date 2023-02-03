@@ -1,0 +1,125 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(http-equiv="X-UA-Compatible" content="IE=edge")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet/less" type="text/css" href="../stylesheets/common_style.css")
+        link(rel="stylesheet/less" type="text/css" href="../stylesheets/profile.css")
+        link(rel="stylesheet/less" type="text/css" href="../stylesheets/edit_profile.css")
+        script(src="https://cdn.jsdelivr.net/npm/less")
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous")
+        script(src="../scripts/jquery.js" type="module")
+        title Редактирование профиля
+
+    body.all
+        - const user = value ? value.user : {name:"", birth:"", id:"", gender:"", role:"",  status:"", email:""}
+        - const userFriends = value ? value.userFriends : []
+        - const friendsPosts = value ? value.friendsPosts : []
+        - const userPosts = value ? value.userPosts : []
+
+        header(id="common_header")
+            a(href="/" id="index_header_profile_link") На главную
+            a(href="/admin_panel" id="index_header_admin_panel_link") Панель управления
+
+        main(id="profile_main")
+            div(id="profile_content")
+                section(id="profile_content_header")
+                    h2 Страница пользователя
+                    div(id="profile_content_header_buttons")
+                        a(href=`/edit_profile/${user.id}`)
+                            button.button-warning(type="button" id="profile_edit_user" class="action-button") Редактировать
+                        button.button-danger(type="button" id=`ban_user#${user.id}` class="action-button ban_button") Заблокировать
+                div(id="profile_main_content")
+                    section(id="profile_card")
+                        img(src=user.image_link id="profile_user_image")
+                        div(id="profile_card_content")
+                            p Прошлые данные профиля
+                            div.profile-info
+                                p.profile-card-title ID:
+                                p.profile-card-value(id="profile_id") #{user.id}
+                            div.profile-info
+                                p.profile-card-title Имя:
+                                p.profile-card-value(id="profile_name") #{user.name}
+                            div.profile-info
+                                p.profile-card-title Дата рождения:
+                                p.profile-card-value(id="profile_birth") #{user.birth}
+                            div.profile-info
+                                p.profile-card-title Пол:
+                                case user.gender
+                                    when "male"
+                                        - user.gender = "Мужчина"
+                                    when "female"
+                                        - user.gender = "Женщина"
+                                    default
+                                        - user.gender = "Undefined"
+                                p.profile-card-value(id="profile_gender") #{user.gender}
+                            div.profile-info
+                                p.profile-card-title Роль:
+                                case user.role
+                                    when "admin"
+                                        - user.role = "Администратор"
+                                    when "user"
+                                        - user.role = "Пользователь"
+                                    default
+                                        - user.role = "Undefined"
+                                p.profile-card-value(id="profile_role") #{user.role}
+                            div.profile-info
+                                p.profile-card-title Статус:
+                                case user.status
+                                    when "banned"
+                                        - user.status = "Заблокирован"
+                                    when "confirmed"
+                                        - user.status = "Подтвержден"
+                                    when "unconfirmed"
+                                        - user.status = "Неподтвержден"
+                                    default
+                                        - user.status = "Undefined"
+                                p.profile-card-value(id="profile_status") #{user.status}
+                            div.profile-info
+                                p.profile-card-title Почта:
+                                p.profile-card-value(id="profile_email") #{user.email}
+
+
+                    section(id="edit_profile")
+                        div.profile-info
+                            p.profile-card-title(class="edit-profile-field-title") ID:
+                            input.profile-card-value-input(id="edit_profile_id_input" class="edit-profile-field-value" value=user.id)
+                        div.profile-info
+                            p.profile-card-title(class="edit-profile-field-title") Имя:
+                            input.profile-card-value-input(id="edit_profile_name_input" class="edit-profile-field-value" value=user.name)
+                        div.profile-info
+                            p.profile-card-title(class="edit-profile-field-title") Ссылка на изображение:
+                            input.profile-card-value-input(id="edit_profile_img_link_input" class="edit-profile-field-value" value=user.image_link)
+                        div.profile-info
+                            p.profile-card-title(class="edit-profile-field-title") Дата рождения:
+                            input.profile-card-value-input(type="date" id="edit_profile_birth_input" class="edit-profile-field-value"
+                                value=user.birth)
+                        div.profile-info
+                            p.profile-card-title(class="edit-profile-field-title") Пол:
+                            select.profile-card-value-select(id="edit_profile_gender_select" class="edit-profile-field-value")
+                                option(value="male" selected=(user.role === "Мужчина")) Мужчина
+                                option(value="female" selected=(user.role === "Женщина")) Женщина
+                        div.profile-info
+                            p.profile-card-title(class="edit-profile-field-title") Роль:
+                            select.profile-card-value-select(id="edit_profile_role_select" class="edit-profile-field-value")
+                                option(value="admin" selected=(user.role === "Администратор")) Администратор
+                                option(value="user" selected=(user.role === "Пользователь")) Пользователь
+                        div.profile-info
+                            p.profile-card-title(class="edit-profile-field-title") Статус:
+                            select.profile-card-value-select(id="edit_profile_status_select" class="edit-profile-field-value")
+                                option(value="banned" selected=(user.status === "Заблокирован")) Заблокирован
+                                option(value="confirmed" selected=(user.status === "Подтвержден")) Подтвержден
+                                option(value="unconfirmed" selected=(user.status === "Неподтвержден")) Неподтвержден
+                        div.profile-info
+                            p.profile-card-title(class="edit-profile-field-title") Почта:
+                            input.profile-card-value-input(id="edit_profile_email_input" class="edit-profile-field-value" value=user.email)
+                        div.edit-profile-buttons
+                            button.button-primary(id="edit_profile_button_save" class="edit-profile-button") Сохранить
+                            button.button-warning(id="edit_profile_button_revert" class="edit-profile-button") Вернуть
+
+        script(src="../scripts/client.js" type="module")
+        script(src="../scripts/edit_profile.js" type="module")
+        script(src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous")
+        script(src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous")
+        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous")

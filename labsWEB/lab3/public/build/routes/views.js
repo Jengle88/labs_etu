@@ -1,9 +1,9 @@
 const express = require("express")
 const router  = express.Router()
 const fs = require("fs")
+const path = require("path");
 
 let database;
-let localizeData = require("../utils/data_interceptor.js").localizeData
 
 /**
  * @route GET /
@@ -11,7 +11,7 @@ let localizeData = require("../utils/data_interceptor.js").localizeData
  */
 router.get("/", async (_, res) => {
     res.status(200)
-    res.render("start")
+    res.sendFile(path.join(__dirname, "../public/views/start.html"))
 })
 
 /**
@@ -20,17 +20,13 @@ router.get("/", async (_, res) => {
  */
 router.get("/admin_panel", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
-    let usersInfo = database.users
-    usersInfo.forEach(user => {
-        localizeData(user)
-    })
+    // let usersInfo = database.users
+    // usersInfo.forEach(user => {
+    //     localizeData(user)
+    // })
 
     res.status(200)
-    res.render("admin_panel", {
-        value: {
-            usersInfo: usersInfo
-        }
-    })
+    res.sendFile(path.join(__dirname, "../public/views/admin_panel.html"))
 })
 
 /**
@@ -38,7 +34,7 @@ router.get("/admin_panel", async (req, res) => {
  * @param userId User ID
  * @description Profile page of user
  */
-router.get("/profile/:userId", async (req, res, next) => {
+router.get("/profile/:userId", async (req, res) => {
     database = JSON.parse(fs.readFileSync("./storage/database.json"))
     const userId = req.params.userId
     let user = null
@@ -52,26 +48,19 @@ router.get("/profile/:userId", async (req, res, next) => {
         res.status(404)
         return
     }
-
-    localizeData(user)
-
-    let friendsPosts = database.posts.filter(post => user.friends.includes(post.userId))
-    let userPosts = database.posts.filter(post => post.userId === userId)
-    let userFriends = user.friends.map(friendId => database.users.filter(user => user.id === friendId)[0])
-
-    userFriends.forEach(friend => {
-        localizeData(friend)
-    })
+    //
+    // localizeData(user)
+    //
+    // let friendsPosts = database.posts.filter(post => user.friends.includes(post.userId))
+    // let userPosts = database.posts.filter(post => post.userId === userId)
+    // let userFriends = user.friends.map(friendId => database.users.filter(user => user.id === friendId)[0])
+    //
+    // userFriends.forEach(friend => {
+    //     localizeData(friend)
+    // })
 
     res.status(200)
-    res.render("profile", {
-        value: {
-            user: user,
-            friendsPosts: friendsPosts,
-            userPosts: userPosts,
-            userFriends: userFriends
-        }
-    })
+    res.sendFile(path.join(__dirname, "../public/views/profile.html"))
 })
 
 router.get("/edit_profile/:userId", async (req, res) => {
@@ -90,12 +79,7 @@ router.get("/edit_profile/:userId", async (req, res) => {
     }
 
     res.status(200)
-    res.render("edit_profile", {
-        value: {
-            user: user
-        }
-    })
-
+    res.sendFile(path.join(__dirname, "../public/views/edit_profile.html"))
 })
 
 router.get("*", (_, res) => {

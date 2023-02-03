@@ -1,0 +1,28 @@
+body {
+    background: #929292;
+    width: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    font-family: Tahoma, Verdana, Arial, sans-serif;
+}
+#game_div {
+    display: flex;
+    flex-direction: row;
+}
+
+#game_message {
+    margin-left: 16px;
+    margin-top: 16px;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+#game_field {
+    display: flex;
+    flex-direction: row;
+    height: 780px;
+    width: 1140px;
+    padding-right: 80px;
+}
