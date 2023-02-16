@@ -86,21 +86,21 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QPushButton" name="buttonLab2">
+         <widget class="QPushButton" name="buttonLab1">
           <property name="text">
            <string>Лабораторная работа 1</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="buttonLab3">
+         <widget class="QPushButton" name="buttonLab2">
           <property name="text">
            <string>Лабораторная работа 2 (TODO)</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="buttonLab1">
+         <widget class="QPushButton" name="buttonLab3">
           <property name="text">
            <string>(TODO)</string>
           </property>

@@ -39,7 +39,10 @@ else()
           ui/splashWindow/splashwindow.cpp
           ui/splashWindow/splashwindow.h
           ui/splashWindow/splashwindow.ui
-          app/App.h)
+          ui/lab1Window/lab1widget.cpp
+          ui/lab1Window/lab1widget.h
+          ui/lab1Window/lab1widget.ui
+          app/App.h labs/Lab1Primitives.cpp labs/Lab1Primitives.h)
 endif()
 
 find_package(OpenGL REQUIRED)
