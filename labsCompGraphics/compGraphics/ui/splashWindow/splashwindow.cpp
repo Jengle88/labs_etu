@@ -4,6 +4,7 @@ SplashWindow::~SplashWindow() {
     delete lab1Widget;
     delete ui;
 }
+
 void SplashWindow::on_buttonLab1_clicked() {
     lab1Widget->show();
 }

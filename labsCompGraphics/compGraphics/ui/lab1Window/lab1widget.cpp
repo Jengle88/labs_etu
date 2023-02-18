@@ -15,17 +15,21 @@ void Lab1Widget::init(int windowWidth, int windowHeight) {
     setWindowTitle("Лабораторная работа №1");
 
     loadListOfNamePrimitives();
+    setDropdownMenuOfPrimitives();
+}
+
+void Lab1Widget::setDropdownMenuOfPrimitives() {
+    ui->selectPrimitive->addItems(listOfNamePrimitives);
+    ui->selectPrimitive->setCurrentIndex(0);
 }
 
 void Lab1Widget::loadListOfNamePrimitives() {
-    QStringList listOfNamePrimitives;
-    listOfNamePrimitives.reserve(lab1Primitives.getNameOfPrimitives().size());
-    for (const auto &name: lab1Primitives.getNameOfPrimitives()) listOfNamePrimitives.append(name);
-    ui->selectPrimitive->addItems(listOfNamePrimitives);
+    listOfNamePrimitives.reserve(Lab1Primitives::getNameOfPrimitives().size());
+    for (const auto &name: Lab1Primitives::getNameOfPrimitives()) listOfNamePrimitives.append(name);
 }
 
 void Lab1Widget::on_selectPrimitive_currentIndexChanged(const QString &newPrimitive) {
-
+    ui->openGLWidget->update(newPrimitive);
 }
 
 Lab1Widget::~Lab1Widget() {

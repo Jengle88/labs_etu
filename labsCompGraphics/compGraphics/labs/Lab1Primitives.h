@@ -8,13 +8,20 @@
 #include "GL/freeglut.h"
 
 class Lab1Primitives {
-    const std::vector<QString> nameOfPrimitives = { "GL_POINT", "GL_LINES", "GL_TRIANGLES", "GL_POLYGON" };
+private:
+    static const std::vector<QString> nameOfPrimitives;
 public:
     explicit Lab1Primitives();
 
-    const std::vector<QString> &getNameOfPrimitives() const;
+    static const std::vector<QString> &getNameOfPrimitives();
 
-    void drawPoints() {
+    static void drawPoints();
 
-    }
+    static void drawLines();
+
+    static void drawTriangles();
+
+    static void clear();
+
+    static void drawPolygon();
 };
