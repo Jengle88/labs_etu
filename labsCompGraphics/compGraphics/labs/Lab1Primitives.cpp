@@ -3,3 +3,10 @@
 //
 
 #include "Lab1Primitives.h"
+
+
+const std::vector<QString> &Lab1Primitives::getNameOfPrimitives() const {
+    return nameOfPrimitives;
+}
+
+Lab1Primitives::Lab1Primitives() {}

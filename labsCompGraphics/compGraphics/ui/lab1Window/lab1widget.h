@@ -4,15 +4,14 @@
 #include <QComboBox>
 #include <memory>
 #include "ui_lab1widget.h"
+#include "labs/Lab1Primitives.h"
 
 namespace Ui { class Lab1Widget; }
 
 class Lab1Widget : public QWidget
 {
-    QComboBox* selectPrimitive;
     Q_OBJECT
-
-
+    Lab1Primitives lab1Primitives = Lab1Primitives();
 public:
     explicit Lab1Widget(int windowWidth, int windowHeight, QWidget *parent = nullptr);
     ~Lab1Widget();
@@ -22,5 +21,7 @@ private:
 
     void init(int windowWidth, int windowHeight);
 
-    void on_selectPrimitive_activated(const QString &arg1);
+    void loadListOfNamePrimitives();
+
+    void on_selectPrimitive_currentIndexChanged(const QString &newPrimitive);
 };

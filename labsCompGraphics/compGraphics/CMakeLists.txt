@@ -42,7 +42,12 @@ else()
           ui/lab1Window/lab1widget.cpp
           ui/lab1Window/lab1widget.h
           ui/lab1Window/lab1widget.ui
-          app/App.h labs/Lab1Primitives.cpp labs/Lab1Primitives.h)
+          app/App.h
+          labs/Lab1Primitives.cpp
+          labs/Lab1Primitives.h
+          ui/openGLWidget/OpenGLWidget.cpp
+          ui/openGLWidget/OpenGLWidget.h
+          )
 endif()
 
 find_package(OpenGL REQUIRED)
