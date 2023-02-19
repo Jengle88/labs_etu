@@ -21,9 +21,9 @@ public:
 
     static void drawTriangles();
 
-    static void clear();
+    static void drawQuads();
 
     static void drawPolygon();
 
-    static void drawQuads();
+    static void clear();
 };
