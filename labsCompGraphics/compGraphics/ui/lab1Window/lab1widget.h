@@ -5,6 +5,7 @@
 #include <memory>
 #include "ui_lab1widget.h"
 #include "labs/Lab1Primitives.h"
+#include "ui/openGLWidget/OpenGLWidget.h"
 
 namespace Ui { class Lab1Widget; }
 

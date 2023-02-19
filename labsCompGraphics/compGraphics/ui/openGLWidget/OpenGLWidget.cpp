@@ -2,23 +2,26 @@
 // Created by evgeny on 18.02.23.
 //
 
-
-#include <iostream>
 #include "OpenGLWidget.h"
-#include "labs/Lab1Primitives.h"
 
 OpenGLWidget::OpenGLWidget(QWidget *parent): QOpenGLWidget(parent) { }
 
 void OpenGLWidget::initializeGL() {
+    initializeOpenGLFunctions();
     glClearColor(0,0,0,1);
-    glViewport(0, 0, 10, 10);
     glEnable(GL_COLOR_BUFFER_BIT);
     glEnable(GL_DEPTH_BUFFER_BIT);
-
 }
 
 void OpenGLWidget::resizeGL(int w, int h) {
-    QOpenGLWidget::resizeGL(w, h);
+    frameHeight = h;
+    frameWidth = w;
+
+    glViewport(0, 0, frameWidth, frameHeight);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 }
 
 void OpenGLWidget::paintGL() {
@@ -30,12 +33,13 @@ void OpenGLWidget::paintGL() {
         Lab1Primitives::drawLines();
     else if (currentFigureForRepaint == "GL_TRIANGLES")
         Lab1Primitives::drawTriangles();
+    else if (currentFigureForRepaint == "GL_QUADS")
+        Lab1Primitives::drawQuads();
     else if (currentFigureForRepaint == "GL_POLYGON")
         Lab1Primitives::drawPolygon();
-
 }
 
-void OpenGLWidget::update(const QString &newFigure) {
+void OpenGLWidget::setFigure(const QString &newFigure) {
     currentFigureForRepaint = newFigure;
-    repaint();
+    update();
 }

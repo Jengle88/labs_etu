@@ -1,5 +1,4 @@
 #include "lab1widget.h"
-#include "ui/openGLWidget/OpenGLWidget.h"
 
 Lab1Widget::Lab1Widget(
         int windowWidth,
@@ -29,7 +28,7 @@ void Lab1Widget::loadListOfNamePrimitives() {
 }
 
 void Lab1Widget::on_selectPrimitive_currentIndexChanged(const QString &newPrimitive) {
-    ui->openGLWidget->update(newPrimitive);
+    ui->openGLWidget->setFigure(newPrimitive);
 }
 
 Lab1Widget::~Lab1Widget() {

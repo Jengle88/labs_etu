@@ -24,4 +24,6 @@ public:
     static void clear();
 
     static void drawPolygon();
+
+    static void drawQuads();
 };

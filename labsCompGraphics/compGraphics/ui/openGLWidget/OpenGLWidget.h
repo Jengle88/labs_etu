@@ -4,13 +4,16 @@
 #pragma once
 
 
-#include <QOpenGLWidget>
+#include <QtWidgets/QOpenGLWidget>
 #include <QOpenGLFunctions>
+#include <iostream>
+#include "labs/Lab1Primitives.h"
 
-class OpenGLWidget : public QOpenGLWidget {
+class OpenGLWidget : public QOpenGLWidget, public QOpenGLFunctions {
 public:
     explicit OpenGLWidget(QWidget *parent);
-    void update(const QString& newFigure);
+
+    void setFigure(const QString &newFigure);
 
 protected:
     void initializeGL() override;
@@ -21,4 +24,7 @@ protected:
 
 private:
     QString currentFigureForRepaint;
+
+    int frameWidth = 0;
+    int frameHeight = 0;
 };
