@@ -56,5 +56,5 @@ find_package(Qt5OpenGL REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 
-target_link_libraries(compGraphics PRIVATE Qt5::Widgets OpenGL::GL GLUT::GLUT)
+target_link_libraries(compGraphics PRIVATE Qt5::Widgets Qt5::OpenGL OpenGL::GL GLUT::GLUT)
 
