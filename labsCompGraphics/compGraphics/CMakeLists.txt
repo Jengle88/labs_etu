@@ -24,8 +24,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
-
 if(ANDROID)
   add_library(compGraphics SHARED
           app/main.cpp
@@ -50,6 +48,11 @@ else()
           )
 endif()
 
+# Qt library
+find_package(Qt5Widgets REQUIRED)
+find_package(Qt5OpenGL REQUIRED)
+
+# OpenGL & GLEW library
 find_package(OpenGL REQUIRED)
 find_package(GLUT REQUIRED)
 
