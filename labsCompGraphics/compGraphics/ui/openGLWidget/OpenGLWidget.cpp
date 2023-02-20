@@ -25,7 +25,6 @@ void OpenGLWidget::resizeGL(int w, int h) {
 }
 
 void OpenGLWidget::paintGL() {
-//    std::cout << currentFigureForRepaint.toStdString() << "\n";
     Lab1Primitives::clear();
     if (currentFigureForRepaint == "GL_POINTS")
         Lab1Primitives::drawPoints();

@@ -6,7 +6,7 @@
 
 Lab1Primitives::Lab1Primitives() = default;
 
-const std::vector<QString> Lab1Primitives::nameOfPrimitives = {"GL_LINES", "GL_POINTS", "GL_TRIANGLES", "GL_QUADS",
+const std::vector<QString> Lab1Primitives::nameOfPrimitives = {"GL_POINTS", "GL_LINES", "GL_TRIANGLES", "GL_QUADS",
                                                                "GL_POLYGON", "CLEAN"};
 
 const std::vector<QString> &Lab1Primitives::getNameOfPrimitives() {

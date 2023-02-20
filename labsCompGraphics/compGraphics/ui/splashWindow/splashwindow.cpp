@@ -16,6 +16,7 @@ SplashWindow::SplashWindow(int windowWidth, int windowHeight, QWidget *parent)
 }
 
 void SplashWindow::init(int windowWidth, int windowHeight) {
+    this->setWindowTitle("Компьютерная графика. Шквиря Е.В.");
     lab1Widget = new Lab1Widget(windowWidth, windowHeight);
     setMinimumWidth(windowWidth);
     setMinimumHeight(windowHeight);
