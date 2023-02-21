@@ -95,7 +95,7 @@
         <item>
          <widget class="QPushButton" name="buttonLab2">
           <property name="text">
-           <string>Лабораторная работа 2 (TODO)</string>
+           <string>Лабораторная работа 2</string>
           </property>
          </widget>
         </item>

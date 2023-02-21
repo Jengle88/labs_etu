@@ -7,7 +7,7 @@
 #include <QtWidgets/QOpenGLWidget>
 #include <QOpenGLFunctions>
 #include <iostream>
-#include "labs/Lab1Primitives.h"
+#include "labs/lab1/Lab1Primitives.h"
 
 class OpenGLWidget : public QOpenGLWidget, public QOpenGLFunctions {
 public:
