@@ -48,7 +48,7 @@ else()
           ui/lab2Window/lab2widget.cpp
           ui/lab2Window/lab2widget.h
           ui/lab2Window/lab2widget.ui
-          )
+          labs/lab2/Lab2Primitives.cpp labs/lab2/Lab2Primitives.h)
 endif()
 
 # Qt library

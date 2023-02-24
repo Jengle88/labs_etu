@@ -11,7 +11,6 @@ class Lab2Widget;
 class Lab2Widget : public QWidget
 {
     Q_OBJECT
-    QStringList listOfNamePrimitives;
 
 public:
     explicit Lab2Widget(int windowWidth, int windowHeight, QWidget *parent = nullptr);
@@ -25,9 +24,9 @@ private:
 
     void init(int windowWidth, int windowHeight);
 
-    void setDropdownMenuOfPrimitives();
+    void setQComboBoxMenu(const QStringList &listOfItems, QComboBox *qComboBox);
 
-    void loadListOfNamePrimitives();
+    QStringList vectorOfQStringToQStringList(const std::vector<QString>& src);
 };
 
 #endif // LAB2WIDGET_H
