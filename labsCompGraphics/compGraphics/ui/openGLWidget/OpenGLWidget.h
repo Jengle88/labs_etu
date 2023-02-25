@@ -48,7 +48,6 @@ private:
     QString sFactor;
     QString dFactor;
 
-    void runAreaParams();
-
+    void runAreaParams() const;
     void stopAreaParams() const;
 };

@@ -45,6 +45,46 @@ void OpenGLWidget::setFigure(const QString &newFigure) {
     update();
 }
 
+void OpenGLWidget::runAreaParams() const {
+    if (scissorEnable) {
+        Lab2Primitives::makeScissors(
+                frameWidth, frameHeight, scissorX, scissorY, scissorWidth, scissorHeight);
+    }
+    if (alphaEnable) {
+        Lab2Primitives::makeAlphaFunc(alphaFunc, alphaFuncValue);
+    }
+
+    if (blendFactorEnable) {
+        Lab2Primitives::makeBlendFunc(sFactor, dFactor);
+    }
+}
+
+void OpenGLWidget::stopAreaParams() const {
+    if (scissorEnable) Lab2Primitives::disableScissors();
+    if (alphaEnable) Lab2Primitives::disableAlphaFunc();
+    if (blendFactorEnable) Lab2Primitives::disableBlendFunc();
+}
+
+void OpenGLWidget::setScissorParams(bool scissorEnable, double x, double y, double width, double height) {
+    this->scissorEnable = scissorEnable;
+    this->scissorX = x;
+    this->scissorY = y;
+    this->scissorWidth = width;
+    this->scissorHeight = height;
+}
+
+void OpenGLWidget::setAlphaParams(bool alphaEnable, const QString &alphaFunc, double alphaFuncValue) {
+    this->alphaEnable = alphaEnable;
+    this->alphaFunc = alphaFunc;
+    this->alphaFuncValue = alphaFuncValue;
+}
+
+void OpenGLWidget::setBlendFactorParams(bool blendFactorEnable, const QString &sFactor, const QString &dFactor) {
+    this->blendFactorEnable = blendFactorEnable;
+    this->sFactor = sFactor;
+    this->dFactor = dFactor;
+}
+
 void OpenGLWidget::runAreaParams() {
     if (scissorEnable) {
         Lab2Primitives::makeScissors(
