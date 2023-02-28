@@ -23,14 +23,12 @@ public:
     void setAlphaParams(bool alphaEnable, const QString &alphaFunc, double alphaFuncValue);
 
     void setBlendFactorParams(bool blendFactorEnable, const QString &sFactor, const QString &dFactor);
-
 protected:
     void initializeGL() override;
 
     void resizeGL(int w, int h) override;
 
     void paintGL() override;
-
 private:
     QString currentFigureForRepaint;
 

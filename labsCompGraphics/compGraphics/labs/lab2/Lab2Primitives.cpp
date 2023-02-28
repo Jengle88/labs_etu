@@ -4,14 +4,14 @@
 
 #include "Lab2Primitives.h"
 
-const QMap<QString, int> Lab2Primitives::mapOfAlphaFunc = QMap<QString, int>({{"GL_NEVER",    GL_NEVER},
-                                                                              {"GL_LESS",     GL_LESS},
-                                                                              {"GL_EQUAL",    GL_EQUAL},
-                                                                              {"GL_LEQUAL",   GL_LEQUAL},
-                                                                              {"GL_GREATER",  GL_GREATER},
-                                                                              {"GL_NOTEQUAL", GL_NOTEQUAL},
-                                                                              {"GL_GEQUAL",   GL_GEQUAL},
-                                                                              {"GL_ALWAYS",   GL_ALWAYS}});
+const QMap<QString, int> Lab2Primitives::mapOfAlphaFunc = {{"GL_NEVER",    GL_NEVER},
+                                                           {"GL_LESS",     GL_LESS},
+                                                           {"GL_EQUAL",    GL_EQUAL},
+                                                           {"GL_LEQUAL",   GL_LEQUAL},
+                                                           {"GL_GREATER",  GL_GREATER},
+                                                           {"GL_NOTEQUAL", GL_NOTEQUAL},
+                                                           {"GL_GEQUAL",   GL_GEQUAL},
+                                                           {"GL_ALWAYS",   GL_ALWAYS}};
 const QList<QString> Lab2Primitives::namesOfAlphaFunc = mapOfAlphaFunc.keys();
 
 const QMap<QString, int> Lab2Primitives::mapOfBlendFuncSFactor = {{"GL_ZERO",                GL_ZERO},
@@ -70,11 +70,10 @@ int Lab2Primitives::getBlendFuncDFactorByName(const QString &name) {
 
 void Lab2Primitives::makeScissors(int frameWidth, int frameHeight, double x, double y, double width, double height) {
     glEnable(GL_SCISSOR_TEST);
-    glScissor(
-            x * frameWidth,
-            y * frameHeight,
-            width * (1. - x) * frameWidth,
-            height * (1. - y) * frameHeight);
+    glScissor(x * frameWidth,
+              y * frameHeight,
+              width * (1. - x) * frameWidth,
+              height * (1. - y) * frameHeight);
 }
 
 void Lab2Primitives::disableScissors() { glDisable(GL_SCISSOR_TEST); }
