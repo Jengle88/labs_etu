@@ -6,81 +6,81 @@
 
 Lab1Primitives::Lab1Primitives() = default;
 
-const std::vector<QString> Lab1Primitives::nameOfPrimitives = {"GL_LINES", "GL_POINTS", "GL_TRIANGLES", "GL_QUADS",
-                                                               "GL_POLYGON", "CLEAN"};
+const QList<QString> Lab1Primitives::nameOfPrimitives = {"GL_POINTS", "GL_LINES", "GL_TRIANGLES", "GL_QUADS",
+                                                         "GL_POLYGON", "CLEAN"};
 
-const std::vector<QString> &Lab1Primitives::getNameOfPrimitives() {
+const QList<QString> &Lab1Primitives::getNameOfPrimitives() {
     return nameOfPrimitives;
 }
 
 void Lab1Primitives::drawPoints() {
     glPointSize(5.0f);
     glBegin(GL_POINTS);
-        glColor3f(1.0, 0.0, 0.0);
+        glColor4f(1.0, 0.0, 0.0, 1.0);
         glVertex2d(-0.5, -0.5);
 
-        glColor3f(0.0, 1.0, 0.0);
+        glColor4f(0.0, 1.0, 0.0, 0.7);
         glVertex2d(0.5, -0.5);
 
-        glColor3f(0.0, 0.0, 1.0);
+        glColor4f(0.0, 0.0, 1.0, 0.5);
         glVertex2d(0.0, 0.5);
     glEnd();
 }
 
 void Lab1Primitives::drawLines() {
     glLineWidth(3.0f);
-    glColor3f(0.0f, 0.3f, 0.7f);
+    glColor4f(0.0f, 0.3f, 0.7f, 1.0f);
     glBegin(GL_LINES);
-        glColor3f(1.0, 0.0, 0.0);
+        glColor4f(1.0, 0.0, 0.0, 1.0);
         glVertex2d(-0.5, -0.5);
-        glColor3f(0.0, 1.0, 0.0);
+        glColor4f(0.0, 1.0, 0.0, 0.7);
         glVertex2d(0.5, -0.5);
 
-        glColor3f(1.0, 0.0, 0.0);
+        glColor4f(1.0, 0.0, 0.0, 0.8);
         glVertex2d(-0.25, 0);
-        glColor3f(0.0, 1.0, 0.0);
+        glColor4f(0.0, 1.0, 0.0, 0.5);
         glVertex2d(0.5, 0);
 
-        glColor3f(1.0, 0.0, 0.0);
+        glColor4f(1.0, 0.0, 0.0, 0.6);
         glVertex2d(0, 0.5);
-        glColor3f(0.0, 1.0, 0.0);
+        glColor4f(0.0, 1.0, 0.0, 0.3);
         glVertex2d(0.5, 0.5);
     glEnd();
 }
 
 void Lab1Primitives::drawTriangles() {
     glBegin(GL_TRIANGLES);
-        glColor3f(1.0, 0.0, 0.0);
+        glColor4f(1.0, 0.0, 0.0, 0.8);
         glVertex2d(-0.5, -0.5);
-        glColor3f(0.0, 1.0, 0.0);
+        glColor4f(0.0, 1.0, 0.0, 0.5);
         glVertex2d(0.5, -0.5);
-        glColor3f(0.0, 0.0, 1.0);
+        glColor4f(0.0, 0.0, 1.0, 0.6);
         glVertex2d(0.0, 0.5);
     glEnd();
 }
 
 void Lab1Primitives::drawQuads() {
     glBegin(GL_QUADS);
-        glColor3f(1.0, 0.0, 0.0);
+        glColor4f(1.0, 0.0, 0.0, 0.3);
         glVertex2d(-0.5, -0.5);
-        glColor3f(0.0, 1.0, 0.0);
+        glColor4f(0.0, 1.0, 0.0, 0.7);
         glVertex2d(0.5, -0.5);
-        glColor3f(0.0, 0.0, 1.0);
+        glColor4f(0.0, 0.0, 1.0, 0.1);
         glVertex2d(0.5, 0.5);
-        glColor3f(0.0, 0.0, 1.0);
+        glColor4f(0.0, 0.0, 1.0, 0.2);
         glVertex2d(-0.5, 0.5);
     glEnd();
 }
 
 void Lab1Primitives::drawPolygon() {
     glBegin(GL_POLYGON);
-        glColor3f(1.0, 0.0, 0.0);
+        glColor4f(1.0, 0.0, 0.0, 0.9);
         glVertex2d(-0.5, -0.5);
-        glColor3f(0.0, 1.0, 0.0);
+        glColor4f(0.0, 1.0, 0.0, 0.4);
         glVertex2d(0.5, -0.5);
-        glColor3f(0.0, 0.0, 1.0);
+        glColor4f(0.0, 0.0, 1.0, 0.7);
         glVertex2d(-0.5, 0.5);
-        glColor3f(0.0, 1.0, 1.0);
+        glColor4f(0.0, 1.0, 1.0, 0.3);
         glVertex2d(0.5, 0.5);
     glEnd();
 }

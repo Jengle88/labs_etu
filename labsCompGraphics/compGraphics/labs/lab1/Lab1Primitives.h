@@ -6,14 +6,16 @@
 #include <vector>
 #include <QString>
 #include "GL/freeglut.h"
+#include <QList>
+#include "labs/lab2/Lab2Primitives.h"
 
 class Lab1Primitives {
 private:
-    static const std::vector<QString> nameOfPrimitives;
+    static const QList<QString> nameOfPrimitives;
 public:
     explicit Lab1Primitives();
 
-    static const std::vector<QString> &getNameOfPrimitives();
+    static const QList<QString> &getNameOfPrimitives();
 
     static void drawPoints();
 
