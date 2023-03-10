@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Lab2Widget</class>
- <widget class="QWidget" name="Lab2Widget">
+ <class>Lab3Widget</class>
+ <widget class="QWidget" name="Lab3Widget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -37,13 +37,13 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <layout class="QVBoxLayout" name="verticalLayout_6">
+    <layout class="QVBoxLayout" name="verticalLayout_7">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
+      <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout">
+        <layout class="QVBoxLayout" name="verticalLayout_9">
          <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="label_9">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -53,7 +53,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="selectPrimitive">
+          <widget class="QComboBox" name="selectPrimitive_2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -65,72 +65,72 @@
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
+        <layout class="QVBoxLayout" name="verticalLayout_10">
          <item>
-          <widget class="QLabel" name="label_4">
+          <widget class="QLabel" name="label_10">
            <property name="text">
             <string>Отсечение</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="scissorEnable">
+          <widget class="QCheckBox" name="scissorEnable_2">
            <property name="text">
             <string>Активировать</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_5">
+          <widget class="QLabel" name="label_11">
            <property name="text">
             <string>X</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="xSlider">
+          <widget class="QSlider" name="xSlider_2">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_6">
+          <widget class="QLabel" name="label_12">
            <property name="text">
             <string>Y</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="ySlider">
+          <widget class="QSlider" name="ySlider_2">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_7">
+          <widget class="QLabel" name="label_13">
            <property name="text">
             <string>Ширина</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="widthSlider">
+          <widget class="QSlider" name="widthSlider_2">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_8">
+          <widget class="QLabel" name="label_17">
            <property name="text">
             <string>Высота</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="heightSlider">
+          <widget class="QSlider" name="heightSlider_2">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
@@ -139,33 +139,33 @@
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <layout class="QVBoxLayout" name="verticalLayout_11">
          <item>
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="label_18">
            <property name="text">
             <string>Прозрачность</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="alphaFuncEnable">
+          <widget class="QCheckBox" name="alphaFuncEnable_2">
            <property name="text">
             <string>Активировать</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="alphaFuncSelect"/>
+          <widget class="QComboBox" name="alphaFuncSelect_2"/>
          </item>
          <item>
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="label_19">
            <property name="text">
             <string>Значение прозрачности (0..1)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="alphaFuncSlider">
+          <widget class="QSlider" name="alphaFuncSlider_2">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
@@ -174,47 +174,47 @@
         </layout>
        </item>
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_5">
+        <layout class="QVBoxLayout" name="verticalLayout_12">
          <item>
-          <widget class="QLabel" name="label_14">
+          <widget class="QLabel" name="label_20">
            <property name="text">
             <string>Смешение цветов</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="blendFuncEnable">
+          <widget class="QCheckBox" name="blendFuncEnable_2">
            <property name="text">
             <string>Активировать</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_15">
+          <widget class="QLabel" name="label_21">
            <property name="text">
             <string>SFactor</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="blendSFactorSelect"/>
+          <widget class="QComboBox" name="blendSFactorSelect_2"/>
          </item>
          <item>
-          <widget class="QLabel" name="label_16">
+          <widget class="QLabel" name="label_22">
            <property name="text">
             <string>DFactor</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="blendDFactorSelect"/>
+          <widget class="QComboBox" name="blendDFactorSelect_2"/>
          </item>
         </layout>
        </item>
       </layout>
      </item>
      <item>
-      <spacer name="verticalSpacer">
+      <spacer name="verticalSpacer_2">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
        </property>

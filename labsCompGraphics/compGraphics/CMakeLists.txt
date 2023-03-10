@@ -48,7 +48,11 @@ else()
           ui/lab2Window/lab2widget.cpp
           ui/lab2Window/lab2widget.h
           ui/lab2Window/lab2widget.ui
-          labs/lab2/Lab2Primitives.cpp labs/lab2/Lab2Primitives.h)
+          labs/lab2/Lab2Primitives.cpp labs/lab2/Lab2Primitives.h
+          ui/lab3Window/lab3widget.cpp
+          ui/lab3Window/lab3widget.h
+          ui/lab3Window/lab3widget.ui
+          labs/lab3/Lab3Fractals.cpp labs/lab3/Lab3Fractals.h ui/openGLWidget/OpenGLWidgetLab3.cpp ui/openGLWidget/OpenGLWidgetLab3.h)
 endif()
 
 # Qt library
