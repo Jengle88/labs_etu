@@ -41,173 +41,62 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_8">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout_9">
-         <item>
-          <widget class="QLabel" name="label_9">
-           <property name="enabled">
-            <bool>true</bool>
-           </property>
-           <property name="text">
-            <string>Выбор примитива</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="selectPrimitive_2">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
         <layout class="QVBoxLayout" name="verticalLayout_10">
-         <item>
-          <widget class="QLabel" name="label_10">
-           <property name="text">
-            <string>Отсечение</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="scissorEnable_2">
-           <property name="text">
-            <string>Активировать</string>
-           </property>
-          </widget>
-         </item>
          <item>
           <widget class="QLabel" name="label_11">
            <property name="text">
-            <string>X</string>
+            <string>deltaX</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="xSlider_2">
+          <widget class="QSlider" name="deltaXSlider">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QSlider" name="deltaXSlider2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="deltaXLabel">
+           <property name="text">
+            <string/>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="label_12">
            <property name="text">
-            <string>Y</string>
+            <string>deltaY</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="ySlider_2">
+          <widget class="QSlider" name="deltaYSlider">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_13">
-           <property name="text">
-            <string>Ширина</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSlider" name="widthSlider_2">
+          <widget class="QSlider" name="deltaYSlider2">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_17">
+          <widget class="QLabel" name="deltaYLabel">
            <property name="text">
-            <string>Высота</string>
+            <string/>
            </property>
           </widget>
-         </item>
-         <item>
-          <widget class="QSlider" name="heightSlider_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_11">
-         <item>
-          <widget class="QLabel" name="label_18">
-           <property name="text">
-            <string>Прозрачность</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="alphaFuncEnable_2">
-           <property name="text">
-            <string>Активировать</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="alphaFuncSelect_2"/>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_19">
-           <property name="text">
-            <string>Значение прозрачности (0..1)</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QSlider" name="alphaFuncSlider_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_12">
-         <item>
-          <widget class="QLabel" name="label_20">
-           <property name="text">
-            <string>Смешение цветов</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="blendFuncEnable_2">
-           <property name="text">
-            <string>Активировать</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_21">
-           <property name="text">
-            <string>SFactor</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="blendSFactorSelect_2"/>
-         </item>
-         <item>
-          <widget class="QLabel" name="label_22">
-           <property name="text">
-            <string>DFactor</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="blendDFactorSelect_2"/>
          </item>
         </layout>
        </item>

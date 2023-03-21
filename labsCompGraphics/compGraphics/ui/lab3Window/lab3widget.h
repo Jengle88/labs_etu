@@ -15,6 +15,15 @@ public:
     explicit Lab3Widget(int windowWidth, int windowHeight, QWidget *parent = nullptr);
     ~Lab3Widget();
 
+private slots:
+    void on_deltaXSlider_valueChanged(int value);
+
+    void on_deltaYSlider_valueChanged(int value);
+
+    void on_deltaXSlider2_valueChanged(int value);
+
+    void on_deltaYSlider2_valueChanged(int value);
+
 private:
     Ui::Lab3Widget *ui;
 
