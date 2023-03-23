@@ -12,8 +12,9 @@ public:
     int frameWidth = 0;
     int frameHeight = 0;
 
-    double delta2X = 0.43;
-    double delta2Y = 0.5837;
+    int deep = 0;
+    double xCenter = 0;
+    double yCenter = 0;
 
 protected:
     void initializeGL() override;

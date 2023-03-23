@@ -31,17 +31,19 @@ void OpenGLWidgetLab3::resizeGL(int w, int h) {
 
 void OpenGLWidgetLab3::paintGL() {
     Lab1Primitives::clear();
-    double xCenter = 0;
-    double yCenter = 0;
+    const double delta2X = 0.43;
+    const double delta2Y = 0.5837;
 
     std::vector<Point> pointsForFractal;
-    pointsForFractal.emplace_back(Point(xCenter, yCenter));
-    int deep = 3;
+    if (deep > 0) {
+        pointsForFractal.emplace_back(Point(xCenter, yCenter));
+    }
     int currIndex = 0;
     for (int i = 2; i <= deep; ++i) {
         auto newPoints = std::set<Point>();
         for (int j = currIndex; j < pointsForFractal.size(); ++j) {
-            auto vectorOfNewCenters = Lab3Fractals::calcNewCenters(pointsForFractal[j].x, pointsForFractal[j].y, delta2X, delta2Y);
+            auto vectorOfNewCenters = Lab3Fractals::calcNewCenters(pointsForFractal[j].x, pointsForFractal[j].y,
+                                                                   delta2X, delta2Y);
             for (const auto& newCenter : vectorOfNewCenters) {
                 newPoints.insert(newCenter);
             }
@@ -54,7 +56,6 @@ void OpenGLWidgetLab3::paintGL() {
     for(const auto& point : pointsForFractal) {
         drawFractal(point.x, point.y);
     }
-//    glFlush();
 }
 
 void OpenGLWidgetLab3::drawFractal(double xCenter, double yCenter) {
@@ -65,22 +66,22 @@ void OpenGLWidgetLab3::drawFractal(double xCenter, double yCenter) {
 }
 
 void OpenGLWidgetLab3::drawStars(double xCenter, double yCenter) {
-    double radius = 0.3;
+    double radius = 0.31;
     Vector fromCenter = Vector(0, radius);
     glLineWidth(3.0f);
 
     for (int i = 0; i < 10; ++i) {
         double angle = 2 * M_PI / 10 * i;
         auto currVector = fromCenter.rotate(angle);
-        Lab3Fractals::drawLittleStar(xCenter + currVector.x, yCenter + currVector.y, 0.057, M_PI - angle);
+        Lab3Fractals::drawLittleStar(xCenter + currVector.x, yCenter + currVector.y, 0.06, M_PI - angle);
     }
 
     double deltaX = 0.43;
-    double deltaY = 0.05;
-    Lab3Fractals::drawLittleStar(xCenter + deltaX, yCenter + deltaY, 0.05);
-    Lab3Fractals::drawLittleStar(xCenter - deltaX, yCenter + deltaY, 0.05);
-    Lab3Fractals::drawLittleStar(xCenter + deltaX, yCenter - deltaY, 0.05, M_PI);
-    Lab3Fractals::drawLittleStar(xCenter - deltaX, yCenter - deltaY, 0.05, M_PI);
+    double deltaY = 0.065;
+    Lab3Fractals::drawLittleStar(xCenter + deltaX, yCenter + deltaY, 0.065);
+    Lab3Fractals::drawLittleStar(xCenter - deltaX, yCenter + deltaY, 0.065);
+    Lab3Fractals::drawLittleStar(xCenter + deltaX, yCenter - deltaY, 0.065, M_PI);
+    Lab3Fractals::drawLittleStar(xCenter - deltaX, yCenter - deltaY, 0.065, M_PI);
 }
 
 void OpenGLWidgetLab3::drawWhiteLines(double xCenter, double yCenter) {

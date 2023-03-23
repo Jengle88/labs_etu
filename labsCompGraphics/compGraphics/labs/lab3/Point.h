@@ -1,3 +1,5 @@
+#include <cmath>
+
 class Point {
 public:
     double x;
@@ -7,6 +9,11 @@ public:
 
     bool operator < (const Point& point) const
     {
-        return this->x < point.x || this->x == point.x && this->y < point.y;
+        return this->x < point.x || std::abs(this->x - point.x) < 0.00001 && this->y < point.y;
+    }
+
+    bool operator == (const Point& point) const
+    {
+        return std::abs(this->x - point.x) > 0.00001 && std::abs(this->y - point.y) < 0.00001;
     }
 };
