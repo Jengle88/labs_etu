@@ -62,7 +62,7 @@
      <item>
       <widget class="QLabel" name="label_12">
        <property name="text">
-        <string>deltaX</string>
+        <string>X Offset</string>
        </property>
       </widget>
      </item>
@@ -83,7 +83,7 @@
      <item>
       <widget class="QLabel" name="label_13">
        <property name="text">
-        <string>deltaY</string>
+        <string>Y Offset</string>
        </property>
       </widget>
      </item>

@@ -31,13 +31,13 @@ void Lab3Widget::on_deepSlider_valueChanged(int value) {
 }
 
 void Lab3Widget::on_deltaXSlider_valueChanged(int value) {
-    ui->openGLWidget->xCenter = double(value) / 100 - 0.5;
-    ui->deltaXValue->setText(QString(std::to_string(ui->openGLWidget->xCenter).c_str()));
+    ui->openGLWidget->xCenter = double(-value) / 100 + 0.5;
+    ui->deltaXValue->setText(QString(std::to_string(-ui->openGLWidget->xCenter).c_str()));
     ui->openGLWidget->update();
 }
 
 void Lab3Widget::on_deltaYSlider_valueChanged(int value) {
-    ui->openGLWidget->yCenter = double(value) / 100 - 0.5;
-    ui->deltaYValue->setText(QString(std::to_string(ui->openGLWidget->yCenter).c_str()));
+    ui->openGLWidget->yCenter = double(-value) / 100 + 0.5;
+    ui->deltaYValue->setText(QString(std::to_string(-ui->openGLWidget->yCenter).c_str()));
     ui->openGLWidget->update();
 }

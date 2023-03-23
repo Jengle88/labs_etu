@@ -14,6 +14,6 @@ public:
 
     bool operator == (const Point& point) const
     {
-        return std::abs(this->x - point.x) > 0.00001 && std::abs(this->y - point.y) < 0.00001;
+        return std::abs(this->x - point.x) < 0.00001 && std::abs(this->y - point.y) < 0.00001;
     }
 };
