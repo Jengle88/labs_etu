@@ -18,6 +18,26 @@ public:
 private slots:
     void on_smoothBorderSlider_valueChanged(int value);
 
+    void on_p1XSlider_valueChanged(int value);
+
+    void on_p1YSlider_valueChanged(int value);
+
+    void on_p2XSlider_valueChanged(int value);
+
+    void on_p2YSlider_valueChanged(int value);
+
+    void on_p3XSlider_valueChanged(int value);
+
+    void on_p3YSlider_valueChanged(int value);
+
+    void on_p4XSlider_valueChanged(int value);
+
+    void on_p4YSlider_valueChanged(int value);
+
+    void on_p5XSlider_valueChanged(int value);
+
+    void on_p5YSlider_valueChanged(int value);
+
 private:
     Ui::Lab4Widget *ui;
     void init(int windowWidth, int windowHeight);

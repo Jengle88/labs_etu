@@ -27,10 +27,6 @@ void OpenGLWidgetLab4::resizeGL(int w, int h) {
 }
 
 void OpenGLWidgetLab4::paintGL() {
-    auto points = {
-            Point(0, 0), Point(-0.4, 0.3),
-            Point(-0.2, 0.9), Point(0.3, 1.2),
-            Point(0.8, 0.8), Point(0.7, 0.1)};
     glColor3f(1.0f, 1.0f, 1.0f);
     if (smoothBorder > 0)
         Lab4Spline::drawCurve(points, smoothBorder);
