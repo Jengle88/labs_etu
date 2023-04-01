@@ -1,3 +1,4 @@
+#pragma once
 #include <cmath>
 
 class Point {
@@ -6,6 +7,7 @@ public:
     double y;
 
     Point(double x, double y);
+    Point();
 
     bool operator < (const Point& point) const
     {

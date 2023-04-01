@@ -109,6 +109,13 @@
         <item>
          <widget class="QPushButton" name="buttonLab4">
           <property name="text">
+           <string>Лабораторная работа 4</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonLab5">
+          <property name="text">
            <string>(TODO)</string>
           </property>
          </widget>

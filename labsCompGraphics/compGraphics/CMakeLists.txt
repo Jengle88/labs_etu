@@ -24,36 +24,46 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-if(ANDROID)
-  add_library(compGraphics SHARED
-          app/main.cpp
-          ui/splashWindow/splashwindow.cpp
-          ui/splashWindow/splashwindow.h
-          ui/splashWindow/splashwindow.ui
-  )
-else()
-  add_executable(compGraphics
-          app/main.cpp
-          ui/splashWindow/splashwindow.cpp
-          ui/splashWindow/splashwindow.h
-          ui/splashWindow/splashwindow.ui
-          ui/lab1Window/lab1widget.cpp
-          ui/lab1Window/lab1widget.h
-          ui/lab1Window/lab1widget.ui
-          app/App.h
-          labs/lab1/Lab1Primitives.cpp
-          labs/lab1/Lab1Primitives.h
-          ui/openGLWidget/OpenGLWidget.cpp
-          ui/openGLWidget/OpenGLWidget.h
-          ui/lab2Window/lab2widget.cpp
-          ui/lab2Window/lab2widget.h
-          ui/lab2Window/lab2widget.ui
-          labs/lab2/Lab2Primitives.cpp labs/lab2/Lab2Primitives.h
-          ui/lab3Window/lab3widget.cpp
-          ui/lab3Window/lab3widget.h
-          ui/lab3Window/lab3widget.ui
-          labs/lab3/Lab3Fractals.cpp labs/lab3/Lab3Fractals.h ui/openGLWidget/OpenGLWidgetLab3.cpp ui/openGLWidget/OpenGLWidgetLab3.h labs/lab3/Vector.cpp labs/lab3/Vector.h labs/lab3/Point.cpp labs/lab3/Point.h)
-endif()
+if (ANDROID)
+    add_library(compGraphics SHARED
+            app/main.cpp
+            ui/splashWindow/splashwindow.cpp
+            ui/splashWindow/splashwindow.h
+            ui/splashWindow/splashwindow.ui
+            )
+else ()
+    add_executable(compGraphics
+            app/main.cpp
+            ui/splashWindow/splashwindow.cpp
+            ui/splashWindow/splashwindow.h
+            ui/splashWindow/splashwindow.ui
+            ui/lab1Window/lab1widget.cpp
+            ui/lab1Window/lab1widget.h
+            ui/lab1Window/lab1widget.ui
+            app/App.h
+            labs/lab1/Lab1Primitives.cpp
+            labs/lab1/Lab1Primitives.h
+            ui/openGLWidget/OpenGLWidget.cpp
+            ui/openGLWidget/OpenGLWidget.h
+            ui/lab2Window/lab2widget.cpp
+            ui/lab2Window/lab2widget.h
+            ui/lab2Window/lab2widget.ui
+            labs/lab2/Lab2Primitives.cpp labs/lab2/Lab2Primitives.h
+            ui/lab3Window/lab3widget.cpp
+            ui/lab3Window/lab3widget.h
+            ui/lab3Window/lab3widget.ui
+            labs/lab3/Lab3Fractals.cpp
+            labs/lab3/Lab3Fractals.h
+            ui/openGLWidget/OpenGLWidgetLab3.cpp
+            ui/openGLWidget/OpenGLWidgetLab3.h
+            labs/lab3/Vector.cpp
+            labs/lab3/Vector.h
+            labs/lab3/Point.cpp
+            labs/lab3/Point.h
+            ui/lab4Window/lab4widget.cpp
+            ui/lab4Window/lab4widget.h
+            ui/lab4Window/lab4widget.ui ui/openGLWidget/OpenGLWidgetLab4.cpp ui/openGLWidget/OpenGLWidgetLab4.h labs/lab4/Lab4Spline.cpp labs/lab4/Lab4Spline.h)
+endif ()
 
 # Qt library
 find_package(Qt5Widgets REQUIRED)
