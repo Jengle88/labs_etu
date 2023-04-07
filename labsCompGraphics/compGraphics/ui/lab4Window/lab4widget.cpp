@@ -34,12 +34,15 @@ void Lab4Widget::init(int windowWidth, int windowHeight) {
     ui->p4YSlider->setValue(ui->openGLWidget->points[3].y * 10 + 50);
     ui->p5XSlider->setValue(ui->openGLWidget->points[4].x * 10 + 50);
     ui->p5YSlider->setValue(ui->openGLWidget->points[4].y * 10 + 50);
+    ui->p6XSlider->setValue(ui->openGLWidget->points[5].x * 10 + 50);
+    ui->p6YSlider->setValue(ui->openGLWidget->points[5].y * 10 + 50);
 
     ui->p1Value->setText(QString(("(" + std::to_string(ui->openGLWidget->points[0].x) + ";" + std::to_string(ui->openGLWidget->points[0].y) + ")").c_str()));
     ui->p2Value->setText(QString(("(" + std::to_string(ui->openGLWidget->points[1].x) + ";" + std::to_string(ui->openGLWidget->points[1].y) + ")").c_str()));
     ui->p3Value->setText(QString(("(" + std::to_string(ui->openGLWidget->points[2].x) + ";" + std::to_string(ui->openGLWidget->points[2].y) + ")").c_str()));
     ui->p4Value->setText(QString(("(" + std::to_string(ui->openGLWidget->points[3].x) + ";" + std::to_string(ui->openGLWidget->points[3].y) + ")").c_str()));
     ui->p5Value->setText(QString(("(" + std::to_string(ui->openGLWidget->points[4].x) + ";" + std::to_string(ui->openGLWidget->points[4].y) + ")").c_str()));
+    ui->p6Value->setText(QString(("(" + std::to_string(ui->openGLWidget->points[5].x) + ";" + std::to_string(ui->openGLWidget->points[5].y) + ")").c_str()));
 }
 
 void Lab4Widget::on_smoothBorderSlider_valueChanged(int value) {
@@ -115,5 +118,21 @@ void Lab4Widget::on_p5YSlider_valueChanged(int value) {
     ui->openGLWidget->points[4].y = double(value - 50) / 10;
     ui->p5YSlider->setValue(ui->openGLWidget->points[4].y * 10 + 50);
     ui->p5Value->setText(QString(("(" + std::to_string(ui->openGLWidget->points[4].x) + ";" + std::to_string(ui->openGLWidget->points[4].y) + ")").c_str()));
+    ui->openGLWidget->update();
+}
+
+void Lab4Widget::on_p6XSlider_valueChanged(int value)
+{
+    ui->openGLWidget->points[5].x = double(value - 50) / 10;
+    ui->p6XSlider->setValue(ui->openGLWidget->points[5].x * 10 + 50);
+    ui->p6Value->setText(QString(("(" + std::to_string(ui->openGLWidget->points[5].x) + ";" + std::to_string(ui->openGLWidget->points[5].y) + ")").c_str()));
+    ui->openGLWidget->update();
+}
+
+void Lab4Widget::on_p6YSlider_valueChanged(int value)
+{
+    ui->openGLWidget->points[5].y = double(value - 50) / 10;
+    ui->p6YSlider->setValue(ui->openGLWidget->points[5].y * 10 + 50);
+    ui->p6Value->setText(QString(("(" + std::to_string(ui->openGLWidget->points[5].x) + ";" + std::to_string(ui->openGLWidget->points[5].y) + ")").c_str()));
     ui->openGLWidget->update();
 }

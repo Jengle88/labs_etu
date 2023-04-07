@@ -38,6 +38,10 @@ private slots:
 
     void on_p5YSlider_valueChanged(int value);
 
+    void on_p6XSlider_valueChanged(int value);
+
+    void on_p6YSlider_valueChanged(int value);
+
 private:
     Ui::Lab4Widget *ui;
     void init(int windowWidth, int windowHeight);
