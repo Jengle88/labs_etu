@@ -41,7 +41,7 @@
      <item>
       <widget class="QLabel" name="label_11">
        <property name="text">
-        <string>SmoothBorder</string>
+        <string>Smoothness</string>
        </property>
       </widget>
      </item>
