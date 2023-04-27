@@ -77,7 +77,7 @@
      <item>
       <widget class="QLabel" name="deltaPixelsLabel">
        <property name="text">
-        <string>Расстояние между волнами: 100</string>
+        <string/>
        </property>
       </widget>
      </item>
@@ -91,7 +91,7 @@
      <item>
       <widget class="QLabel" name="deltaColorLabel">
        <property name="text">
-        <string>Изменение цвета: 100</string>
+        <string/>
        </property>
       </widget>
      </item>

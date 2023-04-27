@@ -4,6 +4,11 @@
 #include <QColor>
 #include "QVector"
 #include <iostream>
+#include <set>
+#include <QImage>
+#include <QOpenGLShader>
+#include <QOpenGLTexture>
+#include "labs/lab5/Lab5Shaders.h"
 #include "labs/lab3/Point.h"
 
 

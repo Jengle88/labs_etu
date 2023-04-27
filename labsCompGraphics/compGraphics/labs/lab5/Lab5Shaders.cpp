@@ -2,16 +2,13 @@
 // Created by evgeny on 14.04.23.
 //
 
-#include <unordered_set>
-#include <set>
-#include <QImage>
 #include "Lab5Shaders.h"
 
 Lab5Shaders::Lab5Shaders() = default;
 
 void Lab5Shaders::makeWaveEffect(QImage &image, int deltaColor, int deltaPixels) {
     int cntColorSwaps = image.height() / deltaPixels;
-    int deltaPixels2 = deltaPixels >> 1;
+    int deltaPixels2 = std::max(deltaPixels >> 1, 1);
     double oneStepForColor = double(deltaColor) / deltaPixels2;
     for (int i = 0; i < cntColorSwaps; ++i) {
         for (int j = 0; j < deltaPixels; ++j) {
