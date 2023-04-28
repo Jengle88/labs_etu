@@ -65,7 +65,7 @@ else ()
             ui/lab4Window/lab4widget.ui ui/openGLWidget/OpenGLWidgetLab4.cpp ui/openGLWidget/OpenGLWidgetLab4.h labs/lab4/Lab4Spline.cpp labs/lab4/Lab4Spline.h
             ui/lab5Window/lab5widget.ui
             ui/lab5Window/lab5widget.h
-            ui/lab5Window/lab5widget.cpp ui/openGLWidget/OpenGLWidgetLab5.cpp ui/openGLWidget/OpenGLWidgetLab5.h labs/lab5/Lab5Shaders.cpp labs/lab5/Lab5Shaders.h)
+            ui/lab5Window/lab5widget.cpp ui/openGLWidget/OpenGLWidgetLab5.cpp ui/openGLWidget/OpenGLWidgetLab5.h)
 endif ()
 
 # Qt library

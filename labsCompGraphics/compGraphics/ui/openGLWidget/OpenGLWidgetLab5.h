@@ -6,7 +6,6 @@
 #include <QPainter>
 #include <QOpenGLTexture>
 #include <QOpenGLShaderProgram>
-#include "labs/lab5/Lab5Shaders.h"
 
 class OpenGLWidgetLab5: public QOpenGLWidget, public QOpenGLFunctions {
 public:
@@ -25,6 +24,7 @@ public:
     QOpenGLTexture* texture;
     QVector<QVector3D> vertices;
     QVector<QVector2D> texCoords;
+    QVector<QVector3D> waveEffectParams;
 
 protected:
     void initializeGL() override;
