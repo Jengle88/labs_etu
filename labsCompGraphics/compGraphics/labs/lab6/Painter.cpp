@@ -145,3 +145,21 @@ void Painter::sandClock(double a, double b, double c) {
     }
     glEnd();
 }
+
+void Painter::systemCoordinates() {
+    glBegin(GL_LINE_STRIP);
+    glColor3d(1, 0, 0);
+    glVertex3d(0, 0, 0);
+    glVertex3d(2, 0, 0);
+    glEnd();
+    glBegin(GL_LINE_STRIP);
+    glColor3d(0, 1, 0);
+    glVertex3d(0, 0, 0);
+    glVertex3d(0, 2, 0);
+    glEnd();
+    glBegin(GL_LINE_STRIP);
+    glColor3d(0, 0, 1);
+    glVertex3d(0, 0, 0);
+    glVertex3d(0, 0, 2);
+    glEnd();
+}

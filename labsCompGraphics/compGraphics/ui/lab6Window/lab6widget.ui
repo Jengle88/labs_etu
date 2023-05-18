@@ -39,22 +39,40 @@
    <item row="0" column="1">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Fixed</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+      <widget class="QPushButton" name="resetCamera">
+       <property name="text">
+        <string>Вернуть камеру в начало</string>
+       </property>
+      </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_3"/>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_4"/>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_5"/>
-     </item>
-     <item>
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_6"/>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>

@@ -17,40 +17,12 @@ Lab6Widget::Lab6Widget(
 void Lab6Widget::init(int windowWidth, int windowHeight) {
     setMinimumSize(windowWidth, windowHeight);
     setWindowTitle("Лабораторная работа №6");
-    ui->doubleSpinBox->setSingleStep(0.1);
-    ui->doubleSpinBox_2->setSingleStep(0.1);
-    ui->doubleSpinBox_3->setSingleStep(0.1);
-    ui->doubleSpinBox_4->setSingleStep(0.1);
-    ui->doubleSpinBox_5->setSingleStep(0.1);
-    ui->doubleSpinBox_6->setSingleStep(0.1);
 }
 
-void Lab6Widget::on_doubleSpinBox_valueChanged(double arg1) {
-    ui->openGLWidget->scx = arg1;
-    ui->openGLWidget->update();
-}
+void Lab6Widget::on_resetCamera_clicked() {
+    ui->openGLWidget->cameraPosition = {0, -2, -6};
+    ui->openGLWidget->cameraRotation = {1, 0};
+    ui->openGLWidget->cameraZoom = 0.85;
 
-void Lab6Widget::on_doubleSpinBox_2_valueChanged(double arg1) {
-    ui->openGLWidget->scy = arg1;
-    ui->openGLWidget->update();
-}
-
-void Lab6Widget::on_doubleSpinBox_3_valueChanged(double arg1) {
-    ui->openGLWidget->scz = arg1;
-    ui->openGLWidget->update();
-}
-
-void Lab6Widget::on_doubleSpinBox_4_valueChanged(double arg1) {
-    ui->openGLWidget->hpa = arg1;
-    ui->openGLWidget->update();
-}
-
-void Lab6Widget::on_doubleSpinBox_5_valueChanged(double arg1) {
-    ui->openGLWidget->hpb = arg1;
-    ui->openGLWidget->update();
-}
-
-void Lab6Widget::on_doubleSpinBox_6_valueChanged(double arg1) {
-    ui->openGLWidget->hpc = arg1;
     ui->openGLWidget->update();
 }

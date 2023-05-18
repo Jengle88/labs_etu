@@ -53,6 +53,8 @@ protected:
     void draw3Figure();
 
     void draw4Figure();
+
+    void systemCoordinates();
 };
 
 

@@ -36,9 +36,10 @@ void OpenGLWidgetLab6::paintGL() {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    glMatrixMode(GL_MODELVIEW);
 
     glFrustum(-1, 1, -1, 1, 2, 30);
+
+    glMatrixMode(GL_MODELVIEW);
 
     // camera
     glTranslated(cameraPosition.x, cameraPosition.y, cameraPosition.z);
@@ -53,6 +54,8 @@ void OpenGLWidgetLab6::paintGL() {
     draw2Figure();
     draw3Figure();
     draw4Figure();
+
+    systemCoordinates();
 }
 
 void OpenGLWidgetLab6::draw1Figure() {
@@ -89,6 +92,14 @@ void OpenGLWidgetLab6::draw4Figure() {
     glScaled(0.2, 0.3, 0.3);
     glRotated(90, 0, 1, 1);
     Painter::sandClock(0.3, 0.3, 1.1);
+    glPopMatrix();
+}
+
+void OpenGLWidgetLab6::systemCoordinates() {
+    glPushMatrix();
+    glTranslated(0, 0, 0);
+    glScaled(1, 1, 1);
+    Painter::systemCoordinates();
     glPopMatrix();
 }
 

@@ -16,17 +16,8 @@ public:
     ~Lab6Widget();
 
 private slots:
-    void on_doubleSpinBox_valueChanged(double arg1);
 
-    void on_doubleSpinBox_2_valueChanged(double arg1);
-
-    void on_doubleSpinBox_3_valueChanged(double arg1);
-
-    void on_doubleSpinBox_4_valueChanged(double arg1);
-
-    void on_doubleSpinBox_5_valueChanged(double arg1);
-
-    void on_doubleSpinBox_6_valueChanged(double arg1);
+    void on_resetCamera_clicked();
 
 private:
     Ui::Lab6Widget *ui;
