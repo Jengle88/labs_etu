@@ -19,6 +19,8 @@ private slots:
 
     void on_resetCamera_clicked();
 
+    void on_globalScaleSlider_valueChanged(int value);
+
 private:
     Ui::Lab6Widget *ui;
     void init(int windowWidth, int windowHeight);

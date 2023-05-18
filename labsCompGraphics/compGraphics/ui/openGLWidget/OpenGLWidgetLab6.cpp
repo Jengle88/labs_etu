@@ -50,46 +50,46 @@ void OpenGLWidgetLab6::paintGL() {
     glColor3d(1, 1, 1);
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
-    draw1Figure();
-    draw2Figure();
-    draw3Figure();
-    draw4Figure();
+    draw1Figure(globalScale);
+    draw2Figure(globalScale);
+    draw3Figure(globalScale);
+    draw4Figure(globalScale);
 
     systemCoordinates();
 }
 
-void OpenGLWidgetLab6::draw1Figure() {
+void OpenGLWidgetLab6::draw1Figure(double scale) {
     glPushMatrix();
-    glTranslated(0, 0, -1);
-    glScaled(0.1, 1.3, 1.5);
+    glTranslated(2 * scale, 0, -1);
+    glScaled(0.1 * scale, 1.3 * scale, 1.5 * scale);
     glRotated(90, 0, 1, 0);
     Painter::wheel(0.6, 0.6, 6.7);
     glPopMatrix();
 }
 
-void OpenGLWidgetLab6::draw2Figure() {
+void OpenGLWidgetLab6::draw2Figure(double scale) {
     glPushMatrix();
-    glTranslated(3, 0, -1);
-    glScaled(0.04, 1.5, 1);
+    glTranslated(5 * scale, 0, -1);
+    glScaled(0.04 * scale, 1.5 * scale, 1 * scale);
     glRotated(90, 0, 1, 0);
     glRotated(90, 0, 0, 1);
     Painter::button(0.7, 0.7, 6.7, 1, 1, 30.5);
     glPopMatrix();
 }
 
-void OpenGLWidgetLab6::draw3Figure() {
+void OpenGLWidgetLab6::draw3Figure(double scale) {
     glPushMatrix();
-    glTranslated(6, 0, -1);
-    glScaled(0.1, 1.3, 1.5);
+    glTranslated(8 * scale, 0, -1);
+    glScaled(0.1 * scale, 1.3 * scale, 1.5 * scale);
     glRotated(90, 0, 1, 0);
     Painter::doorhandle(0.6, 0.6, 6.7, 0.7, 0.7, 4.5);
     glPopMatrix();
 }
 
-void OpenGLWidgetLab6::draw4Figure() {
+void OpenGLWidgetLab6::draw4Figure(double scale) {
     glPushMatrix();
-    glTranslated(9, 0, -1);
-    glScaled(0.2, 0.3, 0.3);
+    glTranslated(11 * scale, 0, -1);
+    glScaled(0.2 * scale, 0.3 * scale, 0.3 * scale);
     glRotated(90, 0, 1, 1);
     Painter::sandClock(0.3, 0.3, 1.1);
     glPopMatrix();

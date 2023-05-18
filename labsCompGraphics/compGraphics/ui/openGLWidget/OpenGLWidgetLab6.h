@@ -25,8 +25,7 @@ public:
     Vector2D cameraRotation = {1, 0};
     double cameraZoom = 0.85;
 
-    double scx = 0.1, scy = 0.1, scz = 0.1;
-    double hpa = 0.7, hpb = 0.6, hpc = 5.4;
+    double globalScale = 3;
 
 
 protected:
@@ -46,13 +45,13 @@ protected:
 
     void wheelEvent(QWheelEvent *event);
 
-    void draw1Figure();
+    void draw1Figure(double scale);
 
-    void draw2Figure();
+    void draw2Figure(double scale);
 
-    void draw3Figure();
+    void draw3Figure(double scale);
 
-    void draw4Figure();
+    void draw4Figure(double scale);
 
     void systemCoordinates();
 };
