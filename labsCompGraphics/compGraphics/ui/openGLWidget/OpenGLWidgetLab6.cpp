@@ -52,6 +52,7 @@ void OpenGLWidgetLab6::paintGL() {
     draw1Figure();
     draw2Figure();
     draw3Figure();
+    draw4Figure();
 }
 
 void OpenGLWidgetLab6::draw1Figure() {
@@ -79,6 +80,15 @@ void OpenGLWidgetLab6::draw3Figure() {
     glScaled(0.1, 1.3, 1.5);
     glRotated(90, 0, 1, 0);
     Painter::doorhandle(0.6, 0.6, 6.7, 0.7, 0.7, 4.5);
+    glPopMatrix();
+}
+
+void OpenGLWidgetLab6::draw4Figure() {
+    glPushMatrix();
+    glTranslated(9, 0, -1);
+    glScaled(0.2, 0.3, 0.3);
+    glRotated(90, 0, 1, 1);
+    Painter::sandClock(0.3, 0.3, 1.1);
     glPopMatrix();
 }
 

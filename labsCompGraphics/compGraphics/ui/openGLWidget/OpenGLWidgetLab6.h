@@ -51,6 +51,8 @@ protected:
     void draw2Figure();
 
     void draw3Figure();
+
+    void draw4Figure();
 };
 
 

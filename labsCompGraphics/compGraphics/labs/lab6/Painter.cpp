@@ -124,3 +124,24 @@ void Painter::doorhandle(double a1, double b1, double c1, double a2, double b2, 
     }
     glEnd();
 }
+
+void Painter::sandClock(double a, double b, double c) {
+    glBegin(GL_QUADS);
+    float angle_inc = M_PI / 8;
+    float z_inc = 0.5;
+    for (double z = -4; z < 4; z += z_inc) {
+        double r = (1 + (pow(z, 2) / pow(c, 2))) * pow(a, 2) * pow(b, 2);
+        double rNext = (1 + (pow(z + z_inc, 2) / pow(c, 2))) * pow(a, 2) * pow(b, 2);
+        for (double angle = 0; angle < M_PI * 2; angle += angle_inc) {
+            double x = (r * cos(angle)) / pow(b, 2), y = (r * sin(angle)) / pow(a, 2);
+            double x2 = (r * cos(angle + angle_inc)) / pow(b, 2), y2 = (r * sin(angle + angle_inc)) / pow(a, 2);
+            double xNext = (rNext * cos(angle)) / pow(b, 2), yNext = (rNext * sin(angle)) / pow(a, 2);
+            double x2Next = (rNext * cos(angle + angle_inc)) / pow(b, 2), y2Next = (rNext * sin(angle + angle_inc)) / pow(a, 2);
+            glVertex3d(x, y, z);
+            glVertex3d(xNext, yNext, z + z_inc);
+            glVertex3d(x2Next, y2Next, z + z_inc);
+            glVertex3d(x2, y2, z);
+        }
+    }
+    glEnd();
+}
