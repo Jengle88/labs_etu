@@ -15,6 +15,8 @@ void SplashWindow::init(int windowWidth, int windowHeight) {
     lab3Widget = new Lab3Widget(windowWidth, windowHeight);
     lab4Widget = new Lab4Widget(windowWidth, windowHeight);
     lab5Widget = new Lab5Widget(windowWidth, windowHeight);
+    lab6Widget = new Lab6Widget(std::max(windowWidth, windowHeight),
+                                std::max(windowWidth, windowHeight));
     setMinimumWidth(windowWidth);
     setMinimumHeight(windowHeight);
 }
@@ -40,11 +42,17 @@ void SplashWindow::on_buttonLab5_clicked() {
     safeShowWidget(lab5Widget);
 }
 
+void SplashWindow::on_buttonLab6_clicked() {
+    safeShowWidget(lab6Widget);
+}
+
 SplashWindow::~SplashWindow() {
     delete lab1Widget;
     delete lab2Widget;
     delete lab3Widget;
     delete lab4Widget;
+    delete lab5Widget;
+    delete lab6Widget;
     delete ui;
 }
 
@@ -59,6 +67,8 @@ void SplashWindow::safeShowWidget(QWidget *widget) {
         lab4Widget->hide();
     if (lab5Widget != widget)
         lab5Widget->hide();
+    if (lab6Widget != widget)
+        lab6Widget->hide();
 
     widget->show();
 }

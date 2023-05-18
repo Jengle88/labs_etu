@@ -123,6 +123,13 @@
         <item>
          <widget class="QPushButton" name="buttonLab6">
           <property name="text">
+           <string>Лабораторная работа 6</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="buttonLab7">
+          <property name="text">
            <string>(TODO)</string>
           </property>
          </widget>
