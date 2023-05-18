@@ -65,7 +65,11 @@ else ()
             ui/lab4Window/lab4widget.ui ui/openGLWidget/OpenGLWidgetLab4.cpp ui/openGLWidget/OpenGLWidgetLab4.h labs/lab4/Lab4Spline.cpp labs/lab4/Lab4Spline.h
             ui/lab5Window/lab5widget.ui
             ui/lab5Window/lab5widget.h
-            ui/lab5Window/lab5widget.cpp ui/openGLWidget/OpenGLWidgetLab5.cpp ui/openGLWidget/OpenGLWidgetLab5.h labs/lab5/Lab5Shaders.cpp labs/lab5/Lab5Shaders.h)
+            ui/lab5Window/lab5widget.cpp ui/openGLWidget/OpenGLWidgetLab5.cpp ui/openGLWidget/OpenGLWidgetLab5.h
+            ui/lab6Window/lab6widget.ui
+            ui/lab6Window/lab6widget.h
+            ui/lab6Window/lab6widget.cpp
+            ui/openGLWidget/OpenGLWidgetLab6.cpp ui/openGLWidget/OpenGLWidgetLab6.h labs/lab6/Vector2D.cpp labs/lab6/Vector2D.h labs/lab6/Vector3D.cpp labs/lab6/Vector3D.h labs/lab6/Painter.cpp labs/lab6/Painter.h)
 endif ()
 
 # Qt library

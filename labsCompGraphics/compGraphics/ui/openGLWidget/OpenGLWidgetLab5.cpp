@@ -29,6 +29,8 @@ void OpenGLWidgetLab5::initShaders() {
     vertices.append(QVector3D(-1, -1, 0));
     vertices.append(QVector3D(1, -1, 0));
 
+    waveEffectParams.append(QVector3D(0, 0, 0));
+
     shaderProgram.bindAttributeLocation("vertex", 0);
     shaderProgram.bindAttributeLocation("texCoord", 1);
 
@@ -49,21 +51,19 @@ void OpenGLWidgetLab5::resizeGL(int w, int h) {
 
 void OpenGLWidgetLab5::paintGL() {
     if (!imagePath.isEmpty()) {
-        QImage image(imagePath);
-        if (deltaColor > 0 && deltaPixels > 0) {
-            Lab5Shaders::makeWaveEffect(image, deltaColor, deltaPixels);
-        }
-
-        QImage timg = image;
+        QImage timg(imagePath);
         texture = new QOpenGLTexture(timg);
         texture->bind();
 
+        waveEffectParams[0] = QVector3D(timg.height(), deltaColor, deltaPixels);
+
         shaderProgram.enableAttributeArray(0);
         shaderProgram.enableAttributeArray(1);
-        shaderProgram.enableAttributeArray(2);
         shaderProgram.setAttributeArray(0, vertices.constData());
         shaderProgram.setAttributeArray(1, texCoords.constData());
+        shaderProgram.setUniformValue("waveEffectParams", waveEffectParams[0]);
         shaderProgram.setUniformValue("texture", 0);
+
         glDrawArrays(GL_POLYGON, 0, 4);
 
         delete texture;
